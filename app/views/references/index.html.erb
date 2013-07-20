@@ -1,0 +1,43 @@
+<% title "Articles and Monographs", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'Articles and Monographs', references_path %>
+  </nav>
+<% end %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'New Article or Monograph', new_reference_path, class: "button small" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :main_section do %>
+  <table>
+    <tr>
+      <th>Author(s)</th>
+      <th>Title</th>
+      <th>In</th>
+      <% if can? :edit, @serials %>
+        <th></th>
+      <% end %>
+  
+    </tr>
+  
+    <% @references.each do |reference| %>
+      <tr>
+        <td><%= reference.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></td>
+        <td><%= link_to "#{reference.title}", reference %></td>
+        <td><%= link_to "#{reference.book.content(true)}", reference.book if reference.book %></td>
+        <% if can? :edit, @serials %>
+          <td><%= link_to "Edit", edit_reference_path(reference), :class => 'small button' %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

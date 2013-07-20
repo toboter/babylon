@@ -1,0 +1,55 @@
+<% title @reference.title, nil %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @reference %>
+        <%= link_to 'Edit', edit_reference_path(@reference), class: "button small" %>
+        <%= link_to 'Delete', @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'Articles and Monographs', references_path %>
+    <%= link_to "#{@reference.title}", @serial %>
+  </nav>
+<% end %>
+
+<% content_for :note_section do %>
+<p>
+  <b>Authors:</b>
+  <%= @reference.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @reference.title %>
+</p>
+
+<p>
+  <b>In:</b>
+  <%= @reference.book.inspect %>
+</p>
+<p>
+  <b>Pages:</b>
+  <%= @reference.first_page %> to <%= @reference.last_page %>
+</p>
+
+<p>
+  <b>URI:</b>
+  <%= @reference.uri %>
+</p>
+
+<% end %>
+
+<% content_for :main_section do %>
+  <p>Gescannte Bilder aus diesem Buch</p>
+  <p>Abstract</p>
+  <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
+<% end %>
+
+<%= link_to 'Back', :back %>

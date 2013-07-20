@@ -1,0 +1,40 @@
+<p>
+  <b>Asset:</b>
+  <%= @asset.assetfile %>
+</p>
+<p>
+  <%= image_tag(@asset.assetfile_url(:big)) %>
+</p>
+<p>
+  <b>Name:</b>
+  <%= @asset.name %>
+</p>
+
+<p>
+  <b>Parent:</b>
+  <%= @asset.parent_id %>
+</p>
+
+<p>
+  <b>Content type:</b>
+  <%= @asset.content_type %>
+</p>
+
+<p>
+  <b>File size:</b>
+  <%= @asset.file_size %>
+</p>
+
+<p>
+  <b>File name:</b>
+  <%= @asset.file_name %>
+</p>
+
+<p>
+  <b>File datetime:</b>
+  <%= @asset.file_datetime %>
+</p>
+
+
+<%= link_to 'Edit', edit_asset_path(@asset) %> |
+<%= link_to 'Back', assets_path %>

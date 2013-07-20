@@ -1,0 +1,23 @@
+<p>
+  <b>Attachable:</b>
+  <%= @bucket.attachable_type %>
+</p>
+
+<p>
+  <b>Attachable:</b>
+  <%= @bucket.attachable_id %>
+</p>
+
+<p>
+  <b>Attachable:</b>
+  <%= @bucket.cover_asset_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @bucket.name %>
+</p>
+
+
+<%= link_to 'Edit', [:edit, @attachable, @bucket] %> |
+<%= link_to 'Back', :back %>

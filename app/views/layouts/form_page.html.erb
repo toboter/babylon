@@ -1,0 +1,11 @@
+<% content_for :content do %>
+  <div class="row">
+    <div class="large-12 columns">
+      <%= content_tag :h2, yield(:title) if show_title? %>
+      <%= content_tag :h4, yield(:subtitle), :class => "subheader" if show_title? %>
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :template => 'layouts/application' %>

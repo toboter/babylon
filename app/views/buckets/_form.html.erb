@@ -1,0 +1,29 @@
+<%= form_for [@attachable, @bucket] do |f| %>
+<%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :attachable_type %><br />
+    <%= f.text_field :attachable_type %>
+  </div>
+  <div class="field">
+    <%= f.label :attachable_id %><br />
+    <%= f.text_field :attachable_id %>
+  </div>
+  <div class="field">
+    <%= f.label :cover_asset_id %><br />
+    <%= f.text_field :cover_asset_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name_fixed %><br />
+    <%= f.check_box :name_fixed %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

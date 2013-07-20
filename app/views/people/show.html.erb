@@ -1,0 +1,74 @@
+<% title @person.fullname, nil %>
+
+<% content_for :link_section do %>
+<div class="button-bar right">
+  <ul class="button-group">
+    <% if (current_user == @person.user) || (can? :edit, @person) %>
+      <%= link_to 'Edit', edit_person_path(@person), class: "button small" %>
+      <%= link_to 'Delete', @person, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'People', people_path %>
+    <%= link_to "#{@person.fullname}", @person %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <h4>Bibliography</h4>
+  <ul>
+    <% for reference in @person.references do %>
+      <li><%= link_to "#{reference.title}", reference %></li>
+    <% end %>
+  </ul>
+
+  <h4>Buckets</h4>
+  <ul>
+    <% for bucket in @buckets do %>
+      <li>
+        <%= link_to "#{bucket.name}", [@attachable, bucket] %>, <%= bucket.cover_asset_id %>, <%= bucket.name_fixed %>
+        <ul>
+        <% for asset in bucket.assets do %>
+          <li><%= asset.name %></li>
+        <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+
+<% end %>
+
+<% content_for :note_section do %>
+  <div class="section-container tabs" data-section="tabs">
+    <section>
+      <p class="title" data-section-title><%= link_to "Bild" %></p>
+      <div class="content" data-section-content>
+        <% if @buckets.with_profile_pictures.first.cover_asset_id %>
+          <h1>Ein Bild, ein Bild</h1>
+        <% else %>
+          <h1>nix zu sehen</h1>
+        <% end %>
+        <p><b>Name:</b><%= @person.fullname %> <% unless @person.grade.blank? %>(<%= @person.grade %>)<% end %></p>
+        <p><b>Nickname:</b><%= @person.nickname %></p>
+        <p><b>Date of birth:</b><%= @person.date_of_birth.strftime("%d.%m.%Y") unless @person.date_of_birth.blank? %></p>
+        <p><b>Date of death:</b><%= @person.date_of_death.strftime("%d.%m.%Y") unless @person.date_of_death.blank? %></p>
+        <p><b>Profession:</b><%= @person.profession %></p>
+        <p><b>Gender:</b><%= @person.gender %></p>
+        <p><b>Public email:</b><%= @person.public_email %></p>
+      </div>
+    </section>
+    <section>
+      <p class="title" data-section-title><%= link_to "Weiteres" %></p>
+      <div class="content" data-section-content>
+        <p><b>Username:</b><%= @person.user.username if @person.user %></p>
+        <p><b>Created by:</b><%= @person.creator.available_name %></p>
+        <p><b>Updated by:</b><%= @person.updater.available_name %></p>
+      </div>
+    </section>
+  </div>
+<% end %>

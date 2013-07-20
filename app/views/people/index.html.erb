@@ -1,0 +1,56 @@
+<% title "People", "Listing people working on Babylon" %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'People', people_path %>
+  </nav>
+<% end %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'New Person', new_person_path, class: "button small" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :main_section do %>
+  <table>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Grade</th>
+      <th>Nickname</th>
+      <th>Date of birth</th>
+      <th>Date of death</th>
+      <th>Profession</th>
+      <th>Gender</th>
+      <th>Public email</th>
+      <% if can? :edit, @people %>
+        <th></th>
+      <% end %>
+    </tr>
+  
+    <% @people.each do |person| %>
+      <tr>
+        <td><%= "c" if person.user_id %></td>
+        <td><%= link_to "#{person.fullname}", person %></td>
+        <td><%= person.grade %></td>
+        <td><%= person.nickname %></td>
+        <td><%= person.date_of_birth.strftime("%d.%m.%Y") unless person.date_of_birth.blank? %></td>
+        <td><%= person.date_of_death.strftime("%d.%m.%Y") unless person.date_of_death.blank? %></td>
+        <td><%= person.profession %></td>
+        <td><%= person.gender %></td>
+        <td><%= person.public_email %></td>
+        <% if can? :edit, @people %>
+          <td><%= link_to 'Edit', edit_person_path(person) %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+

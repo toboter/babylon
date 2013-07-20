@@ -1,0 +1,35 @@
+<%= form_for @asset, :html => { :class => 'custom', :multipart => true } do |f| %>
+  <%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :assetfile %><br />
+    <%= f.file_field :assetfile %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %><br />
+    <%= f.number_field :parent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :content_type %><br />
+    <%= f.text_field :content_type %>
+  </div>
+  <div class="field">
+    <%= f.label :file_size %><br />
+    <%= f.text_field :file_size %>
+  </div>
+  <div class="field">
+    <%= f.label :file_name %><br />
+    <%= f.text_field :file_name %>
+  </div>
+  <div class="field">
+    <%= f.label :file_datetime %><br />
+    <%= f.datetime_select :file_datetime %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

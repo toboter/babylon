@@ -1,0 +1,29 @@
+<h1>Listing buckets</h1>
+
+<table>
+  <tr>
+    <th>Attachable</th>
+    <th></th>
+    <th></th>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @buckets.each do |bucket| %>
+  <tr>
+    <td><%= bucket.attachable_type %></td>
+    <td><%= bucket.attachable_id %></td>
+    <td><%= bucket.cover_asset_id %></td>
+    <td><%= bucket.name %></td>
+    <td><%= link_to 'Show', [bucket.attachable, bucket] %></td>
+    <td><%= link_to 'Edit', [:edit, bucket.attachable, bucket] %></td>
+    <td><%= link_to 'Destroy', [bucket.attachable, bucket], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Bucket', [:new, @attachable, :bucket] %>

@@ -1,0 +1,38 @@
+<%= form_for @serial, :html => {:class => "custom"} do |f| %>
+  <%= f.error_messages %>
+<div class="row">
+  <div class="large-12 columns">
+    <%= f.label :serial_type %>
+    <%= f.select(:serial_type, Serial::SERIALTYPES) %>
+  </div>
+</div>
+<div class="row collapse">
+  <div class="large-9 columns">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="large-3 columns">
+    <%= f.label :shortcut %>
+    <%= f.text_field :shortcut %>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    <%= f.label :serial_identifier %>
+    <%= f.text_field :serial_identifier %>
+  </div>
+  <div class="large-12 columns">
+    <%= f.label :uri %>
+    <%= f.text_field :uri %>
+  </div>
+</div>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @serial.new_record? %>
+      <%= link_to 'Abbrechen', serials_path, :class => 'button secondary' %>
+    <% else %>
+      <%= link_to 'Abbrechen', @serial, :class => 'button secondary' %>
+    <% end %>
+  </div>
+<% end %>

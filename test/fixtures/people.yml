@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  account_id: 1
+  first_name: MyString
+  last_name: MyString
+  grade: MyString
+  nickname: MyString
+  date_of_birth: 2013-07-06 01:24:48
+  date_of_death: 2013-07-06 01:24:48
+  profession: MyString
+  gender: MyString
+  start_of_activity: 2013-07-06 01:24:48
+  end_of_activity: 2013-07-06 01:24:48
+  public_email: MyString
+  created_by: 1
+  updated_by: 1
+
+two:
+  account_id: 1
+  first_name: MyString
+  last_name: MyString
+  grade: MyString
+  nickname: MyString
+  date_of_birth: 2013-07-06 01:24:48
+  date_of_death: 2013-07-06 01:24:48
+  profession: MyString
+  gender: MyString
+  start_of_activity: 2013-07-06 01:24:48
+  end_of_activity: 2013-07-06 01:24:48
+  public_email: MyString
+  created_by: 1
+  updated_by: 1

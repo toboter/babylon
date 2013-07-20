@@ -1,4 +1,27 @@
 Babylon::Application.routes.draw do
+
+  resources :assets
+
+  resources :serials
+  resources :books
+  resources :references
+
+  resources :people do
+    resources :buckets
+  end
+
+  devise_for :users
+
+  post "user_connect" => "people#connect_to_user"
+  get 'dashboard', to: 'dashboard#index'
+  get 'discover', to: 'discover#index'
+
+  resources :roles, only: [] do
+    collection do
+      put :update_multiple
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -48,7 +71,7 @@ Babylon::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'discover#index'
 
   # See how all your routes lay out with "rake routes"
 

@@ -1,0 +1,9 @@
+<h1>Editing person</h1>
+<% if @person.user_id == current_user.id %>
+  <%= link_to "Edit your account", edit_user_registration_path %>
+<% end %>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @person %> |
+<%= link_to 'Back', people_path %>

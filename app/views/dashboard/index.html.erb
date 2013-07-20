@@ -1,0 +1,28 @@
+<h1>Hi <%= current_user.available_name %>!</h1>
+
+<div>
+  <%= current_user.available_name %><br />
+  <%= current_user.username %><br />
+  <%= current_user.role.role %><br />
+  <%= current_user.email %><br />
+  <%= current_user.current_sign_in_at %><br />
+  <%= current_user.current_sign_in_ip %><br />
+  <%= current_user.last_sign_in_at %><br />
+  <%= current_user.last_sign_in_ip %><br />
+</div>
+
+<% if can? :manage, "roles" %>
+  <%= form_tag update_multiple_roles_path, method: :put do %>
+    <% for role in Role.all do %>
+      <li>
+        <%= role.user.username %>
+        <%= fields_for "roles[]", role do |f| %>
+          <%= f.error_messages %>
+          <%= f.label :role %><br />
+          <%= f.select(:role, User::ROLES) %>
+        <% end %>
+      </li>
+    <% end %>
+    <%= submit_tag "Update Roles" %>
+  <% end %>
+<% end %>

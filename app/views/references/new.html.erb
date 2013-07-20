@@ -1,0 +1,12 @@
+<% title "New Articles or Monographs", nil %>
+<% if @reference.book %>
+  <div class="row">
+  	<div class="large-8 columns">
+      <p>Einen Artikel in <strong><%= link_to "#{@reference.book.people.map{ |a| a.fullname }.join(", ")+' '+@reference.book.year}", @reference.book %></strong> anlegen.</p>
+	</div>
+  </div>
+<% end %>
+
+<%= render 'form' %>
+
+<%= link_to '<< Back', :back %>

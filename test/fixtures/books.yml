@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  place: MyString
+  publisher: MyString
+  year: MyString
+  book_type: MyString
+  unpublished: false
+  serial_id: 1
+  book_identifier: MyString
+
+two:
+  title: MyString
+  place: MyString
+  publisher: MyString
+  year: MyString
+  book_type: MyString
+  unpublished: false
+  serial_id: 1
+  book_identifier: MyString

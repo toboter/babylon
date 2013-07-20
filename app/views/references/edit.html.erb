@@ -1,0 +1,12 @@
+<h1>Editing reference</h1>
+<% if @reference.book %>
+  <div class="row">
+  	<div class="large-8 columns">
+      <p>Dieser Artikel ist in <strong><%= link_to "#{@reference.book.people.map{ |a| a.fullname }.join(", ")+' '+@reference.book.year}", @reference.book %></strong> erschienen.</p>
+    </div>
+  </div>
+<% end %>
+<%= render 'form' %>
+
+<%= link_to 'Show', @reference %> |
+<%= link_to 'Back', references_path %>

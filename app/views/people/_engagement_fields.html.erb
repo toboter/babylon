@@ -1,0 +1,15 @@
+<div class="field", style="border:1px dashed #eee; padding:20px 0 10px 0; margin-top:5px;">
+  <div class="control-group">
+    <div class="controls controls-row">
+        <div class="field">
+          <%= f.label :start %><br />
+          <%= f.datetime_select :start %>
+        </div>
+        <div class="field">
+          <%= f.label :end %><br />
+          <%= f.datetime_select :end %>
+        </div>
+      <small><%= f.link_to_remove "remove" %></small>
+    </div>
+  </div>  
+</div>

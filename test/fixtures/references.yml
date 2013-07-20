@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  original_date: 2013-07-09 16:31:09
+  ancestry: MyString
+  publisher: 1
+  place: 1
+  reference_type_id: 1
+  signatory: MyString
+
+two:
+  title: MyString
+  original_date: 2013-07-09 16:31:09
+  ancestry: MyString
+  publisher: 1
+  place: 1
+  reference_type_id: 1
+  signatory: MyString

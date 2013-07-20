@@ -1,0 +1,76 @@
+<% title @book.blank_title, nil %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'Edit', edit_book_path(@book), class: "button small" %>
+        <%= link_to 'Delete', @book, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'Publications', books_path %>
+    <%= link_to "#{@book.blank_title}", @book %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <h4>Content</h4>
+  <ul>
+    <% for article in @book.articles do %>
+      <li><%= link_to "#{article.title}", article %></li>
+    <% end %>
+  </ul>
+  <% unless @book.book_type == 'Monographie' || @book.book_type == 'Monographie in einer Reihe' %>
+    <p><%= link_to 'Add an article', new_reference_path(:book_id => @book), class: "button small" if can? :edit, @book %></p>
+  <% end %>
+<% end %>
+
+<% content_for :note_section do %>
+  <p>
+    <b>Title:</b>
+    <%= @book.blank_title %>
+  </p>
+  
+  <% if @book.serial && @book.volume %>
+    <p>
+      <b>Serial:</b>
+      <%= link_to "#{@book.serial.name}", @book.serial %>
+    </p>
+  <% end %>
+
+  <p>
+    <b>Place:</b>
+    <%= @book.place %>
+  </p>
+  
+  <p>
+    <b>Publisher:</b>
+    <%= @book.publisher %>
+  </p>
+  
+  <p>
+    <b>Year:</b>
+    <%= @book.year %>
+  </p>
+  
+  <p>
+    <b>Book type:</b>
+    <%= @book.book_type %>
+  </p>
+  
+  <p>
+    <b>Unpublished:</b>
+    <%= @book.unpublished %>
+  </p>
+  
+  <p>
+    <b>Book identifier:</b>
+    <%= @book.book_identifier %>
+  </p>
+<% end %>

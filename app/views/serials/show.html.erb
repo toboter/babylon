@@ -1,0 +1,58 @@
+<% title @serial.name, nil %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'Edit', edit_serial_path(@serial), class: "button small" %>
+        <%= link_to 'Delete', @serial, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Discover", discover_path %>
+    <%= link_to 'Periodicals and serials', serials_path %>
+    <%= link_to "#{@serial.name}", @serial %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <h4>Volumes</h4>
+  <ul>
+    <% for book in @serial.books.order("volume ASC") do %>
+      <li><%= link_to "#{book.content_for_select}", book %></li>
+    <% end %>
+  </ul>
+  <p><%= link_to 'Add a volume', new_book_path(:serial_id => @serial), class: "button small" if can? :edit, @serial %></p>
+<% end %>
+
+<% content_for :note_section do %>
+  <p>
+    <b>Name:</b>
+    <%= @serial.name %>
+  </p>
+  
+  <p>
+    <b>Shortcut:</b>
+    <%= @serial.shortcut %>
+  </p>
+  
+  <p>
+    <b>Type:</b>
+    <%= @serial.serial_type %>
+  </p>
+  
+  <p>
+    <b>Serial identifier:</b>
+    <%= @serial.serial_identifier %>
+  </p>
+  
+  <p>
+    <b>Uri:</b>
+    <%= @serial.uri %>
+  </p>
+<% end %>
+

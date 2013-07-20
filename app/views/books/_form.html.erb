@@ -1,0 +1,80 @@
+<%= form_for @book, :html => {:class => "custom"} do |f| %>
+  <%= f.error_messages %>
+
+  <div class="row">
+    <div class="large-12 columns">
+      <%= f.label :book_type %>
+      <% unless @book.serial %>
+      <%= f.select(:book_type, Book::BOOKTYPES) %>
+
+      <% else %>
+         <%= f.select(:book_type, @book.serial_types) %>       
+      <% end %>
+    </div>
+
+    <div id="if_serial" class="large-12 columns">
+      <div class="row collapse">
+        <div class="large-10 columns">
+          <%= f.label :serial_id %>
+          <%= f.collection_select(:serial_id, Serial.all, :id, :name, :include_blank => true) %>
+        </div>
+        <div class="large-2 columns">
+          <%= f.label :volume %>
+          <%= f.text_field :volume %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div id="if_editorial" class="large-6 columns">
+      <%= f.label :person_ids, "Editors", :class => 'control-label' %>
+      <%= collection_select(:book, :person_ids, Person.find(:all), :id, :fullname, { }, {:multiple => true}) %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-4 columns">
+      <%= f.label :year %>
+      <%= f.text_field :year %>
+    </div>
+    <div class="large-3 columns pull-5">
+      <%= f.label :unpublished %>
+      <%= f.check_box :unpublished %>
+    </div>
+  </div>
+
+  <div id="if_collection" class="row">
+    <div class="large-12 columns">
+      <%= f.label :title %>
+      <%= f.text_field :title %>
+    </div>
+  </div>
+
+  <div id="unless_serial" class="row">  
+    <div class="large-12 column">
+      <div class="row">
+        <div class="large-6 column">
+          <%= f.label :publisher %>
+          <%= f.text_field :publisher %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-6 column">
+          <%= f.label :place %>
+          <%= f.text_field :place %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-6 column">
+          <%= f.label :book_identifier %>
+          <%= f.text_field :book_identifier %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
