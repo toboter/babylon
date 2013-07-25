@@ -25,6 +25,8 @@ class BooksController < ApplicationController
   # GET /books/new.json
   def new
     @book = Book.new(:serial_id => params[:serial_id])
+    @book.articles.build
+    @book.editorships.build
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

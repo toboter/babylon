@@ -13,7 +13,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
+    <%= link_to "Explore", explore_path %>
     <%= link_to 'Periodicals and serials', serials_path %>
     <%= link_to "#{@serial.name}", @serial %>
   </nav>
@@ -23,7 +23,7 @@
   <h4>Volumes</h4>
   <ul>
     <% for book in @serial.books.order("volume ASC") do %>
-      <li><%= link_to "#{book.content_for_select}", book %></li>
+      <li><%= link_to "#{book_short_title(book)}", book %></li>
     <% end %>
   </ul>
   <p><%= link_to 'Add a volume', new_book_path(:serial_id => @serial), class: "button small" if can? :edit, @serial %></p>

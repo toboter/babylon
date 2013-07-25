@@ -14,3 +14,139 @@
  *= require general_foundicons_ie7
  *= require_tree .
  */
+
+.top-bar li.name h1 a {
+	color: #858585;
+}
+
+.babylo-tec-footer {
+	padding-top:150px;
+}
+
+/*--- Footer Top ---*/
+.babylo-tec-footer-top {
+	background: #f6f6f6;
+ 	padding: 24px 0 10px;
+ 	margin: 0;
+ 	height: 200px;
+ 	border-top: 1px solid #e6e6e6;
+}
+
+.babylo-tec-footer-top .option-block span, .babylo-tec-footer-top .option-block-last span {
+	padding-left: 25px;
+	line-height: 22px;
+	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 18px;
+}
+
+.babylo-tec-footer-top .option-block span i, .babylo-tec-footer-top .option-block-last span i {
+	padding-right: 12px;
+	color: orange;
+	font-size: 22px;
+}
+
+.babylo-tec-footer-top .option-block {
+	border-right: 1px solid #e6e6e6;
+	height: 130px;
+}
+
+.babylo-tec-footer-top .option-block-last {
+	height: 130px;
+}
+
+.babylo-tec-footer-top .option-block ul li, .babylo-tec-footer-top .option-block-last ul li {
+	display: block;
+	font-size: 12px;
+	padding-left: 60px;
+	line-height: 18px;
+}
+
+/*--- Footer Bottom ---*/
+.babylo-tec-footer-bottom {
+ 	background: #333;
+ 	padding: 24px 0 10px;
+ 	margin: 0;
+ 	height: 120px;
+ 	border-top: 1px solid #e6e6e6;
+ }
+
+.co-operation-links {
+ 	display: block;
+	float: right;
+	padding-bottom: 8px;
+	margin-left: 0;
+ }
+
+.babylo-tec-footer-bottom ul.co-operation-links li {
+ 	list-style: none;
+	display: block;
+	float: left;
+}
+
+.babylo-tec-footer-bottom ul.co-operation-links li a {
+	display: block;
+	color: #2ba6cb;
+	text-decoration: none;
+}
+
+.babylo-tec-footer-bottom ul.co-operation-links li a.vam {
+	background: url("/assets/smb-logo.png") no-repeat center 0;
+	background-size: auto 50px;
+	height: 50px;
+	width: 50px;
+}
+
+.babylo-tec-footer-bottom ul.co-operation-links li a.fu-berlin {
+	background: url("/assets/fu-logo.png") no-repeat center 0;
+	background-size: auto 50px;
+	height: 50px;
+	width: 50px;
+}
+
+.babylo-tec-footer-bottom ul.co-operation-links li a.dog {
+	background: url("/assets/dog-logo.png") no-repeat center center;
+	background-size: 100px auto;
+	margin: 0 30px;
+	height: 50px;
+	width: 100px;
+}
+
+
+.babylo-tec-footer-bottom ul.babylo-tec-links li a.babylo-tec-logo {
+	color: #858585;
+	font-weight: bold;
+	padding-right: 6px;
+	margin-left: -6px;
+	font-size: 16px;
+	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-transform: none;
+}
+
+.babylo-tec-footer-bottom ul.babylo-tec-links {
+	display: inline-block;
+	padding-top: 10px;
+	margin-bottom: 0.7em;
+}
+
+.babylo-tec-footer-bottom ul.babylo-tec-links li {
+	float: left;
+	display: block;
+	margin-left: 6px;
+	font-family: "Proxima Nova Condensed", "proxima-nova-condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 13px;
+	line-height: 16px
+}
+
+.babylo-tec-footer-bottom ul.babylo-tec-links li a {
+	color: #666;
+	padding: 0px 6px 3px 6px;
+}
+
+.babylo-tec-footer-bottom p span {
+	margin: 0;
+	font-size: 13px;
+	color: #666;
+	padding-left: 6px;
+}

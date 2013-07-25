@@ -13,33 +13,42 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
+    <%= link_to "Explore", explore_path %>
     <%= link_to 'People', people_path %>
     <%= link_to "#{@person.fullname}", @person %>
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
-  <h4>Bibliography</h4>
-  <ul>
-    <% for reference in @person.references do %>
-      <li><%= link_to "#{reference.title}", reference %></li>
-    <% end %>
-  </ul>
+  <section>
+    <h4>CV, Biographie und sonstige Texte</h4>
+  </section>
 
-  <h4>Buckets</h4>
-  <ul>
-    <% for bucket in @buckets do %>
-      <li>
-        <%= link_to "#{bucket.name}", [@attachable, bucket] %>, <%= bucket.cover_asset_id %>, <%= bucket.name_fixed %>
-        <ul>
-        <% for asset in bucket.assets do %>
-          <li><%= asset.name %></li>
-        <% end %>
-        </ul>
-      </li>
-    <% end %>
-  </ul>
+  <section>
+    <h4>Bibliography</h4>
+    <ul>
+      <% for reference in @person.references do %>
+        <li><%= link_to "#{reference.title}", reference %></li>
+      <% end %>
+    </ul>
+  </section>
+  <section>
+    <h4>Buckets</h4>
+    <ul>
+      <% for bucket in @buckets do %>
+        <li>
+          <h4><%= link_to "#{bucket.name}", [@attachable, bucket] %></h4> 
+          <ul class="small-block-grid-2 large-block-grid-4">
+            <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').limit(8).order('created_at desc') do %>
+              <li><%= link_to (image_tag asset.assetfile.thumb.url), asset, class: "th radius" %></li>
+            <% end %>
+          </ul>
+          <%= bucket.cover_asset_id %> 
+          <%= link_to "Add an asset", new_bucket_asset_path(bucket) %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
 
 <% end %>
 
@@ -49,9 +58,9 @@
       <p class="title" data-section-title><%= link_to "Bild" %></p>
       <div class="content" data-section-content>
         <% if @buckets.with_profile_pictures.first.cover_asset_id %>
-          <h1>Ein Bild, ein Bild</h1>
+          <%= link_to (image_tag @profile_picture.assetfile.small.url), @profile_picture, class: "th radius" %>
         <% else %>
-          <h1>nix zu sehen</h1>
+          <%= image_tag("missing_profile_picture.jpg") %>
         <% end %>
         <p><b>Name:</b><%= @person.fullname %> <% unless @person.grade.blank? %>(<%= @person.grade %>)<% end %></p>
         <p><b>Nickname:</b><%= @person.nickname %></p>

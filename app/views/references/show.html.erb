@@ -1,11 +1,11 @@
-<% title @reference.title, nil %>
+<% title "#{@reference.title}", nil %>
 
 <% content_for :link_section do %>
   <div class="button-bar right">
     <ul class="button-group">
       <% if can? :edit, @reference %>
-        <%= link_to 'Edit', edit_reference_path(@reference), class: "button small" %>
-        <%= link_to 'Delete', @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+        <li><%= link_to 'Edit', edit_reference_path(@reference), class: "button small" %></li>
+        <li><%= link_to 'Delete', @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %></li>
       <% end %>
     </ul>
   </div>
@@ -13,27 +13,31 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
-    <%= link_to 'Articles and Monographs', references_path %>
-    <%= link_to "#{@reference.title}", @serial %>
+    <%= link_to "Explore", explore_path %>
+    <%= link_to 'Bibliography', references_path %>
+    <%= link_to "#{@reference.title}", @reference %>
   </nav>
 <% end %>
 
 <% content_for :note_section do %>
 <p>
   <b>Authors:</b>
-  <%= @reference.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>
+  <%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>
 </p>
+
+<%= @reference.book.year if @reference.book %>
 
 <p>
   <b>Title:</b>
   <%= @reference.title %>
 </p>
 
-<p>
-  <b>In:</b>
-  <%= @reference.book.inspect %>
-</p>
+<% if @reference.book %>
+  <p>
+    <b>In: </b><%= book_edited_by(@reference.book, true, true, true) %><%= book_title(@reference.book, true) %>
+  </p>
+  Bookinfo
+<% end %>
 <p>
   <b>Pages:</b>
   <%= @reference.first_page %> to <%= @reference.last_page %>
@@ -50,6 +54,6 @@
   <p>Gescannte Bilder aus diesem Buch</p>
   <p>Abstract</p>
   <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
+  <p>Außerdem in diesem Buch</p>
 <% end %>
 
-<%= link_to 'Back', :back %>

@@ -1,15 +1,19 @@
 class Reference < ActiveRecord::Base
-  attr_accessible :creator_id, :updater_id, :title, :person_ids, :original_date, :alternative_author, :slug,
-                  :first_page, :last_page, :book_id, :uri
+  attr_accessible :creator_id, :updater_id, :title, :author_ids, :original_date, :alternative_author, :slug,
+                  :first_page, :last_page, :book_id, :uri, :authorships_attributes
 
   stampable
 
-  validates_presence_of :title
-  validates_presence_of :person_ids, :unless => :alternative_author
 
-  has_many :people, through: :authorships
-  has_many :authorships, :dependent => :destroy
+  validates_presence_of :title
+  #validates_presence_of :uri unless book_id == nil
+
+  has_many :authors, :class_name => 'Person', through: :authorships, :source => :person
+  has_many :authorships, :dependent => :destroy, :order => 'position'
   belongs_to :book
+
+  accepts_nested_attributes_for :authorships, allow_destroy: true
+
 
 
 end

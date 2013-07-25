@@ -1,4 +1,4 @@
-<% title @book.blank_title, nil %>
+<% title book_short_title(@book), nil %>
 
 <% content_for :link_section do %>
   <div class="button-bar right">
@@ -13,9 +13,9 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
-    <%= link_to 'Publications', books_path %>
-    <%= link_to "#{@book.blank_title}", @book %>
+    <%= link_to "Explore", explore_path %>
+    <%= link_to 'Books', books_path %>
+    <%= link_to "#{book_short_title(@book)}", @book %>
   </nav>
 <% end %>
 
@@ -33,16 +33,8 @@
 
 <% content_for :note_section do %>
   <p>
-    <b>Title:</b>
-    <%= @book.blank_title %>
+    <b>Title: </b><%= book_edited_by(@book, true, true, false) %><%= book_title(@book) %>
   </p>
-  
-  <% if @book.serial && @book.volume %>
-    <p>
-      <b>Serial:</b>
-      <%= link_to "#{@book.serial.name}", @book.serial %>
-    </p>
-  <% end %>
 
   <p>
     <b>Place:</b>

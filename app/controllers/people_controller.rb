@@ -19,6 +19,7 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     @attachable = @person
     @buckets = @attachable.buckets
+    @profile_picture = Asset.find(@buckets.with_profile_pictures.first.cover_asset_id) if @buckets.with_profile_pictures.first.cover_asset_id
     @bucket = Bucket.new
 
     respond_to do |format|

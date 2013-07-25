@@ -1,0 +1,78 @@
+<fieldset>
+  <div class="row">
+    <div class="large-6 columns">
+      <p style="text-align:right;"><small><%= link_to("Toggle authorship", '#', class: "add_fields", id: 'toggle-authors') %></small></p>
+      <div id="authors" class="control-group">
+        <%= f.fields_for :authorships do |builder| %>
+          <%= render "references/author_fields", :f => builder %>
+        <% end %>
+        <%= f.link_to_add "Add Author", :authorships %>
+      </div>
+      <div id="alt-author" class="control-group">
+        <%= f.label :alternative_author, "Institutionelle oder andere Autorenschaft", :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :alternative_author, :class => 'text_field' %>
+        </div>
+      </div>
+      
+    </div>
+    <div class="large-6 columns">
+
+    </div>
+  </div>
+  
+  <br />
+
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="control-group">
+        <%= f.label :title, "Titel", :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :title, :class => 'text_field' %>
+        </div>
+      </div>
+    <% unless @book %> <!-- Wenn das Formular aus dem Book-form als nested_field aufgerufen wird -->
+      <% unless @reference.book %> <!-- Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde -->
+        <div class="row">
+          <div class="large-12 columns">
+            <%= f.label :book_id, 'Select Book', :class => 'control-label' %>
+            <%= f.select(:book_id, Book.all.collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: "large-12") %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-4 columns">
+      <div class="control-group">
+        <%= f.label :first_page, "Erste Seite", :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :first_page, :class => 'text_field' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :last_page, "Letzte Seite", :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :last_page, :class => 'text_field' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :uri, 'Internet Resource URI', :class => 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :uri %>
+        </div>
+      </div>
+      <p><small><%= link_to("Add specific date", '#', class: "add_fields", id: 'add-date') %></small></p>
+      <div id="date" class="control-group">
+        <%= f.label :original_date, :class => 'control-label' %>
+        <div class="controls">
+          <%= f.date_select :original_date, {:start_year => Time.now.year + 1, :end_year => 1899, :include_blank => true}, :class => 'text_field' %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if @book %>
+    <small><%= f.link_to_remove "remove" %></small>
+  <% end %>
+</fieldset>

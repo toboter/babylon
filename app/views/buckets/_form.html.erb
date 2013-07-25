@@ -1,4 +1,4 @@
-<%= form_for [@attachable, @bucket] do |f| %>
+<%= form_for [@attachable, @bucket], :html => { :class => 'custom'} do |f| %>
 <%= f.error_messages %>
 
   <div class="field">
@@ -23,6 +23,8 @@
     <%= f.label :name %><br />
     <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
   </div>
+
+
   <div class="actions">
     <%= f.submit %>
   </div>

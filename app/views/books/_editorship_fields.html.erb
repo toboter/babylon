@@ -1,0 +1,9 @@
+<fieldset>
+  <div class="controls controls-row">
+      <div class="field">
+        <%= f.label :person_id, 'Editor' %>
+        <%= f.collection_select :person_id, Person.order(:last_name), :id, :fullname, { :include_blank => true } %>
+      </div>
+    <small><%= f.link_to_remove "remove" %></small>
+  </div>
+</fieldset>

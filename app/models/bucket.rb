@@ -1,5 +1,6 @@
 class Bucket < ActiveRecord::Base
-  attr_accessible :name, :creator_id, :updater_id, :asset_ids, :cover_asset_id, :name_fixed, :attachable_id, :attachable_type
+  attr_accessible :name, :creator_id, :updater_id, :asset_ids, :cover_asset_id, :name_fixed, 
+  				  :attachable_id, :attachable_type
 
   stampable
 

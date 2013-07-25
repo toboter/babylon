@@ -1,20 +1,24 @@
 Babylon::Application.routes.draw do
 
-  resources :assets
-
   resources :serials
   resources :books
-  resources :references
+  resources :references, :path => 'bibliography'
 
   resources :people do
     resources :buckets
   end
 
+  resources :buckets do
+    resources :assets
+  end
+
+  resources :assets, only: [:show, :index, :destroy, :edit]
+
   devise_for :users
 
   post "user_connect" => "people#connect_to_user"
   get 'dashboard', to: 'dashboard#index'
-  get 'discover', to: 'discover#index'
+  get 'explore', to: 'explore#index'
 
   resources :roles, only: [] do
     collection do
@@ -71,7 +75,7 @@ Babylon::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'discover#index'
+  root :to => 'explore#index'
 
   # See how all your routes lay out with "rake routes"
 

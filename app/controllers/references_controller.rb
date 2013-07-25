@@ -27,6 +27,7 @@ class ReferencesController < ApplicationController
   # GET /references/new.json
   def new
     @reference = Reference.new(:book_id => params[:book_id])
+    @reference.authorships.build
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

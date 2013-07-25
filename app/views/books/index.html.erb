@@ -1,18 +1,20 @@
-<% title "Publications", nil %>
+<% title "Books", nil %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
-    <%= link_to 'Publications', books_path %>
+    <%= link_to "Explore", explore_path %>
+    <%= link_to 'Books', books_path %>
   </nav>
 <% end %>
 
 <% content_for :link_section do %>
   <div class="button-bar right">
     <ul class="button-group">
-      <% if can? :edit, @serial %>
+      <% if can? :edit, @books %>
         <%= link_to 'New Book', new_book_path, class: "button small" %>
       <% end %>
+      <li><%= link_to "Bibliography", references_path, class: "button small secondary" %></li>
+      <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>
     </ul>
   </div>
 <% end %>
@@ -34,19 +36,9 @@
   
     <% @books.each do |book| %>
       <tr>
-        <td>
-          <% unless book.people.empty? %>
-            <%= book.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %> (Hrsg.)
-          <% else %>
-            <% if book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe" %>
-              <%= book.articles.first.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>
-            <% else %>
-              Kein Autor
-            <% end %>
-          <% end %>
-        </td>
+        <td><%= book_edited_by(book) %></td>
         <td><%= book.year %></td>
-        <td><%= link_to "#{book.content(false)}", book %></td>
+        <td><%= book_title(book) %></td>
         <td><%= book.place %></td>
         <td><%= book.publisher %></td>
         <td><%= book.book_type %></td>

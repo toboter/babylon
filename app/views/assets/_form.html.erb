@@ -1,5 +1,6 @@
-<%= form_for @asset, :html => { :class => 'custom', :multipart => true } do |f| %>
+<%= form_for [@bucket, @asset], :html => { :class => 'custom', :multipart => true } do |f| %>
   <%= f.error_messages %>
+<%= @bucket.inspect %>
 
   <div class="field">
     <%= f.label :assetfile %><br />
@@ -13,14 +14,7 @@
     <%= f.label :parent_id %><br />
     <%= f.number_field :parent_id %>
   </div>
-  <div class="field">
-    <%= f.label :content_type %><br />
-    <%= f.text_field :content_type %>
-  </div>
-  <div class="field">
-    <%= f.label :file_size %><br />
-    <%= f.text_field :file_size %>
-  </div>
+
   <div class="field">
     <%= f.label :file_name %><br />
     <%= f.text_field :file_name %>

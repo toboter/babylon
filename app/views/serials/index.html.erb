@@ -2,7 +2,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
+    <%= link_to "Explore", explore_path %>
     <%= link_to 'Periodicals and serials', serials_path %>
   </nav>
 <% end %>
@@ -13,6 +13,8 @@
       <% if can? :edit, @serial %>
         <%= link_to 'New Periodical or Serial', new_serial_path, class: "button small" %>
       <% end %>
+      <li><%= link_to "Bibliography", references_path, class: "button small secondary" %></li>
+      <li><%= link_to "Books", books_path, class: "button small secondary" %></li>
     </ul>
   </div>
 <% end %>

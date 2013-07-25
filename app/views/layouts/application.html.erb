@@ -38,18 +38,11 @@
           <li class="has-dropdown"><%= link_to "Explore", root_path %>
             <ul class="dropdown">
               <li><%= link_to "People", people_path %></li>
-              <li class="has-dropdown"><%= link_to "Bibliography", references_path %>
-                <ul class="dropdown">
-                  <li><label>Bibliography</label></li>
-                  <li><%= link_to "Articles and Monographs", references_path %></li>
-                  <li><%= link_to "Books", books_path %></li>
-                  <li><%= link_to "Periodicals and Series", serials_path %></li>
-                </ul>
-              </li>
+              <li><%= link_to "Bibliography", references_path %></li>
             </ul>
           </li>
           <li class="divider"></li>
-          <li><%= link_to "Search" %></li>
+          <li><%= link_to("Search", '#', class: "add-search", id: 'toggle-search') %></li>
           <li class="divider"></li>
         </ul>
         <ul class="right">
@@ -103,80 +96,125 @@
       </section>
     </nav>
 
-    <div class="container">
+
+    <!-- Main Section -->
+
+    <div class="wrapper">
   	  <div class="row">
         <div class="large-12 columns">
   	  	  <% flash.each do |name, msg| %>
             <%= content_tag :div, msg, :id => "flash_#{name}", :class => "alert-box radius" %>
           <% end %>
-        <%= content_for?(:content) ? yield(:content) : yield %>
-        
+          <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
-      </div>      
-    </div>
-
-    <div class="row" style="margin-top:100px;">
-      <div class="large-3 columns">
-        <ul class="side-nav">
-          <li><%= link_to "Items" %></li>
-        </ul>
-      </div>
-    
-      <div class="large-3 columns">
-        <ul class="side-nav">
-          <li><%= link_to "Articles and Monographs", references_path %></li>
-          <li><%= link_to "Books", books_path %></li>
-          <li><%= link_to "Periodicals and Series", serials_path %></li>
-        </ul>
-      </div>
-      
-      <div class="large-3 columns">
-        <ul class="side-nav">
-          <li><%= link_to "People", people_path %></li>
-        </ul>
-      </div>
-    
-      <div class="large-3 columns">
-        <ul class="side-nav">
-          <li><%= link_to "About" %></li>
-          <li><%= link_to "Search" %></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="row" style="margin-top:200px;">
-      <div class="large-12 columns">
-          <p><%= params %></p>
-          <p><%= session.inspect if session %></p>
-          <p></p>
-      </div>
+      </div>   
     </div>
 
 
-  <% if user_signed_in? %>
-    <% unless connected_profile %>
-      <div id="connect_profile" class="reveal-modal">
-        <a class="close-reveal-modal">&#215;</a>
+    <!-- Footer section -->
+
+    <div class="babylo-tec-footer">
+      <% if can? :manage, 'development' %>
         <div class="row">
-          <div class="large-8 columns">
-            <h3>Connect your account to a profile</h3>
-            <%= form_tag user_connect_path, :class => "custom" do %>
-              <div class="row collapse">
-                <div class="small-8 columns">
-                  <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "large-8" %>
-                  <%= hidden_field_tag :connect_user_id, current_user.id %>
-                </div>
-                <div class="small-4 columns">
-                  <%= submit_tag "Connect", class: "button prefix" %>
-                </div>
-              </div>
-            <% end %>
-            <span>Not on the list? <%= link_to "New profile", new_person_path(:user_id => current_user) %></span>
+          <div class="large-12 columns" style="font-size:12px;">
+            <p><%= params %></p>
+            <p><%= session.inspect if session %></p>
+          </div>
+        </div>
+      <% end %>
+      <!-- Menu Footer -->
+      <div class="babylo-tec-footer-top">
+        <div class="row">
+          <div class="large-3 small-6 columns option-block">
+            <span class=​"title">​<i class="foundicon-page"></i>Resources</span>​
+            <ul class="side-nav">
+              <li><%= link_to "Items" %></li>
+              <li><%= link_to "Bibliography", references_path %></li>
+              <li><%= link_to "People", people_path %></li>
+            </ul>
+          </div>
+        
+          <div class="large-3 small-6 columns option-block">
+            <span class=​"title"><i class="foundicon-graph"></i>Projects</span>​
+            <ul class="side-nav">
+              <li><%= link_to "Projects" %></li>
+            </ul>
+          </div>
+          
+          <div class="large-3 small-6 columns option-block">
+            <span class=​"title"><i class="foundicon-search"></i>(Re-)Search</span>​
+            <ul class="side-nav">
+              <li><%= link_to "Search" %></li>
+              <li><%= link_to "Sitemap" %></li>
+            </ul>
+          </div>
+        
+          <div class="large-3 small-6 columns option-block-last">
+            <span class=​"title"><i class="foundicon-compass"></i>BABylo-tec</span>​
+            <ul class="side-nav">
+              <li><%= link_to "About" %></li>
+              <li><%= link_to "Blog" %></li>
+              <li><%= link_to "News & Events" %></li>
+              <li><%= link_to "Contact" %></li>
+            </ul>
           </div>
         </div>
       </div>
+  
+  
+      <!-- Footer About -->
+  
+      <div class="babylo-tec-footer-bottom">
+        <div class="row">
+          <div class="large-4 push-8 columns">
+            <ul class="co-operation-links">
+              <li><%= link_to "", "http://www.vam.de", class: "vam" %></li>
+              <li><%= link_to "", "http://www.deutsche-orientgesellschaft.de", class: "dog" %></li>
+              <li><%= link_to "", "http://www.fu-berlin.de", class: "fu-berlin" %></li>
+            </ul>
+          </div>
+          <div class="large-8 pull-4 columns">            
+              <ul class="babylo-tec-links">
+                <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
+                <li><%= link_to "About" %></li>
+                <li><%= link_to "Blog" %></li>
+                <li><%= link_to "News & Events" %></li>
+                <li><%= link_to "Contact" %></li>
+                <li><%= link_to "Sitemap" %></li>
+              </ul>
+            <p><span class=​"copyright">​&copy; 2013 BABylo-tec. All rights reserved.</span>​</p>​
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modals beginn -->
+
+    <% if user_signed_in? %>
+      <% unless connected_profile %>
+        <div id="connect_profile" class="reveal-modal">
+          <a class="close-reveal-modal">&#215;</a>
+          <div class="row">
+            <div class="large-8 columns">
+              <h3>Connect your account to a profile</h3>
+              <%= form_tag user_connect_path, :class => "custom" do %>
+                <div class="row collapse">
+                  <div class="small-8 columns">
+                    <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "large-8" %>
+                    <%= hidden_field_tag :connect_user_id, current_user.id %>
+                  </div>
+                  <div class="small-4 columns">
+                    <%= submit_tag "Connect", class: "button prefix" %>
+                  </div>
+                </div>
+              <% end %>
+              <span>Not on the list? <%= link_to "New profile", new_person_path(:user_id => current_user) %></span>
+            </div>
+          </div>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
 
     
     <%= javascript_include_tag "application" %>

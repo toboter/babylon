@@ -1,10 +1,17 @@
+<%= @asset.buckets.inspect %>
+
 <p>
   <b>Asset:</b>
   <%= @asset.assetfile %>
 </p>
 <p>
-  <%= image_tag(@asset.assetfile_url(:big)) %>
+  <% if @asset.content_type.include? 'image' %>
+    <%= image_tag(@asset.assetfile.big.url) %>
+  <% else %>
+    <li><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></li>
+  <% end %>
 </p>
+
 <p>
   <b>Name:</b>
   <%= @asset.name %>
@@ -35,6 +42,3 @@
   <%= @asset.file_datetime %>
 </p>
 
-
-<%= link_to 'Edit', edit_asset_path(@asset) %> |
-<%= link_to 'Back', assets_path %>

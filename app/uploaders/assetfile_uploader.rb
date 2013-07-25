@@ -1,10 +1,14 @@
+require 'carrierwave/processing/mime_types'
 # encoding: utf-8
 
 class AssetfileUploader < CarrierWave::Uploader::Base
 
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
+  include CarrierWave::MimeTypes
   include CarrierWave::MiniMagick
+
+  process :set_content_type
 
   # Choose what kind of storage to use for this uploader:
   storage :file
@@ -35,13 +39,14 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   # version :thumb do
   #   process :scale => [50, 50]
   # end
-  version :big do
+
+  version :big, :if => :is_image? do
     process :resize_to_fit => [1024, 1024]
   end
-  version :small do
+  version :small, :if => :is_image? do
     process :resize_to_fit => [460, 460]
   end
-  version :thumb do
+  version :thumb, :if => :is_image? do
     process :resize_to_fill => [150, 150]
   end
   
@@ -56,5 +61,9 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  def is_image? file
+    file.content_type.include? 'image'
+  end
 
 end

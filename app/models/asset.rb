@@ -4,6 +4,21 @@ class Asset < ActiveRecord::Base
   stampable
   mount_uploader :assetfile, AssetfileUploader
 
+  before_validation :update_asset_attributes
+
   has_many :buckets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
+
+  validates_presence_of :assetfile, :name, :content_type
+
+
+  
+  private
+  
+  def update_asset_attributes
+    if assetfile.present? && assetfile_changed?
+      self.content_type = assetfile.file.content_type
+      self.file_size = assetfile.file.size
+    end
+  end
 end

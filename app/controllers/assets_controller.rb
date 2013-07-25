@@ -24,7 +24,8 @@ class AssetsController < ApplicationController
   # GET /assets/new
   # GET /assets/new.json
   def new
-    @asset = Asset.new
+    @bucket = Bucket.find(params[:bucket_id])
+    @asset = @bucket.assets.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,11 +41,13 @@ class AssetsController < ApplicationController
   # POST /assets
   # POST /assets.json
   def create
+    @bucket = Bucket.find(params[:bucket_id])
     @asset = Asset.new(params[:asset])
+    @asset.buckets << @bucket
 
     respond_to do |format|
       if @asset.save
-        format.html { redirect_to @asset, notice: 'Asset was successfully created.' }
+        format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
         format.json { render json: @asset, status: :created, location: @asset }
       else
         format.html { render action: "new" }

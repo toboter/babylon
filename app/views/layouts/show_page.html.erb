@@ -7,7 +7,7 @@
 
   <div class="row">
     <div class="large-8 columns">
-      <%= content_tag :h2, yield(:title) if show_title? %>
+      <%= content_tag :h3, yield(:title) if show_title? %>
       <%= content_tag :h4, yield(:subtitle), :class => "subheader" if show_title? %>
   	</div>
   	<div class="large-4 columns">

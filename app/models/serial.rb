@@ -11,4 +11,13 @@ class Serial < ActiveRecord::Base
   has_many :books
 
   SERIALTYPES = %w[Zeitschrift Reihe]
+
+  def serial_types
+    if serial_type == 'Zeitschrift'
+      %w[Band\ einer\ Zeitschrift]
+    else
+      %w[Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe]
+    end
+  end
+
 end

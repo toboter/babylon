@@ -1,18 +1,20 @@
-<% title "Articles and Monographs", nil %>
+<% title "Bibliography", nil %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Discover", discover_path %>
-    <%= link_to 'Articles and Monographs', references_path %>
+    <%= link_to 'Explore', explore_path %>
+    <%= link_to 'Bibliography', references_path %>
   </nav>
 <% end %>
 
 <% content_for :link_section do %>
   <div class="button-bar right">
     <ul class="button-group">
-      <% if can? :edit, @serial %>
-        <%= link_to 'New Article or Monograph', new_reference_path, class: "button small" %>
+      <% if can? :edit, @references %>
+        <li><%= link_to 'New Entry', new_reference_path, class: "button small" %></li>
       <% end %>
+      <li><%= link_to "Books", books_path, class: "button small secondary" %></li>
+      <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>
     </ul>
   </div>
 <% end %>
@@ -21,9 +23,10 @@
   <table>
     <tr>
       <th>Author(s)</th>
+      <th>Year</th>
       <th>Title</th>
       <th>In</th>
-      <% if can? :edit, @serials %>
+      <% if can? :edit, @references %>
         <th></th>
       <% end %>
   
@@ -31,11 +34,12 @@
   
     <% @references.each do |reference| %>
       <tr>
-        <td><%= reference.people.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></td>
+        <td><%= authors_of_article(reference) %></td>
+        <td><%= reference.book.year if reference.book %></td>
         <td><%= link_to "#{reference.title}", reference %></td>
-        <td><%= link_to "#{reference.book.content(true)}", reference.book if reference.book %></td>
-        <% if can? :edit, @serials %>
-          <td><%= link_to "Edit", edit_reference_path(reference), :class => 'small button' %></td>
+        <td><%= article_in_book(reference) %></td>
+        <% if can? :edit, @references %>
+          <td><%= link_to "Edit", edit_reference_path(reference) %></td>
         <% end %>
       </tr>
     <% end %>

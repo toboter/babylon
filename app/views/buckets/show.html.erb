@@ -1,23 +1,24 @@
 <p>
-  <b>Attachable:</b>
-  <%= @bucket.attachable_type %>
-</p>
-
-<p>
-  <b>Attachable:</b>
-  <%= @bucket.attachable_id %>
-</p>
-
-<p>
-  <b>Attachable:</b>
-  <%= @bucket.cover_asset_id %>
-</p>
-
-<p>
   <b>Name:</b>
   <%= @bucket.name %>
 </p>
 
+<p>
+  <b>Cover_id:</b>
+  <%= @bucket.cover_asset_id %>
+</p>
+
+<ul class="small-block-grid-2 large-block-grid-4">
+  <% for asset in @bucket.assets do %>
+    <% if asset.content_type.include? 'image' %>
+      <li><%= link_to (image_tag asset.assetfile.small.url), asset, class: "th radius" %></li>
+    <% else %>
+      <li><%= link_to "#{asset.assetfile.url}", asset %></li>
+    <% end %>
+  <% end %>
+</ul>
+
+<p><%= link_to 'Add Assets', new_bucket_asset_path(@bucket) %></p>
 
 <%= link_to 'Edit', [:edit, @attachable, @bucket] %> |
-<%= link_to 'Back', :back %>
+<%= link_to 'Back', @attachable %>

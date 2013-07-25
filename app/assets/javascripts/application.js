@@ -16,4 +16,6 @@
 //= require_tree .
 //= require jquery_nested_form
 
-$(function(){ $(document).foundation(); });
+$(function(){ 
+	$(document).foundation(); 
+});
