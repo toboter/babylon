@@ -1,0 +1,37 @@
+<% title "Projects", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Projects", projects_path %>
+  </nav>
+<% end %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :main_section do %>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Group</th>
+      <th>Area</th>
+      <th></th>
+    </tr>
+  
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= link_to "#{project.name}", project %></td>
+        <td><%= project.group.name %></td>
+        <td><%= project.group.area.name %></td>
+        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  
+<% end %>

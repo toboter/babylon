@@ -1,0 +1,37 @@
+<% title "Research Group: #{@group.name}", nil %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'Add Project', new_project_path(:group_id => @group), class: "button small" %>
+        <%= link_to 'Edit', edit_group_path(@group), class: "button small" %>
+        <%= link_to 'Delete', @group, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Area: #{@group.area.name}", @group.area %>
+    <%= link_to "#{@group.name}", @group %>
+
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+<p>
+  <b>Area:</b>
+  <%= @group.area.name %>
+</p>
+
+<% for project in @group.projects do %>
+  <p><%= link_to "#{project.name}", project %></p>
+<% end %>
+
+<% end %>
+
+<% content_for :note_section do %>
+
+<% end %>

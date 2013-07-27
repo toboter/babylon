@@ -1,4 +1,4 @@
-<% title "People", "Listing people working on Babylon" %>
+<% title "People", nil %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
@@ -22,7 +22,6 @@
     <tr>
       <th></th>
       <th>Name</th>
-      <th>Grade</th>
       <th>Nickname</th>
       <th>Date of birth</th>
       <th>Date of death</th>
@@ -36,9 +35,8 @@
   
     <% @people.each do |person| %>
       <tr>
-        <td><%= "c" if person.user_id %></td>
-        <td><%= link_to "#{person.fullname}", person %></td>
-        <td><%= person.grade %></td>
+        <td><% if person.user_id %><span data-tooltip class="has-tip" title="This Person has a connected user-account in BABylo-tec."><i class="foundicon-lock"></i></span><% end %></td>
+        <td><%= link_to "#{graded_fullname(person)}", person %></td>
         <td><%= person.nickname %></td>
         <td><%= person.date_of_birth.strftime("%d.%m.%Y") unless person.date_of_birth.blank? %></td>
         <td><%= person.date_of_death.strftime("%d.%m.%Y") unless person.date_of_death.blank? %></td>
@@ -46,7 +44,9 @@
         <td><%= person.gender %></td>
         <td><%= person.public_email %></td>
         <% if can? :edit, @people %>
-          <td><%= link_to 'Edit', edit_person_path(person) %></td>
+          <% if (!person.user_id?) || (person.user_id == current_user.id) %>
+            <td><%= link_to 'Edit', edit_person_path(person) %></td>
+          <% end %>
         <% end %>
       </tr>
     <% end %>

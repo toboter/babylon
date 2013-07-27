@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
 
   has_many :people
   has_one :role
+  has_many :projects, through: :memberships
+  has_many :memberships, :dependent => :destroy
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'

@@ -88,7 +88,7 @@
 </fieldset>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :id => 'book-submit', :class => 'button' %>
     <% if @book.new_record? %>
         <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
     <% else %>

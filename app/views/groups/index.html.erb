@@ -1,0 +1,34 @@
+<% title "Research Groups", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Reasearch Groups", groups_path %>
+
+  </nav>
+<% end %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :main_section do %>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Area</th>
+      <th></th>
+    </tr>
+  
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= link_to "#{group.name}", group %></td>
+        <td><%= group.area.name %></td>
+        <td><%= link_to 'Edit', edit_group_path(group) %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

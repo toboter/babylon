@@ -1,11 +1,13 @@
-<% title @person.fullname, nil %>
+<% title graded_fullname(@person), nil %>
 
 <% content_for :link_section do %>
 <div class="button-bar right">
   <ul class="button-group">
-    <% if (current_user == @person.user) || (can? :edit, @person) %>
+    <% if can? :edit, @person %>
+      <% if (!@person.user_id?) || (@person.user_id == current_user.id) %>
       <%= link_to 'Edit', edit_person_path(@person), class: "button small" %>
       <%= link_to 'Delete', @person, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+    <% end %>
     <% end %>
   </ul>
 </div>
@@ -15,17 +17,18 @@
   <nav class="breadcrumbs">
     <%= link_to "Explore", explore_path %>
     <%= link_to 'People', people_path %>
-    <%= link_to "#{@person.fullname}", @person %>
+    <%= link_to "#{graded_fullname(@person)}", @person %>
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
   <section>
-    <h4>CV, Biographie und sonstige Texte</h4>
+    <h4>General Information, Activities | Curriculum Vitae | Publications</h4>
+    <p>Areas, Groups, Projects | Email, Telefon, Fax, Address (durch Institution), Institut</p>
   </section>
 
   <section>
-    <h4>Bibliography</h4>
+    <h4>Publications on Babylon</h4>
     <ul>
       <% for reference in @person.references do %>
         <li><%= link_to "#{reference.title}", reference %></li>
@@ -43,8 +46,12 @@
               <li><%= link_to (image_tag asset.assetfile.thumb.url), asset, class: "th radius" %></li>
             <% end %>
           </ul>
-          <%= bucket.cover_asset_id %> 
-          <%= link_to "Add an asset", new_bucket_asset_path(bucket) %>
+          <%= bucket.cover_asset_id %>
+          <% if can? :edit, @person %>
+            <% if (!@person.user_id?) || (@person.user_id == current_user.id) %>
+              <%= link_to "Add asset", new_bucket_asset_path(bucket) %>
+            <% end %>
+          <% end %>
         </li>
       <% end %>
     </ul>
@@ -53,31 +60,18 @@
 <% end %>
 
 <% content_for :note_section do %>
-  <div class="section-container tabs" data-section="tabs">
-    <section>
-      <p class="title" data-section-title><%= link_to "Bild" %></p>
-      <div class="content" data-section-content>
-        <% if @buckets.with_profile_pictures.first.cover_asset_id %>
-          <%= link_to (image_tag @profile_picture.assetfile.small.url), @profile_picture, class: "th radius" %>
-        <% else %>
-          <%= image_tag("missing_profile_picture.jpg") %>
-        <% end %>
-        <p><b>Name:</b><%= @person.fullname %> <% unless @person.grade.blank? %>(<%= @person.grade %>)<% end %></p>
-        <p><b>Nickname:</b><%= @person.nickname %></p>
-        <p><b>Date of birth:</b><%= @person.date_of_birth.strftime("%d.%m.%Y") unless @person.date_of_birth.blank? %></p>
-        <p><b>Date of death:</b><%= @person.date_of_death.strftime("%d.%m.%Y") unless @person.date_of_death.blank? %></p>
-        <p><b>Profession:</b><%= @person.profession %></p>
-        <p><b>Gender:</b><%= @person.gender %></p>
-        <p><b>Public email:</b><%= @person.public_email %></p>
-      </div>
-    </section>
-    <section>
-      <p class="title" data-section-title><%= link_to "Weiteres" %></p>
-      <div class="content" data-section-content>
-        <p><b>Username:</b><%= @person.user.username if @person.user %></p>
-        <p><b>Created by:</b><%= @person.creator.available_name %></p>
-        <p><b>Updated by:</b><%= @person.updater.available_name %></p>
-      </div>
-    </section>
+  <div class="content">
+    <% if @buckets.with_profile_pictures.first.cover_asset_id %>
+      <%= link_to (image_tag @profile_picture.assetfile.small.url), @profile_picture, class: "th" %>
+    <% end %>
+    <p><b>Shortcut:</b><%= @person.nickname %></p>
+    <p><b>Date of birth:</b><%= @person.date_of_birth.strftime("%d.%m.%Y") unless @person.date_of_birth.blank? %></p>
+    <p><b>Date of death:</b><%= @person.date_of_death.strftime("%d.%m.%Y") unless @person.date_of_death.blank? %></p>
+    <p><b>Profession:</b><%= @person.profession %></p>
+    <p><b>Gender:</b><%= @person.gender %></p>
+    <p><b>Email:</b><%= @person.public_email %></p>
+    <p><b>Username:</b><%= @person.user.username if @person.user %></p>
+    <p><b>Created by:</b><%= @person.creator.available_name %></p>
+    <p><b>Updated by:</b><%= @person.updater.available_name %></p>
   </div>
 <% end %>

@@ -3,7 +3,7 @@
 <% content_for :link_section do %>
   <div class="button-bar right">
     <ul class="button-group">
-      <% if can? :edit, @serial %>
+      <% if can? :edit, @book %>
         <%= link_to 'Edit', edit_book_path(@book), class: "button small" %>
         <%= link_to 'Delete', @book, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
       <% end %>

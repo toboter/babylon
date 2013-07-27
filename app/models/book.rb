@@ -4,7 +4,7 @@ class Book < ActiveRecord::Base
 
   stampable
 
-attr_accessor :selected
+  attr_accessor :selected
 
   validates_presence_of :book_type
   validates_presence_of :year unless :unpublished == true

@@ -35,15 +35,22 @@
       <section class="top-bar-section">
         <ul class="left">
           <li class="divider"></li>
-          <li class="has-dropdown"><%= link_to "Explore", root_path %>
+          <li class="has-dropdown"><%= link_to "Ressources" %>
             <ul class="dropdown">
               <li><%= link_to "People", people_path %></li>
               <li><%= link_to "Bibliography", references_path %></li>
             </ul>
           </li>
           <li class="divider"></li>
-          <li><%= link_to("Search", '#', class: "add-search", id: 'toggle-search') %></li>
+          <li class="has-dropdown"><%= link_to "Research" %>
+            <ul class="dropdown">
+              <li><%= link_to "Areas", areas_path %></li>
+              <li><%= link_to "Groups", groups_path %></li>
+              <li><%= link_to "Projects", projects_path %></li>
+            </ul>
+          </li>
           <li class="divider"></li>
+
         </ul>
         <ul class="right">
           <% if user_signed_in? %>
@@ -117,8 +124,7 @@
       <% if can? :manage, 'development' %>
         <div class="row">
           <div class="large-12 columns" style="font-size:12px;">
-            <p><%= params %></p>
-            <p><%= session.inspect if session %></p>
+            <p><%= debug(params) %></p>
           </div>
         </div>
       <% end %>
@@ -135,16 +141,19 @@
           </div>
         
           <div class="large-3 small-6 columns option-block">
-            <span class=​"title"><i class="foundicon-graph"></i>Projects</span>​
+            <span class=​"title"><i class="foundicon-graph"></i>Research</span>​
             <ul class="side-nav">
-              <li><%= link_to "Projects" %></li>
+              <li><%= link_to "Areas", areas_path %></li>
+              <li><%= link_to "Groups", groups_path %></li>
+              <li><%= link_to "Projects", projects_path %></li>
             </ul>
           </div>
           
           <div class="large-3 small-6 columns option-block">
-            <span class=​"title"><i class="foundicon-search"></i>(Re-)Search</span>​
+            <span class=​"title"><i class="foundicon-search"></i>Explore</span>​
             <ul class="side-nav">
               <li><%= link_to "Search" %></li>
+              <li><%= link_to "Events" %></li>
               <li><%= link_to "Sitemap" %></li>
             </ul>
           </div>
@@ -154,8 +163,8 @@
             <ul class="side-nav">
               <li><%= link_to "About" %></li>
               <li><%= link_to "Blog" %></li>
-              <li><%= link_to "News & Events" %></li>
               <li><%= link_to "Contact" %></li>
+              <li><%= link_to "API" %></li>
             </ul>
           </div>
         </div>
@@ -178,8 +187,9 @@
                 <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
                 <li><%= link_to "About" %></li>
                 <li><%= link_to "Blog" %></li>
-                <li><%= link_to "News & Events" %></li>
+                <li><%= link_to "Help" %></li>
                 <li><%= link_to "Contact" %></li>
+                <li><%= link_to "API" %></li>
                 <li><%= link_to "Sitemap" %></li>
               </ul>
             <p><span class=​"copyright">​&copy; 2013 BABylo-tec. All rights reserved.</span>​</p>​

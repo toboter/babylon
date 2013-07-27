@@ -9,7 +9,7 @@ jQuery ->
   $("#unless_serial").hide()
   $("#year").hide()
   $("#articles").hide()
-  $('input[type="submit"]').attr('disabled','disabled')
+  $('#book-submit').attr('disabled','disabled')
   $('#book_book_type').change ->
     book_type = $("#book_book_type option").filter(':selected').text()
     # alert('Handler for .change() called. from ' + book_type)
@@ -20,13 +20,15 @@ jQuery ->
       $("#unless_serial").show()
       $("#year").show()
       $("#articles").show()
-      $('input[type="submit"]').removeAttr('disabled')
+      $('#book-submit').removeAttr('disabled')
     if book_type == 'Sammelband'
       $("#if_serial").hide()
       $("#if_editorial").show()
       $("#if_collection").show()
       $("#unless_serial").show()
       $("#year").show()
+      $("#articles").show()
+      $('#book-submit').removeAttr('disabled')
     if book_type == 'Monographie in einer Reihe'
       $("#if_serial").show()
       $("#if_editorial").hide()
@@ -34,7 +36,7 @@ jQuery ->
       $("#unless_serial").show()
       $("#year").show()
       $("#articles").show()
-      $('input[type="submit"]').removeAttr('disabled')
+      $('#book-submit').removeAttr('disabled')
     if book_type == 'Sammelband in einer Reihe'
       $("#if_serial").show()
       $("#if_editorial").show()
@@ -42,7 +44,7 @@ jQuery ->
       $("#unless_serial").show()
       $("#year").show()
       $("#articles").show()
-      $('input[type="submit"]').removeAttr('disabled')
+      $('#book-submit').removeAttr('disabled')
     if book_type == 'Band einer Zeitschrift'
       $("#if_serial").show()
       $("#if_editorial").hide()
@@ -50,7 +52,7 @@ jQuery ->
       $("#unless_serial").hide()
       $("#year").show()
       $("#articles").show()
-      $('input[type="submit"]').removeAttr('disabled')
+      $('#book-submit').removeAttr('disabled')
     if book_type == ''
       $("#if_serial").hide()
       $("#if_editorial").hide()
@@ -58,4 +60,4 @@ jQuery ->
       $("#unless_serial").hide()
       $("#year").hide()
       $("#articles").hide()
-      $('input[type="submit"]').attr('disabled','disabled')
+      $('#book-submit').attr('disabled','disabled')

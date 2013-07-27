@@ -1,0 +1,22 @@
+<%= nested_form_for @project, :html => { class: "custom" } do |f| %>
+  <%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :group_id %>
+  </div>
+
+  <div class="control-group">
+    <%= f.fields_for :memberships do |builder| %>
+      <%= render "membership_fields", :f => builder %>
+    <% end %>
+    <%= f.link_to_add "Add Member", :memberships %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -23,6 +23,7 @@ class Person < ActiveRecord::Base
   scope :unconnected, where(:user_id => nil)
 
   GENDER = %w{female male}
+  GRADES = %w{Prof.\ Dr. Dr. M.A.}
 
   def build_profile_picture_bucket
     Bucket.create :attachable_id => self.id, :attachable_type => "Person", :name => "Profile Pictures", :name_fixed => true

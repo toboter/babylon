@@ -1,5 +1,13 @@
 Babylon::Application.routes.draw do
 
+  resources :areas do
+    resources :groups, only: [:index] do
+      resources :projects, only: [:index]
+    end
+  end
+  resources :groups
+  resources :projects
+
   resources :serials
   resources :books
   resources :references, :path => 'bibliography'

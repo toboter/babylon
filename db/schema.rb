@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130719163330) do
+ActiveRecord::Schema.define(:version => 20130727122115) do
+
+  create_table "areas", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
 
   create_table "assets", :force => true do |t|
     t.string   "assetfile"
@@ -90,6 +98,30 @@ ActiveRecord::Schema.define(:version => 20130719163330) do
     t.integer  "updater_id"
   end
 
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "area_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "groups", ["area_id"], :name => "index_groups_on_area_id"
+
+  create_table "memberships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.string   "role"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "memberships", ["project_id"], :name => "index_memberships_on_project_id"
+  add_index "memberships", ["user_id"], :name => "index_memberships_on_user_id"
+
   create_table "pailfuls", :force => true do |t|
     t.integer  "asset_id"
     t.integer  "bucket_id"
@@ -121,6 +153,17 @@ ActiveRecord::Schema.define(:version => 20130719163330) do
   end
 
   add_index "people", ["slug"], :name => "index_people_on_slug", :unique => true
+
+  create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.integer  "group_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "projects", ["group_id"], :name => "index_projects_on_group_id"
 
   create_table "references", :force => true do |t|
     t.string   "title"

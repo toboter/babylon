@@ -1,0 +1,35 @@
+<% title "Project: #{@project.name}", nil %>
+
+<% content_for :link_section do %>
+  <div class="button-bar right">
+    <ul class="button-group">
+      <% if can? :edit, @serial %>
+        <%= link_to 'Edit', edit_project_path(@project), class: "button small" %>
+        <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Area: #{@project.group.area.name}", @project.group.area %>
+    <%= link_to "Group: #{@project.group.name}", @project.group %>
+    <%= link_to "#{@project.name}", @project %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+<p>
+  <b>Group:</b>
+  <%= @project.group.name %>
+</p>
+
+<% for member in @project.members do %>
+  <p><%= member.available_name %> (<%= member.role %>)</p>
+<% end %>
+<% end %>
+
+<% content_for :note_section do %>
+
+<% end %>
