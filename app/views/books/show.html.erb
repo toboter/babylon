@@ -1,15 +1,5 @@
 <% title book_short_title(@book), nil %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-      <% if can? :edit, @book %>
-        <%= link_to 'Edit', edit_book_path(@book), class: "button small" %>
-        <%= link_to 'Delete', @book, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<% edit_section_for(@book, nil) %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">

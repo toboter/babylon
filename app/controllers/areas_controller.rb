@@ -1,4 +1,5 @@
 class AreasController < ApplicationController
+  before_filter :authenticate_user!, except: [:index, :show]
   # GET /areas
   # GET /areas.json
   def index
@@ -24,7 +25,7 @@ class AreasController < ApplicationController
   # GET /areas/new
   # GET /areas/new.json
   def new
-    @area = Area.new
+    @area = Area.new(:cluster_id => params[:cluster_id])
 
     respond_to do |format|
       format.html # new.html.erb

@@ -1,0 +1,18 @@
+<%= form_for @cluster, :html => { :class => 'custom'} do |f| %>
+  <%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @cluster.new_record? %>
+        <%= link_to 'Abbrechen', clusters_path, :class => 'button secondary' %>
+    <% else %>
+      <%= link_to 'Abbrechen', @cluster, :class => 'button secondary' %>
+    <% end %>
+  </div>
+
+<% end %>

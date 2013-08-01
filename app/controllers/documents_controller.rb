@@ -1,0 +1,105 @@
+class DocumentsController < ApplicationController
+  before_filter :authenticate_user!, except: [:index, :show]
+  before_filter :load_documentable, except: [:show]
+  # GET /documents
+  # GET /documents.json
+  def index
+    if @documentable
+      @documents = @documentable.documents.all
+    else
+      @documents = Document.all
+    end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @documents }
+    end
+  end
+
+  # GET /documents/1
+  # GET /documents/1.json
+  def show
+    @document = Document.find(params[:id])
+
+    respond_to do |format|
+      format.html { render :layout => "show_page" }# show.html.erb
+      format.json { render json: @document }
+    end
+  end
+
+  # GET /documents/new
+  # GET /documents/new.json
+  def new
+    @document = @documentable.documents.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @document }
+    end
+  end
+
+  # GET /documents/1/edit
+  def edit
+    @document = @documentable.documents.find(params[:id])
+  end
+
+  # POST /documents
+  # POST /documents.json
+  def create
+    @document = @documentable.documents.new(params[:document])
+
+    respond_to do |format|
+      if @document.save
+        format.html { redirect_to [@documentable, @document], notice: 'Document was successfully created.' }
+        format.json { render json: @document, status: :created, location: @document }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /documents/1
+  # PUT /documents/1.json
+  def update
+    @document = @documentable.documents.find(params[:id])
+
+    respond_to do |format|
+      if @document.update_attributes(params[:document])
+        format.html { redirect_to [@documentable, @document], notice: 'Document was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /documents/1
+  # DELETE /documents/1.json
+  def destroy
+    @document = @documentable.documents.find(params[:id])
+    @document.destroy
+
+    respond_to do |format|
+      format.html { redirect_to @documentable }
+      format.json { head :no_content }
+    end
+  end
+
+private
+
+  def load_documentable
+    resource, id = request.path.split('/')[1, 2]
+    if resource == 'modules'
+      resource = 'clusters'
+    end
+    if id == nil
+      @documentable = nil
+    else
+      @documentable = resource.singularize.classify.constantize.find(id)
+    end
+  end
+
+
+end

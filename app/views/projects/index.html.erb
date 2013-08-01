@@ -15,23 +15,23 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Group</th>
-      <th>Area</th>
-      <th></th>
-    </tr>
-  
-    <% @projects.each do |project| %>
-      <tr>
-        <td><%= link_to "#{project.name}", project %></td>
-        <td><%= project.group.name %></td>
-        <td><%= project.group.area.name %></td>
-        <td><%= link_to 'Edit', edit_project_path(project) %></td>
-      </tr>
-    <% end %>
-  </table>
-
-  
+  <% @projects.each do |project| %>
+    <div class="project-entry panel">
+      <h6><small>
+        <% if project.projectable_type == "Cluster" %>
+          <%= link_to "#{project.projectable.name}", project.projectable %>
+        <% end %>
+        <% if project.projectable_type == "Group" %>
+          <%= link_to "#{project.projectable.area.cluster.name}", project.projectable.area.cluster %>
+        <% end %>
+      </small></h6>
+      <h3><%= link_to "#{project.name}", [project.projectable, project] %></h3>
+      <% if project.documents.introduction.present? %>
+        <h4 class="subheader"><%= project.documents.introduction.title %></h4>
+        <p><%= project.documents.introduction.abstract %> ... <%= link_to 'read more', [project.documents.introduction.documentable, project.documents.introduction] %></p>
+      <% else %>
+        <p>No introduction or abstract available</p>
+      <% end %>
+    </div>
+  <% end %>  
 <% end %>

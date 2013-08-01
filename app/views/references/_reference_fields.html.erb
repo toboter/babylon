@@ -31,32 +31,36 @@
           <%= f.text_field :title, :class => 'text_field' %>
         </div>
       </div>
-    <% unless @book %> <!-- Wenn das Formular aus dem Book-form als nested_field aufgerufen wird -->
-      <% unless @reference.book %> <!-- Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde -->
+    
+    <% unless @book %>  <!--Wenn das Formular aus dem Book-form als nested_field aufgerufen wird-->
+      <% unless @reference.book %> <!--Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde-->
         <div class="row">
           <div class="large-12 columns">
             <%= f.label :book_id, 'Select Book', :class => 'control-label' %>
-            <%= f.select(:book_id, Book.all.collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: "large-12") %>
+            <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: "large-12") %>
           </div>
         </div>
       <% end %>
     <% end %>
+    
     </div>
   </div>
   <div class="row">
     <div class="large-4 columns">
-      <div class="control-group">
-        <%= f.label :first_page, "Erste Seite", :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :first_page, :class => 'text_field' %>
+      <% if @book %>
+        <div class="control-group">
+          <%= f.label :first_page, "Erste Seite", :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :first_page, :class => 'text_field' %>
+          </div>
         </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :last_page, "Letzte Seite", :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :last_page, :class => 'text_field' %>
+        <div class="control-group">
+          <%= f.label :last_page, "Letzte Seite", :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :last_page, :class => 'text_field' %>
+          </div>
         </div>
-      </div>
+      <% end %>
       <div class="control-group">
         <%= f.label :uri, 'Internet Resource URI', :class => 'control-label' %>
         <div class="controls">

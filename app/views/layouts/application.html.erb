@@ -44,9 +44,19 @@
           <li class="divider"></li>
           <li class="has-dropdown"><%= link_to "Research" %>
             <ul class="dropdown">
-              <li><%= link_to "Areas", areas_path %></li>
-              <li><%= link_to "Groups", groups_path %></li>
-              <li><%= link_to "Projects", projects_path %></li>
+              <% for cluster in Cluster.all %>
+                <li><%= link_to "#{cluster.name}", cluster %></li>
+              <% end %>
+              <li class="divider"></li>
+              <li class="has-dropdown"><%= link_to "All" %>
+                <ul class="dropdown">
+                  <li><%= link_to "Modules", clusters_path %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to "Areas", areas_path %></li>
+                  <li><%= link_to "Groups", groups_path %></li>
+                  <li><%= link_to "Projects", projects_path %></li>
+                </ul>
+              </li>
             </ul>
           </li>
           <li class="divider"></li>
@@ -112,7 +122,9 @@
   	  	  <% flash.each do |name, msg| %>
             <%= content_tag :div, msg, :id => "flash_#{name}", :class => "alert-box radius" %>
           <% end %>
-          <%= content_for?(:content) ? yield(:content) : yield %>
+          <div class="main-yield">
+            <%= content_for?(:content) ? yield(:content) : yield %>
+          </div>
         </div>
       </div>   
     </div>

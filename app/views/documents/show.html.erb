@@ -1,0 +1,66 @@
+<% title "#{@document.title}", nil %>
+<% edit_section_for(@document, @document.documentable) %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "#{@document.documentable.name ? @document.documentable.name : ' name not resolveable'}", @document.documentable %>
+    <%= link_to "#{@document.title}", [@document.documentable, @document] %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="large-9 columns">
+    <% if @document.abstract %>
+      <div class="abstract-section">
+        <h4 class="subheader">Abstract</h4>
+        <p><%= @document.abstract %></p>
+      </div>
+    <% end %>
+    <div class="document-sections">
+      <% for section in @document.document_sections %>
+        <div class="document-section">
+          <h4 class="subheader"><%= section.title %></h4>
+          <p><%= section.content %></p>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div class="large-2 columns right">
+    <h6 class="subheader">Belongs to</h6>
+    <ul class="no-bullet">
+      <li><%= link_to "#{@document.documentable.name ? @document.documentable.name : ' name not resolveable'}", @document.documentable %></li>
+      <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
+    </ul>
+    <h6 class="subheader">Creator</h6>
+    <ul class="no-bullet">
+      <li>
+        <% unless connected_profile %>
+          <%= @document.creator.available_name %>
+        <% else %>
+          <%= link_to "#{@document.creator.available_name}", @document.creator.people.first %>
+        <% end %>
+      </li>
+      <li>on: <%= @document.created_at %></li>
+    </ul>
+    <h6 class="subheader">Last update by</h6>
+    <ul class="no-bullet">
+      <li>
+        <% unless connected_profile %>
+          <%= @document.updater.available_name %>
+        <% else %>
+          <%= link_to "#{@document.updater.available_name}", @document.updater.people.first %>
+        <% end %>
+      </li>
+      <li>on: <%= @document.updated_at %></li>
+    </ul>
+
+  </div>
+
+<% end %>
+
+<% content_for :footer_section do %>
+
+<% end %>

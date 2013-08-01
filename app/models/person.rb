@@ -1,5 +1,7 @@
 class Person < ActiveRecord::Base
-  attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, :last_name, :nickname, :profession, :public_email, :updater_id, :engagements_attributes
+  attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
+                  :last_name, :nickname, :profession, :public_email, :updater_id, :engagements_attributes,
+                  :phone, :fax, :uri, :institution_id, :show_inst_address
   
   stampable
 
@@ -14,6 +16,7 @@ class Person < ActiveRecord::Base
   has_many :editorships, :dependent => :destroy
   has_many :books, through: :editorships
   has_many :buckets, as: :attachable
+  belongs_to :institution
 
   accepts_nested_attributes_for :engagements, allow_destroy: true
 

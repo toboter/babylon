@@ -4,8 +4,12 @@ module ReferencesHelper
   	if reference.book
   	  book_title(reference.book, true)
   	else
-  	  "not specified"
+  	  link_to "#{reference.uri}", reference.uri
   	end
+  end
+
+  def editors(reference)
+    book_edited_by(reference.book, true, true, true) if reference.book
   end
 
   def authors_of_article(reference)

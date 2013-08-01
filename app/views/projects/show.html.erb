@@ -1,35 +1,67 @@
 <% title "Project: #{@project.name}", nil %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-      <% if can? :edit, @serial %>
-        <%= link_to 'Edit', edit_project_path(@project), class: "button small" %>
-        <%= link_to 'Delete', @project, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<% edit_section_for(@project, @project.projectable) %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Area: #{@project.group.area.name}", @project.group.area %>
-    <%= link_to "Group: #{@project.group.name}", @project.group %>
+    <%= link_to "Modules", clusters_path %>
+    <% if @project.projectable_type == "Group" %>
+      <%= link_to "Module: #{@project.projectable.area.cluster.name}", @project.projectable.area.cluster %>
+      <%= link_to "Area: #{@project.projectable.area.name}", @project.projectable.area %>
+      <%= link_to "Group: #{@project.projectable.name}", @project.projectable %>
+    <% end %>
+    <% if @project.projectable_type == "Cluster" %>
+      <%= link_to "Module: #{@project.projectable.name}", @project.projectable %>
+    <% end %>
     <%= link_to "#{@project.name}", @project %>
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
-<p>
-  <b>Group:</b>
-  <%= @project.group.name %>
-</p>
+  <div class="large-8 columns">
+    <h5 class="subheader"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
 
-<% for member in @project.members do %>
-  <p><%= member.available_name %> (<%= member.role %>)</p>
-<% end %>
+    <%= render "shared/document_introduction", :var => @project %>
+
+    <%= render "shared/document_docs_without_type", :var => @project %>
+
+    <%= render "shared/add_document_box", :add_doc => @project %>
+
+  </div>
+
+  <div class="large-3 columns right">
+    <h5 class="subheader">Creator</h5>
+    <ul class="no-bullet">
+      <li>
+        <% unless connected_profile %>
+          <%= @project.creator.available_name %>
+        <% else %>
+          <%= link_to "#{@project.creator.available_name}", @project.creator.people.first %>
+        <% end %>
+      </li>
+    </ul>
+
+    <% if @project.memberships.present? %>
+
+      <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] %></small></h5>
+      <ul class="no-bullet">
+        <% for membership in @project.memberships do %>
+          <li>
+            <% unless connected_profile %>
+              <%= membership.user.available_name %>
+            <% else %>
+              <%= link_to "#{membership.user.available_name}", membership.user.people.first %>
+            <% end %>
+            <%= ' ('+membership.role+')' if can? :edit, @project %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
 <% end %>
 
-<% content_for :note_section do %>
+<% content_for :footer_section do %>
+
+Add a personal todo list | Add a project todo list
 
 <% end %>

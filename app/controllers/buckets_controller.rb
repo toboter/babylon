@@ -1,4 +1,5 @@
 class BucketsController < ApplicationController
+  before_filter :authenticate_user!, except: [:index, :show]
   before_filter :load_attachable
   # GET /buckets
   # GET /buckets.json
@@ -17,7 +18,7 @@ class BucketsController < ApplicationController
     @bucket = @attachable.buckets.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @bucket }
     end
   end

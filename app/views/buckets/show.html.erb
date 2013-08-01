@@ -1,24 +1,43 @@
-<p>
-  <b>Name:</b>
-  <%= @bucket.name %>
-</p>
+<% title "Project: #{@bucket.name}", nil %>
+<% edit_section_for(@bucket, @bucket.attachable) %>
 
-<p>
-  <b>Cover_id:</b>
-  <%= @bucket.cover_asset_id %>
-</p>
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
 
-<ul class="small-block-grid-2 large-block-grid-4">
-  <% for asset in @bucket.assets do %>
-    <% if asset.content_type.include? 'image' %>
-      <li><%= link_to (image_tag asset.assetfile.small.url), asset, class: "th radius" %></li>
-    <% else %>
-      <li><%= link_to "#{asset.assetfile.url}", asset %></li>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <p>
+    <b>Name:</b>
+    <%= @bucket.name %>
+  </p>
+  
+  <p>
+    <b>Cover_id:</b>
+    <%= @bucket.cover_asset_id %>
+  </p>
+  
+  <ul class="small-block-grid-2 large-block-grid-4">
+    <% for asset in @bucket.assets do %>
+      <% if asset.content_type.include? 'image' %>
+        <li><%= link_to (image_tag asset.assetfile.small.url), asset, class: "th radius" %></li>
+      <% else %>
+        <li><%= link_to "#{asset.assetfile.url}", asset %></li>
+      <% end %>
     <% end %>
+  </ul>
+<% end %>
+
+<% content_for :footer_section do %>
+  <% if can? :edit, @bucket %>
+    <div class="large-6 columns push-6">
+      <ul class="pricing-table">
+        <li class="title">Assets</li>
+        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Assets und was es sein kann</li>
+        <li class="bullet-item"><b>Content Types: </b>image, text, ...</li>
+        <li class="cta-button"><%= link_to 'Add Assets', new_bucket_asset_path(@bucket), class: "button" %></li>
+      </ul>
+    </div>
   <% end %>
-</ul>
-
-<p><%= link_to 'Add Assets', new_bucket_asset_path(@bucket) %></p>
-
-<%= link_to 'Edit', [:edit, @attachable, @bucket] %> |
-<%= link_to 'Back', @attachable %>
+<% end %>

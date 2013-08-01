@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130727122115) do
+ActiveRecord::Schema.define(:version => 20130801154722) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20130727122115) do
     t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "cluster_id"
   end
 
   create_table "assets", :force => true do |t|
@@ -76,6 +77,40 @@ ActiveRecord::Schema.define(:version => 20130727122115) do
     t.integer  "updater_id"
   end
 
+  create_table "clusters", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  create_table "document_sections", :force => true do |t|
+    t.string   "title"
+    t.text     "content"
+    t.integer  "document_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "document_sections", ["document_id"], :name => "index_document_sections_on_document_id"
+
+  create_table "documents", :force => true do |t|
+    t.string   "title"
+    t.string   "documentable_type"
+    t.integer  "documentable_id"
+    t.string   "document_type"
+    t.text     "abstract"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "documents", ["documentable_id", "documentable_type"], :name => "index_documents_on_documentable_id_and_documentable_type"
+
   create_table "editorships", :force => true do |t|
     t.integer  "book_id"
     t.integer  "person_id"
@@ -108,6 +143,31 @@ ActiveRecord::Schema.define(:version => 20130727122115) do
   end
 
   add_index "groups", ["area_id"], :name => "index_groups_on_area_id"
+
+  create_table "institution_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "institution_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "institution_anc_desc_udx", :unique => true
+  add_index "institution_hierarchies", ["descendant_id"], :name => "institution_desc_idx"
+
+  create_table "institutions", :force => true do |t|
+    t.string   "name"
+    t.string   "phone"
+    t.string   "fax"
+    t.string   "uri"
+    t.string   "street"
+    t.string   "zip"
+    t.string   "city"
+    t.string   "country"
+    t.integer  "parent_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
@@ -146,24 +206,28 @@ ActiveRecord::Schema.define(:version => 20130727122115) do
     t.string   "gender"
     t.string   "public_email"
     t.string   "slug"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.string   "phone"
+    t.string   "fax"
+    t.string   "uri"
+    t.integer  "institution_id"
+    t.boolean  "show_inst_address"
   end
 
   add_index "people", ["slug"], :name => "index_people_on_slug", :unique => true
 
   create_table "projects", :force => true do |t|
     t.string   "name"
-    t.integer  "group_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "projectable_id"
+    t.string   "projectable_type"
   end
-
-  add_index "projects", ["group_id"], :name => "index_projects_on_group_id"
 
   create_table "references", :force => true do |t|
     t.string   "title"

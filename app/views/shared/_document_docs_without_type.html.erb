@@ -1,0 +1,24 @@
+    <% if var.documents.present? %>
+      <% for document in var.documents.all_but_typelist.limit(3) do %>
+        <h4 class="subheader">
+        	<%= document.title %>
+        	<small>
+        		<%= link_to " (Edit)", [:edit, document.documentable, document] %>
+        	</small>
+        </h4>
+        <p>
+          <% if document.abstract.present? %>
+        	<%= document.abstract %>
+        	... <%= link_to 'read more', [document.documentable, document] %>
+          <% else %>
+            <% if document.document_sections.present? %>
+              <%= document.document_sections.first.title+': '+document.document_sections.first.content %>
+              ... <%= link_to 'read more', [document.documentable, document] %>
+            <% else %>
+              <p>Keine Texte verfügbar</p>
+            <% end %>
+          <% end %>
+        </p>
+      <% end %>
+      <%= link_to "View all documents", [var, :documents] %>
+    <% end %>

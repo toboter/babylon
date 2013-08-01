@@ -1,0 +1,43 @@
+<h1>Listing institutions</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Fax</th>
+    <th>Uri</th>
+    <th>Street</th>
+    <th>Zip</th>
+    <th>City</th>
+    <th>Country</th>
+    <th>Parent</th>
+    <th>Creator</th>
+    <th>Updater</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @institutions.each do |institution| %>
+  <tr>
+    <td><%= institution.name %></td>
+    <td><%= institution.phone %></td>
+    <td><%= institution.fax %></td>
+    <td><%= institution.uri %></td>
+    <td><%= institution.street %></td>
+    <td><%= institution.zip %></td>
+    <td><%= institution.city %></td>
+    <td><%= institution.country %></td>
+    <td><%= institution.parent_id %></td>
+    <td><%= institution.creator_id %></td>
+    <td><%= institution.updater_id %></td>
+    <td><%= link_to 'Show', institution %></td>
+    <td><%= link_to 'Edit', edit_institution_path(institution) %></td>
+    <td><%= link_to 'Destroy', institution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Institution', new_institution_path %>

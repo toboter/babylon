@@ -2,51 +2,105 @@
 <%= f.error_messages %>
 <%= f.hidden_field :user_id %>
 
-  <div class="field">
-    <%= f.label :first_name %>
-    <%= f.text_field :first_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name %>
-    <%= f.text_field :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label :grade %>
-    <%= f.select(:grade, Person::GRADES, :include_blank => true) %>
-  </div>
-  <div class="field">
-    <%= f.label :nickname, 'Short code' %>
-    <%= f.text_field :nickname %>
-  </div>
-  <div class="field">
-    <%= f.label :date_of_birth %>
-    <%= f.date_select("date_of_birth", start_year: 1840, include_blank: true) %>
-  </div>
-  <div class="field">
-    <%= f.label :date_of_death %>
-    <%= f.date_select("date_of_death", start_year: 1900, include_blank: true) %>
-  </div>
-  <div class="field">
-    <%= f.label :profession %>
-    <%= f.text_field :profession %>
-  </div>
-  <div class="field">
-    <%= f.label :gender %>
-    <%= f.select(:gender, Person::GENDER, :include_blank => true) %>
-  </div>
-
-  <%= f.fields_for :engagements do |builder| %>
-    <%= render "engagement_fields", :f => builder %>
+  <% if user_signed_in? && @person.user_id == current_user.id %>
+    <div class="row">
+      <div class="large-12 columns">
+        <p><%= link_to "Edit your account", edit_user_registration_path %></p>
+      </div>
+    </div>
   <% end %>
-  <%= f.link_to_add "Add a activity timespan", :engagements %>
 
-  <div class="field">
-    <%= f.label :public_email %>
-    <%= f.text_field :public_email %>
+  <div class="row">
+    <div class="large-12 columns">
+      <h5 class="subheader">Personal</h5>
+    </div>
+
+    <div class="large-6 columns">
+      <%= f.label :first_name %>
+      <%= f.text_field :first_name %>
+    </div>
+    <div class="large-6 columns">
+      <%= f.label :last_name %>
+      <%= f.text_field :last_name %>
+    </div>
+
+    <div class="large-3 columns">
+      <%= f.label :grade %>
+      <%= f.select(:grade, Person::GRADES, :include_blank => true) %>
+    </div>
+    <div class="large-3 columns">
+      <%= f.label :nickname, 'Alias' %>
+      <%= f.text_field :nickname %>
+    </div>
+    <div class="large-3 columns">
+      <%= f.label :gender %>
+      <%= f.select(:gender, Person::GENDER, :include_blank => true) %>
+    </div>
+    <div class="large-3 columns">
+      <%= f.label :profession %>
+      <%= f.text_field :profession %>
+    </div>
+
+    <div class="large-6 columns">
+      <%= f.label :date_of_birth, 'Birthday' %>
+      <%= f.date_select("date_of_birth", start_year: 1830, include_blank: true) %>
+    </div>
+    <div class="large-6 columns">
+      <small><%= link_to("Add day of death", '#', class: "death", id: 'add-day-of-death') %></small>
+      <div id='death'>
+        <%= f.label :date_of_death, 'Day of death' %>
+        <%= f.date_select("date_of_death", start_year: 1900, include_blank: true) %>
+      </div>
+    </div>
   </div>
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="row" style="margin-top:40px;">
+    <div class="large-12 columns">
+      <h5 class="subheader">Contact Information</h5>
+    </div>
+
+    <div class="large-6 columns left">
+      <%= f.label :institute %>
+      <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true} %>
+
+      <%= f.label :show_inst_address, 'Show the institutes address und my profile' %>
+      <%= f.check_box :show_inst_address %>
+
+      <%= f.label :public_email %>
+      <%= f.text_field :public_email %>
+
+      <%= f.label :phone %>
+      <%= f.text_field :phone %>
+
+      <%= f.label :fax %>
+      <%= f.text_field :fax %>
+
+      <%= f.label :uri %>
+      <%= f.text_field :uri %>
+    </div>
+  </div>
+
+
+
+  <div class="row" style="margin-top:40px;">
+    <div class="large-12 columns">
+      <h5 class="subheader">Engagement Information</h5>
+    </div>
+    <div class="large-12 columns">
+      <%= f.fields_for :engagements do |builder| %>
+        <%= render "engagement_fields", :f => builder %>
+      <% end %>
+      <%= f.link_to_add "Add activity timespan", :engagements %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @person.new_record? %>
+      <%= link_to 'Abbrechen', people_path, :class => 'button secondary' %>
+    <% else %>
+      <%= link_to 'Abbrechen', @person, :class => 'button secondary' %>
+    <% end %>
   </div>
 
 <% end %>

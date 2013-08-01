@@ -1,0 +1,44 @@
+<%= nested_form_for [@documentable, @document], :html => { class: "custom" } do |f| %>
+  <%= f.error_messages %>
+
+  <p>This document belongs to: <%= link_to "#{@documentable ? @documentable.name : ' name not resolveable'}", @documentable %></p>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <%= f.hidden_field :documentable_type %>
+  <%= f.hidden_field :documentable_id %>
+
+  <div class="field">
+    <%= f.label :document_type %>
+    <%= f.select :document_type, Document::GENERALDOCUMENTTYPES, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :abstract %>
+    <%= f.text_area :abstract, class: 'area' %>
+  </div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <%= f.fields_for :document_sections do |builder| %>
+      <%= render "document_section_fields", :f => builder %>
+    <% end %>
+    <%= f.link_to_add "Add Section", :document_sections %>
+  </div>
+</div>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @document.new_record? %>
+      <% if @document.documentable %>
+        <%= link_to 'Abbrechen', @document.documentable, :class => 'button secondary' %>
+      <% else %>
+        <%= link_to 'Abbrechen', documents_path, :class => 'button secondary' %>
+      <% end %>
+    <% else %>
+      <%= link_to 'Abbrechen', [@document.documentable, @document], :class => 'button secondary' %>
+    <% end %>
+  </div>
+<% end %>

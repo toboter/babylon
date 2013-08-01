@@ -16,19 +16,7 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Area</th>
-      <th></th>
-    </tr>
-  
-    <% @groups.each do |group| %>
-      <tr>
-        <td><%= link_to "#{group.name}", group %></td>
-        <td><%= group.area.name %></td>
-        <td><%= link_to 'Edit', edit_group_path(group) %></td>
-      </tr>
-    <% end %>
-  </table>
+
+  <%= render "shared/document_introductions", :vars => @groups %>
+
 <% end %>

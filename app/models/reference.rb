@@ -6,7 +6,7 @@ class Reference < ActiveRecord::Base
 
 
   validates_presence_of :title
-  #validates_presence_of :uri unless book_id == nil
+  validates_presence_of :book_id, :unless => :uri?
 
   has_many :authors, :class_name => 'Person', through: :authorships, :source => :person
   has_many :authorships, :dependent => :destroy, :order => 'position'

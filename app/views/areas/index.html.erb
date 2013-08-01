@@ -10,25 +10,13 @@
 <% content_for :link_section do %>
   <div class="button-bar right">
     <ul class="button-group">
-      <% if can? :edit, @areas %>
-        <%= link_to 'New Area', new_area_path, class: "button small" %>
-      <% end %>
+
     </ul>
   </div>
 <% end %>
 
 <% content_for :main_section do %>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th></th>
-    </tr>
+
+  <%= render "shared/document_introductions", :vars => @areas %>
   
-    <% @areas.each do |area| %>
-      <tr>
-        <td><%= link_to "#{area.name}", area %></td>
-        <td><%= link_to 'Edit', edit_area_path(area) %></td>
-      </tr>
-    <% end %>
-  </table>
 <% end %>

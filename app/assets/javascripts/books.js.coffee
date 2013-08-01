@@ -10,7 +10,7 @@ jQuery ->
   $("#year").hide()
   $("#articles").hide()
   $('#book-submit').attr('disabled','disabled')
-  $('#book_book_type').change ->
+  $('#book_book_type').change( ->
     book_type = $("#book_book_type option").filter(':selected').text()
     # alert('Handler for .change() called. from ' + book_type)
     if book_type == 'Monographie'
@@ -60,4 +60,4 @@ jQuery ->
       $("#unless_serial").hide()
       $("#year").hide()
       $("#articles").hide()
-      $('#book-submit').attr('disabled','disabled')
+      $('#book-submit').attr('disabled','disabled') ).trigger('change')

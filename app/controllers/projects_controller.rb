@@ -1,12 +1,12 @@
 class ProjectsController < ApplicationController
+  before_filter :authenticate_user!, except: [:index, :show]
+  before_filter :load_projectable, except: [:index, :show]
   # GET /projects
   # GET /projects.json
   def index
-    if params[:group_id]
-      @projects = Project.where(:group_id => params[:group_id])
-    else
+
       @projects = Project.all
-    end
+
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
   # GET /projects/new
   # GET /projects/new.json
   def new
-    @project = Project.new(:group_id => params[:group_id])
+    @project = @projectable.projects.new
     # @project.memberships.build
 
     respond_to do |format|
@@ -39,17 +39,17 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1/edit
   def edit
-    @project = Project.find(params[:id])
+    @project = @projectable.projects.find(params[:id])
   end
 
   # POST /projects
   # POST /projects.json
   def create
-    @project = Project.new(params[:project])
+    @project = @projectable.projects.new(params[:project])
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to [@projectable, @project], notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }
@@ -61,11 +61,11 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.json
   def update
-    @project = Project.find(params[:id])
+    @project = @projectable.projects.find(params[:id])
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        format.html { redirect_to [@projectable, @project], notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,12 +77,22 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.json
   def destroy
-    @project = Project.find(params[:id])
+    @project = @projectable.projects.find(params[:id])
     @project.destroy
 
     respond_to do |format|
       format.html { redirect_to projects_url }
       format.json { head :no_content }
     end
+  end
+
+private
+
+  def load_projectable
+    resource, id = request.path.split('/')[1, 2]
+    if resource == 'modules'
+      resource = 'clusters'
+    end
+    @projectable = resource.singularize.classify.constantize.find(id)
   end
 end

@@ -1,4 +1,5 @@
 class AssetsController < ApplicationController
+  before_filter :authenticate_user!, except: [:index, :show]
   # GET /assets
   # GET /assets.json
   def index

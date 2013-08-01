@@ -15,6 +15,20 @@
  *= require_tree .
  */
 
+.main-yield p, .main-yield li {
+	font-size: 90%;
+}
+
+.area {
+	height: 200px;
+}
+.form-actions {
+	border: 1px solid #e6e6e6;
+	padding:20px 20px 0 20px;
+	margin-top:30px;
+	background: #f6f6f6;
+}
+
 .top-bar li.name h1 a {
 	color: #858585;
 }

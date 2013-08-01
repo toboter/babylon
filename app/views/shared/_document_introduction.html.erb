@@ -1,0 +1,6 @@
+    <% if var.documents.introduction.present? %>
+      <h4 class="subheader"><%= var.documents.introduction.title %><small><%= link_to " (Edit)", [:edit, var.documents.introduction.documentable, var.documents.introduction] %></small></h4>
+      <p><%= var.documents.introduction.abstract %> ... <%= link_to 'read more', [var.documents.introduction.documentable, var.documents.introduction] %></p>
+    <% else %>
+      <p>No introduction or abstract available</p>
+    <% end %>

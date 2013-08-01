@@ -1,0 +1,11 @@
+  <% vars.each do |var| %>
+    <div class="var-entry panel">
+      <h3><%= link_to "#{var.name}", var %></h3>
+      <% if var.documents.introduction.present? %>
+        <h4 class="subheader"><%= var.documents.introduction.title %></h4>
+        <p><%= var.documents.introduction.abstract %> ... <%= link_to 'read more', [var.documents.introduction.documentable, var.documents.introduction] %></p>
+      <% else %>
+        <p>No introduction or abstract available</p>
+      <% end %>
+    </div>
+  <% end %>

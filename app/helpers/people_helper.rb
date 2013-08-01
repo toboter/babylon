@@ -11,5 +11,14 @@ module PeopleHelper
   	  end
   	end
   end
+
+  def prepend(icon, lft=nil)
+    if lft.nil?
+      style = 'padding-right:10px'
+    else
+      style = 'padding-right:10px; margin-left:'+lft+';'
+    end
+    content_tag :i, '', class: 'foundicon-'+icon, style: style
+  end
   	  		
 end

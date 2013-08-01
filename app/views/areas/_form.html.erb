@@ -1,11 +1,24 @@
-<%= form_for(@area) do |f| %>
+<%= form_for(@area, :html => { :class => 'custom'}) do |f| %>
   <%= f.error_messages %>
 
   <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <%= f.hidden_field :cluster_id %>
+
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @area.new_record? %>
+      <% if @area.cluster %>
+        <%= link_to 'Abbrechen', @area.cluster, :class => 'button secondary' %>
+      <% else %>
+        <%= link_to 'Abbrechen', areas_path, :class => 'button secondary' %>
+      <% end %>
+    <% else %>
+      <%= link_to 'Abbrechen', @area, :class => 'button secondary' %>
+    <% end %>
   </div>
+
 <% end %>

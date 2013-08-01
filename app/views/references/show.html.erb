@@ -1,15 +1,5 @@
 <% title "#{@reference.title}", nil %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-      <% if can? :edit, @reference %>
-        <li><%= link_to 'Edit', edit_reference_path(@reference), class: "button small" %></li>
-        <li><%= link_to 'Delete', @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "button small alert" %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<% edit_section_for(@reference, nil) %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">

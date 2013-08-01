@@ -12,6 +12,7 @@
     <ul class="button-group">
       <% if can? :edit, @books %>
         <%= link_to 'New Book', new_book_path, class: "button small" %>
+        <%= link_to 'New Reference', new_reference_path, class: "button small" %>
       <% end %>
       <li><%= link_to "Bibliography", references_path, class: "button small secondary" %></li>
       <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>

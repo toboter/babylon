@@ -39,7 +39,7 @@ class PeopleController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @person }
     end
   end
@@ -47,6 +47,8 @@ class PeopleController < ApplicationController
   # GET /people/1/edit
   def edit
     @person = Person.find(params[:id])
+
+    render :layout => "form_page"
   end
 
   # POST /people

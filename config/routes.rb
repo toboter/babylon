@@ -1,12 +1,28 @@
 Babylon::Application.routes.draw do
 
-  resources :areas do
-    resources :groups, only: [:index] do
-      resources :projects, only: [:index]
-    end
+  resources :institutions
+
+
+  resources :documents, only: [:index, :show] do
+    resources :document_sections
   end
-  resources :groups
-  resources :projects
+
+  resources :clusters, :path => 'modules' do
+    resources :projects
+    resources :documents
+  end
+  resources :areas do
+    resources :documents
+  end
+  resources :groups do
+    resources :projects
+    resources :documents
+  end
+  resources :projects, only: [:index, :show] do
+    resources :documents
+  #   resources :todos
+  end
+
 
   resources :serials
   resources :books
