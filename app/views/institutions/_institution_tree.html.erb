@@ -1,0 +1,8 @@
+<% if institution.children.present? %>
+  <% institution.children.each do |leave| %>
+    <%= content_tag :div, class: 'members', style: "padding-left:#{indent}px;" do -%>
+      <%= content_tag tag.to_sym, link_to( "#{leave.name}", leave) %>
+      <%= render 'institution_tree', :institution => leave, :tag => tag, :indent => (indent+10) %>
+    <% end %>
+  <% end %>
+<% end %>

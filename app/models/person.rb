@@ -16,6 +16,8 @@ class Person < ActiveRecord::Base
   has_many :editorships, :dependent => :destroy
   has_many :books, through: :editorships
   has_many :buckets, as: :attachable
+  has_many :assets, through: :buckets
+  has_many :documents, as: :documentable
   belongs_to :institution
 
   accepts_nested_attributes_for :engagements, allow_destroy: true

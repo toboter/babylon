@@ -7,6 +7,8 @@ class Bucket < ActiveRecord::Base
   has_many :assets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
   belongs_to :attachable, :polymorphic => true
+  belongs_to :creator, class_name: "User"
+  belongs_to :updater, class_name: "User"
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:attachable_id, :attachable_type]

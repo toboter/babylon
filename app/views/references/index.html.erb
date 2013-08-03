@@ -2,7 +2,6 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to 'Explore', explore_path %>
     <%= link_to 'Bibliography', references_path %>
   </nav>
 <% end %>
@@ -11,7 +10,6 @@
   <div class="button-bar right">
     <ul class="button-group">
       <% if can? :edit, @references %>
-        <!-- <li><%= link_to 'New Entry', new_reference_path, class: "button small" %></li> #Nur über Books -->
         <li><%= link_to "Books", books_path, class: "button small secondary" %></li>
         <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>
       <% end %>
@@ -20,28 +18,19 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <table>
-    <tr>
-      <th>Author(s)</th>
-      <th>Year</th>
-      <th>Title</th>
-      <th>In</th>
-      <% if can? :edit, @references %>
-        <th></th>
-      <% end %>
-  
-    </tr>
-  
-    <% @references.each do |reference| %>
-      <tr>
-        <td><%= authors_of_article(reference) %></td>
-        <td><%= reference.book.year if reference.book %></td>
-        <td><%= link_to "#{reference.title}", reference %></td>
-        <td><%= editors(reference) %><%= article_in_book(reference) %></td>
-        <% if can? :edit, @references %>
-          <td><%= link_to "Edit", edit_reference_path(reference) %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </table>
+<div class="row collpase">
+  <div class="large-8 columns">
+    <%= render "bib_entries", :references => @references %>
+  </div>
+
+  <div class="large-3 columns offset-1">
+    <h5 class="subheader">by type</h5>
+    <ul class="no-bullet">
+      <li>References <%= @references.count %></li>
+      <li>Books <%= Book.count %></li>
+      <li>Collections <%= Book.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %></li>
+      <li>Monographs <%= Book.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %></li>
+    </ul>
+  </div>
+</div>
 <% end %>

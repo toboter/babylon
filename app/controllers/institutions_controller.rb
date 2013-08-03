@@ -2,10 +2,10 @@ class InstitutionsController < ApplicationController
   # GET /institutions
   # GET /institutions.json
   def index
-    @institutions = Institution.all
+    @institutions = Institution.roots
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @institutions }
     end
   end
@@ -16,7 +16,7 @@ class InstitutionsController < ApplicationController
     @institution = Institution.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @institution }
     end
   end
@@ -24,7 +24,7 @@ class InstitutionsController < ApplicationController
   # GET /institutions/new
   # GET /institutions/new.json
   def new
-    @institution = Institution.new
+    @institution = Institution.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
       format.html # new.html.erb

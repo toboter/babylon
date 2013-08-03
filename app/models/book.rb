@@ -4,6 +4,8 @@ class Book < ActiveRecord::Base
 
   stampable
 
+  default_scope order('year DESC')
+
   validates_presence_of :book_type
   validates_presence_of :year, :unless => "unpublished == true"
   validates_presence_of :title, :unless => "book_type == 'Monographie' || book_type == 'Monographie in einer Reihe' || book_type == 'Band einer Zeitschrift'"
@@ -12,6 +14,8 @@ class Book < ActiveRecord::Base
   has_many :editors, :class_name => 'Person', through: :editorships, :source => :person
   has_many :editorships, :dependent => :destroy
   belongs_to :serial
+  belongs_to :creator, class_name: "User"
+  belongs_to :updater, class_name: "User"
 
   accepts_nested_attributes_for :articles, allow_destroy: true
   accepts_nested_attributes_for :editorships, allow_destroy: true

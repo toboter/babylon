@@ -3,56 +3,62 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Explore", explore_path %>
     <%= link_to 'Books', books_path %>
     <%= link_to "#{book_short_title(@book)}", @book %>
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
-  <h4>Content</h4>
-  <ul>
-    <% for article in @book.articles do %>
-      <li><%= link_to "#{article.title}", article %></li>
+  <div class="large-8 columns">
+    <h4 class="subheader">Content</h4>
+    <ul class="no-bullet">
+      <% for article in @book.articles do %>
+        <li>
+          <%= article.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>, 
+          <%= link_to "#{article.title}", article %>
+          <%= ', '+article.first_page if article.first_page.present? %><%= '-'+article.last_page if article.last_page.present? %>
+        </li>
+      <% end %>
+    </ul>
+    <% unless @book.book_type == 'Monographie' || @book.book_type == 'Monographie in einer Reihe' %>
+      <% if can? :edit, @book %>
+      <div class="row collapse" style="margin-top:50px;">
+        <div class="large-6 columns">
+          <ul class="pricing-table">
+            <li class="title">Article</li>
+            <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Artikels</li>
+            <li class="cta-button"><%= link_to 'Add Article', new_reference_path(:book_id => @book), class: "button" %></li>
+          </ul>
+        </div>
+      </div>
+      <% end %>
     <% end %>
-  </ul>
-  <% unless @book.book_type == 'Monographie' || @book.book_type == 'Monographie in einer Reihe' %>
-    <p><%= link_to 'Add an article', new_reference_path(:book_id => @book), class: "button small" if can? :edit, @book %></p>
-  <% end %>
-<% end %>
+  </div>
 
-<% content_for :note_section do %>
-  <p>
-    <b>Title: </b><%= book_edited_by(@book, true, true, false) %><%= book_title(@book) %>
-  </p>
+  <div class="large-3 columns right">
+    <h5 class="subheader">Title <small><%= @book.book_type %></small></h5>
+    <ul class="no-bullet">
+      <li><%= book_edited_by(@book, true, true, false) %><%= @book.year %></li>
+      <li><%= book_title(@book) %></li>
+    </ul>
 
-  <p>
-    <b>Place:</b>
-    <%= @book.place %>
-  </p>
-  
-  <p>
-    <b>Publisher:</b>
-    <%= @book.publisher %>
-  </p>
-  
-  <p>
-    <b>Year:</b>
-    <%= @book.year %>
-  </p>
-  
-  <p>
-    <b>Book type:</b>
-    <%= @book.book_type %>
-  </p>
-  
-  <p>
-    <b>Unpublished:</b>
-    <%= @book.unpublished %>
-  </p>
-  
-  <p>
-    <b>Book identifier:</b>
-    <%= @book.book_identifier %>
-  </p>
+    <% unless @book.unpublished? %>
+    <h5 class="subheader">Issued</h5>
+    <ul class="no-bullet">
+      <li><%= @book.publisher %></li>
+      <li><%= @book.place %></li>
+      <%= content_tag :li, 'ISBN'+@book.book_identifier if @book.book_identifier.present? %>
+    </ul>
+    <% else %>
+      <h5 class="subheader">UNPUBLISHED</h5>
+    <% end %>
+
+    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
+    <ul class="no-bullet">
+      <li>Created by: <%= @book.creator.available_name %></li>
+      <li>Updated by: <%= @book.updater.available_name %></li>
+    </ul>
+  </div>
+
+
 <% end %>

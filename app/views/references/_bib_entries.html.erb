@@ -1,0 +1,38 @@
+<% references.each do |reference| %>
+  <%= content_tag :div, class: 'bib-entry' do -%>
+    <div class="row">
+      <%= content_tag :div, class: 'large-4 small-4 columns', style: 'text-align:right;' do -%>
+        <ul class="no-bullet">
+          <li><%= authors_of_article(reference) %></li>
+          <%= content_tag :li, reference.book.year if reference.book.present? %>
+          <%= content_tag :li, reference.original_date unless reference.book.present? %>
+
+        </ul>
+      <% end -%>
+      <%= content_tag :div, class: 'large-7 small-7 columns left' do -%>
+        <p>
+          <%= authors_of_article(reference)+', ' %>
+          <%= link_to "#{reference.title}", reference %>
+          <%= content_tag :span, ', ' if reference.book.present? || reference.first_page.present? %>
+          <% if reference.book.present? %>
+            <%= raw('in: '+editors(reference)) %>
+            <%= article_in_book(reference) %>
+            <%= content_tag :span, ', ' if reference.book.publisher.present? %>
+            <%= reference.book.publisher if reference.book.publisher.present? %>
+            <%= content_tag :span, ', ' if reference.book.place.present? %>
+            <%= reference.book.place if reference.book.place.present? %>
+          <% end %>
+          <%= content_tag :span, ', ' if reference.first_page.present? %>
+          <%= reference.first_page if reference.first_page.present? %>
+          <%= content_tag :span, '-' if reference.last_page.present? %>
+          <%= reference.last_page if reference.last_page.present? %>.
+        </p>
+      <% end -%>
+      <% if can? :edit, reference %>
+        <%= content_tag :div, class: 'large-1 small-1 columns right' do -%>
+          <p><%= link_to "Edit", edit_reference_path(reference) %></p>
+        <% end -%>
+      <% end %>
+    </div>
+  <% end -%>
+<% end %>

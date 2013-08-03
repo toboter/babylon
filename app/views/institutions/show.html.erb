@@ -1,60 +1,61 @@
-<p id="notice"><%= notice %></p>
+<% title "#{@institution.name}", nil %>
+<% edit_section_for(@institution, nil) %>
 
-<p>
-  <b>Name:</b>
-  <%= @institution.name %>
-</p>
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Institutions", institutions_path %>
+    <% for institution in @institution.root.self_and_descendants-@institution.descendants-@institution.siblings do %>
+      <%= link_to "#{institution.name}", institution %>
+    <% end %>
+  </nav>
+<% end %>
 
-<p>
-  <b>Phone:</b>
-  <%= @institution.phone %>
-</p>
+<% content_for :main_section do %>
+  <div class="large-8 columns">
+    <%= content_tag :p, raw('Belongs to: '+(@institution.ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe)) unless @institution.root? %></p>
 
-<p>
-  <b>Fax:</b>
-  <%= @institution.fax %>
-</p>
+    <%= content_tag :h4, 'Sub-Institutions', class: "subheader" if @institution.children.present? %>
+    <%= render 'institution_tree', :institution => @institution, :tag => 'p', :indent => 0 %>
 
-<p>
-  <b>Uri:</b>
-  <%= @institution.uri %>
-</p>
+    <h4 class="subheader">Members</h4>
+    <ul class="no-bullet">
+      <% Person.where('institution_id IN (?)', @institution.self_and_descendants).each do |member| %>
+        <li><%= link_to "#{graded_fullname(member)}", member %></li>
+      <% end %>
+    </ul>
 
-<p>
-  <b>Street:</b>
-  <%= @institution.street %>
-</p>
+  </div>
 
-<p>
-  <b>Zip:</b>
-  <%= @institution.zip %>
-</p>
+  <div class="large-3 columns right">
+    <%= image_tag('microformat-logo-small.png', class: "right", style: "") %>
+    <h5 class="subheader">Contact Info</h5>
+    <ul class="no-bullet vcard">
+      <li class="fn"><%= @institution.name %></li>
+      <li class="tel"><abbr class="type" title="Phone"><span class="value"><%= @institution.phone %></span></abbr></li>
+      <li class="tel"><abbr class="type" title="Fax"><span class="value"><%= @institution.fax %></span></abbr></li>
+      <li class="url"><%= link_to "#{@institution.uri}", "#{@institution.uri}" %></li>
+      <span class="adr">
+        <li><span class="street-address"><%= @institution.street %></span></li>
+        <li><span class="postal-code"><%= @institution.zip %></span> <span class="locality"><%= @institution.city %></span></li>
+        <li><span class="country-name"><%= @institution.country %></span></li>
+      </span>
+    </ul> 
 
-<p>
-  <b>City:</b>
-  <%= @institution.city %>
-</p>
+    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
+    <ul class="no-bullet">
+      <li>Created by: <%= @institution.creator.available_name %></li>
+      <li>Updated by: <%= @institution.updater.available_name %></li>
+    </ul>
+  </div>
+  
 
-<p>
-  <b>Country:</b>
-  <%= @institution.country %>
-</p>
-
-<p>
-  <b>Parent:</b>
-  <%= @institution.parent_id %>
-</p>
-
-<p>
-  <b>Creator:</b>
-  <%= @institution.creator_id %>
-</p>
-
-<p>
-  <b>Updater:</b>
-  <%= @institution.updater_id %>
-</p>
-
-
-<%= link_to 'Edit', edit_institution_path(@institution) %> |
-<%= link_to 'Back', institutions_path %>
+  <% if can? :edit, @institution %>
+    <div class="large-6 columns left">
+      <ul class="pricing-table">
+        <li class="title">Institution</li>
+        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen einer neuen Institution</li>
+        <li class="cta-button"><%= link_to 'Add Sub-Institution', new_institution_path(:parent_id => @institution), class: "button small" %></li>
+      </ul>
+    </div>
+  <% end %>
+<% end %>

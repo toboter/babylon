@@ -3,47 +3,55 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Explore", explore_path %>
     <%= link_to 'Bibliography', references_path %>
     <%= link_to "#{@reference.title}", @reference %>
   </nav>
 <% end %>
 
-<% content_for :note_section do %>
-<p>
-  <b>Authors:</b>
-  <%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %>
-</p>
-
-<%= @reference.book.year if @reference.book %>
-
-<p>
-  <b>Title:</b>
-  <%= @reference.title %>
-</p>
-
-<% if @reference.book %>
-  <p>
-    <b>In: </b><%= book_edited_by(@reference.book, true, true, true) %><%= book_title(@reference.book, true) %>
-  </p>
-  Bookinfo
-<% end %>
-<p>
-  <b>Pages:</b>
-  <%= @reference.first_page %> to <%= @reference.last_page %>
-</p>
-
-<p>
-  <b>URI:</b>
-  <%= @reference.uri %>
-</p>
-
-<% end %>
 
 <% content_for :main_section do %>
-  <p>Gescannte Bilder aus diesem Buch</p>
-  <p>Abstract</p>
-  <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
-  <p>Außerdem in diesem Buch</p>
+  <div class="large-8 columns">
+    <p>Gescannte Bilder aus diesem Buch</p>
+    <p>Abstract</p>
+    <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
+    <p>Außerdem in diesem Buch</p>
+  </div>
+
+  <div class="large-3 columns right">
+    <h5 class="subheader">Title</h5>
+    <ul class="no-bullet">
+      <li><%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></li>
+      <li><%= @reference.title %></li>
+    </ul>
+
+    <% if @reference.book %>
+      <h5 class="subheader">In: <small><%= @reference.book.book_type %></small></h5>
+      <p>
+        <%= book_edited_by(@reference.book, true, true, true) %>
+        <%= @reference.book.year+', ' if @reference.book %>
+        <%= book_title(@reference.book, true) %>
+        <%= @reference.first_page %> to <%= @reference.last_page %>
+      </p>
+
+      <% unless @reference.book.unpublished? %>
+        <h5 class="subheader">Issued</h5>
+        <ul class="no-bullet">
+          <li><%= @reference.book.publisher %></li>
+          <li><%= @reference.book.place %></li>
+          <%= content_tag :li, 'ISBN'+@reference.book.book_identifier if @reference.book.book_identifier.present? %>
+        </ul>
+      <% else %>
+        <h5 class="subheader">UNPUBLISHED</h5>
+      <% end %>
+    <% end %>
+
+    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
+    <ul class="no-bullet">
+      <li>Created by: <%= @reference.creator.available_name %></li>
+      <li>Updated by: <%= @reference.updater.available_name %></li>
+      <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") %>
+    </ul>
+  </div>
+
 <% end %>
 

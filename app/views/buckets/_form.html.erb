@@ -1,31 +1,30 @@
 <%= form_for [@attachable, @bucket], :html => { :class => 'custom'} do |f| %>
 <%= f.error_messages %>
 
+  <%= f.hidden_field :attachable_type %>
+  <%= f.hidden_field :attachable_id %>
+  <%= f.hidden_field :name_fixed %>
+
   <div class="field">
-    <%= f.label :attachable_type %><br />
-    <%= f.text_field :attachable_type %>
+    <%= f.label :name %>
+    <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
   </div>
   <div class="field">
-    <%= f.label :attachable_id %><br />
-    <%= f.text_field :attachable_id %>
-  </div>
-  <div class="field">
-    <%= f.label :cover_asset_id %><br />
+    <%= f.label :cover_asset_id %>
     <%= f.text_field :cover_asset_id %>
   </div>
 
-  <div class="field">
-    <%= f.label :name_fixed %><br />
-    <%= f.check_box :name_fixed %>
-  </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
-  </div>
-
-
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'button' %>
+    <% if @bucket.new_record? %>
+      <% if @bucket.attachable %>
+        <%= link_to 'Abbrechen', @bucket.attachable, :class => 'button secondary' %>
+      <% else %>
+        <%= link_to 'Abbrechen', buckets_path, :class => 'button secondary' %>
+      <% end %>
+    <% else %>
+      <%= link_to 'Abbrechen', [@bucket.attachable, @bucket], :class => 'button secondary' %>
+    <% end %>
   </div>
 <% end %>

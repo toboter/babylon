@@ -3,7 +3,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    @books = Book.order("year DESC")
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

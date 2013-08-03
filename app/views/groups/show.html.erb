@@ -12,7 +12,7 @@
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-  <%= render "shared/document_introduction", :var => @group %>
+  <%= render "shared/document_first", var: @group, dtype: "Introduction" %>
 
   <%= render "shared/document_docs_without_type", :var => @group %>
 

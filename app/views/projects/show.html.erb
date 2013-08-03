@@ -20,7 +20,7 @@
   <div class="large-8 columns">
     <h5 class="subheader"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
 
-    <%= render "shared/document_introduction", :var => @project %>
+    <%= render "shared/document_first", var: @project, dtype: "Introduction" %>
 
     <%= render "shared/document_docs_without_type", :var => @project %>
 

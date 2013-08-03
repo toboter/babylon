@@ -26,11 +26,11 @@
         <% end %>
       </small></h6>
       <h3><%= link_to "#{project.name}", [project.projectable, project] %></h3>
-      <% if project.documents.introduction.present? %>
-        <h4 class="subheader"><%= project.documents.introduction.title %></h4>
-        <p><%= project.documents.introduction.abstract %> ... <%= link_to 'read more', [project.documents.introduction.documentable, project.documents.introduction] %></p>
+      <% if project.documents.doctype('Introduction').present? %>
+        <h4 class="subheader"><%= project.documents.doctype('Introduction').title %></h4>
+        <p><%= project.documents.doctype('Introduction').abstract %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
       <% else %>
-        <p>No introduction or abstract available</p>
+        <p>No Introduction available</p>
       <% end %>
     </div>
   <% end %>  

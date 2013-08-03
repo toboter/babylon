@@ -11,7 +11,7 @@
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-    <%= render "shared/document_introduction", :var => @cluster %>
+    <%= render "shared/document_first", var: @cluster, dtype: "Introduction" %>
   
     <%= render "shared/document_docs_without_type", :var => @cluster %>
 

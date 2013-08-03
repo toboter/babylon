@@ -29,7 +29,7 @@ class BucketsController < ApplicationController
     @bucket = @attachable.buckets.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @bucket }
     end
   end
@@ -37,6 +37,7 @@ class BucketsController < ApplicationController
   # GET /buckets/1/edit
   def edit
     @bucket = @attachable.buckets.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /buckets

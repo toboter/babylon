@@ -22,6 +22,21 @@
 .area {
 	height: 200px;
 }
+
+.wrapper {
+
+}
+
+footer {
+    
+}
+
+.vcard {
+	border: none !important;
+	margin-left: -10px !important;
+	margin-top: -10px !important;
+}
+
 .form-actions {
 	border: 1px solid #e6e6e6;
 	padding:20px 20px 0 20px;
@@ -34,7 +49,7 @@
 }
 
 .babylo-tec-footer {
-	padding-top:150px;
+	padding-top:10em;
 }
 
 /*--- Footer Top ---*/
@@ -42,8 +57,9 @@
 	background: #f6f6f6;
  	padding: 24px 0 10px;
  	margin: 0;
- 	height: 200px;
+ 	height: auto;
  	border-top: 1px solid #e6e6e6;
+ 	display: block;
 }
 
 .babylo-tec-footer-top .option-block span, .babylo-tec-footer-top .option-block-last span {
@@ -61,11 +77,13 @@
 
 .babylo-tec-footer-top .option-block {
 	border-right: 1px solid #e6e6e6;
-	height: 130px;
+	height: 10em;
+	margin-bottom: 20px;
 }
 
 .babylo-tec-footer-top .option-block-last {
-	height: 130px;
+	height: 10em;
+	margin-bottom: 20px;
 }
 
 .babylo-tec-footer-top .option-block ul li, .babylo-tec-footer-top .option-block-last ul li {
@@ -78,16 +96,16 @@
 /*--- Footer Bottom ---*/
 .babylo-tec-footer-bottom {
  	background: #333;
- 	padding: 24px 0 10px;
+ 	padding: 20px 0 10px;
  	margin: 0;
- 	height: 120px;
+ 	height: auto;
  	border-top: 1px solid #e6e6e6;
  }
 
 .co-operation-links {
  	display: block;
 	float: right;
-	padding-bottom: 8px;
+	padding-top: 8px;
 	margin-left: 0;
  }
 

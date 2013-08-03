@@ -83,7 +83,7 @@
                     <ul class="dropdown">
                       <li><%= link_to "Active accounts" %></li>
                       <li><%= link_to "Projects" %></li>
-                      <li><%= link_to "Institutions" %></li>
+                      <li><%= link_to "Institutions", institutions_path %></li>
                       <li><%= link_to "Predicates" %></li>
                       <li><%= link_to "About us section" %></li>
                     </ul>
@@ -131,7 +131,7 @@
 
 
     <!-- Footer section -->
-
+    <footer>
     <div class="babylo-tec-footer">
       <% if can? :manage, 'development' %>
         <div class="row">
@@ -141,8 +141,9 @@
         </div>
       <% end %>
       <!-- Menu Footer -->
+      
       <div class="babylo-tec-footer-top">
-        <div class="row">
+        <div class="row">  
           <div class="large-3 small-6 columns option-block">
             <span class=​"title">​<i class="foundicon-page"></i>Resources</span>​
             <ul class="side-nav">
@@ -209,6 +210,7 @@
         </div>
       </div>
     </div>
+    </footer>
 
 
     <!-- Modals beginn -->

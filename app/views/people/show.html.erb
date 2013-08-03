@@ -1,95 +1,135 @@
 <% title graded_fullname(@person), nil %>
-<% edit_section_for(@person, nil) %>
+<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person.user_id == current_user.id)) %>
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Explore", explore_path %>
     <%= link_to 'People', people_path %>
     <%= link_to "#{graded_fullname(@person)}", @person %>
   </nav>
+
+  <div data-magellan-expedition="fixed">
+    <dl class="sub-nav">
+      <%= content_tag(:dd, link_to('General Information', "#general"), {"data-magellan-arrival"=>"general"}) if @person.documents.doctype('General Information').present? %>
+      <%= content_tag :dd, link_to('Curriculum Vitae', "#cv"), {"data-magellan-arrival"=>"cv"} if @person.documents.doctype('Curriculum Vitae').present? %>
+      <%= content_tag :dd, link_to('Publications', "#publications"), {"data-magellan-arrival"=>"publications"} if @person.references.present? || @person.books.present? %>
+      <%= content_tag :dd, link_to('Uploads', "#uploads"), {"data-magellan-arrival"=>"uploads"} if @person.buckets.present? && !@person.assets.empty? %>
+    </dl>
+  </div>
+
 <% end %>
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
     <%= content_tag :p, (@person.institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institution.present? %>
-    <section>
-      <h4 class="subheader">General Information, Activities | Curriculum Vitae | Publications</h4>
-      <p>Areas, Groups, Projects | Email, Telefon, Fax, Address (durch Institution), Institut</p>
-    </section>
 
-    <section>
-      <h4 class="subheader">Publications on Babylon</h4>
-      <ul>
-        <% for reference in @person.references do %>
-          <li><%= link_to "#{reference.title}", reference %></li>
-        <% end %>
-      </ul>
-    </section>
+  
 
-    <section>
-      <% if @person.user %>
-        <h4 class="subheader">Projects</h4>
-        <% for membership in @person.user.memberships %>
-          <p><%= membership.project.name %></p>
-        <% end %>
+    
+    <div id="general" data-magellan-destination="general">
+      <%= render "shared/document_first", var: @person, dtype: "General Information" %>     
+    </div>
 
+    <div id="cv" data-magellan-destination="cv">
+      <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %> 
+    </div>
+
+    <%= render "shared/add_document_box", :add_doc => @person unless @person.documents.doctype('Curriculum Vitae').present? && @person.documents.doctype('General Information').present? %>
+
+    <div id="publications" data-magellan-destination="publications">
+      <% if @person.references.present? %>
+        <h4 class="subheader">Publications on Babylon as author</h4>
+        <%= render "references/bib_entries", :references => @person.references %>
       <% end %>
-    </section>
+
+      <% if @person.books.present? %>
+        <h4 class="subheader">Publications on Babylon as editor</h4>
+        <table style="width:100%;">
+          <% for book in @person.books.order('year DESC') do %>
+            <tr>
+              <td><%= book_edited_by(book) %></td>
+              <td><%= book.year %></td>
+              <td><%= book_title(book) %></td>
+              <td><%= book.place %></td>
+              <td><%= book.publisher %></td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
 
 
-
-    <section>
-      <h4 class="subheader">Buckets</h4>
-      <ul>
+    <div id="uploads" data-magellan-destination="uploads">
+      <% if @person.buckets.present? %>
+        <h4 class="subheader">Uploads</h4>
         <% for bucket in @buckets do %>
-          <li>
-            <h4 class="subheader"><%= link_to "#{bucket.name}", [@attachable, bucket] %></h4> 
-            <ul class="small-block-grid-2 large-block-grid-4">
+          <h5 class="subheader"><%= link_to "#{bucket.name}", [@attachable, bucket] %></h5>
+          <ul class="clearing-thumbs" data-clearing>
             <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').limit(8).order('created_at desc') do %>
-                <li><%= link_to (image_tag asset.assetfile.thumb.url), asset, class: "th radius" %></li>
-              <% end %>
-            </ul>
+              <li><%= link_to (image_tag asset.assetfile.thumb.url), asset.assetfile.big.url, class: "th" %></li>
+            <% end %>
+          </ul>
+          <p>
             <%= bucket.cover_asset_id %>
             <% if can? :edit, @person %>
               <% if (!@person.user_id?) || (@person.user_id == current_user.id) %>
-                <%= link_to "Add asset", new_bucket_asset_path(bucket) %>
+                <%= link_to "Add assets to #{bucket.name}", new_bucket_asset_path(bucket) %>
               <% end %>
             <% end %>
-          </li>
+          </p>
         <% end %>
-      </ul>
-    </section>
+      <% end %>
+      <% if can? :edit, @person %>
+      <div class="row">
+        <div class="large-6 columns">
+          <ul class="pricing-table">
+            <li class="title">Bucket</li>
+            <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Buckets</li>
+            <li class="cta-button"><%= link_to 'Add Bucket', new_person_bucket_path(@person), class: "button" %></li>
+          </ul>
+        </div>
+      </div>
+      <% end %>
+    </div>
   </div>
 
-  <div class="large-3 columns right">
-    <% if @buckets.with_profile_pictures.first.cover_asset_id %>
-      <%= link_to (image_tag @profile_picture.assetfile.small.url), @profile_picture, class: "th", style: "margin-bottom:30px;" %>
-    <% end %>
+  <div class="large-3 columns offset-1 vcard">
 
+    <% if @buckets.with_profile_pictures.first.cover_asset_id %>
+      <%= link_to (image_tag @profile_picture.assetfile.small.url, class: "photo large-12"), @profile_picture, class: "th", style: "margin-bottom:30px;" %>
+    <% end %>
+    
     <h5 class="subheader">Personal Information</h5>
     <ul class="no-bullet">
-      <%= content_tag :li, graded_fullname(@person) + ' (' + @person.nickname + ')' if @person.nickname.present? %>
+      <%= content_tag :li, (content_tag :span, graded_fullname(@person), class: "fn") + (content_tag :span, ' (' + @person.nickname + ')' if @person.nickname.present?) %>
       <%= content_tag :li, 'System Username: '+@person.user.username if @person.user %>
-      <%= content_tag :li, @person.date_of_birth.strftime("%d.%m.%Y") if @person.date_of_birth.present? %>
+      <%= content_tag :li, 'Birthday: '+@person.date_of_birth.strftime("%d.%m.%Y") if @person.date_of_birth.present? %>
       <%= content_tag :li, @person.date_of_death.strftime("%d.%m.%Y") if @person.date_of_death.present? %>
       <%= content_tag :li, @person.profession if @person.profession.present? %>
       <%= content_tag :li, @person.gender if @person.gender.present? %>
     </ul>
-
+    <%= image_tag('microformat-logo-small.png', class: "right", style: "") %>
     <h5 class="subheader">Contact Information</h5>
     <ul class="no-bullet">
-      <%= content_tag :li, prepend('mail')+@person.public_email if @person.public_email.present? %>
-      <%= content_tag :li, prepend('phone')+@person.phone if @person.phone.present? %>
-      <%= content_tag :li, prepend('inbox')+@person.fax if @person.fax.present? %>
-      <%= content_tag :div, style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
-        <%= content_tag :li, prepend('address-book', '-25px')+@person.institution.root.self_and_descendants.map{ |a| a.name }.join(", ") %>
-        <%= content_tag :li, @person.institution.street %>
-        <%= content_tag :li, @person.institution.zip+' '+@person.institution.city %>
-        <%= content_tag :li, @person.institution.country %>
+      <%= content_tag :li, prepend('mail')+@person.public_email, class: "email" if @person.public_email.present? %>
+      <%= content_tag :li, prepend('phone')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
+      <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
+      <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
+        <%= content_tag :li, prepend('address-book', '-25px')+@person.institution.root.self_and_descendants.map{ |a| a.name }.join(", "), class: "org" %>
+        <%= content_tag :li, @person.institution.street, class: "street-address" %>
+        <%= content_tag :li, (content_tag :span, @person.institution.zip, class: "postal-code")+' '+(content_tag :span, @person.institution.city, class: "locality") %>
+        <%= content_tag :li, @person.institution.country, class: "country-name" %>
       <% end if @person.institution.present? && @person.show_inst_address == true -%>
-      <%= content_tag :li, prepend('website')+(link_to "#{@person.uri}", "#{@person.uri}") if @person.uri.present? %>
+      <%= content_tag :li, prepend('website')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
     </ul>
 
+    <% if @person.user %>
+      <h5 class="subheader" style="margin-top:50px;">Projects</h5>
+      <ul class="no-bullet">
+        <% for membership in @person.user.memberships %>
+          <li><%= link_to "#{membership.project.name}", membership.project %></li>
+        <% end %>
+      </ul>
+    <% end %>
 
     <h5 class="subheader" style="margin-top:75px;">Record</h5>
     <ul class="no-bullet">

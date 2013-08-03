@@ -4,7 +4,7 @@ class ReferencesController < ApplicationController
   # GET /references
   # GET /references.json
   def index
-    @references = Reference.all
+    @references = Reference.find(:all, :joins => :authors, :order => 'people.last_name ASC')
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

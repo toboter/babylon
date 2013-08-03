@@ -1,7 +1,8 @@
 <%= nested_form_for [@documentable, @document], :html => { class: "custom" } do |f| %>
   <%= f.error_messages %>
-
-  <p>This document belongs to: <%= link_to "#{@documentable ? @documentable.name : ' name not resolveable'}", @documentable %></p>
+  <%= content_tag :p do -%>
+    This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
+  <% end unless @document.documentable_type == 'Person' -%>
 
   <div class="field">
     <%= f.label :title %>
@@ -13,7 +14,11 @@
 
   <div class="field">
     <%= f.label :document_type %>
-    <%= f.select :document_type, Document::GENERALDOCUMENTTYPES, :include_blank => true %>
+    <% if @document.documentable_type == 'Person' %>
+      <%= f.select :document_type, Document::PEOPLEDOCUMENTTYPES, :include_blank => false %>
+    <% else %>
+      <%= f.select :document_type, Document::GENERALDOCUMENTTYPES, :include_blank => true %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :abstract %>

@@ -11,7 +11,7 @@ class Document < ActiveRecord::Base
 
 
   GENERALDOCUMENTTYPES = %w[Introduction About]
-  PEOPLEDOCUMENTTYPES = %w[General/ Information Curriculum/ Vitae]
+  PEOPLEDOCUMENTTYPES = %w[General\ Information Curriculum\ Vitae]
 
   DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES
 
@@ -20,8 +20,8 @@ class Document < ActiveRecord::Base
 
   accepts_nested_attributes_for :document_sections, allow_destroy: true
 
-  def self.introduction
-    where(:document_type => 'Introduction').first
+  def self.doctype(type)
+    where(:document_type => type).first
   end
 
   scope :all_but_typelist, where('document_type NOT IN (?)', Document::DOKUMENTTYPES)

@@ -41,6 +41,7 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document = @documentable.documents.find(params[:id])
+
   end
 
   # POST /documents
