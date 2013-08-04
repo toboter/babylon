@@ -4,7 +4,22 @@ class ReferencesController < ApplicationController
   # GET /references
   # GET /references.json
   def index
-    @references = Reference.find(:all, :joins => :authors, :order => 'people.last_name ASC')
+    @references = Reference.all # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
+    @references_all = @references
+    @collections = @references.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
+    @monographs = @references.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
+    @misc = @references.select { |reference| reference.book_id == nil }
+
+    if params[:type]
+      if params[:type] == 'in-collection'
+        @references = @collections
+      elsif params[:type] == 'as-monograph'
+        @references = @monographs
+      elsif params[:type] == 'misc'
+        @references = @misc
+      end
+    end
+
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

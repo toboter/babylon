@@ -1,5 +1,5 @@
 <% references.each do |reference| %>
-  <%= content_tag :div, class: 'bib-entry' do -%>
+  <%= content_tag :div, class: 'list-entry' do -%>
     <div class="row">
       <%= content_tag :div, class: 'large-4 small-4 columns', style: 'text-align:right;' do -%>
         <ul class="no-bullet">
@@ -13,14 +13,15 @@
         <p>
           <%= authors_of_article(reference)+', ' %>
           <%= link_to "#{reference.title}", reference %>
-          <%= content_tag :span, ', ' if reference.book.present? || reference.first_page.present? %>
           <% if reference.book.present? %>
-            <%= raw('in: '+editors(reference)) %>
-            <%= article_in_book(reference) %>
+            <%= raw(', in: '+editors(reference)) unless reference.book.book_type == 'Monographie' || reference.book.book_type == 'Monographie in einer Reihe' %>
+            <%= content_tag :span, ', ' if reference.book.book_type == 'Monographie in einer Reihe' %>
+            <%= article_in_book(reference) unless reference.book.book_type == 'Monographie' %>
             <%= content_tag :span, ', ' if reference.book.publisher.present? %>
             <%= reference.book.publisher if reference.book.publisher.present? %>
             <%= content_tag :span, ', ' if reference.book.place.present? %>
             <%= reference.book.place if reference.book.place.present? %>
+            <%= content_tag :span, '('+reference.book.year+')' if reference.book.year.present? %>
           <% end %>
           <%= content_tag :span, ', ' if reference.first_page.present? %>
           <%= reference.first_page if reference.first_page.present? %>

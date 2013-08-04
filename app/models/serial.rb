@@ -9,6 +9,8 @@ class Serial < ActiveRecord::Base
   validates_uniqueness_of :shortcut, :allow_blank => true
 
   has_many :books
+  belongs_to :creator, class_name: "User"
+  belongs_to :updater, class_name: "User"
 
   SERIALTYPES = %w[Zeitschrift Reihe]
 

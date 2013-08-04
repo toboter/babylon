@@ -9,39 +9,36 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <h4>Volumes</h4>
-  <ul>
-    <% for book in @serial.books.order("volume ASC") do %>
-      <li><%= link_to "#{book_short_title(book)}", book %></li>
+  <div class="large-8 columns">
+    <h4 class="subheader">Content</h4>
+    <%= render "books/book_entries", :books => @serial.books.order("volume ASC") %>
+
+    <% if can? :edit, @serial %>
+      <div class="row collapse" style="margin-top:50px;">
+        <div class="large-6 columns">
+          <ul class="pricing-table">
+            <li class="title">Volume</li>
+            <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen</li>
+            <li class="cta-button"><%= link_to 'Add Volume', new_book_path(:serial_id => @serial), class: "button" %></li>
+          </ul>
+        </div>
+      </div>
     <% end %>
-  </ul>
-  <p><%= link_to 'Add a volume', new_book_path(:serial_id => @serial), class: "button small" if can? :edit, @serial %></p>
-<% end %>
+  </div>
 
-<% content_for :note_section do %>
-  <p>
-    <b>Name:</b>
-    <%= @serial.name %>
-  </p>
-  
-  <p>
-    <b>Shortcut:</b>
-    <%= @serial.shortcut %>
-  </p>
-  
-  <p>
-    <b>Type:</b>
-    <%= @serial.serial_type %>
-  </p>
-  
-  <p>
-    <b>Serial identifier:</b>
-    <%= @serial.serial_identifier %>
-  </p>
-  
-  <p>
-    <b>Uri:</b>
-    <%= @serial.uri %>
-  </p>
-<% end %>
+  <div class="large-3 columns offset-1">
+    <h5 class="subheader">Info <small><%= @serial.serial_type %></small></h5>
+    <ul class="no-bullet">
+      <li><%= @serial.name %> (<%= @serial.shortcut %>)</li>
+      <li><%= link_to "#{@serial.uri}", "#{@serial.uri}", :target => '_blank' %></li>
+      <%= content_tag :li, 'ISSN'+@serial.serial_identifier if @serial.serial_identifier.present? %>
+    </ul>
 
+    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
+    <ul class="no-bullet">
+      <li>Created by: <%= @serial.creator.available_name %></li>
+      <li>Updated by: <%= @serial.updater.available_name %></li>
+    </ul>
+  </div>
+
+<% end %>

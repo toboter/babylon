@@ -16,39 +16,24 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <table>
-    <tr>
-      <th></th>
-      <th>Year</th>
-      <th>Booktitle</th>
-      <th>Place</th>
-      <th>Publisher</th>
-      <th>Book type</th>
-      <th>Unpublished</th>
-      <% if can? :edit, @books %>
-        <th></th>
-      <% end %>
-    </tr>
+  <div class="row collpase">
+    <div class="large-9 columns">
+      <%= render "book_entries", :books => @books %>
+    </div>
+    <div class="large-2 columns offset-1">
+      <h5 class="subheader">Filter by type</h5>
+      <ul class="no-bullet">
+        <li><%= link_to "All Books", books_path %> (<%= @books.count %>)</li>
+        <li><%= link_to "Collections", books_path(:type => 'collections') %> (<%= @books.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
+        <li><%= link_to "Monographs", books_path(:type => 'monographs') %> (<%= @books.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
+      </ul>
+    </div>
+  </div>
   
-    <% @books.each do |book| %>
-      <tr>
-        <td><%= book_edited_by(book) %></td>
-        <td><%= book.year %></td>
-        <td><%= book_title(book) %></td>
-        <td><%= book.place %></td>
-        <td><%= book.publisher %></td>
-        <td><%= book.book_type %></td>
-        <td><%= book.unpublished %></td>
-        <% if can? :edit, @books %>
-          <td><%= link_to 'Edit', edit_book_path(book) %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </table>
 <% end %>
 
 <% content_for :footer_section do %>
-  <% if can? :edit, @clusters %>
+  <% if can? :edit, @books %>
     <div class="large-6 columns">
       <ul class="pricing-table">
         <li class="title">Book</li>

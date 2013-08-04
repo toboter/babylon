@@ -5,6 +5,14 @@ class BooksController < ApplicationController
   def index
     @books = Book.order("year DESC")
 
+    if params[:type]
+      if params[:type] == 'collections'
+        @books = @books.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe'])
+      elsif params[:type] == 'monographs'
+        @books = @books.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe'])
+      end
+    end
+
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @books }

@@ -31,6 +31,11 @@ footer {
     
 }
 
+.list-entry {
+	border-bottom: 1px dashed #e6e6e6;
+	margin-bottom: .8em;
+}
+
 .vcard {
 	border: none !important;
 	margin-left: -10px !important;

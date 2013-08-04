@@ -43,17 +43,7 @@
 
       <% if @person.books.present? %>
         <h4 class="subheader">Publications on Babylon as editor</h4>
-        <table style="width:100%;">
-          <% for book in @person.books.order('year DESC') do %>
-            <tr>
-              <td><%= book_edited_by(book) %></td>
-              <td><%= book.year %></td>
-              <td><%= book_title(book) %></td>
-              <td><%= book.place %></td>
-              <td><%= book.publisher %></td>
-            </tr>
-          <% end %>
-        </table>
+        <%= render "books/book_entries", :books => @person.books %>
       <% end %>
     </div>
 

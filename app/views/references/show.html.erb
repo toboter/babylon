@@ -22,6 +22,7 @@
     <ul class="no-bullet">
       <li><%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>
+      <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") if @reference.uri.present? %>
     </ul>
 
     <% if @reference.book %>
@@ -30,7 +31,7 @@
         <%= book_edited_by(@reference.book, true, true, true) %>
         <%= @reference.book.year+', ' if @reference.book %>
         <%= book_title(@reference.book, true) %>
-        <%= @reference.first_page %> to <%= @reference.last_page %>
+        <%= ', '+@reference.first_page if @reference.first_page.present? %> <%= '- '+@reference.last_page if @reference.last_page.present? %>
       </p>
 
       <% unless @reference.book.unpublished? %>
@@ -49,7 +50,6 @@
     <ul class="no-bullet">
       <li>Created by: <%= @reference.creator.available_name %></li>
       <li>Updated by: <%= @reference.updater.available_name %></li>
-      <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") %>
     </ul>
   </div>
 

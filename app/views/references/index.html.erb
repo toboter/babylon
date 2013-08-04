@@ -19,17 +19,17 @@
 
 <% content_for :main_section do %>
 <div class="row collpase">
-  <div class="large-8 columns">
+  <div class="large-9 columns">
     <%= render "bib_entries", :references => @references %>
   </div>
 
-  <div class="large-3 columns offset-1">
-    <h5 class="subheader">by type</h5>
+  <div class="large-2 columns offset-1">
+    <h5 class="subheader">Filter by type</h5>
     <ul class="no-bullet">
-      <li>References <%= @references.count %></li>
-      <li>Books <%= Book.count %></li>
-      <li>Collections <%= Book.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %></li>
-      <li>Monographs <%= Book.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %></li>
+      <li><%= link_to "All entries", references_path %> (<%= @references_all.count %>)</li>
+      <li><%= link_to "in Collections", references_path(:type => 'in-collection') %> (<%= @collections.count %>)</li>
+      <li><%= link_to "as Monographs", references_path(:type => 'as-monograph') %> (<%= @monographs.count %>)</li>
+      <li><%= link_to "misc", references_path(:type => 'misc') %> (<%= @misc.count %>)</li>
     </ul>
   </div>
 </div>
