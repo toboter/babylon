@@ -2,22 +2,25 @@
   <%= f.error_messages %>
   <%= content_tag :p do -%>
     This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
-  <% end unless @document.documentable_type == 'Person' -%>
+  <% end unless @document.person? || @document.page? -%>
 
   <div class="field">
     <%= f.label :title %>
-    <%= f.text_field :title %>
+    <%= f.text_field :title unless @document.page? %>
+    <%= f.text_field :title, :readonly => true if @document.page? %>
   </div>
 
-  <%= f.hidden_field :documentable_type %>
-  <%= f.hidden_field :documentable_id %>
+  <%= f.text_field :documentable_type %>
+  <%= f.text_field :documentable_id %>
 
   <div class="field">
+    <% unless @document.documentable_type == 'Page' %>
     <%= f.label :document_type %>
     <% if @document.documentable_type == 'Person' %>
       <%= f.select :document_type, Document::PEOPLEDOCUMENTTYPES, :include_blank => false %>
     <% else %>
       <%= f.select :document_type, Document::GENERALDOCUMENTTYPES, :include_blank => true %>
+    <% end %>
     <% end %>
   </div>
   <div class="field">
@@ -43,7 +46,7 @@
         <%= link_to 'Abbrechen', documents_path, :class => 'button secondary' %>
       <% end %>
     <% else %>
-      <%= link_to 'Abbrechen', [@document.documentable, @document], :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
     <% end %>
   </div>
 <% end %>

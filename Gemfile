@@ -9,8 +9,6 @@ gem 'pg'
 
 # active_record_hstore
 
-
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

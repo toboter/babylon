@@ -7,4 +7,5 @@ class Role < ActiveRecord::Base
 
   validates_uniqueness_of :user_id
   validates_presence_of :user_id, :role
+
 end

@@ -5,7 +5,10 @@
   <% if user_signed_in? && @person.user_id == current_user.id %>
     <div class="row">
       <div class="large-12 columns">
-        <p><%= link_to "Edit your account", edit_user_registration_path %></p>
+        <% unless @person.new_record? %>
+          <p><%= link_to "Edit your account", edit_user_registration_path %> | 
+          <%= link_to "Delete Account-Profile connection", user_disconnect_path(:user_id => current_user), method: :post, data: { confirm: 'Are you sure?'} %></p>
+        <% end %>
       </div>
     </div>
   <% end %>
@@ -97,7 +100,7 @@
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'button' %>
     <% if @person.new_record? %>
-      <%= link_to 'Abbrechen', people_path, :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
     <% else %>
       <%= link_to 'Abbrechen', @person, :class => 'button secondary' %>
     <% end %>

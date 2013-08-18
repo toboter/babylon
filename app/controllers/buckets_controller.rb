@@ -1,9 +1,10 @@
 class BucketsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_attachable
+  before_filter :load_attachable#, except: [:index]
   # GET /buckets
   # GET /buckets.json
   def index
+    #@buckets = Bucket.all
     @buckets = @attachable.buckets
 
     respond_to do |format|

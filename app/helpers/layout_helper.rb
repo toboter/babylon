@@ -9,9 +9,9 @@ module LayoutHelper
     @show_title = show_title
   end
 
-  def edit_section_for(var, polymorphic)
+  def edit_section_for(var, polymorphic, polymorphicl2=nil)
     if can? :edit, var
-      content_for(:edit_section) { h(link_to 'Edit', [:edit, polymorphic, var]) + ' | ' + h(link_to 'Delete', [polymorphic, var], method: :delete, data: { confirm: 'Are you sure?' })}
+      content_for(:edit_section) { h(link_to 'Edit', [:edit, polymorphicl2, polymorphic, var]) + ' | ' + h(link_to 'Delete', [polymorphicl2, polymorphic, var], method: :delete, data: { confirm: 'Are you sure?' })}
     end
   end
 

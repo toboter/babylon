@@ -4,8 +4,9 @@ class Document < ActiveRecord::Base
 
   stampable
 
-  has_many :document_sections
+  has_many :document_sections, dependent: :destroy
   belongs_to :documentable, :polymorphic => true
+  belongs_to :page, foreign_key: "documentable_id", conditions: "documentable_type = 'Page'"
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
@@ -25,5 +26,13 @@ class Document < ActiveRecord::Base
   end
 
   scope :all_but_typelist, where('document_type NOT IN (?)', Document::DOKUMENTTYPES)
+
+  def page?
+    documentable_type == 'Page'
+  end
+
+  def person?
+    documentable_type == 'Person'
+  end
 
 end

@@ -1210,6 +1210,7 @@ $topbar-bg: #333 !default;
 
 // $topbar-height: 45px;
 // $topbar-margin-bottom: emCalc(30px);
+$topbar-margin-bottom: 0;
 
 // Control Input height for top bar
 
@@ -1271,3 +1272,7 @@ $topbar-dropdown-toggle-size: 5px;
 // $topbar-sticky-class: ".sticky";
 
 @import 'foundation';
+
+.wrapper {
+	padding-top: emCalc(30px);
+}

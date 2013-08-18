@@ -12,7 +12,10 @@ class Asset < ActiveRecord::Base
   validates_presence_of :assetfile, :name, :content_type
 
 
-  
+  def self.has_cover_id(cover_id)
+    where('id = ?', cover_id).first
+  end
+
   private
   
   def update_asset_attributes

@@ -3,8 +3,8 @@ class Group < ActiveRecord::Base
 
   stampable
 
-  has_many :projects, as: :projectable
-  has_many :documents, as: :documentable
+  has_many :projects, as: :projectable, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :area

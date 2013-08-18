@@ -1,29 +1,33 @@
 Babylon::Application.routes.draw do
-
-  resources :institutions
-
-
-  resources :documents, only: [:index, :show] do
-    resources :document_sections
+  resources :pages do
+    resources :buckets
+    resources :documents
   end
+
+  # get 'people/about', to: 'explore#index'
 
   resources :clusters, :path => 'modules' do
     resources :projects
     resources :documents
   end
+
   resources :areas do
     resources :documents
   end
+
   resources :groups do
     resources :projects
     resources :documents
   end
+
   resources :projects, only: [:index, :show] do
     resources :documents
-  #   resources :todos
+    resources :todolists do
+      resources :todos, except: [:show]
+    end
   end
 
-
+  resources :institutions
   resources :serials
   resources :books
   resources :references, :path => 'bibliography'
@@ -33,17 +37,27 @@ Babylon::Application.routes.draw do
     resources :documents
   end
 
-  resources :buckets do
-    resources :assets
+  # Standard Document routes
+  resources :documents, only: [:index, :show] do
+    resources :document_sections
   end
 
-  resources :assets, only: [:show, :index, :destroy, :edit]
+  # Standard Bucket und Asset routes
+  # Assets sind immer die gleichen, können aber in verschiedenen Buckets vorkommen.
+  resources :buckets, only: [:index] do
+    resources :assets, only: [:new, :create, :edit, :update, :destroy]
+  end
+  resources :assets, only: [:show, :index]
 
-  devise_for :users
-
-  post "user_connect" => "people#connect_to_user"
   get 'dashboard', to: 'dashboard#index'
   get 'explore', to: 'explore#index'
+  get 'help', to: 'explore#index'
+
+  # User routes
+  devise_for :users 
+
+  post "user_connect" => "people#connect_to_user"
+  post "user_disconnect" => "people#disconnect_user"
 
   resources :roles, only: [] do
     collection do

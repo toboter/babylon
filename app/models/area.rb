@@ -3,8 +3,8 @@ class Area < ActiveRecord::Base
 
   stampable
 
-  has_many :groups
-  has_many :documents, as: :documentable
+  has_many :groups, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :cluster

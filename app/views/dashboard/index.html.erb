@@ -1,28 +1,86 @@
-<h1>Hi <%= current_user.available_name %>!</h1>
+<% title "Dashboard", "#{current_user.available_name}" %>
 
-<div>
-  <%= current_user.available_name %><br />
-  <%= current_user.username %><br />
-  <%= current_user.role.role %><br />
-  <%= current_user.email %><br />
-  <%= current_user.current_sign_in_at %><br />
-  <%= current_user.current_sign_in_ip %><br />
-  <%= current_user.last_sign_in_at %><br />
-  <%= current_user.last_sign_in_ip %><br />
-</div>
+<% content_for :breadcrumbs_section do %>
 
-<% if can? :manage, "roles" %>
-  <%= form_tag update_multiple_roles_path, method: :put do %>
-    <% for role in Role.all do %>
-      <li>
-        <%= role.user.username %>
-        <%= fields_for "roles[]", role do |f| %>
-          <%= f.error_messages %>
-          <%= f.label :role %><br />
-          <%= f.select(:role, User::ROLES) %>
-        <% end %>
-      </li>
-    <% end %>
-    <%= submit_tag "Update Roles" %>
-  <% end %>
+<% end %>
+
+
+<% content_for :main_section do %>
+  <div class="large-8 columns">
+    <div class="row section-container auto" data-section>
+      <section>
+        <h4 class="title subheader" data-section-title><%= link_to "Tasks", "#tasks" %></h4>
+        <div class="content" data-section-content>
+          <ul class="no-bullet">
+            <% for todolist in current_user.in_todolists %>
+              <h5><%= link_to "#{todolist.name}", [todolist.project, todolist] %></h5>
+              <% for todo in todolist.todos.where(:assigned_id => current_user).order('due_to ASC').limit(5) %>
+                <li><%= todo.name %>, <%= todo.due_to %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+
+
+      <% if can? :manage, "roles" %>
+      <section>
+        <h4 class="title subheader" data-section-title><%= link_to "Roles", "#roles" %></h4>
+        <div class="content" data-section-content>       
+          <%= form_tag(update_multiple_roles_path, {method: :put, :class => 'custom'}) do %>
+            <ul class="no-bullet">
+              <% for role in Role.all do %>
+                <%= fields_for "roles[]", role do |f| %>
+                  <%= f.error_messages %>
+                  <div class="row">
+                    <div class="large-3 small-3 columns">
+                      <%= f.label :role, "#{role.user.available_name}", class: "right inline" %>
+                    </div>
+                    <div class="large-9 small-9 columns">
+                      <%= f.select(:role, User::ROLES) %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </ul>
+            <div class="form-actions">
+              <%= submit_tag "Update Roles", class: "button" %>
+            </div>
+          <% end %>
+        </div>
+      </section> 
+      <% end %>
+
+      <% if can? :manage, "pages" %>
+      <section>
+        <h4 class="title subheader" data-section-title><%= link_to "Static Pages", "#static" %></h4>
+        <div class="content" data-section-content>
+          <ul class="no-bullet">
+            <%= content_tag :li, page_doc_path_for('about') %>
+            <%= content_tag :li, page_doc_path_for('API') %>
+          </ul>
+        </div>
+      </section> 
+      <% end %>
+
+    </div>
+  </div>
+
+  <div class="large-3 columns offset-1">
+    <h5 class="subheader">Account</h5>
+    <ul class="no-bullet">
+      <li><%= connected_profile ? link_to("#{current_user.available_name}", person_path(connected_profile)) : current_user.available_name %></li>
+      <li><%= current_user.username %> (<%= current_user.role.role %>)</li>
+      <li><%= current_user.email %></li>
+      <li>Created at: <%= current_user.created_at %>
+    </ul>
+    <h5 class="subheader">SignIn Time & IP</h5>
+    <ul class="no-bullet">
+      <li>This: <%= current_user.current_sign_in_at %></li>
+      <li><%= current_user.current_sign_in_ip %></li>
+      <li>Last: <%= current_user.last_sign_in_at %></li>
+      <li><%= current_user.last_sign_in_ip %></li>
+    </ul>
+  </div>
+
 <% end %>

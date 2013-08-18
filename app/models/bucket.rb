@@ -12,6 +12,7 @@ class Bucket < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:attachable_id, :attachable_type]
+  # validates_uniqueness_of :attachable_type if :attachable_type == 'Explore'
   # validates limitation by person of Profile Pictures to one
   # validates :name, :exclusion => { :in => %w(profile\ pictures ..) }
 

@@ -11,14 +11,17 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
 
   has_many :people
-  has_one :role
+  has_one :role, :dependent => :destroy
   has_many :projects, through: :memberships
   has_many :memberships, :dependent => :destroy
+  has_many :todos, foreign_key: "assigned_id"
+  has_many :in_todolists, source: "todolist", through: :todos, uniq: true
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
   attr_accessor :login
   after_create :add_base_role
+  before_destroy :not_destroy_admin
 
   model_stamper
 
@@ -47,5 +50,12 @@ class User < ActiveRecord::Base
     else
      username
    end
+  end
+
+  def not_destroy_admin
+    if role.role == 'admin'
+      errors.add(:base, "You cannot destroy the last admin!")
+      return false
+    end
   end
 end

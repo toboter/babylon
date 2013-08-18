@@ -27,7 +27,7 @@
   </div>
 
   <div class="large-3 columns right">
-    <%= image_tag('microformat-logo-small.png', class: "right", style: "") %>
+    <%= link_to (image_tag('microformat-logo-small.png', class: "right", style: "")), help_path(:about =>'microformats') %>
     <h5 class="subheader">Contact Info</h5>
     <ul class="no-bullet vcard">
       <li class="fn"><%= @institution.name %></li>

@@ -89,11 +89,7 @@
 
   <div class="form-actions">
     <%= f.submit "Speichern", :id => 'book-submit', :class => 'button' %>
-    <% if @book.new_record? %>
-        <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
-    <% else %>
-      <%= link_to 'Abbrechen', @book, :class => 'button secondary' %>
-    <% end %>
+    <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
   </div>
 
 <% end %>

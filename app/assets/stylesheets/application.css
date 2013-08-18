@@ -12,6 +12,7 @@
  *= require foundation_and_overrides
  *= require general_foundicons
  *= require general_foundicons_ie7
+ *= require foundation-datepicker
  *= require_tree .
  */
 
@@ -23,12 +24,16 @@
 	height: 200px;
 }
 
-.wrapper {
-
-}
-
 footer {
     
+}
+
+.subtitle {
+	line-height: 1.4;
+	color: #6f6f6f;
+	font-weight: 300;
+	margin-top: -0.7em;
+	margin-bottom: 1em;
 }
 
 .list-entry {

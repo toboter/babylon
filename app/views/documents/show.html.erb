@@ -1,12 +1,15 @@
-<% title "#{@document.title}", nil %>
+<% title "#{@document.title}", nil unless @document.page? %>
+<% title "#{@document.documentable.permalink.humanize}", nil if @document.page? %>
 <% edit_section_for(@document, @document.documentable) %>
 
 <% content_for :breadcrumbs_section do %>
+  <% unless @document.page? %>
   <nav class="breadcrumbs">
-    <%= link_to "#{@document.documentable.name}", @document.documentable unless @document.documentable_type == 'Person' %>
-    <%= link_to "#{@document.documentable.fullname}", @document.documentable if @document.documentable_type == 'Person' %>
+    <%= link_to "#{@document.documentable.name}", @document.documentable unless @document.person? %>
+    <%= link_to "#{@document.documentable.fullname}", @document.documentable if @document.person? %>
     <%= @document.title.present? ? (link_to "#{@document.title}", [@document.documentable, @document]) : (link_to "#{@document.document_type}", [@document.documentable, @document]) %>
   </nav>
+  <% end %>
 <% end %>
 
 <% content_for :main_section do %>
@@ -30,12 +33,14 @@
 
 
   <div class="large-2 columns right">
+    <% unless @document.page? %>
     <h6 class="subheader">Belongs to</h6>
     <ul class="no-bullet">
-      <%= content_tag :li, link_to("#{@document.documentable.name}", @documentable) unless @document.documentable_type == 'Person' %>
-      <%= content_tag :li, link_to("#{@document.documentable.fullname}", @documentable) if @document.documentable_type == 'Person' %>
+      <%= content_tag :li, link_to("#{@document.documentable.name}", @document.documentable) unless @document.person? %>
+      <%= content_tag :li, link_to("#{@document.documentable.fullname}", @document.documentable) if @document.person? %>
       <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
     </ul>
+    <% end %>
     <h6 class="subheader">Creator</h6>
     <ul class="no-bullet">
       <li>

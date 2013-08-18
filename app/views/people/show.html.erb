@@ -97,7 +97,7 @@
       <%= content_tag :li, @person.profession if @person.profession.present? %>
       <%= content_tag :li, @person.gender if @person.gender.present? %>
     </ul>
-    <%= image_tag('microformat-logo-small.png', class: "right", style: "") %>
+    <%= link_to (image_tag('microformat-logo-small.png', class: "right", style: "")), help_path(:about =>'microformats') %>
     <h5 class="subheader">Contact Information</h5>
     <ul class="no-bullet">
       <%= content_tag :li, prepend('mail')+@person.public_email, class: "email" if @person.public_email.present? %>

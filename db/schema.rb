@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130801154722) do
+ActiveRecord::Schema.define(:version => 20130816092205) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -182,6 +182,16 @@ ActiveRecord::Schema.define(:version => 20130801154722) do
   add_index "memberships", ["project_id"], :name => "index_memberships_on_project_id"
   add_index "memberships", ["user_id"], :name => "index_memberships_on_user_id"
 
+  create_table "pages", :force => true do |t|
+    t.string   "permalink"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "pages", ["permalink"], :name => "index_pages_on_permalink"
+
   create_table "pailfuls", :force => true do |t|
     t.integer  "asset_id"
     t.integer  "bucket_id"
@@ -266,6 +276,32 @@ ActiveRecord::Schema.define(:version => 20130801154722) do
     t.integer  "updater_id"
     t.string   "serial_type"
   end
+
+  create_table "todolists", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.integer  "responsible_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "todolists", ["project_id"], :name => "index_todolists_on_project_id"
+
+  create_table "todos", :force => true do |t|
+    t.string   "name"
+    t.datetime "due_to"
+    t.integer  "todolist_id"
+    t.integer  "assigned_id"
+    t.boolean  "completed"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "todos", ["todolist_id"], :name => "index_todos_on_todolist_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

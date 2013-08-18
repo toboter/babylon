@@ -8,7 +8,7 @@ class Person < ActiveRecord::Base
   after_create :build_profile_picture_bucket
   
   belongs_to :user
-  has_many :engagements
+  has_many :engagements, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   has_many :authorships, :dependent => :destroy

@@ -112,4 +112,14 @@ class PeopleController < ApplicationController
     end
   end
 
+  def disconnect_user
+    @person = Person.find_by_user_id(params[:user_id])
+    @user = User.find_by_id(params[:user_id])
+    if @person.update_attribute(:user_id, nil)
+      redirect_to @person, notice: "#{@person.fullname} is no longer connected to #{@user.username}."
+    else
+      redirect_to root_url, notice: "Error on update."
+    end
+  end
+
 end

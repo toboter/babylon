@@ -2,11 +2,13 @@
 <% edit_section_for(@bucket, @bucket.attachable) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "#{@bucket.attachable.name}", @bucket.attachable unless @bucket.attachable_type == 'Person' %>
-    <%= link_to "#{@bucket.attachable.fullname}", @bucket.attachable if @bucket.attachable_type == 'Person' %>
-    <%= @bucket.name.present? ? (link_to "#{@bucket.name}", [@bucket.attachable, @bucket]) : 'Nothing' %>
-  </nav>
+  <% unless @bucket.attachable_type == 'Page' %>
+    <nav class="breadcrumbs">
+      <%= link_to "#{@bucket.attachable.name}", @bucket.attachable unless @bucket.attachable_type == 'Person' %>
+      <%= link_to "#{@bucket.attachable.fullname}", @bucket.attachable if @bucket.attachable_type == 'Person' %>
+      <%= @bucket.name.present? ? (link_to "#{@bucket.name}", [@bucket.attachable, @bucket]) : 'Nothing' %>
+    </nav>
+  <% end %>
 <% end %>
 
 <% content_for :main_section do %>

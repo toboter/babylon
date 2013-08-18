@@ -1,0 +1,27 @@
+<%= form_for [@todolist.project, @todolist, @todo], :html => { class: "custom" } do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :todolist_id %>
+  <%= f.hidden_field :completed, value: 'f' %>
+
+  <div class="row">
+    <div class="large-6 columns left">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    
+    <div class="large-3 columns">
+      <%= f.label :assigned_id, 'Assigned to' %>
+      <%= f.collection_select :assigned_id, @todolist.project.members, :id, :available_name, {:selected => current_user.id.to_s} %>
+    </div>
+
+    <div class="large-2 columns left">
+      <%= f.label :due_to %>
+      <%= f.text_field :due_to, class: "datepicker" %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", class: 'button' %>
+    <%= link_to 'Abbrechen', project_todolist_todos_path(@todo.todolist.project, @todo.todolist), class: 'button secondary' %>
+  </div>
+<% end %>

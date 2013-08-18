@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  due_to: 2013-08-07 11:19:48
+  todolist: 
+  assigned_id: 1
+  completed: false
+
+two:
+  name: MyString
+  due_to: 2013-08-07 11:19:48
+  todolist: 
+  assigned_id: 1
+  completed: false

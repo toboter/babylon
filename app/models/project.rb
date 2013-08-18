@@ -6,11 +6,12 @@ class Project < ActiveRecord::Base
   after_create :add_first_admin
 
   has_many :memberships, :dependent => :destroy
-  has_many :members, :class_name => 'User', through: :memberships, :source => :user  
-  has_many :documents, as: :documentable
+  has_many :members, :class_name => 'User', through: :memberships, :source => :user
+  has_many :documents, as: :documentable, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
+  has_many :todolists, dependent: :destroy
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
 

@@ -1,0 +1,33 @@
+<% title "Todos", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <nav class="breadcrumbs">
+    <%= link_to "Project: #{@todolist.project.name}", [@todolist.project.projectable, @todolist.project] %>
+    <%= link_to "Todolists", project_todolists_path(@todolist.project) %>
+    <%= link_to "#{@todolist.name}", [@todolist.project, @todolist] %>
+    <%= link_to "Todos", project_todolist_todos_path(@todolist.project, @todolist) %>
+  </nav>
+<% end %>
+
+<% content_for :main_section do %>
+  <%= link_to 'Add Todo', new_project_todolist_todo_path(@todolist.project, @todolist), class: "button", id: "new_link" %>
+<div class="row">
+  <div class="large-6 columns">
+    <h4 class="subheader">Incomplete</h4>
+    <div class="todos" id="incomplete_todos">
+      <%= render @incomplete_todos %>
+    </div>
+  </div>
+  <div class="large-6 columns">
+    <h4 class="subheader">Complete</h4>
+    <div class="todos" id="complete_todos">
+      <%= render @complete_todos %>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<% content_for :footer_section do %>
+
+<% end %>
+

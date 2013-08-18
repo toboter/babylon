@@ -12,7 +12,7 @@
     <% if @project.projectable_type == "Cluster" %>
       <%= link_to "Module: #{@project.projectable.name}", @project.projectable %>
     <% end %>
-    <%= link_to "#{@project.name}", @project %>
+    <%= link_to "#{@project.name}", [@project.projectable, @project] %>
   </nav>
 <% end %>
 
@@ -20,19 +20,41 @@
   <div class="large-8 columns">
     <h5 class="subheader"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
 
+    <h4 class="subheader">Documents</h5>
+
     <%= render "shared/document_first", var: @project, dtype: "Introduction" %>
 
     <%= render "shared/document_docs_without_type", :var => @project %>
 
     <%= render "shared/add_document_box", :add_doc => @project %>
 
+    <% if can? :follow, @project %>
+      <h4 class="subheader"><%= link_to "Todolists", project_todolists_path(@project) %></h5>
+      <ul class="no-bullet">
+        <% for todolist in @project.todolists do %>
+          <li>
+            <%= link_to "#{todolist.name}", [todolist.project, todolist] %>
+            (Todo's: <%= todolist.todos.count %>, 
+            Responsible: <%= todolist.responsible.available_name %>)
+          </li>
+        <% end %>
+      </ul>
+      <div class="row" style="margin-top:40px;margin-bottom:40px;">
+        <div class="large-6 columns">
+          <ul class="pricing-table">
+            <li class="description">Hier ergänzender Text über die Möglichkeiten</li>
+            <li class="cta-button"><%= link_to 'Add Todolist', new_project_todolist_path(@project), class: "button" %></li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div class="large-3 columns right">
     <h5 class="subheader">Creator</h5>
     <ul class="no-bullet">
       <li>
-        <% unless connected_profile %>
+        <% unless connected_profile(@project.creator) %>
           <%= @project.creator.available_name %>
         <% else %>
           <%= link_to "#{@project.creator.available_name}", @project.creator.people.first %>
@@ -42,14 +64,14 @@
 
     <% if @project.memberships.present? %>
 
-      <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] %></small></h5>
+      <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? %></small></h5>
       <ul class="no-bullet">
         <% for membership in @project.memberships do %>
           <li>
-            <% unless connected_profile %>
-              <%= membership.user.available_name %>
-            <% else %>
+            <% if connected_profile(membership.user) %>
               <%= link_to "#{membership.user.available_name}", membership.user.people.first %>
+            <% else %>
+              <%= membership.user.available_name %>
             <% end %>
             <%= ' ('+membership.role+')' if can? :edit, @project %>
           </li>
@@ -62,6 +84,5 @@
 
 <% content_for :footer_section do %>
 
-Add a personal todo list | Add a project todo list
 
 <% end %>
