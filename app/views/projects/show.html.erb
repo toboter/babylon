@@ -3,7 +3,6 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Modules", clusters_path %>
     <% if @project.projectable_type == "Group" %>
       <%= link_to "Module: #{@project.projectable.area.cluster.name}", @project.projectable.area.cluster %>
       <%= link_to "Area: #{@project.projectable.area.name}", @project.projectable.area %>
@@ -12,7 +11,7 @@
     <% if @project.projectable_type == "Cluster" %>
       <%= link_to "Module: #{@project.projectable.name}", @project.projectable %>
     <% end %>
-    <%= link_to "#{@project.name}", [@project.projectable, @project] %>
+    <%= link_to "Project: #{@project.name}", [@project.projectable, @project] %>
   </nav>
 <% end %>
 
@@ -20,9 +19,13 @@
   <div class="large-8 columns">
     <h5 class="subheader"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
 
-    <h4 class="subheader">Documents</h5>
+    <%= content_tag :h4, 'Documents', class: 'subheader' if @project.documents.any? %>
 
-    <%= render "shared/document_first", var: @project, dtype: "Introduction" %>
+    <% if @project.documents.doctype('Introduction') %>
+      <%= render "shared/document_first", var: @project, dtype: "Introduction" %>
+    <% else %>
+      <%= link_to "Add Introduction", polymorphic_path([:new, @project, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @project %>    
+    <% end %>
 
     <%= render "shared/document_docs_without_type", :var => @project %>
 
@@ -62,9 +65,8 @@
       </li>
     </ul>
 
+    <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></small></h5>
     <% if @project.memberships.present? %>
-
-      <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? %></small></h5>
       <ul class="no-bullet">
         <% for membership in @project.memberships do %>
           <li>

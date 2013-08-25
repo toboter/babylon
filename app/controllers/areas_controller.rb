@@ -3,7 +3,12 @@ class AreasController < ApplicationController
   # GET /areas
   # GET /areas.json
   def index
-    @areas = Area.all
+    if params[:cluster_id]
+      @cluster = Cluster.find(params[:cluster_id])
+      @areas = @cluster.areas
+    else
+      @areas = Area.all
+    end
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

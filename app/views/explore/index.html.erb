@@ -2,7 +2,7 @@
 
 <% content_for :explore do %>
   <div class="explorer">
-  	<%= image_tag(@cover.assetfile.big.url) %><%= link_to '(Edit)', [@bucket.attachable, @bucket] if @welcome.present? && @bucket.present? && (can? :edit, @bucket) %>
+  	<%= image_tag(@cover.assetfile.big.url) if @cover %><%= link_to [@bucket.attachable, @bucket] do %><i class="foundicon-edit"></i><% end if @welcome.present? && @bucket.present? && (can? :edit, @bucket) %>
   	<%= button_to "Add Bucket", pages_path(:permalink => 'welcome', :type => 'img'), method: :post, class: 'button tiny' unless @welcome.present? %>
   </div>
 <% end %>
@@ -10,24 +10,25 @@
 
 <% content_for :content do %>
   <div class="row">
-  	<div class="large-4 columns" style="border-right:1px solid #efefef;">
-  	  <%= render "doc_panel", doc: @resources, permalink: 'resources' %>
-  	</div>
-  	<div class="large-4 columns" style="border-right:1px solid #efefef;">
-  	  <%= render "doc_panel", doc: @research, permalink: 'research' %>
-  	</div>
-   	<div class="large-4 columns">
-  	  <h5 class="subheader"><%= @cluster.name %></h5>
-  	  <p><%= truncate(@cluster.intro, length: 170, separator: ' ') %><%= link_to "... read more", @cluster %></p>
+  	<div class="large-8 columns" style="border-right:1px solid #efefef;">
+  	  <div class="row">
+  	    <div class="large-6 columns" style="border-right:1px solid #efefef;">
+  	      <%= render "doc_panel", doc: @resources, permalink: 'resources', length: 170 %>
+  	    </div>
+  	    <div class="large-6 columns">
+  	      <%= render "doc_panel", doc: @research, permalink: 'research', length: 170 %>
+  	    </div>
+  	  </div>
+  	  <div class="row" style="border-top:1px solid #efefef;margin-top:20px;padding-top:20px;">
+  	    <div class="large-12 columns">
+  	      <%= render "doc_panel", doc: @about, permalink: 'about', length: 360 %>
+  	    </div>
+  	  </div>
+    </div>
+  	<div class="large-4 columns">
+  	  <h3>News</h3>
+  	  <p>news about the project</p>
   	</div>
   </div>
-  <div class="row" style="border-top:1px solid #efefef;margin-top:20px;padding-top:20px;">
-  	<div class="large-6 columns" style="border-right:1px solid #efefef;">
-  	  <%= render "doc_panel", doc: @about, permalink: 'about' %>
-  	</div>
-  	<div class="large-6 columns">
-  	  <h5 class="subheader">News</h5>
-  	  <p>new about the project</p>
-  	</div>
-  </div>
+
 <% end %>

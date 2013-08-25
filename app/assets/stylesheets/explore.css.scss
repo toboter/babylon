@@ -2,3 +2,13 @@
 	width: 100%;
 	height: auto;
 }
+
+.explorer i {
+	color: white;
+	padding: 0.4em;
+	background: black;
+	opacity: 0.5;
+	position: relative;
+	top:-1.4em;
+	z-index:999;
+}

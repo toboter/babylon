@@ -1,25 +1,24 @@
 class Document < ActiveRecord::Base
-  attr_accessible :abstract, :document_type, :documentable_id, :documentable_type, :title, 
-  				  :creator_id, :updater_id, :document_sections_attributes
+  attr_accessible :content, :document_type, :documentable_id, :documentable_type, :title, 
+  				  :creator_id, :updater_id
 
   stampable
 
-  has_many :document_sections, dependent: :destroy
   belongs_to :documentable, :polymorphic => true
   belongs_to :page, foreign_key: "documentable_id", conditions: "documentable_type = 'Page'"
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
 
-  GENERALDOCUMENTTYPES = %w[Introduction About]
+  GENERALDOCUMENTTYPES = %w[Introduction]
   PEOPLEDOCUMENTTYPES = %w[General\ Information Curriculum\ Vitae]
 
   DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES
 
   validates_presence_of :title, :unless => :document_type?
+  validates_presence_of :content
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
-
-  accepts_nested_attributes_for :document_sections, allow_destroy: true
+  validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
 
   def self.doctype(type)
     where(:document_type => type).first
@@ -33,6 +32,14 @@ class Document < ActiveRecord::Base
 
   def person?
     documentable_type == 'Person'
+  end
+
+  def intro?
+    document_type == 'Introduction'
+  end
+
+  def title_readonly?
+    page? || person? || intro?
   end
 
 end

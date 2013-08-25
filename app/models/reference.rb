@@ -16,6 +16,4 @@ class Reference < ActiveRecord::Base
   
   accepts_nested_attributes_for :authorships, allow_destroy: true
 
-
-
 end

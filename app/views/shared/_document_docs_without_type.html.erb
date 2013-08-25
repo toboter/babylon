@@ -7,8 +7,8 @@
         	</small>
         </h4>
         <p>
-          <% if document.abstract.present? %>
-        	<%= document.abstract %>
+          <% if document.content.present? %>
+        	<%= document.content %>
         	... <%= link_to 'read more', [document.documentable, document] %>
           <% else %>
             <% if document.document_sections.present? %>

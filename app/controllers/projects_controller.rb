@@ -4,8 +4,17 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-
+    if params[:cluster_id]
+      load_projectable
+      @cluster_projects =  @projectable.projects
+      @group_projects = @projectable.group_projects
+      @projects = @group_projects+@cluster_projects
+    elsif params[:group_id]
+      load_projectable
+      @projects = Group.find(params[:group_id]).projects
+    else
       @projects = Project.all
+    end
 
 
     respond_to do |format|
@@ -93,6 +102,8 @@ private
     if resource == 'modules'
       resource = 'clusters'
     end
-    @projectable = resource.singularize.classify.constantize.find(id)
+    if id
+      @projectable = resource.singularize.classify.constantize.find(id)
+    end
   end
 end

@@ -2,7 +2,9 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Projects", projects_path %>
+    <%= link_to "Projects", @projectable unless @projectable %>
+    <%= link_to "#{@projectable.name}", @projectable if @projectable %>
+    <%= link_to "Projects", cluster_projects_path(@projectable) if @projectable %>
   </nav>
 <% end %>
 
@@ -28,7 +30,7 @@
       <h3><%= link_to "#{project.name}", [project.projectable, project] %></h3>
       <% if project.documents.doctype('Introduction').present? %>
         <h4 class="subheader"><%= project.documents.doctype('Introduction').title %></h4>
-        <p><%= project.documents.doctype('Introduction').abstract %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+        <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
       <% else %>
         <p>No Introduction available</p>
       <% end %>

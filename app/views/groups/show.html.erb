@@ -5,21 +5,25 @@
   <nav class="breadcrumbs">
     <%= link_to "Module: #{@group.area.cluster.name}", @group.area.cluster %>
     <%= link_to "Area: #{@group.area.name}", @group.area %>
-    <%= link_to "#{@group.name}", @group %>
+    <%= link_to "Group: #{@group.name}", @group %>
 
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-  <%= render "shared/document_first", var: @group, dtype: "Introduction" %>
+    <% if @group.documents.doctype('Introduction') %>
+      <%= render "shared/document_first", var: @group, dtype: "Introduction" %>
+    <% else %>
+      <%= link_to "Add Introduction", polymorphic_path([:new, @group, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @group %>    
+    <% end %>
 
-  <%= render "shared/document_docs_without_type", :var => @group %>
+    <%= render "shared/document_docs_without_type", :var => @group %>
 
-  <%= render "shared/add_document_box", :add_doc => @group %>
+    <%= render "shared/add_document_box", :add_doc => @group %>
 
-  <%= content_tag :h4, 'Projects', class: "subheader" if @group.projects.present? %>
-  <%= render "shared/document_introductions", :vars => @group.projects %>
+    <%= content_tag :h4, 'Projects', class: "subheader" if @group.projects.present? %>
+    <%= render "shared/document_introductions", :vars => @group.projects %>
 
   </div>
 
@@ -27,7 +31,7 @@
     <h5 class="subheader">Creator</h5>
     <ul class="no-bullet">
       <li>
-        <% unless connected_profile %>
+        <% unless connected_profile(@group.creator) %>
           <%= @group.creator.available_name %>
         <% else %>
           <%= link_to "#{@group.creator.available_name}", @group.creator.people.first %>
@@ -41,7 +45,7 @@
       <ul class="no-bullet">
         <% for membership in Membership.where(:project_id => @group.projects) do %>
           <li>
-            <% unless connected_profile %>
+            <% unless connected_profile(membership.user) %>
               <%= membership.user.available_name %>
             <% else %>
               <%= link_to "#{membership.user.available_name}", membership.user.people.first %>
@@ -55,7 +59,7 @@
       <h5 class="subheader">Projects</h5>
       <ul class="no-bullet">
         <% for project in @group.projects do %>
-          <li><%= link_to "#{project.name}", [@group, project] %></li>
+          <li><%= link_to "#{project.name}", project %></li>
         <% end %>
       </ul>
     <% end %>
@@ -66,7 +70,7 @@
 
 <% content_for :footer_section do %>
   <% if can? :edit, @area %>
-    <div class="large-6 columns push-6">
+    <div class="large-6 columns">
       <ul class="pricing-table">
         <li class="title">Project</li>
         <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Projektes in einer Group</li>

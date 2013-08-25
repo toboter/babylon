@@ -1,0 +1,10 @@
+<% title "Forbidden. (403)", nil %>
+<% content_for :main_section do %>
+  <div class="large-8 columns">
+    <% if @exception %>
+  	  <p><%= @exception.message %></p>
+    <% else %>
+      <p>You are not authorized to perform that action.</p>
+    <% end %>
+  </div>
+<% end %>

@@ -66,7 +66,7 @@
       <%= f.label :institute %>
       <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true} %>
 
-      <%= f.label :show_inst_address, 'Show the institutes address und my profile' %>
+      <%= f.label :show_inst_address, 'Show the institutes address in the profile' %>
       <%= f.check_box :show_inst_address %>
 
       <%= f.label :public_email %>

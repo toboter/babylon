@@ -30,7 +30,11 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   # GET /documents/new.json
   def new
-    @document = @documentable.documents.new
+    if params[:document_type]
+      @document = @documentable.documents.new(:document_type => params[:document_type], :title => params[:document_type].humanize)
+    else
+      @document = @documentable.documents.new
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -80,11 +84,15 @@ class DocumentsController < ApplicationController
   # DELETE /documents/1.json
   def destroy
     @document = @documentable.documents.find(params[:id])
-    @document.destroy
+    if @document.documentable_type == 'Page'
+      redirect_to :back, alert: "You can't delete documents belonging to pages!"
+    else
+      @document.destroy
 
-    respond_to do |format|
-      format.html { redirect_to @documentable }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to @documentable }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -98,7 +106,11 @@ private
     if id == nil
       @documentable = nil
     else
-      @documentable = resource.singularize.classify.constantize.find(id)
+      if resource == 'pages'
+        @documentable = resource.singularize.classify.constantize.find_by_permalink!(id)
+      else
+        @documentable = resource.singularize.classify.constantize.find(id)
+      end
     end
   end
 

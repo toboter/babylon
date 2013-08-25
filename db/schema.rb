@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130816092205) do
+ActiveRecord::Schema.define(:version => 20130825144756) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -85,24 +85,12 @@ ActiveRecord::Schema.define(:version => 20130816092205) do
     t.integer  "updater_id"
   end
 
-  create_table "document_sections", :force => true do |t|
-    t.string   "title"
-    t.text     "content"
-    t.integer  "document_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-  end
-
-  add_index "document_sections", ["document_id"], :name => "index_document_sections_on_document_id"
-
   create_table "documents", :force => true do |t|
     t.string   "title"
     t.string   "documentable_type"
     t.integer  "documentable_id"
     t.string   "document_type"
-    t.text     "abstract"
+    t.text     "content"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.integer  "creator_id"

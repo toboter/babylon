@@ -1,17 +1,18 @@
 Babylon::Application.routes.draw do
-  resources :pages do
+  resources :pages, only: [:show, :create] do
     resources :buckets
     resources :documents
   end
 
-  # get 'people/about', to: 'explore#index'
-
   resources :clusters, :path => 'modules' do
+    resources :areas, only: [:index]
+    resources :groups, only: [:index]
     resources :projects
     resources :documents
   end
 
   resources :areas do
+    resources :groups
     resources :documents
   end
 
@@ -47,6 +48,7 @@ Babylon::Application.routes.draw do
   resources :buckets, only: [:index] do
     resources :assets, only: [:new, :create, :edit, :update, :destroy]
   end
+
   resources :assets, only: [:show, :index]
 
   get 'dashboard', to: 'dashboard#index'
@@ -115,6 +117,8 @@ Babylon::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'explore#index'
+
+  match '(errors)/:status', to: 'errors#show', constraints: {status: /\d{3}/} # via: :all 
 
   # See how all your routes lay out with "rake routes"
 

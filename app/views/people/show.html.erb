@@ -26,14 +26,20 @@
 
     
     <div id="general" data-magellan-destination="general">
-      <%= render "shared/document_first", var: @person, dtype: "General Information" %>     
+      <% if @person.documents.doctype('General Information') %>
+        <%= render "shared/document_first", var: @person, dtype: "General Information" %>
+      <% else %>
+        <%= link_to "Add General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information"), class: 'button small' if can? :edit, @person %>    
+      <% end %>
     </div>
 
     <div id="cv" data-magellan-destination="cv">
-      <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %> 
+      <% if @person.documents.doctype('Curriculum Vitae') %>
+        <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>
+      <% else %>
+        <%= link_to "Add Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae"), class: 'button small' if can? :edit, @person %>    
+      <% end %>
     </div>
-
-    <%= render "shared/add_document_box", :add_doc => @person unless @person.documents.doctype('Curriculum Vitae').present? && @person.documents.doctype('General Information').present? %>
 
     <div id="publications" data-magellan-destination="publications">
       <% if @person.references.present? %>

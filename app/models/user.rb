@@ -25,6 +25,9 @@ class User < ActiveRecord::Base
 
   model_stamper
 
+  validates_presence_of :username
+  validates_uniqueness_of :username
+
   ROLES = %w[guest fellow author editor admin]
 
   def role?(base_role)

@@ -1,6 +1,5 @@
 class ExploreController < ApplicationController
   def index
-  	@cluster = Cluster.last
   	@docs = Document.where(:documentable_type => 'Page')
   	@welcome = Page.find(:first, :conditions => ['permalink = ?', 'welcome'])
   	@bucket = @welcome.buckets.first if @welcome.present?

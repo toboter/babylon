@@ -15,6 +15,9 @@
  *= require foundation-datepicker
  *= require_tree .
  */
+.field_with_errors input[type="text"], .field_with_errors textarea {
+	border: 1px solid red;
+}
 
 .main-yield p, .main-yield li {
 	font-size: 90%;
@@ -59,7 +62,7 @@ footer {
 }
 
 .babylo-tec-footer {
-	padding-top:10em;
+	padding-top:3em;
 }
 
 /*--- Footer Top ---*/

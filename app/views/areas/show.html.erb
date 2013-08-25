@@ -4,14 +4,18 @@
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
   	<%= link_to "Module: #{@area.cluster.name}", @area.cluster %>
-    <%= link_to "#{@area.name}", @area %>
+    <%= link_to "Area: #{@area.name}", @area %>
 
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-    <%= render "shared/document_first", var: @area, dtype: "Introduction" %>
+    <% if @area.documents.doctype('Introduction') %>
+      <%= render "shared/document_first", var: @area, dtype: "Introduction" %>
+    <% else %>
+      <%= link_to "Add Introduction", polymorphic_path([:new, @area, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @area %>    
+    <% end %>
 
     <%= render "shared/document_docs_without_type", :var => @area %>
 
@@ -26,7 +30,7 @@
     <h5 class="subheader">Creator</h5>
     <ul class="no-bullet">
       <li>
-        <% unless connected_profile %>
+        <% unless connected_profile(@area.creator) %>
           <%= @area.creator.available_name %>
         <% else %>
           <%= link_to "#{@area.creator.available_name}", @area.creator.people.first %>
@@ -49,7 +53,7 @@
 
 <% content_for :footer_section do %>
   <% if can? :edit, @area %>
-    <div class="large-6 columns push-6">
+    <div class="large-6 columns">
       <ul class="pricing-table">
         <li class="title">Group</li>
         <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen einer neuen Gruppe in einem Area</li>

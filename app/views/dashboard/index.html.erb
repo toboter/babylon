@@ -56,8 +56,11 @@
         <h4 class="title subheader" data-section-title><%= link_to "Static Pages", "#static" %></h4>
         <div class="content" data-section-content>
           <ul class="no-bullet">
-            <%= content_tag :li, page_doc_path_for('about') %>
-            <%= content_tag :li, page_doc_path_for('API') %>
+            <%= content_tag :li, page_doc_path_for('about'), class: 'panel' %>
+            <%= content_tag :li, page_doc_path_for('API'), class: 'panel' %>
+            <%= content_tag :li, page_doc_path_for('help'), class: 'panel' %>
+            <%= content_tag :li, page_doc_path_for('resources'), class: 'panel' %>
+            <%= content_tag :li, page_doc_path_for('research'), class: 'panel' %>
           </ul>
         </div>
       </section> 

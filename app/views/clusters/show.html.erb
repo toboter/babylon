@@ -3,15 +3,19 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
-    <%= link_to "Modules ", clusters_path %>
-    <%= link_to "Modul: #{@cluster.name}", @module %>
+    <%= link_to "Modules ", clusters_path if @clusters.count > 1 %>
+    <%= link_to "Module: #{@cluster.name}", @module %>
 
   </nav>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-    <%= render "shared/document_first", var: @cluster, dtype: "Introduction" %>
+    <% if @cluster.documents.doctype('Introduction') %>
+        <%= render "shared/document_first", var: @cluster, dtype: "Introduction" %>
+    <% else %>
+      <%= link_to "Add Introduction", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @cluster %>    
+    <% end %>
   
     <%= render "shared/document_docs_without_type", :var => @cluster %>
 
@@ -29,7 +33,7 @@
     <h5 class="subheader">Creator</h5>
     <ul class="no-bullet">
       <li>
-        <% unless connected_profile %>
+        <% unless connected_profile(@cluster.creator) %>
           <%= @cluster.creator.available_name %>
         <% else %>
           <%= link_to "#{@cluster.creator.available_name}", @cluster.creator.people.first %>
@@ -50,7 +54,7 @@
       <h5 class="subheader">Projects</h5>
       <ul class="no-bullet">
         <% for project in @cluster.projects do %>
-          <li><%= link_to "#{project.name}", [@cluster, project] %></li>
+          <li><%= link_to "#{project.name}", project %></li>
         <% end %>
       </ul>
     <% end %>

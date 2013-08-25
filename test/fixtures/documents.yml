@@ -5,11 +5,11 @@ one:
   documentable_type: MyString
   documentable_id: 1
   document_type: MyString
-  abstract: MyText
+  content: MyText
 
 two:
   title: MyString
   documentable_type: MyString
   documentable_id: 1
   document_type: MyString
-  abstract: MyText
+  content: MyText

@@ -19,5 +19,9 @@
 //= require jquery_nested_form
 
 $(function(){ 
-	$(document).foundation(); 
+	$(document).foundation();
+	$("#params-panel").hide();
+    $("#toggle-params").click(function(){
+      $("#params-panel").toggle()
+  });
 });

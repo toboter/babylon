@@ -2,6 +2,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <nav class="breadcrumbs">
+  	<%= link_to "#{@cluster.name}", @cluster if @cluster %>
     <%= link_to "Reasearch Areas", areas_path %>
 
   </nav>
