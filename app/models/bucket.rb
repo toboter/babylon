@@ -17,4 +17,12 @@ class Bucket < ActiveRecord::Base
   # validates :name, :exclusion => { :in => %w(profile\ pictures ..) }
 
   scope :with_profile_pictures, where('name = ?', 'Profile Pictures')
+
+  def full_bucket_name
+    if name == 'Profile Pictures'
+      name+' of '+attachable.fullname
+    else
+      name
+    end
+  end
 end

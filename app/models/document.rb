@@ -1,6 +1,6 @@
 class Document < ActiveRecord::Base
   attr_accessible :content, :document_type, :documentable_id, :documentable_type, :title, 
-  				  :creator_id, :updater_id
+  				  :creator_id, :updater_id, :abstract
 
   stampable
 

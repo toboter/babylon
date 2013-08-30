@@ -1,4 +1,7 @@
 class Person < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :fullname, use: [:slugged, :history]
+
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
                   :last_name, :nickname, :profession, :public_email, :updater_id, :engagements_attributes,
                   :phone, :fax, :uri, :institution_id, :show_inst_address

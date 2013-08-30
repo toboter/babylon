@@ -2,7 +2,7 @@
 
 <% content_for :explore do %>
   <div class="explorer">
-  	<%= image_tag(@cover.assetfile.big.url) if @cover %><%= link_to [@bucket.attachable, @bucket] do %><i class="foundicon-edit"></i><% end if @welcome.present? && @bucket.present? && (can? :edit, @bucket) %>
+  	<%= image_tag(@cover.assetfile.normal.url) if @cover %><%= link_to [@bucket.attachable, @bucket] do %><i class="foundicon-edit"></i><% end if @welcome.present? && @bucket.present? && (can? :edit, @bucket) %>
   	<%= button_to "Add Bucket", pages_path(:permalink => 'welcome', :type => 'img'), method: :post, class: 'button tiny' unless @welcome.present? %>
   </div>
 <% end %>

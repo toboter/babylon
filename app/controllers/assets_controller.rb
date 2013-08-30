@@ -3,10 +3,15 @@ class AssetsController < ApplicationController
   # GET /assets
   # GET /assets.json
   def index
-    @assets = Asset.all
+    if params[:bucket_id]
+      @bucket = Bucket.find(params[:bucket_id])
+      @assets = @bucket.assets
+    else
+      @assets = Asset.all
+    end
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @assets }
     end
   end
@@ -15,9 +20,10 @@ class AssetsController < ApplicationController
   # GET /assets/1.json
   def show
     @asset = Asset.find(params[:id])
+    @buckets = @asset.buckets
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @asset }
     end
   end
@@ -26,17 +32,19 @@ class AssetsController < ApplicationController
   # GET /assets/new.json
   def new
     @bucket = Bucket.find(params[:bucket_id])
-    @asset = @bucket.assets.new
+    @assets_available = Asset.all-@bucket.assets
 
     respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @asset }
+      format.html { render :layout => "form_page" }# new.html.erb
+      format.json { render json: @bucket.assets.new }
     end
   end
 
   # GET /assets/1/edit
   def edit
     @asset = Asset.find(params[:id])
+
+    render :layout => "form_page"
   end
 
   # POST /assets
@@ -44,7 +52,7 @@ class AssetsController < ApplicationController
   def create
     @bucket = Bucket.find(params[:bucket_id])
     @asset = Asset.new(params[:asset])
-    @asset.buckets << @bucket
+    @asset.buckets << @bucket if @bucket
 
     respond_to do |format|
       if @asset.save
@@ -61,6 +69,12 @@ class AssetsController < ApplicationController
   # PUT /assets/1.json
   def update
     @asset = Asset.find(params[:id])
+
+    #Nur Administratoren können die Bildversionen neu erstellen. 
+    #Das aber dann automatisch durch einmaliges editieren und wieder speichern.
+    if can? :manage, @asset
+      @asset.assetfile.recreate_versions!
+    end
 
     respond_to do |format|
       if @asset.update_attributes(params[:asset])

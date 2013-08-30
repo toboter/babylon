@@ -1,4 +1,5 @@
 Babylon::Application.routes.draw do
+
   resources :pages, only: [:show, :create] do
     resources :buckets
     resources :documents
@@ -39,21 +40,23 @@ Babylon::Application.routes.draw do
   end
 
   # Standard Document routes
-  resources :documents, only: [:index, :show] do
-    resources :document_sections
-  end
+  resources :documents, only: [:index, :show]
 
   # Standard Bucket und Asset routes
   # Assets sind immer die gleichen, können aber in verschiedenen Buckets vorkommen.
-  resources :buckets, only: [:index] do
-    resources :assets, only: [:new, :create, :edit, :update, :destroy]
+  resources :buckets, only: [:index, :show] do
+    member do
+      put :set_as_cover
+      delete :pailful, to: 'pailfuls#destroy'
+      post :pailfuls, to: 'pailfuls#create'
+    end
+    resources :assets, only: [:index, :new, :create]
   end
 
-  resources :assets, only: [:show, :index]
+  resources :assets, only: [:index, :show, :destroy, :edit, :update]
 
   get 'dashboard', to: 'dashboard#index'
   get 'explore', to: 'explore#index'
-  get 'help', to: 'explore#index'
 
   # User routes
   devise_for :users 

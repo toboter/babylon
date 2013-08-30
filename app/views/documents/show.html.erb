@@ -14,6 +14,12 @@
 
 <% content_for :main_section do %>
   <div class="large-9 columns">
+    <% if @document.abstract %>
+      <div class="abstract_section">
+        <b>Abstract: </b><%= @document.abstract %>
+      </div>
+    <% end %>
+    <p>tags</p>
     <% if @document.content %>
       <div class="content_section">
         <%= raw@document.content %>

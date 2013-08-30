@@ -1,6 +1,32 @@
 <h1>Editing asset</h1>
 
-<%= render 'form' %>
+<%= form_for @asset, :html => { :class => 'custom', :multipart => true } do |f| %>
+  <%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :assetfile %>
+    <%= f.file_field :assetfile %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+
+
+
+
+  <div class="field">
+    <%= f.label :parent_id %>
+    <%= f.number_field :parent_id %>
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
 
 <%= link_to 'Show', @asset %> |
 <%= link_to 'Back', assets_path %>

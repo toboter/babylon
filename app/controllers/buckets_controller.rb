@@ -1,11 +1,15 @@
 class BucketsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_attachable#, except: [:index]
+  before_filter :load_attachable, except: [:index]
   # GET /buckets
   # GET /buckets.json
   def index
-    #@buckets = Bucket.all
-    @buckets = @attachable.buckets
+    if params[:bucket_id]
+      load_attachable
+      @buckets = @attachable.buckets
+    else
+      @buckets = Bucket.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -84,6 +88,21 @@ class BucketsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  def set_as_cover
+    @bucket = Bucket.find(params[:id])
+    if params[:cover_asset_id]
+      @asset = Asset.find(params[:cover_asset_id])
+      @bucket.cover_asset_id = @asset.id
+      if @bucket.update_attributes(params[:bucket])
+        redirect_to [@bucket.attachable, @bucket], notice: 'Cover of the Bucket was successfully updated.'
+      end
+    else
+      redirect_to :back, notice: 'No asset_id given. Error.'
+    end
+  end
+
 
 private
 

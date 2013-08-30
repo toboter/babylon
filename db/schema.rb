@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130825144756) do
+ActiveRecord::Schema.define(:version => 20130830121850) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -30,11 +30,25 @@ ActiveRecord::Schema.define(:version => 20130825144756) do
     t.string   "file_size"
     t.string   "file_name"
     t.integer  "file_author"
-    t.datetime "file_datetime"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.string   "md5hash"
+    t.text     "caption"
+    t.string   "date_taken"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "width"
+    t.integer  "height"
+    t.string   "camera"
+    t.string   "camera_make"
+    t.string   "flash"
+    t.string   "focal_length"
+    t.string   "exposure"
+    t.string   "f_number"
+    t.string   "iso"
+    t.string   "license"
   end
 
   create_table "authorships", :force => true do |t|
@@ -95,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20130825144756) do
     t.datetime "updated_at",        :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.text     "abstract"
   end
 
   add_index "documents", ["documentable_id", "documentable_type"], :name => "index_documents_on_documentable_id_and_documentable_type"
@@ -120,6 +135,17 @@ ActiveRecord::Schema.define(:version => 20130825144756) do
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
+
+  create_table "friendly_id_slugs", :force => true do |t|
+    t.string   "slug",                         :null => false
+    t.integer  "sluggable_id",                 :null => false
+    t.string   "sluggable_type", :limit => 40
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], :name => "index_friendly_id_slugs_on_slug_and_sluggable_type", :unique => true
+  add_index "friendly_id_slugs", ["sluggable_id"], :name => "index_friendly_id_slugs_on_sluggable_id"
+  add_index "friendly_id_slugs", ["sluggable_type"], :name => "index_friendly_id_slugs_on_sluggable_type"
 
   create_table "groups", :force => true do |t|
     t.string   "name"

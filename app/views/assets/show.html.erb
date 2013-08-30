@@ -1,44 +1,70 @@
+<% title "#{@asset.name}", nil %>
+
 <%= link_to "back", :back %>
 
-<p>
-  <b>Asset:</b>
-  <%= @asset.assetfile %>
-</p>
-<p>
-  <% if @asset.content_type.include? 'image' %>
-    <%= image_tag(@asset.assetfile.big.url) %>
-  <% else %>
-    <li><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></li>
-  <% end %>
-</p>
 
-<p>
-  <b>Name:</b>
-  <%= @asset.name %>
-</p>
+<% content_for :main_section do %>
+<% edit_section_for(@asset, nil) if can? :edit, @asset %>
+  <div class="large-9 small-12 columns">   
+    <% if @asset.content_type.include? 'image' %>
+      <%= image_tag(@asset.assetfile.normal.url) %>
+    <% else %>
+      <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
+    <% end %>
+    <p><b>Original Filename: </b><%= @asset.file_name %></p>
+  </div>
+  <div class="large-3 small-12 columns">
+    <div class="row">
+      <div class="large-5 columns">
+        <ul class="no-bullet">
+          <li>Name:</li>
+          <li>Caption:</li>
+          <li>Content type:</li>
+          <li>File size:</li>
+          <li>Original filename:</li>
+          
+        </ul>
+      </div>
+      <div class="large-7 columns">
+        <ul class="no-bullet">
+          <li><%= @asset.name %></li>
+          <li><%= @asset.caption %></li>
+          <li><%= @asset.content_type %></li>
+          <li><%= @asset.file_size %></li>
+          <li><%= @asset.file_name %></li>
 
-<p>
-  <b>Parent:</b>
-  <%= @asset.parent_id %>
-</p>
+        </ul>
+      </div>
+    </div>
+    
+    <p>
+      <b>Parent:</b>
+      <%= @asset.parent_id %>
+    </p>
+    
+    <p><b>Date Taken:</b><%= @asset.date_taken %></p>
+    <p><b>width</b>: <%= @asset.width %></p>
+    <p><b>height</b>: <%= @asset.height %></p>
+    <p><b>latitude</b>: <%= @asset.latitude %></p>
+    <p><b>longitude</b>: <%= @asset.longitude %></p>
+    <p><b>camera</b>: <%= @asset.camera %></p>
+    <p><b>camera_make</b>: <%= @asset.camera_make %></p>
+    <p><b>flash</b>: <%= @asset.flash %></p>
+    <p><b>focal_length</b>: <%= @asset.focal_length %></p>
+    <p><b>exposure</b>: <%= @asset.exposure %></p>
+    <p><b>f_number</b>: <%= @asset.f_number %></p>
+    <p><b>iso</b>: <%= @asset.iso %></p>
 
-<p>
-  <b>Content type:</b>
-  <%= @asset.content_type %>
-</p>
 
-<p>
-  <b>File size:</b>
-  <%= @asset.file_size %>
-</p>
+    <ul class="no-bullet">
+    <% for bucket in @buckets do %>
+      <li><%= link_to "#{bucket.name}", [bucket.attachable, bucket] %></li>
+    <% end %>
+    </ul>
+  </div>
 
-<p>
-  <b>File name:</b>
-  <%= @asset.file_name %>
-</p>
+<% end %>
 
-<p>
-  <b>File datetime:</b>
-  <%= @asset.file_datetime %>
-</p>
+
+
 

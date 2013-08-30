@@ -17,14 +17,18 @@ class PeopleController < ApplicationController
   # GET /people/1.json
   def show
     @person = Person.find(params[:id])
-    @attachable = @person
-    @buckets = @attachable.buckets
-    @profile_picture = Asset.find(@buckets.with_profile_pictures.first.cover_asset_id) if @buckets.with_profile_pictures.first.cover_asset_id
-    @bucket = Bucket.new
-
-    respond_to do |format|
-      format.html { render :layout => "show_page" } # show.html.erb
-      format.json { render json: @person }
+    if request.path != person_path(@person)
+      redirect_to @person, status: :moved_permanently
+    else
+      @attachable = @person
+      @buckets = @attachable.buckets
+      @profile_picture = Asset.find(@buckets.with_profile_pictures.first.cover_asset_id) if @buckets.with_profile_pictures.first.cover_asset_id
+      @bucket = Bucket.new
+  
+      respond_to do |format|
+        format.html { render :layout => "show_page" } # show.html.erb
+        format.json { render json: @person }
+      end
     end
     
   end

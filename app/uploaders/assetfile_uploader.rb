@@ -40,14 +40,23 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   #   process :scale => [50, 50]
   # end
 
-  version :big, :if => :is_image? do
-    process :resize_to_fit => [1024, 1024]
+  version :xlarge, :if => :is_image? do
+    process :resize_to_fit => [1600, 1600]
   end
-  version :small, :if => :is_image? do
-    process :resize_to_fit => [460, 460]
+  version :large, :from_version => :xlarge, :if => :is_image? do
+    process :resize_to_fit => [1280, 1280]
   end
-  version :thumb, :if => :is_image? do
-    process :resize_to_fill => [150, 150]
+  version :normal, :from_version => :large, :if => :is_image? do
+    process :resize_to_fit => [800, 800]
+  end
+  version :small, :from_version => :normal, :if => :is_image? do
+    process :resize_to_fit => [400, 400]
+  end
+  version :thumb, :from_version => :small, :if => :is_image? do
+    process :resize_to_fill => [200, 200]
+  end
+  version :mini_thumb, :from_version => :thumb, :if => :is_image? do
+    process :resize_to_fill => [50, 50]
   end
   
   # Add a white list of extensions which are allowed to be uploaded.
