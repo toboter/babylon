@@ -10,6 +10,7 @@
 <% end %>
 
 <% content_for :main_section do %>
+
   <div class="large-8 columns">
     <% if @cluster.documents.doctype('Introduction') %>
         <%= render "shared/document_first", var: @cluster, dtype: "Introduction" %>
@@ -51,13 +52,26 @@
     <% end %>
     
     <% if @cluster.projects.present? %>
-      <h5 class="subheader">Projects</h5>
+      <h5 class="subheader">Ungrouped Projects</h5>
       <ul class="no-bullet">
         <% for project in @cluster.projects do %>
           <li><%= link_to "#{project.name}", project %></li>
         <% end %>
       </ul>
     <% end %>
+
+      <h5 class="subheader">Members of <%= @cluster.name %></h5>
+      <ul class="no-bullet">
+        <% for member in @members do %>
+          <li>
+          <% unless connected_profile(member) %>
+            <%= member.available_name %>
+          <% else %>
+            <%= link_to "#{member.available_name}", member.people.first %>
+          <% end %>
+          </li>
+        <% end %>
+      </ul>
   </div>
 
 <% end %>

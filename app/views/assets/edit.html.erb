@@ -13,7 +13,10 @@
     <%= f.text_field :name %>
   </div>
 
-
+  <div class="field">
+    <%= f.label :caption %>
+    <%= f.text_area :caption %>
+  </div>
 
 
 
@@ -29,4 +32,4 @@
 <% end %>
 
 <%= link_to 'Show', @asset %> |
-<%= link_to 'Back', assets_path %>
+<%= link_to 'Back', :back %>

@@ -7,12 +7,12 @@
         	</small>
         </h4>
         <p>
-          <% if document.content.present? %>
-        	<%= document.content %>
+          <% if document.abstract.present? %>
+        	<strong>Abstract: </strong><%= document.abstract %>
         	... <%= link_to 'read more', [document.documentable, document] %>
           <% else %>
-            <% if document.document_sections.present? %>
-              <%= document.document_sections.first.title+': '+document.document_sections.first.content %>
+            <% if document.content.present? %>
+              <%= document.content %>
               ... <%= link_to 'read more', [document.documentable, document] %>
             <% else %>
               <p>Keine Texte verfügbar</p>

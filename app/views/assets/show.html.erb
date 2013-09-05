@@ -5,62 +5,53 @@
 
 <% content_for :main_section do %>
 <% edit_section_for(@asset, nil) if can? :edit, @asset %>
-  <div class="large-9 small-12 columns">   
+  <div class="large-8 small-12 columns">   
     <% if @asset.content_type.include? 'image' %>
       <%= image_tag(@asset.assetfile.normal.url) %>
     <% else %>
       <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
     <% end %>
-    <p><b>Original Filename: </b><%= @asset.file_name %></p>
+    <p><b>Caption: </b><%= @asset.caption %></p>
   </div>
-  <div class="large-3 small-12 columns">
-    <div class="row">
-      <div class="large-5 columns">
-        <ul class="no-bullet">
-          <li>Name:</li>
-          <li>Caption:</li>
-          <li>Content type:</li>
-          <li>File size:</li>
-          <li>Original filename:</li>
-          
-        </ul>
-      </div>
-      <div class="large-7 columns">
-        <ul class="no-bullet">
-          <li><%= @asset.name %></li>
-          <li><%= @asset.caption %></li>
-          <li><%= @asset.content_type %></li>
-          <li><%= @asset.file_size %></li>
-          <li><%= @asset.file_name %></li>
+  <div class="large-4 small-12 columns">
+    <dl class="dl-horizontal">
+      <dt>Content type</dt><dd><%= @asset.content_type %></dd>
+      <dt>Dimensions</dt><dd><%= @asset.width %> x <%= @asset.height %></dd>
+      <dt>File size</dt><dd><%= @asset.file_size %></dd>
+      <dt>File Name</dt><dd><%= @asset.file_name %></dd>
+      <dt>Date Taken</dt><dd><%= @asset.date_taken %></dd>
+      <dt>Location</dt><dd><%= @asset.latitude %>, <%= @asset.longitude %></dd>
+      <dt>Camera</dt><dd><%= @asset.camera %></dd>
+      <dt>Manufacturer</dt><dd><%= @asset.camera_make %></dd>
+      <dt>Flash</dt><dd><%= @asset.flash %></dd>
+      <dt>Focal length</dt><dd><%= @asset.focal_length %></dd>
+      <dt>Exposure</dt><dd><%= @asset.exposure %></dd>
+      <dt>f_number</dt><dd><%= @asset.f_number %></dd>
+      <dt>ISO</dt><dd><%= @asset.iso %></dd>
+      <dt>Versions</dt><dd><%= @asset.parent_id %></dd>
+    </dl>
 
-        </ul>
-      </div>
-    </div>
-    
-    <p>
-      <b>Parent:</b>
-      <%= @asset.parent_id %>
-    </p>
-    
-    <p><b>Date Taken:</b><%= @asset.date_taken %></p>
-    <p><b>width</b>: <%= @asset.width %></p>
-    <p><b>height</b>: <%= @asset.height %></p>
-    <p><b>latitude</b>: <%= @asset.latitude %></p>
-    <p><b>longitude</b>: <%= @asset.longitude %></p>
-    <p><b>camera</b>: <%= @asset.camera %></p>
-    <p><b>camera_make</b>: <%= @asset.camera_make %></p>
-    <p><b>flash</b>: <%= @asset.flash %></p>
-    <p><b>focal_length</b>: <%= @asset.focal_length %></p>
-    <p><b>exposure</b>: <%= @asset.exposure %></p>
-    <p><b>f_number</b>: <%= @asset.f_number %></p>
-    <p><b>iso</b>: <%= @asset.iso %></p>
+<br />
 
-
+    <%= content_tag :h5, 'Buckets', class: "subheader" if @buckets.any? %>
     <ul class="no-bullet">
     <% for bucket in @buckets do %>
-      <li><%= link_to "#{bucket.name}", [bucket.attachable, bucket] %></li>
+      <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
     <% end %>
     </ul>
+
+<br />
+    <% if can? :read, @asset %>
+      <h5 class="subheader">Download</h5>
+      <ul class="no-bullet">
+        <li><%= link_to 'Original File', download_asset_path(@asset, size: 'original') %></li>
+        <% if @asset.content_type.include? 'image' %>
+          <li><%= link_to '1600px file', download_asset_path(@asset, size: 'xlarge') %></li>
+          <li><%= link_to '1280px file', download_asset_path(@asset, size: 'large') %></li>
+          <li><%= link_to '800px file', download_asset_path(@asset, size: 'normal') %></li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 
 <% end %>

@@ -22,9 +22,25 @@ class AssetsController < ApplicationController
     @asset = Asset.find(params[:id])
     @buckets = @asset.buckets
 
-    respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
-      format.json { render json: @asset }
+    if params[:size] && (can? :read, @asset) && (request.path.include? 'download')
+      if params[:size] == 'original'
+        send_file @asset.assetfile.path, type: @asset.content_type, filename: @asset.name
+      elsif params[:size] == 'xlarge' && (@asset.content_type.include? 'image')
+        send_file @asset.assetfile.xlarge.path, type: @asset.content_type, filename: @asset.name
+      elsif params[:size] == 'large' && (@asset.content_type.include? 'image')
+        send_file @asset.assetfile.large.path, type: @asset.content_type, filename: @asset.name
+      elsif params[:size] == 'normal' && (@asset.content_type.include? 'image')
+        send_file @asset.assetfile.normal.path, type: @asset.content_type, filename: @asset.name
+      else
+        params[:size] = nil
+        redirect_to @asset
+      end
+    else
+
+      respond_to do |format|
+        format.html { render :layout => "show_page" }# show.html.erb
+        format.json { render json: @asset }
+      end
     end
   end
 
@@ -98,4 +114,5 @@ class AssetsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 end

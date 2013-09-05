@@ -13,8 +13,10 @@
  *= require general_foundicons
  *= require general_foundicons_ie7
  *= require foundation-datepicker
+ *= require typography_extend
  *= require_tree .
  */
+
 .field_with_errors input[type="text"], .field_with_errors textarea {
 	border: 1px solid red;
 }

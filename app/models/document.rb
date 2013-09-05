@@ -16,7 +16,7 @@ class Document < ActiveRecord::Base
   DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES
 
   validates_presence_of :title, :unless => :document_type?
-  validates_presence_of :content
+  validates_presence_of :content, :unless => :page? # wenn diese validierung eintritt können pages nicht mehr automatisch erstellt werden.
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
   validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
 

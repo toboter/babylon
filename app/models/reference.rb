@@ -10,10 +10,17 @@ class Reference < ActiveRecord::Base
 
   has_many :authors, :class_name => 'Person', through: :authorships, :source => :person
   has_many :authorships, :dependent => :destroy, :order => 'position'
+  has_many :documents, as: :documentable
+  has_many :buckets, as: :attachable
+  has_many :assets, through: :buckets
   belongs_to :book
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   
   accepts_nested_attributes_for :authorships, allow_destroy: true
 
+
+  def name
+    title
+  end
 end

@@ -1,29 +1,25 @@
-<h1>Listing buckets</h1>
+<% title "Buckets", nil %>
 
-<table>
-  <tr>
-    <th>Attachable</th>
-    <th></th>
-    <th></th>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<% content_for :main_section do %>
+  <p><%= link_to 'Back', :back %></p>
 
-<% @buckets.each do |bucket| %>
-  <tr>
-    <td><%= bucket.attachable_type %></td>
-    <td><%= bucket.attachable_id %></td>
-    <td><%= bucket.cover_asset_id %></td>
-    <td><%= bucket.name %></td>
-    <td><%= link_to 'Show', [bucket.attachable, bucket] %></td>
-    <td><%= link_to 'Edit', [:edit, bucket.attachable, bucket] %></td>
-    <td><%= link_to 'Destroy', [bucket.attachable, bucket], method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+  <% @buckets.each do |bucket| %>
+    <div class="panel">
+      <div class="row">
+        <div class="large-3 columns">
+          <p><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></p>
+        </div>
+        <div class="large-2 columns">
+          <%= link_to (image_tag bucket.assets.find_by_id(bucket.cover_asset_id).assetfile.thumb.url), bucket.assets.find_by_id(bucket.cover_asset_id), class: "th radius" if bucket.assets.find_by_id(bucket.cover_asset_id) %>
+        </div>
+        <div class="large-7 columns">
+          <% for asset in bucket.assets-Array.wrap(bucket.assets.find_by_id(bucket.cover_asset_id)) %>
+            <%= link_to (image_tag asset.assetfile.mini_thumb.url), asset, class: "th radius" if asset.content_type.include? 'image' %>
+            <%= link_to (image_tag 'mini_dummy.gif'), asset, class: "th radius" unless asset.content_type.include? 'image' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
 <% end %>
-</table>
-
-<br />
-
-link_to 'New Bucket', [:new, @attachable, :bucket]

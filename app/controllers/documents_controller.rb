@@ -102,6 +102,8 @@ private
     resource, id = request.path.split('/')[1, 2]
     if resource == 'modules'
       resource = 'clusters'
+    elsif resource == 'bibliography'
+      resource = 'references'
     end
     if id == nil
       @documentable = nil

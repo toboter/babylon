@@ -9,11 +9,11 @@
 
 <div class="row">
   <% @assets.each do |asset| %>
-    <div class="large-4 small-12 columns">
+    <div class="large-4 small-12 columns" style="height:7em; margin-bottom:1em;">
       <div class="row">
       <div class="large-3 small-3 columns">
         <%= link_to (image_tag asset.assetfile.mini_thumb.url, class: "th left"), asset if asset.content_type.include? 'image' %>
-        <%= image_tag 'mini_dummy.gif', class: "th left" unless asset.content_type.include? 'image' %>
+        <%= link_to (image_tag 'mini_dummy.gif', class: "th left"), asset unless asset.content_type.include? 'image' %>
       </div>
       <div class="large-9 small-9 columns">
         <p>

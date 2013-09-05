@@ -11,8 +11,18 @@
 
 <% content_for :main_section do %>
   <div class="large-8 columns">
-    <p>Gescannte Bilder aus diesem Buch</p>
-    <p>Abstract</p>
+    <%= content_tag :h4, 'Documents', class: 'subheader' if @reference.documents.any? %>
+    <%= render "shared/document_docs_without_type", :var => @reference %>
+
+    <%= render "shared/add_document_box", :add_doc => @reference %>
+
+    <hr>
+
+    <%= render "shared/buckets_with_clearing", :obj => @reference, :personal => false %>
+    <%= render "shared/add_bucket_box", :add_bucket => @reference %>
+
+    <hr>
+
     <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
     <p>Außerdem in diesem Buch</p>
   </div>

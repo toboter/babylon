@@ -14,7 +14,7 @@
 
 <% content_for :main_section do %>
   <div class="large-9 columns">
-    <% if @document.abstract %>
+    <% if @document.abstract && !@document.title_readonly? %>
       <div class="abstract_section">
         <b>Abstract: </b><%= @document.abstract %>
       </div>

@@ -32,7 +32,10 @@ Babylon::Application.routes.draw do
   resources :institutions
   resources :serials
   resources :books
-  resources :references, :path => 'bibliography'
+  resources :references, :path => 'bibliography' do
+    resources :documents
+    resources :buckets
+  end
 
   resources :people do
     resources :buckets
@@ -53,7 +56,11 @@ Babylon::Application.routes.draw do
     resources :assets, only: [:index, :new, :create]
   end
 
-  resources :assets, only: [:index, :show, :destroy, :edit, :update]
+  resources :assets, except: [:new, :create] do
+    member do
+      get :download, to: 'assets#show'
+    end
+  end
 
   get 'dashboard', to: 'dashboard#index'
   get 'explore', to: 'explore#index'

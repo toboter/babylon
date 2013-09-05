@@ -15,6 +15,10 @@ class ClustersController < ApplicationController
   # GET /clusters/1.json
   def show
     @cluster = Cluster.find(params[:id])
+    @project_members = @cluster.projects.map {|project| [project.members.map {|member| member.id }]}.flatten
+    @group_project_members = @cluster.group_projects.map {|project| [project.members.map {|member| member.id }]}.flatten
+    @raw_members = @project_members+@group_project_members
+    @members = User.find(@raw_members)
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb
@@ -60,7 +64,7 @@ class ClustersController < ApplicationController
     @cluster = Cluster.find(params[:id])
 
     respond_to do |format|
-      if @module.update_attributes(params[:cluster])
+      if @cluster.update_attributes(params[:cluster])
         format.html { redirect_to @cluster, notice: 'Module was successfully updated.' }
         format.json { head :no_content }
       else

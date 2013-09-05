@@ -14,7 +14,6 @@ class Asset < ActiveRecord::Base
   validates_presence_of :assetfile, :name, :content_type
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload is already in stock"
 
-
   def self.has_cover_id(cover_id)
     where('id = ?', cover_id).first
   end

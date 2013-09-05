@@ -14,10 +14,12 @@
     <%= f.text_field :title, :readonly => true if @document.title_readonly? %>
   </div>
 
+  <% unless @document.title_readonly? %>
   <div class="field">
     <%= f.label :abstract %>
     <%= f.text_area :abstract, class: 'area' %>
   </div>
+  <% end %>
 
   <div class="field">
     <%= f.label :content %>

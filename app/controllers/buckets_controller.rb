@@ -12,7 +12,7 @@ class BucketsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @buckets }
     end
   end
@@ -80,11 +80,11 @@ class BucketsController < ApplicationController
   # DELETE /buckets/1
   # DELETE /buckets/1.json
   def destroy
-    @bucket = @attchable.bucket.find(params[:id])
+    @bucket = @attachable.buckets.find(params[:id])
     @bucket.destroy
 
     respond_to do |format|
-      format.html { redirect_to buckets_url }
+      format.html { redirect_to @attachable }
       format.json { head :no_content }
     end
   end
@@ -111,7 +111,11 @@ private
     if resource == 'pages'
       @attachable = resource.singularize.classify.constantize.find_by_permalink!(id)
     else
+      if resource == 'bibliography'
+        resource = 'references'
+      end
       @attachable = resource.singularize.classify.constantize.find(id)
     end
   end
+
 end

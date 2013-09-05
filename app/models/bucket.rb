@@ -19,10 +19,24 @@ class Bucket < ActiveRecord::Base
   scope :with_profile_pictures, where('name = ?', 'Profile Pictures')
 
   def full_bucket_name
-    if name == 'Profile Pictures'
+    if name == 'Profile Pictures' && attachable_type == 'Person'
       name+' of '+attachable.fullname
+    elsif name == 'welcome' && attachable_type == 'Page'
+      'Banner pictures'
     else
       name
     end
   end
+
+  def profile_picture_bucket?
+    name == 'Profile Pictures'
+  end
+
+  #def cover_asset
+    #if cover_asset_id
+      #assets.where('asset.id = ?', cover_asset_id).first
+    #end
+  #end
+
+
 end
