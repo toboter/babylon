@@ -19,8 +19,12 @@ class Reference < ActiveRecord::Base
   
   accepts_nested_attributes_for :authorships, allow_destroy: true
 
-
   def name
     title
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w( title ) + _ransackers.keys
+  end
+
 end

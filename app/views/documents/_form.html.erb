@@ -1,4 +1,4 @@
-<%= nested_form_for [@documentable, @document], :html => { class: "custom" } do |f| %>
+<%= form_for [@documentable, @document] do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field :document_type %>
   <%= f.hidden_field :documentable_type %>
@@ -17,13 +17,13 @@
   <% unless @document.title_readonly? %>
   <div class="field">
     <%= f.label :abstract %>
-    <%= f.text_area :abstract, class: 'area' %>
+    <%= f.text_area :abstract, class: 'abstract_area' %>
   </div>
   <% end %>
 
   <div class="field">
     <%= f.label :content %>
-    <%= f.text_area :content, class: 'area' %>
+    <%= f.text_area :content, class: 'ckeditor', id: 'content_field', html: {:toolbar => 'Simple'} %>
   </div>
 
   <div class="form-actions">

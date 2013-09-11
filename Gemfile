@@ -24,6 +24,9 @@ group :assets do
   gem 'foundation-icons-sass-rails'
 end
 
+# https://github.com/plataformatec/simple_form
+#gem 'simple_form'
+
 gem 'jquery-rails'
 
 # https://github.com/plataformatec/devise
@@ -53,6 +56,14 @@ gem 'friendly_id'
 # gem "rmagick"
 gem 'mini_magick', '~> 3.5.0'
 gem 'carrierwave'
+
+# https://github.com/ernie/ransack/
+gem 'ransack'
+
+# https://github.com/galetahub/ckeditor
+# gem 'ckeditor'
+# https://github.com/tsechingho/ckeditor-rails
+gem 'ckeditor_rails'
 
 
 # To use ActiveModel has_secure_password

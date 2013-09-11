@@ -20,6 +20,25 @@
 <% content_for :main_section do %>
 <div class="row collpase">
   <div class="large-9 columns">
+    <div id="search-and-sort">
+      <%= search_form_for @search do |f| %>
+        <%= f.condition_fields do |c| %>
+          <%= render "condition_fields", f: c %>
+        <% end %>
+        <p><%= link_to_add_fields "Add Conditions", f, :condition %></p>
+        <div class="row">
+          <div class="large-1 columns">
+            <p>Sort:</p>
+          </div>
+          <%= f.sort_fields do |s| %>
+            <div class="large-4 columns left">
+              <%= s.sort_select associations: [:authors, :book] %>
+            </div>
+          <% end %>
+        </div>
+        <div class="form-actions"><%= f.submit "Search", class: 'button' %></div>
+      <% end %>
+    </div>
     <%= render "bib_entries", :references => @references %>
   </div>
 

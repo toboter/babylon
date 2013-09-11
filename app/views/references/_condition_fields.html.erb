@@ -1,0 +1,18 @@
+<div class="row field">
+  <div class="large-2 columns">
+  	<%= f.attribute_fields do |a| %>
+      <%= a.attribute_select associations: [:book, :authors] %>
+  	<% end %>
+  </div>
+  <div class="large-3 columns">
+  	<%= f.predicate_select compounds: false %>
+  </div>
+  <div class="large-6 columns">
+  	<%= f.value_fields do |v| %>
+      <%= v.text_field :value %>
+  	<% end %>
+  </div>
+  <div class="large-1 columns">
+  	<small><%= link_to "remove", '#', class: "remove_fields" %></small>
+  </div>
+</div>

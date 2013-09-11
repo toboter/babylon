@@ -4,11 +4,15 @@ class ReferencesController < ApplicationController
   # GET /references
   # GET /references.json
   def index
-    @references = Reference.all # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
-    @references_all = @references
-    @collections = @references.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
-    @monographs = @references.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
-    @misc = @references.select { |reference| reference.book_id == nil }
+    @search = Reference.search(params[:q])
+    @references = @search.result # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
+    @references_all = Reference.all
+    @collections = @references_all.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
+    @monographs = @references_all.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
+    @misc = @references_all.select { |reference| reference.book_id == nil }
+
+    @search.build_sort if @search.sorts.empty?
+    @search.build_condition if @search.conditions.empty?
 
     if params[:type]
       if params[:type] == 'in-collection'

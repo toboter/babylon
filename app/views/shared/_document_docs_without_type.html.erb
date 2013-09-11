@@ -13,7 +13,7 @@
           <% else %>
             <% if document.content.present? %>
               <%= document.content %>
-              ... <%= link_to 'read more', [document.documentable, document] %>
+              ... <%= link_to 'read more', document %>
             <% else %>
               <p>Keine Texte verfügbar</p>
             <% end %>

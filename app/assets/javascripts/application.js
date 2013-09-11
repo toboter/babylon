@@ -15,8 +15,9 @@
 //= require jquery_ujs
 //= require foundation
 //= require foundation-datepicker
-//= require_tree .
 //= require jquery_nested_form
+//= require ckeditor-jquery
+//= require_tree .
 
 $(function(){ 
 	$(document).foundation();

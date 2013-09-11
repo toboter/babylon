@@ -41,4 +41,8 @@ class Person < ActiveRecord::Base
   	"#{first_name} #{last_name}"
   end
   
+  def self.ransackable_attributes(auth_object = nil)
+    %w( first_name last_name ) + _ransackers.keys
+  end
+
 end

@@ -23,5 +23,8 @@ class Book < ActiveRecord::Base
   BOOKTYPES = %w[Monographie Sammelband Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe Band\ einer\ Zeitschrift]
 
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w( title year ) + _ransackers.keys
+  end
 
 end
