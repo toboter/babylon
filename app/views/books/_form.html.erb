@@ -1,95 +1,102 @@
-<%= nested_form_for @book, :html => {:class => "custom"} do |f| %>
+<%= nested_form_for @book, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
 <fieldset>
   <div class="row">
-    <div class="large-12 columns">
-      <%= f.label :book_type %>
-      <% unless @book.serial %>
-        <%= f.select(:book_type, Book::BOOKTYPES, :include_blank => true) %>
-      <% else %>
-         <%= f.select(:book_type, @book.serial.serial_types, :include_blank => true) %>       
-      <% end %>
+    <div class="control-group">
+      <%= f.label :book_type, class: 'control-label' %>
+      <div class="controls">
+        <% unless @book.serial %>
+          <%= f.select(:book_type, Book::BOOKTYPES, :include_blank => true) %>
+        <% else %>
+          <%= f.select(:book_type, @book.serial.serial_types, :include_blank => true) %>       
+        <% end %>
+      </div>
     </div>
 
-    <div id="if_serial" class="large-12 columns">
-      <div class="row collapse">
-        <div class="large-10 columns">
-          <%= f.label :serial_id %>
+    <div id="if_serial">
+      <div class="control-group">
+        <%= f.label :serial_id, class: 'control-label' %>
+        <div class="controls">
           <%= f.collection_select(:serial_id, Serial.all, :id, :name, :include_blank => true) %>
         </div>
-        <div class="large-2 columns">
-          <%= f.label :volume %>
+      </div>
+      <div class="control-group">
+        <%= f.label :volume, class: 'control-label' %>
+        <div class="controls">
           <%= f.text_field :volume %>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div id="if_editorial" class="large-6 columns">
-      <div id="editors" class="control-group">
-        <%= f.fields_for :editorships do |builder| %>
-          <%= render "editorship_fields", :f => builder %>
-        <% end %>
-        <%= f.link_to_add "Add Editor", :editorships %>
+
+    <hr class="controls">
+
+    <div id="if_editorial">
+      <%= f.fields_for :editorships do |builder| %>
+        <%= render "editorship_fields", :f => builder %>
+      <% end %>
+      <%= f.link_to_add "Add Editor", :editorships, class: 'controls' %>
+    </div>
+
+    <div id="if_collection">
+      <div class="control-group">
+        <%= f.label :title, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :title, class: 'input-xxlarge' %>
+        </div>
       </div>
     </div>
-  </div>
 
-  <br />
-
-  <div id="if_collection" class="row">
-    <div class="large-12 columns">
-      <%= f.label :title %>
-      <%= f.text_field :title %>
+    <div id="year">
+      <div class="control-group">
+        <%= f.label :year, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :year %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :unpublished, class: 'control-label' %>
+        <div class="controls">
+          <%= f.check_box :unpublished %>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div id="year" class="row">
-    <div class="large-4 columns">
-      <%= f.label :year %>
-      <%= f.text_field :year %>
-    </div>
-    <div class="large-3 columns pull-5">
-      <%= f.label :unpublished %>
-      <%= f.check_box :unpublished %>
-    </div>
-  </div>
-
-  <div id="unless_serial" class="row">  
-    <div class="large-12 column">
-      <div class="row">
-        <div class="large-6 column">
-          <%= f.label :publisher %>
+  
+    <div id="unless_serial">  
+      <div class="control-group">
+        <%= f.label :publisher, class: 'control-label' %>
+        <div class="controls">
           <%= f.text_field :publisher %>
         </div>
       </div>
-      <div class="row">
-        <div class="large-6 column">
-          <%= f.label :place %>
+      <div class="control-group">
+        <%= f.label :place, class: 'control-label' %>
+        <div class="controls">
           <%= f.text_field :place %>
         </div>
       </div>
-      <div class="row">
-        <div class="large-6 column">
-          <%= f.label :book_identifier %>
+
+      <div class="control-group">
+        <%= f.label :book_identifier, class: 'control-label' %>
+        <div class="controls">
           <%= f.text_field :book_identifier %>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="articles">
-    <%= f.fields_for :articles do |builder| %>
-      <%= render "references/reference_fields", :f => builder %>
-    <% end %>
-    <%= f.link_to_add "Add Contents", :articles %>
+    <div id="articles">
+      <%= f.fields_for :articles do |builder| %>
+        <%= render "references/reference_fields", :f => builder %>
+      <% end %>
+      <%= f.link_to_add "Add Contents", :articles %>
+    </div>
+
+
+    <div class="form-actions">
+      <%= f.submit "Speichern", :id => 'book-submit', :class => 'btn btn-primary' %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    </div>
   </div>
 </fieldset>
-
-  <div class="form-actions">
-    <%= f.submit "Speichern", :id => 'book-submit', :class => 'button' %>
-    <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
-  </div>
 
 <% end %>

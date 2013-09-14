@@ -1,38 +1,44 @@
-<%= form_for @serial, :html => {:class => "custom"} do |f| %>
+<%= form_for @serial, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
-<div class="row">
-  <div class="large-12 columns">
-    <%= f.label :serial_type %>
-    <%= f.select(:serial_type, Serial::SERIALTYPES) %>
-  </div>
-</div>
-<div class="row collapse">
-  <div class="large-9 columns">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  <div class="large-3 columns">
-    <%= f.label :shortcut %>
-    <%= f.text_field :shortcut %>
-  </div>
-</div>
-<div class="row">
-  <div class="large-12 columns">
-    <%= f.label :serial_identifier %>
-    <%= f.text_field :serial_identifier %>
-  </div>
-  <div class="large-12 columns">
-    <%= f.label :uri %>
-    <%= f.text_field :uri %>
-  </div>
-</div>
-
-  <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
-    <% if @serial.new_record? %>
-      <%= link_to 'Abbrechen', serials_path, :class => 'button secondary' %>
-    <% else %>
-      <%= link_to 'Abbrechen', @serial, :class => 'button secondary' %>
-    <% end %>
+  <div class="row">
+    <div class="control-group">
+      <%= f.label :serial_type, class: 'control-label' %>
+      <div class="controls">
+        <%= f.select(:serial_type, Serial::SERIALTYPES) %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, class: 'input-xxlarge' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :shortcut, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :shortcut %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :serial_identifier, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :serial_identifier %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :uri, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :uri %>
+      </div>
+    </div>
+  
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <% if @serial.new_record? %>
+        <%= link_to 'Abbrechen', serials_path, :class => 'btn' %>
+      <% else %>
+        <%= link_to 'Abbrechen', @serial, :class => 'btn' %>
+      <% end %>
+    </div>
   </div>
 <% end %>

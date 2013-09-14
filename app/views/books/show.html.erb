@@ -1,52 +1,45 @@
-<% title book_short_title(@book), nil %>
+<% title book_short_title(@book, true), nil %>
 <% edit_section_for(@book, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to 'Books', books_path %>
-    <%= link_to "#{book_short_title(@book)}", @book %>
-  </nav>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Books', books_path %> <span class="divider">/</span></li>
+  <li class="active"><%= book_short_title(@book, true) %></li>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
-    <h4 class="subheader">Content</h4>
+  <div class="span8">
+    <h4 class="muted">Content</h4>
     <%= render "references/bib_entries", :references => @book.articles.order('first_page ASC') %>
     <% unless @book.book_type == 'Monographie' || @book.book_type == 'Monographie in einer Reihe' %>
       <% if can? :edit, @book %>
-      <div class="row collapse" style="margin-top:50px;">
-        <div class="large-6 columns">
-          <ul class="pricing-table">
-            <li class="title">Article</li>
-            <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Artikels</li>
-            <li class="cta-button"><%= link_to 'Add Article', new_reference_path(:book_id => @book), class: "button" %></li>
-          </ul>
+        <div class="" style="margin-top:50px;">
+          <%= link_to 'Add Article', new_reference_path(:book_id => @book), class: "btn btn-large" %>
         </div>
-      </div>
       <% end %>
     <% end %>
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Title <small><%= @book.book_type %></small></h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <h5 class="muted">Title <small><%= @book.book_type %></small></h5>
+    <ul class="unstyled">
       <li><%= book_edited_by(@book, true, true, false) %><%= @book.year %></li>
       <li><%= book_title(@book) %></li>
     </ul>
 
     <% unless @book.unpublished? %>
-    <h5 class="subheader">Published</h5>
-    <ul class="no-bullet">
+    <h5 class="muted">Published</h5>
+    <ul class="unstyled">
       <li><%= @book.publisher %></li>
       <li><%= @book.place %></li>
       <%= content_tag :li, 'ISBN'+@book.book_identifier if @book.book_identifier.present? %>
     </ul>
     <% else %>
-      <h5 class="subheader">UNPUBLISHED</h5>
+      <h5 class="muted">UNPUBLISHED</h5>
     <% end %>
 
-    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
-    <ul class="no-bullet">
+    <h5 class="muted" style="margin-top:50px;">Record Info</h5>
+    <ul class="unstyled">
       <li>Created by: <%= @book.creator.available_name %></li>
       <li>Updated by: <%= @book.updater.available_name %></li>
     </ul>

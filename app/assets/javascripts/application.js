@@ -9,20 +9,10 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
-// foundation-datepicker.peterbeno.com/example/example.html
 //
 //= require jquery
 //= require jquery_ujs
-//= require foundation
-//= require foundation-datepicker
+//= require_tree .
 //= require jquery_nested_form
 //= require ckeditor-jquery
-//= require_tree .
-
-$(function(){ 
-	$(document).foundation();
-	$("#params-panel").hide();
-    $("#toggle-params").click(function(){
-      $("#params-panel").toggle()
-  });
-});
+//= require bootstrap

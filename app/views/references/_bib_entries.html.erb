@@ -1,15 +1,15 @@
 <% references.each do |reference| %>
   <%= content_tag :div, class: 'list-entry' do -%>
-    <div class="row">
-      <%= content_tag :div, class: 'large-4 small-4 columns', style: 'text-align:right;' do -%>
-        <ul class="no-bullet">
+    <div class="row-fluid">
+      <%= content_tag :div, class: 'span3 authors' do -%>
+        <ul class="unstyled">
           <li><%= authors_of_article(reference) %></li>
           <%= content_tag :li, reference.book.year if reference.book.present? %>
           <%= content_tag :li, reference.original_date unless reference.book.present? %>
 
         </ul>
       <% end -%>
-      <%= content_tag :div, class: 'large-7 small-7 columns left' do -%>
+      <%= content_tag :div, class: 'span8' do -%>
         <p>
           <%= authors_of_article(reference)+', ' %>
           <%= link_to "#{reference.title}", reference %>
@@ -30,7 +30,7 @@
         </p>
       <% end -%>
       <% if can? :edit, reference %>
-        <%= content_tag :div, class: 'large-1 small-1 columns right' do -%>
+        <%= content_tag :div, class: 'span1 reference-edit-link' do -%>
           <p><%= link_to "Edit", edit_reference_path(reference) %></p>
         <% end -%>
       <% end %>

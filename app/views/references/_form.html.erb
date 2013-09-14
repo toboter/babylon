@@ -1,11 +1,11 @@
-<%= nested_form_for @reference, :html => {:class => "custom"} do |f| %>
+<%= nested_form_for @reference, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
   <%= render 'reference_fields', :f => f %>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
-    <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <%= link_to 'Abbrechen', :back, :class => 'btn' %>
   </div>
 <% end %>
 

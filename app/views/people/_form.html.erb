@@ -1,10 +1,10 @@
-<%= nested_form_for @person, :html => {:class => "custom"} do |f| %>
+<%= nested_form_for @person, :html => {:class => "form-horizontal"} do |f| %>
 <%= f.error_messages %>
 <%= f.hidden_field :user_id %>
 
   <% if user_signed_in? && @person.user_id == current_user.id %>
     <div class="row">
-      <div class="large-12 columns">
+      <div class="span12">
         <% unless @person.new_record? %>
           <p><%= link_to "Edit your account", edit_user_registration_path %> | 
           <%= link_to "Delete Account-Profile connection", user_disconnect_path(:user_id => current_user), method: :post, data: { confirm: 'Are you sure?'} %></p>
@@ -14,96 +14,127 @@
   <% end %>
 
   <div class="row">
-    <div class="large-12 columns">
-      <h5 class="subheader">Personal</h5>
+    <div class="span12">
+      <h4 class="muted">Personal</h4>
     </div>
 
-    <div class="large-6 columns">
-      <%= f.label :first_name %>
-      <%= f.text_field :first_name %>
-    </div>
-    <div class="large-6 columns">
-      <%= f.label :last_name %>
-      <%= f.text_field :last_name %>
-    </div>
-
-    <div class="large-3 columns">
-      <%= f.label :grade %>
-      <%= f.select(:grade, Person::GRADES, :include_blank => true) %>
-    </div>
-    <div class="large-3 columns">
-      <%= f.label :nickname, 'Alias' %>
-      <%= f.text_field :nickname %>
-    </div>
-    <div class="large-3 columns">
-      <%= f.label :gender %>
-      <%= f.select(:gender, Person::GENDER, :include_blank => true) %>
-    </div>
-    <div class="large-3 columns">
-      <%= f.label :profession %>
-      <%= f.text_field :profession %>
-    </div>
-
-    <div class="large-6 columns">
-      <%= f.label :date_of_birth, 'Birthday' %>
-      <%= f.date_select("date_of_birth", start_year: 1830, include_blank: true) %>
-    </div>
-    <div class="large-6 columns">
-      <small><%= link_to("Add day of death", '#', class: "death", id: 'add-day-of-death') %></small>
-      <div id='death'>
-        <%= f.label :date_of_death, 'Day of death' %>
-        <%= f.date_select("date_of_death", start_year: 1900, include_blank: true) %>
+    <div class="control-group">
+      <%= f.label :first_name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :first_name %>
       </div>
     </div>
-  </div>
-
-  <div class="row" style="margin-top:40px;">
-    <div class="large-12 columns">
-      <h5 class="subheader">Contact Information</h5>
+    <div class="control-group">
+      <%= f.label :last_name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :last_name %>
+      </div>
     </div>
 
-    <div class="large-6 columns left">
-      <%= f.label :institute %>
-      <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true} %>
-
-      <%= f.label :show_inst_address, 'Show the institutes address in the profile' %>
-      <%= f.check_box :show_inst_address %>
-
-      <%= f.label :public_email %>
-      <%= f.text_field :public_email %>
-
-      <%= f.label :phone %>
-      <%= f.text_field :phone %>
-
-      <%= f.label :fax %>
-      <%= f.text_field :fax %>
-
-      <%= f.label :uri %>
-      <%= f.text_field :uri %>
+    <div class="control-group">
+      <%= f.label :grade, class: 'control-label' %>
+      <div class="controls">
+        <%= f.select(:grade, Person::GRADES, :include_blank => true) %>
+      </div>
     </div>
-  </div>
-
-
-
-  <div class="row" style="margin-top:40px;">
-    <div class="large-12 columns">
-      <h5 class="subheader">Engagement Information</h5>
+    <div class="control-group">
+      <%= f.label :nickname, 'Alias', class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :nickname %>
+      </div>
     </div>
-    <div class="large-12 columns">
+    <div class="control-group">
+      <%= f.label :gender, class: 'control-label' %>
+      <div class="controls">
+        <%= f.select(:gender, Person::GENDER, :include_blank => true) %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :profession, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :profession %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :date_of_birth, 'Birthday', class: 'control-label' %>
+      <div class="controls">
+        <%= f.date_select("date_of_birth", start_year: 1830, include_blank: true) %>
+      </div>
+    </div>
+    <div class="control-group">
+      <small><%= link_to("Add day of death", '#', class: "controls", id: 'add-day-of-death') %></small>
+      <div id='death'>
+        <%= f.label :date_of_death, 'Day of death', class: 'control-label' %>
+        <div class="controls">
+          <%= f.date_select("date_of_death", start_year: 1900, include_blank: true) %>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="margin-top:40px;">
+      <div class="span12">
+        <h4 class="muted">Contact Information</h4>
+      </div>
+      <div class="control-group">
+        <%= f.label :institute, class: 'control-label' %>
+        <div class="controls">
+          <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true}, class: 'input-xxlarge' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :show_inst_address, 'Show the institutes address in the profile', class: 'control-label' %>
+        <div class="controls">
+          <%= f.check_box :show_inst_address %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :public_email, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :public_email, class: 'input-xlarge' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :phone, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :phone, class: 'input-xlarge' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :fax, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :fax, class: 'input-xlarge' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :uri, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :uri, class: 'input-xlarge' %>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div style="margin-top:40px;">
+      <div class="span12">
+        <h4 class="muted">Engagement Information</h4>
+      </div>
       <%= f.fields_for :engagements do |builder| %>
         <%= render "engagement_fields", :f => builder %>
       <% end %>
-      <%= f.link_to_add "Add activity timespan", :engagements %>
+      <%= f.link_to_add "Add activity timespan", :engagements, class: 'controls' %>
     </div>
-  </div>
 
-  <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
-    <% if @person.new_record? %>
-      <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
-    <% else %>
-      <%= link_to 'Abbrechen', @person, :class => 'button secondary' %>
-    <% end %>
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <% if @person.new_record? %>
+        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+      <% else %>
+        <%= link_to 'Abbrechen', @person, :class => 'btn' %>
+      <% end %>
+    </div>
   </div>
 
 <% end %>

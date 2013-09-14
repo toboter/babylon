@@ -1,0 +1,36 @@
+<% if obj.buckets.present? %>
+  <h4 class="muted">Uploads</h4>
+  <% for bucket in obj.buckets do %>
+    <p class="pull-right">
+      <% if can? :edit, obj %>
+        <% if personal == true %>
+          <% if (!obj.user_id?) || (obj.user_id == current_user.id) %>
+            <%= link_to "Show", polymorphic_path([obj, bucket]) %> | 
+            <%= link_to "Add assets to #{bucket.name}", new_bucket_asset_path(bucket) %>
+          <% end %>
+        <% else %>
+          <%= link_to "Show", polymorphic_path([obj, bucket]) %> | 
+          <%= link_to "Add assets to #{bucket.name}", new_bucket_asset_path(bucket) %>
+        <% end %>
+      <% end %>
+    </p>
+    <h5 class="muted"><%= link_to "#{bucket.name}", [bucket.attachable, bucket] %></h5>
+    <ul class="thumbnails">
+      <% if bucket.assets.find_by_id(bucket.cover_asset_id) %>
+        <li class="span4">
+          <%= link_to (image_tag bucket.assets.find_by_id(bucket.cover_asset_id).assetfile.big_thumb.url, class: "img-polaroid"), bucket.assets.find_by_id(bucket.cover_asset_id) %>
+        </li>
+      <% end %>
+      <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').limit(bucket.assets.find_by_id(bucket.cover_asset_id) ? 4 : 8).order('created_at desc') do %>
+        <li class="span2">
+          <%= link_to (image_tag asset.assetfile.thumb.url, class: "img-polaroid"), asset %>
+        </li>
+      <% end %>
+    </ul>
+    <ul>
+      <% for asset in bucket.assets.where('content_type NOT LIKE ?', 'image%').limit(6).order('created_at desc') do %>
+        <li><%= link_to "#{asset.name}", asset %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

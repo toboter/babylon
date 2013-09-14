@@ -1,6 +1,6 @@
     <% if var.documents.doctype(dtype).present? %>
-      <h4 class="subheader"><%= var.documents.doctype(dtype).title.present? ? var.documents.doctype(dtype).title : dtype %><small><%= link_to " (Edit)", [:edit, var.documents.doctype(dtype).documentable, var.documents.doctype(dtype)] %></small></h4>
-      <p><%= var.documents.doctype(dtype).content %> ... <%= link_to 'read more', [var.documents.doctype(dtype).documentable, var.documents.doctype(dtype)] %></p>
+      <h4 class="muted"><%= var.documents.doctype(dtype).title.present? ? var.documents.doctype(dtype).title : dtype %><small><%= link_to " (Edit)", [:edit, var.documents.doctype(dtype).documentable, var.documents.doctype(dtype)] %></small></h4>
+      <div class="content"><%= raw(var.documents.doctype(dtype).content) %> ... <%= link_to 'read more', [var.documents.doctype(dtype).documentable, var.documents.doctype(dtype)] %></div>
     <% else %>
       <p>No <%= dtype %> available</p>
     <% end %>

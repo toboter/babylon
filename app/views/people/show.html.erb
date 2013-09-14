@@ -2,106 +2,93 @@
 <% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person.user_id == current_user.id)) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to 'People', people_path %>
-    <%= link_to "#{graded_fullname(@person)}", @person %>
-  </nav>
-
-  <div data-magellan-expedition="fixed">
-    <dl class="sub-nav">
-      <%= content_tag(:dd, link_to('General Information', "#general"), {"data-magellan-arrival"=>"general"}) if @person.documents.doctype('General Information').present? %>
-      <%= content_tag :dd, link_to('Curriculum Vitae', "#cv"), {"data-magellan-arrival"=>"cv"} if @person.documents.doctype('Curriculum Vitae').present? %>
-      <%= content_tag :dd, link_to('Publications', "#publications"), {"data-magellan-arrival"=>"publications"} if @person.references.present? || @person.books.present? %>
-      <%= content_tag :dd, link_to('Uploads', "#uploads"), {"data-magellan-arrival"=>"uploads"} if @person.buckets.present? && !@person.assets.empty? %>
-    </dl>
-  </div>
-
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'People', people_path %> <span class="divider">/</span></li>
+  <li class="active"><%= graded_fullname(@person) %></li>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
+  <div class="span8">
     <%= content_tag :p, (@person.institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institution.present? %>
-
-  
-
-    
-    <div id="general" data-magellan-destination="general">
+    <%= content_tag :p do %>
+      <%= link_to "Add General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information") if !@person.documents.doctype('General Information') %>
+      <%= content_tag :span, ' | ' if (!@person.documents.doctype('General Information') && !@person.documents.doctype('Curriculum Vitae')) %>
+      <%= link_to "Add Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae") if !@person.documents.doctype('Curriculum Vitae') %>   
+    <% end if can? :edit, @person && (!@person.documents.doctype('General Information') || !@person.documents.doctype('Curriculum Vitae')) %>
+   
+    <div id="general">
       <% if @person.documents.doctype('General Information') %>
-        <%= render "shared/document_first", var: @person, dtype: "General Information" %>
-      <% else %>
-        <%= link_to "Add General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information"), class: 'button small' if can? :edit, @person %>    
+        <%= render "shared/document_first", var: @person, dtype: "General Information" %> 
       <% end %>
     </div>
 
-    <div id="cv" data-magellan-destination="cv">
+    <div id="cv">
       <% if @person.documents.doctype('Curriculum Vitae') %>
-        <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>
-      <% else %>
-        <%= link_to "Add Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae"), class: 'button small' if can? :edit, @person %>    
+        <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>  
       <% end %>
     </div>
 
-    <div id="publications" data-magellan-destination="publications">
+    <div id="publications">
       <% if @person.references.present? %>
-        <h4 class="subheader">Publications on Babylon as author</h4>
+        <h4 class="muted">Publications on Babylon as author</h4>
         <%= render "references/bib_entries", :references => @person.references %>
       <% end %>
 
       <% if @person.books.present? %>
-        <h4 class="subheader">Publications on Babylon as editor</h4>
+        <h4 class="muted">Publications on Babylon as editor</h4>
         <%= render "books/book_entries", :books => @person.books %>
       <% end %>
     </div>
 
 
-    <div id="uploads" data-magellan-destination="uploads">
-      <%= render "shared/buckets_with_clearing", :obj => @person, :personal => true %>
-      <%= render "shared/add_bucket_box", :add_bucket => @person %>
-
+    <div id="uploads">
+      <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+      <%= link_to 'Add Bucket', polymorphic_path([:new, @person, :bucket]), class: "btn" if (can? :edit, @person) %>
     </div>
   </div>
 
-  <div class="large-3 columns offset-1 vcard">
-
+  <div class="vcard span3 offset1">
+    <address>
     <% if @buckets.with_profile_pictures.first.cover_asset_id %>
-      <%= link_to (image_tag @profile_picture.assetfile.small.url, class: "photo large-12"), @profile_picture, class: "th", style: "margin-bottom:30px;" %>
+      <%= link_to (image_tag @profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @profile_picture %>
     <% end %>
-    
-    <h5 class="subheader">Personal Information</h5>
-    <ul class="no-bullet">
+
+    <h5 class="muted">Personal Information</h5>
+    <ul class="unstyled">
       <%= content_tag :li, (content_tag :span, graded_fullname(@person), class: "fn") + (content_tag :span, ' (' + @person.nickname + ')' if @person.nickname.present?) %>
       <%= content_tag :li, 'System Username: '+@person.user.username if @person.user %>
       <%= content_tag :li, 'Birthday: '+@person.date_of_birth.strftime("%d.%m.%Y") if @person.date_of_birth.present? %>
-      <%= content_tag :li, @person.date_of_death.strftime("%d.%m.%Y") if @person.date_of_death.present? %>
+      <%= content_tag :li, 'Day of death: '+@person.date_of_death.strftime("%d.%m.%Y") if @person.date_of_death.present? %>
       <%= content_tag :li, @person.profession if @person.profession.present? %>
       <%= content_tag :li, @person.gender if @person.gender.present? %>
     </ul>
-    <%= link_to (image_tag('microformat-logo-small.png', class: "right", style: "")), page_path('help', anchor: 'microformats') %>
-    <h5 class="subheader">Contact Information</h5>
-    <ul class="no-bullet">
-      <%= content_tag :li, prepend('mail')+@person.public_email, class: "email" if @person.public_email.present? %>
-      <%= content_tag :li, prepend('phone')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
+    <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), page_path('help', anchor: 'microformats') %>
+    <h5 class="muted">Contact Information</h5>
+    <ul class="unstyled">
+      <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
+      <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
       <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
       <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
-        <%= content_tag :li, prepend('address-book', '-25px')+(@person.institution.root.self_and_descendants-@person.institution.descendants-@person.institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
+        <%= content_tag :li, prepend('home', '-25px')+(@person.institution.root.self_and_descendants-@person.institution.descendants-@person.institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
         <%= content_tag :li, @person.institution.street, class: "street-address" %>
         <%= content_tag :li, (content_tag :span, @person.institution.zip, class: "postal-code")+' '+(content_tag :span, @person.institution.city, class: "locality") %>
         <%= content_tag :li, @person.institution.country, class: "country-name" %>
       <% end if @person.institution.present? && @person.show_inst_address == true -%>
-      <%= content_tag :li, prepend('website')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
+      <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
     </ul>
+    </address>
 
     <% if @person.user %>
-      <h5 class="subheader" style="margin-top:50px;">Projects</h5>
-      <ul class="no-bullet">
+      <h5 class="muted" style="margin-top:50px;">Projects</h5>
+      <ul class="unstyled">
         <% for membership in @person.user.memberships %>
           <li><%= link_to "#{membership.project.name}", membership.project %></li>
         <% end %>
       </ul>
     <% end %>
 
-    <h5 class="subheader" style="margin-top:75px;">Record</h5>
-    <ul class="no-bullet">
+    <h5 class="muted" style="margin-top:75px;">Record</h5>
+    <ul class="unstyled">
       <li>Created by: <%= @person.creator.available_name %></li>
       <li>Updated by: <%= @person.updater.available_name %></li>
     </ul>

@@ -1,55 +1,44 @@
 <% title "Bibliography", nil %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to 'Bibliography', references_path %>
-  </nav>
-<% end %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-      <% if can? :edit, @references %>
-        <li><%= link_to "Books", books_path, class: "button small secondary" %></li>
-        <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>
-      <% end %>
-    </ul>
-  </div>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li class="active">Bibliography</li>
 <% end %>
 
 <% content_for :main_section do %>
-<div class="row collpase">
-  <div class="large-9 columns">
+  <div class="span9">
     <div id="search-and-sort">
-      <%= search_form_for @search do |f| %>
+      <h5 class="muted">Filter &amp; Sort</h5>
+      <%= search_form_for @search, html: { class: 'form-inline' } do |f| %>
         <%= f.condition_fields do |c| %>
+          Filter:
           <%= render "condition_fields", f: c %>
         <% end %>
         <p><%= link_to_add_fields "Add Conditions", f, :condition %></p>
-        <div class="row">
-          <div class="large-1 columns">
-            <p>Sort:</p>
-          </div>
+        <div class="form-inline">
+          Sort:<br />
           <%= f.sort_fields do |s| %>
-            <div class="large-4 columns left">
-              <%= s.sort_select associations: [:authors, :book] %>
-            </div>
+            <%= s.sort_select associations: [:authors, :book] %>
           <% end %>
         </div>
-        <div class="form-actions"><%= f.submit "Search", class: 'button' %></div>
+        <div class="other-actions">
+          <%= f.submit "Go", class: 'btn btn-info btn-block' %>
+        </div>
       <% end %>
     </div>
     <%= render "bib_entries", :references => @references %>
   </div>
 
-  <div class="large-2 columns offset-1">
-    <h5 class="subheader">Filter by type</h5>
-    <ul class="no-bullet">
+  <div class="span2 offset1">
+    <%= render "shared/bibliographic_cat_navs", :obj => @references %>
+
+    <h5 class="muted">Filter by type</h5>
+    <ul class="unstyled">
       <li><%= link_to "All entries", references_path %> (<%= @references_all.count %>)</li>
       <li><%= link_to "in Collections", references_path(:type => 'in-collection') %> (<%= @collections.count %>)</li>
       <li><%= link_to "as Monographs", references_path(:type => 'as-monograph') %> (<%= @monographs.count %>)</li>
       <li><%= link_to "misc", references_path(:type => 'misc') %> (<%= @misc.count %>)</li>
     </ul>
   </div>
-</div>
+
 <% end %>

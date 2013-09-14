@@ -6,10 +6,6 @@ class Book < ActiveRecord::Base
 
   default_scope order('year DESC')
 
-  validates_presence_of :book_type
-  validates_presence_of :year, :unless => "unpublished == true"
-  validates_presence_of :title, :unless => "book_type == 'Monographie' || book_type == 'Monographie in einer Reihe' || book_type == 'Band einer Zeitschrift'"
-
   has_many :articles, :class_name => 'Reference', :dependent => :destroy
   has_many :editors, :class_name => 'Person', through: :editorships, :source => :person
   has_many :editorships, :dependent => :destroy
@@ -20,7 +16,16 @@ class Book < ActiveRecord::Base
   accepts_nested_attributes_for :articles, allow_destroy: true
   accepts_nested_attributes_for :editorships, allow_destroy: true
 
+  validates_presence_of :book_type
+  validates_presence_of :year, :unless => "unpublished == true"
+  validates_presence_of :title, :unless => :title_not_needed?
+  validates_associated :articles
+
   BOOKTYPES = %w[Monographie Sammelband Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe Band\ einer\ Zeitschrift]
+
+  def title_not_needed?
+    book_type == 'Monographie' || book_type == 'Monographie in einer Reihe' || book_type == 'Band einer Zeitschrift'
+  end
 
 
   def self.ransackable_attributes(auth_object = nil)

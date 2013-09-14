@@ -1,8 +1,8 @@
 <% title "New bibliographical resource entry", nil %>
 <% if @reference.book %>
   <div class="row">
-  	<div class="large-8 columns">
-      <p>Einen Artikel in <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong> anlegen.</p>
+  	<div class="span6">
+      <p>Add an article to <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong></p>
 	</div>
   </div>
 <% end %>

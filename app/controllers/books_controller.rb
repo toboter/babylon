@@ -4,6 +4,7 @@ class BooksController < ApplicationController
   # GET /books.json
   def index
     @books = Book.order("year DESC")
+    @books_all = @books
 
     if params[:type]
       if params[:type] == 'collections'

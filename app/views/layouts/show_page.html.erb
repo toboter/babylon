@@ -1,18 +1,9 @@
 <% content_for :content do %>
   <div class="row">
-  	<div class="large-12 columns" style="margin-bottom:20px;">
-  	    <%= yield(:breadcrumbs_section) %>
-  	</div>
-  </div>
-
-  <div class="row">
-    <div class="large-8 columns">
+    <div class="span12">
       <%= content_tag :small, yield(:edit_section) %>
       <%= content_tag :h3, yield(:title), style: "margin-top:10px;" if show_title? %>
       <%= content_tag :h4, yield(:subtitle), :class => "subtitle" if show_title? %>
-  	</div>
-  	<div class="large-4 columns">
-  	  <%= yield(:link_section) %>
   	</div>
   </div>
 
@@ -23,11 +14,6 @@
   <div class="row" style="margin-top:70px;">
     <%= yield(:footer_section) %>
   </div>
-
-
-  <div class="row">
-  <%= yield(:note_section) %>
-</div>
 
 <% end %>
 

@@ -1,0 +1,22 @@
+@import "bootstrap";
+
+
+.navbar .brand {
+	color: #858585;
+	font-weight: bold;
+	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.authors, .reference-edit-link {
+	@media (min-width: 768px) { text-align:right }
+}
+
+h4 {
+	margin-top: 2em;
+}
+
+h5 {
+	margin-top: 1em;
+}
+
+@import "bootstrap-responsive";

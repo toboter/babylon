@@ -1,11 +1,16 @@
 <fieldset>
-    <div class="large-6 columns">
-      <%= f.label :start %>
-      <%= f.date_select :start %>
+    <div class="control-group">
+      <%= f.label :start, class: 'control-label' %>
+      <div class="controls">
+      	<%= f.date_select :start %>
+      </div>
     </div>
-    <div class="large-6 columns">
-      <%= f.label :end %>
-      <%= f.date_select :end %>
+    <div class="control-group">
+      <%= f.label :end, class: 'control-label' %>
+      <div class="controls">
+      	<%= f.date_select :end %>
+      </div>
+      <small><%= f.link_to_remove "remove", class: 'controls' %></small>
     </div>
-  <small><%= f.link_to_remove "remove" %></small>
+  
 </fieldset>

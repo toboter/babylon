@@ -1,24 +1,29 @@
-    <% if var.documents.present? %>
-      <% for document in var.documents.all_but_typelist.limit(3) do %>
-        <h4 class="subheader">
-        	<%= document.title %>
-        	<small>
-        		<%= link_to " (Edit)", [:edit, document.documentable, document] %>
-        	</small>
-        </h4>
-        <p>
-          <% if document.abstract.present? %>
-        	<strong>Abstract: </strong><%= document.abstract %>
-        	... <%= link_to 'read more', [document.documentable, document] %>
-          <% else %>
-            <% if document.content.present? %>
-              <%= document.content %>
-              ... <%= link_to 'read more', document %>
-            <% else %>
-              <p>Keine Texte verfügbar</p>
-            <% end %>
-          <% end %>
-        </p>
+<% if var.documents.present? %>
+  <% for document in var.documents.all_but_typelist.limit(3) do %>
+    <h4 class="muted">
+      <%= document.title %>
+      <small>
+        <%= link_to " (Edit)", [:edit, document.documentable, document] %>
+      </small>
+    </h4>
+    <p>
+      <% if document.abstract.present? %>
+      <strong>Abstract: </strong>
+        <div class="content">
+          <%= raw(document.abstract) %>
+          ... <%= link_to 'read more', [document.documentable, document] %>
+        </div>
+      <% else %>
+        <% if document.content.present? %>
+          <div class="content">
+            <%= raw(document.content) %>
+            ... <%= link_to 'read more', document %>
+          </div>
+        <% else %>
+          <p>Keine Texte verfügbar</p>
+        <% end %>
       <% end %>
-      <%= link_to "View all documents", [var, :documents] %>
-    <% end %>
+    </p>
+  <% end %>
+  <p style="margin-top:40px;"><%= link_to "View all documents", [var, :documents] %></p>
+<% end %>

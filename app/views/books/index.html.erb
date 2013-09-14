@@ -1,45 +1,29 @@
 <% title "Books", nil %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to 'Books', books_path %>
-  </nav>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li class="active">Books</li>
 <% end %>
 
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-      <li><%= link_to "Bibliography", references_path, class: "button small secondary" %></li>
-      <li><%= link_to "Periodicals and Series", serials_path, class: "button small secondary" %></li>
+<% content_for :main_section do %>
+  <div class="span9">
+    <%= render "book_entries", :books => @books %>
+  </div>
+  <div class="span2 offset1">
+    <%= render "shared/bibliographic_cat_navs", :obj => @books %>
+    <h5 class="muted">Filter by type</h5>
+    <ul class="unstyled">
+      <li><%= link_to "All Books", books_path %> (<%= @books_all.count %>)</li>
+      <li><%= link_to "Collections", books_path(:type => 'collections') %> (<%= @books_all.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
+      <li><%= link_to "Monographs", books_path(:type => 'monographs') %> (<%= @books_all.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
     </ul>
   </div>
 <% end %>
 
-<% content_for :main_section do %>
-  <div class="row collpase">
-    <div class="large-9 columns">
-      <%= render "book_entries", :books => @books %>
-    </div>
-    <div class="large-2 columns offset-1">
-      <h5 class="subheader">Filter by type</h5>
-      <ul class="no-bullet">
-        <li><%= link_to "All Books", books_path %> (<%= @books.count %>)</li>
-        <li><%= link_to "Collections", books_path(:type => 'collections') %> (<%= @books.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
-        <li><%= link_to "Monographs", books_path(:type => 'monographs') %> (<%= @books.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
-      </ul>
-    </div>
-  </div>
-  
-<% end %>
-
 <% content_for :footer_section do %>
-  <% if can? :edit, @books %>
-    <div class="large-6 columns">
-      <ul class="pricing-table">
-        <li class="title">Book</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Buches; was ist eine Resource</li>
-        <li class="cta-button"><%= link_to 'Add Book', new_book_path, class: "button" %> or <%= link_to 'Add Resource', new_reference_path %></li>
-      </ul>
-    </div>
-  <% end %>
+  <div class="span12">
+    <% if can? :edit, @books %>
+      <%= link_to 'Add Book', new_book_path, class: "btn btn-large" %> or <%= link_to 'Add Resource', new_reference_path %>
+    <% end %>
+  </div>
 <% end %>

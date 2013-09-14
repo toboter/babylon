@@ -19,13 +19,18 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
-  gem 'zurb-foundation'
+
+  # https://github.com/thomas-mcdonald/bootstrap-sass
+  gem 'bootstrap-sass'
+
+  # gem 'zurb-foundation'
+  # gem 'foundation-icons-sass-rails'
+
   gem 'jquery-fileupload-rails'
-  gem 'foundation-icons-sass-rails'
 end
 
 # https://github.com/plataformatec/simple_form
-#gem 'simple_form'
+gem 'simple_form'
 
 gem 'jquery-rails'
 

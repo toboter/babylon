@@ -9,11 +9,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require foundation_and_overrides
- *= require general_foundicons
- *= require general_foundicons_ie7
- *= require foundation-datepicker
- *= require typography_extend
  *= require_tree .
  */
 
@@ -29,10 +24,6 @@
 	height: 100px;
 }
 
-footer {
-    
-}
-
 .subtitle {
 	line-height: 1.4;
 	color: #6f6f6f;
@@ -46,24 +37,12 @@ footer {
 	margin-bottom: .8em;
 }
 
-.vcard {
-	border: none !important;
-	margin-left: -10px !important;
-	margin-top: -10px !important;
+.other-actions {
+	margin: 1em 0 3em 0;
 }
 
-.form-actions {
-	border: 1px solid #e6e6e6;
-	padding:20px 20px 0 20px;
-	margin-top:30px;
-	background: #f6f6f6;
-}
 
-.top-bar li.name h1 a {
-	color: #858585;
-}
-
-.babylo-tec-footer {
+footer {
 	padding-top:3em;
 }
 
@@ -78,34 +57,33 @@ footer {
 }
 
 .babylo-tec-footer-top .option-block span, .babylo-tec-footer-top .option-block-last span {
-	padding-left: 25px;
 	line-height: 22px;
 	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 18px;
 }
 
-.babylo-tec-footer-top .option-block span i, .babylo-tec-footer-top .option-block-last span i {
-	padding-right: 12px;
-	color: orange;
-	font-size: 22px;
+.babylo-tec-footer-top .option-block i, .babylo-tec-footer-top .option-block-last i {
+	margin-right: .8em;
+	margin-top: .2em;
+	float:left;
 }
 
 .babylo-tec-footer-top .option-block {
 	border-right: 1px solid #e6e6e6;
 	height: 10em;
 	margin-bottom: 20px;
+	padding-left: 20px;
 }
 
 .babylo-tec-footer-top .option-block-last {
 	height: 10em;
 	margin-bottom: 20px;
+	padding-left: 20px;
 }
 
 .babylo-tec-footer-top .option-block ul li, .babylo-tec-footer-top .option-block-last ul li {
-	display: block;
 	font-size: 12px;
-	padding-left: 60px;
-	line-height: 18px;
+	padding-left:1.1em;
 }
 
 /*--- Footer Bottom ---*/
@@ -121,7 +99,8 @@ footer {
  	display: block;
 	float: right;
 	padding-top: 8px;
-	margin-left: 0;
+	margin-right: 20px;
+
  }
 
 .babylo-tec-footer-bottom ul.co-operation-links li {
@@ -158,7 +137,6 @@ footer {
 	width: 100px;
 }
 
-
 .babylo-tec-footer-bottom ul.babylo-tec-links li a.babylo-tec-logo {
 	color: #858585;
 	font-weight: bold;
@@ -170,14 +148,11 @@ footer {
 }
 
 .babylo-tec-footer-bottom ul.babylo-tec-links {
-	display: inline-block;
 	padding-top: 10px;
 	margin-bottom: 0.7em;
 }
 
 .babylo-tec-footer-bottom ul.babylo-tec-links li {
-	float: left;
-	display: block;
 	margin-left: 6px;
 	font-family: "Proxima Nova Condensed", "proxima-nova-condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform: uppercase;
@@ -191,9 +166,8 @@ footer {
 	padding: 0px 6px 3px 6px;
 }
 
-.babylo-tec-footer-bottom p span {
-	margin: 0;
+.babylo-tec-footer-bottom p.copyright {
 	font-size: 13px;
 	color: #666;
-	padding-left: 6px;
+	padding: 0 0 0 1em;
 }

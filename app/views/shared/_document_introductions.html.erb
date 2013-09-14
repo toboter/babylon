@@ -1,5 +1,5 @@
   <% vars.each do |var| %>
-    <div class="var-entry panel">
+    <div class="var-entry well">
       <h3><%= link_to "#{var.name}", var %></h3>
       <% if var.documents.doctype('Introduction').present? %>
         <h4 class="subheader"><%= var.documents.doctype('Introduction').title %></h4>

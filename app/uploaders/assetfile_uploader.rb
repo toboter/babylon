@@ -52,7 +52,10 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   version :small, :from_version => :normal, :if => :is_image? do
     process :resize_to_fit => [400, 400]
   end
-  version :thumb, :from_version => :small, :if => :is_image? do
+  version :big_thumb, :from_version => :normal, :if => :is_image? do
+    process :resize_to_fill => [370, 370]
+  end
+  version :thumb, :from_version => :big_thumb, :if => :is_image? do
     process :resize_to_fill => [200, 200]
   end
   version :mini_thumb, :from_version => :thumb, :if => :is_image? do

@@ -18,7 +18,7 @@ module PeopleHelper
     else
       style = 'padding-right:10px; margin-left:'+lft+';'
     end
-    content_tag :i, '', class: 'foundicon-'+icon, style: style
+    content_tag :i, '', class: 'icon-'+icon, style: style
   end
   	  		
 end

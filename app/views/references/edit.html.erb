@@ -1,8 +1,8 @@
 <h1>Editing bibliographic entry</h1>
 <% if @reference.book %>
   <div class="row">
-  	<div class="large-8 columns">
-      <p>Dieser Artikel ist in <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong> erschienen.</p>
+  	<div class="span6">
+      <p>This article is published in <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong></p>
     </div>
   </div>
 <% end %>

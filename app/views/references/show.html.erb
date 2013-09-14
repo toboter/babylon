@@ -2,24 +2,22 @@
 <% edit_section_for(@reference, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to 'Bibliography', references_path %>
-    <%= link_to "#{@reference.title}", @reference %>
-  </nav>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Bibliography', references_path %> <span class="divider">/</span></li>
+  <li class="active"><%= @reference.title %></li>
 <% end %>
 
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
-    <%= content_tag :h4, 'Documents', class: 'subheader' if @reference.documents.any? %>
+  <div class="span8">
+    <%= content_tag :h3, 'Documents', class: 'muted' if @reference.documents.any? %>
     <%= render "shared/document_docs_without_type", :var => @reference %>
-
-    <%= render "shared/add_document_box", :add_doc => @reference %>
+    <%= link_to 'Add Document', polymorphic_path([:new, @reference, :document]), class: "btn btn-large" if (can? :edit, @reference) %>
 
     <hr>
 
-    <%= render "shared/buckets_with_clearing", :obj => @reference, :personal => false %>
-    <%= render "shared/add_bucket_box", :add_bucket => @reference %>
+    <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
+    <%= link_to 'Add Bucket', polymorphic_path([:new, @reference, :bucket]), class: "btn btn-large" if (can? :edit, @reference) %>
 
     <hr>
 
@@ -27,16 +25,16 @@
     <p>Außerdem in diesem Buch</p>
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Title</h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <h5 class="muted">Title</h5>
+    <ul class="unstyled">
       <li><%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>
       <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") if @reference.uri.present? %>
     </ul>
 
     <% if @reference.book %>
-      <h5 class="subheader">In: <small><%= @reference.book.book_type %></small></h5>
+      <h5 class="muted">In: <small><%= @reference.book.book_type %></small></h5>
       <p>
         <%= book_edited_by(@reference.book, true, true, true) %>
         <%= @reference.book.year+', ' if @reference.book %>
@@ -45,19 +43,19 @@
       </p>
 
       <% unless @reference.book.unpublished? %>
-        <h5 class="subheader">Issued</h5>
-        <ul class="no-bullet">
+        <h5 class="muted">Issued</h5>
+        <ul class="unstyled">
           <li><%= @reference.book.publisher %></li>
           <li><%= @reference.book.place %></li>
           <%= content_tag :li, 'ISBN'+@reference.book.book_identifier if @reference.book.book_identifier.present? %>
         </ul>
       <% else %>
-        <h5 class="subheader">UNPUBLISHED</h5>
+        <h5 class="muted">UNPUBLISHED</h5>
       <% end %>
     <% end %>
 
-    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
-    <ul class="no-bullet">
+    <h5 class="muted" style="margin-top:50px;">Record Info</h5>
+    <ul class="unstyled">
       <li>Created by: <%= @reference.creator.available_name %></li>
       <li>Updated by: <%= @reference.updater.available_name %></li>
     </ul>

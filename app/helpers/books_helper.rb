@@ -58,7 +58,7 @@ module BooksHelper
 	end
   end
 
-  def book_short_title(book)
+  def book_short_title(book, abbr=false)
   	if book.title && book.serial.blank?
   	  if book.book_type == "Monographie"
   	    book.articles.first.title
@@ -67,12 +67,12 @@ module BooksHelper
   	  end
   	elsif book.title && book.serial
 	  if book.book_type == "Monographie in einer Reihe"
-	  	  book.articles.first.title+', '+book.serial.name+' ('+book.volume+')'
+	  	  book.articles.first.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  else
 	  	if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
-	  	  book.title+', '+book.serial.name+' ('+book.volume+')'
+	  	  book.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  	else
-	  	  book.serial.name+' ('+book.volume+')'
+	  	  (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  	end
 	  end
 	end

@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
   <head>
   	<meta charset="utf-8" />
 
-  	<!-- Uncomment to make IE8 render like IE7 -->
-  	<!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
-
-  	<!-- Set the viewport width to device width for mobile -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
   	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   	<title>BABylo-tec: <%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
@@ -21,139 +15,163 @@
   </head>
 
   <body>
-  	<nav class="top-bar">
-      <ul class="title-area">
-        <li class="name">
-          <h1><%= link_to "BABylo-tec", root_path %></h1>
-        </li>
-        <li class="toggle-topbar menu-icon">
-          <a href="#">
-            <span></span>
+    <div class="navbar navbar-static-top navbar-inverse">
+      <div class="navbar-inner">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </a>
-        </li>
-      </ul>
-      <section class="top-bar-section">
-        <ul class="left">
-          <li class="divider"></li>
-          <li class="has-dropdown"><%= link_to "Resources" %>
-            <ul class="dropdown">
-              <li><%= link_to "People", people_path %></li>
-              <li><%= link_to "Bibliography", references_path %></li>
-            </ul>
-          </li>
-          <li class="divider"></li>
-          <li class="has-dropdown"><%= link_to "Research" %>
-            <ul class="dropdown">
-              <% for cluster in @clusters %>
-                <li class="has-dropdown"><%= link_to "#{cluster.name}", cluster %>
-                  <ul class="dropdown">
-                    <li><%= link_to "#{cluster.name}", cluster %></li>
-                    <li class="divider"></li>
-                    <li><%= link_to "Areas", cluster_areas_path(cluster) %></li>
-                    <li><%= link_to "Groups", cluster_groups_path(cluster) %></li>
-                    <li><%= link_to "Projects", cluster_projects_path(cluster) %></li>
-                  </ul>
-                </li>
-              <% end %>
-              <% if @clusters.count > 1 %>
-              <li class="has-dropdown"><%= link_to "All" %>
-                <ul class="dropdown">
-                  <li><%= link_to "All Modules", clusters_path %></li>
-                  <li><%= link_to "All Areas", areas_path %></li>
-                  <li><%= link_to "All Groups", groups_path %></li>
-                  <li><%= link_to "All Projects", projects_path %></li>
+          <%= link_to "BABylo-tec", root_url, :class => "brand", style: 'margin-left:0' %>
+
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-left">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <strong>Resources</strong>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "People", people_path %></li>
+                  <li><%= link_to "Bibliography", references_path %></li>
                 </ul>
               </li>
-              <li class="divider"></li>
-              <% end %>
-              <li><%= link_to "Institutions", institutions_path %></li>
-
+              <li class="divider-vertical"></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <strong>Research</strong>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <% for cluster in @clusters %>
+                    <li class="dropdown-submenu">
+                      <a tabindex="-1" href="#">
+                        <%= cluster.name %>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><%= link_to "#{cluster.name}", cluster %></li>
+                        <li class="divider"></li>
+                        <li><%= link_to "Areas", cluster_areas_path(cluster) %></li>
+                        <li><%= link_to "Groups", cluster_groups_path(cluster) %></li>
+                        <li><%= link_to "Projects", cluster_projects_path(cluster) %></li>
+                      </ul>
+                    </li>
+                  <% end %>
+                  <% if @clusters.count > 1 %>
+                    <li class="dropdown-submenu">
+                      <a tabindex="-1" href="#">
+                        All
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><%= link_to "All Modules", clusters_path %></li>
+                        <li><%= link_to "All Areas", areas_path %></li>
+                        <li><%= link_to "All Groups", groups_path %></li>
+                        <li><%= link_to "All Projects", projects_path %></li>
+                      </ul>
+                    </li>
+                    <li class="divider"></li>
+                  <% end %>
+                  <li><%= link_to "Institutions", institutions_path %></li>
+                </ul>
+              </li>
             </ul>
-          </li>
-          <li class="divider"></li>
 
-        </ul>
-        <ul class="right">
-          <% if user_signed_in? %>
-            <li><%= link_to "Dashboard", dashboard_path %></li>
-            <li class="divider"></li>
-            <% if connected_profile %>
-              <li><%= link_to "#{current_user.available_name}", person_path(connected_profile) %></li>
-            <% else %>
-              <li><%= link_to "#{current_user.available_name}", dashboard_path %></li>
-            <% end %>
-            <li class="divider"></li>
-
-
-
-            <li class="has-dropdown"><%= link_to(dashboard_path) do %><i class="foundicon-settings"></i><% end %>
-              <ul class="dropdown">
-                
-                <% if can? :manage, 'settings' %>
-                  <li class="has-dropdown"><%= link_to "Application Settings" %>
-                    <ul class="dropdown">
-                      <li><%= link_to "Active accounts", dashboard_path(anchor:"roles") %></li>
-                      <li><%= link_to "Static Pages", dashboard_path(anchor:"static") %></li>
-                      <li><%= link_to "Add Institution", new_institution_path %></li>
-                      <li><%= link_to "Add Module", new_cluster_path %></li>
-                      <li><%= link_to "Manage Predicates" %></li>
-                      
-                    </ul>
-                  </li>
+            <ul class="nav pull-right">
+              <% if user_signed_in? %>
+                <% if can? :manage, 'development' %>
+                  <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
+                  <li class="divider-vertical"></li>
                 <% end %>
-                <% unless connected_profile %>
-                  <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
-                <% end %>
+                <li><%= link_to "Dashboard", dashboard_path %></li>
+                <li class="divider-vertical"></li>
                 <% if connected_profile %>
-                  <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
+                  <li><%= link_to "#{current_user.available_name}", person_path(connected_profile) %></li>
                 <% else %>
-                  <li>
-                    <a href="#" data-reveal-id="connect_profile">Connect profile</a>
-                  </li>
+                  <li><%= link_to "#{current_user.available_name}", dashboard_path %></li>
                 <% end %>
-                <li><%= link_to "Log Out", destroy_user_session_path, method: :delete %></li>              
+                <li class="divider-vertical"></li>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-cog"></i>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                    <% if can? :manage, 'settings' %>
+                      <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">
+                          Settings
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><%= link_to "Active accounts", dashboard_path(anchor:"roles") %></li>
+                          <li><%= link_to "Static Pages", dashboard_path(anchor:"static") %></li>
+                          <li><%= link_to "Add Institution", new_institution_path %></li>
+                          <li><%= link_to "Add Module", new_cluster_path %></li>
+                          <li><%= link_to "Manage Predicates" %></li>
+                        </ul>
+                      </li>
+                    <% end %>
+                    <% unless connected_profile %>
+                      <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
+                    <% end %>
+                    <% if connected_profile %>
+                      <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
+                    <% else %>
+                      <li>
+                        <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
+                      </li>
+                    <% end %>
+                    <li><%= link_to "Help", page_path('help') %></li>          
+                    <li class="divider"></li>
+                    <li><%= link_to "Log Out", destroy_user_session_path, method: :delete %></li>
+                  </ul>
+                </li>
+              <% else %>
+                <%- if controller_name != 'sessions' %>
+                  <li><%= link_to "Sign in", new_session_path(:user) %></li>
+                <% end -%>
                 <li class="divider"></li>
-                <li><%= link_to "Help" %></li>
-              </ul>
-            </li>
-          <% else %>
-  			    <%- if controller_name != 'sessions' %>
-              <li><%= link_to "Sign in", new_session_path(:user) %></li>
-            <% end -%>
-            <li class="divider"></li>
-            <%- if controller_name != 'registrations' %>
-              <li><%= link_to "Sign up", new_registration_path(:user) %></li>
-            <% end -%>
-		      <% end %>
-        </ul>
-      </section>
-    </nav>
+                <%- if controller_name != 'registrations' %>
+                  <li><%= link_to "Sign up", new_registration_path(:user) %></li>
+                <% end -%>
+              <% end %>
+            </ul>
+          </div>
+      </div>
+    </div>
+
 
 
     <!-- Main Section -->
     <%= yield(:explore) %>
-    <% if can? :manage, 'development' %>
-      <div class="row">
-        <div class="large-6 columns" style="font-size:12px;">
-          <%= link_to("Params", '#', class: "", id: 'toggle-params') %>
-          <div class="panel hide" id="params-panel">
-            <p><%= debug(params) %></p>
+    <div class="container">
+      <% if can? :manage, 'development' %>
+        <div class="row">
+          <div class="span12" style="font-size:12px;">
+            <div class="collapse" id="params-well">
+              <p><%= debug(params) %></p>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
-    <div class="wrapper">      
+      <% end %>     
   	  <div class="row">
-        <div class="large-12 columns">
+        <div class="span12">
   	  	  <% flash.each do |name, msg| %>
             <%= content_tag :div, msg, :id => "flash_#{name}", class: 'alert-box success radius' %>
           <% end %>
-          <div class="main-yield">
-            <%= content_for?(:content) ? yield(:content) : yield %>
-          </div>
         </div>
-      </div>   
-    </div>
+      </div>
+      <div class="main-yield">
+        <%= content_tag :div, class: 'row' do %>
+          <div class="span12">
+            <ul class="breadcrumb">
+              <%= yield(:breadcrumbs_section) %>
+            </ul>
+          </div>
+        <% end if content_for?(:breadcrumbs_section) %>
+        <%= content_for?(:content) ? yield(:content) : yield %>
+      </div>
+    </div>  
+      
 
 
     <!-- Footer section -->
@@ -163,46 +181,48 @@
       <!-- Menu Footer -->
       
       <div class="babylo-tec-footer-top">
-        <div class="row">  
-          <div class="large-3 small-6 columns option-block">
-            <span class=​"title">​<i class="foundicon-page"></i>Resources</span>​
-            <ul class="side-nav">
-              <li><%= link_to "Items" %></li>
-              <li><%= link_to "Bibliography", references_path %></li>
-              <li><%= link_to "People", people_path %></li>
-            </ul>
-          </div>
-        
-          <div class="large-3 small-6 columns option-block">
-            <span class=​"title"><i class="foundicon-graph"></i>Research</span>​
-            <ul class="side-nav">
-              <% if @clusters.count > 1 %>
-                <li><%= link_to "Modules", clusters_path %></li>
-              <% else %>
-                <li><%= link_to "#{@clusters.first.name}", @clusters.first %></li>
-              <% end %>
-              <li class="divider"></li>
-              <li><%= link_to "Institutions", institutions_path %></li>
-            </ul>
-          </div>
+        <div class="container">
+          <div class="row-fluid">  
+            <div class="span3 option-block">
+              <span class=​"title">​Resources</span>​<i class="icon-file"></i>
+              <ul class="nav nav-pills nav-stacked">
+                <li><%= link_to "Items" %></li>
+                <li><%= link_to "Bibliography", references_path %></li>
+                <li><%= link_to "People", people_path %></li>
+              </ul>
+            </div>
           
-          <div class="large-3 small-6 columns option-block">
-            <span class=​"title"><i class="foundicon-search"></i>Explore</span>​
-            <ul class="side-nav">
-              <li><%= link_to "Search" %></li>
-              <li><%= link_to "Events" %></li>
-              <li><%= link_to "Sitemap" %></li>
-            </ul>
-          </div>
-        
-          <div class="large-3 small-6 columns option-block-last">
-            <span class=​"title"><i class="foundicon-compass"></i>BABylo-tec</span>​
-            <ul class="side-nav">
-              <li><%= link_to "About", page_path('about') %></li>
-              <li><%= link_to "Help", page_path('help') %></li>
-              <li><%= link_to "API", page_path('API') %></li>
-              <li><%= link_to "Contact", page_path('contact') %></li>
-            </ul>
+            <div class="span3 option-block">
+              <span class=​"title">Research</span>​<i class="icon-globe"></i>
+              <ul class="nav nav-pills nav-stacked">
+                <% if @clusters.count > 1 %>
+                  <li><%= link_to "Modules", clusters_path %></li>
+                <% else %>
+                  <li><%= link_to "#{@clusters.first.name}", @clusters.first %></li>
+                <% end %>
+                <li class="divider"></li>
+                <li><%= link_to "Institutions", institutions_path %></li>
+              </ul>
+            </div>
+            
+            <div class="span3 option-block">
+              <span class=​"title">Explore</span>​<i class="icon-search"></i>
+              <ul class="nav nav-pills nav-stacked">
+                <li><%= link_to "Search" %></li>
+                <li><%= link_to "Events" %></li>
+                <li><%= link_to "Sitemap" %></li>
+              </ul>
+            </div>
+          
+            <div class="span3 option-block-last">
+              <span class=​"title">BABylo-tec</span>​<i class="icon-leaf"></i>
+              <ul class="nav nav-pills nav-stacked">
+                <li><%= link_to "About", page_path('about') %></li>
+                <li><%= link_to "Help", page_path('help') %></li>
+                <li><%= link_to "API", page_path('API') %></li>
+                <li><%= link_to "Contact", page_path('contact') %></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -211,9 +231,10 @@
       <!-- Footer About -->
   
       <div class="babylo-tec-footer-bottom">
-        <div class="row">
-          <div class="large-8 columns">            
-              <ul class="babylo-tec-links">
+        <div class="container">
+          <div class="row">
+            <div class="span7">            
+              <ul class="babylo-tec-links inline">
                 <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
                 <li><%= link_to "About", page_path('about') %></li>
                 <li><%= link_to "Help", page_path('help') %></li>
@@ -221,16 +242,17 @@
                 <li><%= link_to "API", page_path('API') %></li>
                 <li><%= link_to "Sitemap" %></li>
               </ul>
-            <p><span class=​"copyright">​&copy; 2013 BABylo-tec. All rights reserved.</span>​</p>​
-          </div>
-        
-
-          <div class="large-4 right columns">
-            <ul class="co-operation-links">
-              <li><%= link_to "", "http://www.vam.de", class: "vam" %></li>
-              <li><%= link_to "", "http://www.deutsche-orientgesellschaft.de", class: "dog" %></li>
-              <li><%= link_to "", "http://www.fu-berlin.de", class: "fu-berlin" %></li>
-            </ul>
+              <p class="copyright">&copy; 2013 BABylo-tec. All rights reserved.</p>​
+            </div>
+          
+  
+            <div class="span5">
+              <ul class="co-operation-links">
+                <li><%= link_to "", "http://www.vam.de", class: "vam" %></li>
+                <li><%= link_to "", "http://www.deutsche-orientgesellschaft.de", class: "dog" %></li>
+                <li><%= link_to "", "http://www.fu-berlin.de", class: "fu-berlin" %></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -242,25 +264,22 @@
 
     <% if user_signed_in? %>
       <% unless connected_profile %>
-        <div id="connect_profile" class="reveal-modal">
-          <a class="close-reveal-modal">&#215;</a>
-          <div class="row">
-            <div class="large-8 columns">
-              <h3>Connect your account to a profile</h3>
-              <%= form_tag user_connect_path, :class => "custom" do %>
-                <div class="row collapse">
-                  <div class="small-8 columns">
-                    <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "large-8" %>
-                    <%= hidden_field_tag :connect_user_id, current_user.id %>
-                  </div>
-                  <div class="small-4 columns">
-                    <%= submit_tag "Connect", class: "button prefix" %>
-                  </div>
-                </div>
-              <% end %>
-              <span>Not on the list? <%= link_to "New profile", new_person_path(:user_id => current_user) %></span>
-            </div>
+        <div id="connect_profile_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Connect your account to an existing profile</h3>
           </div>
+          <%= form_tag user_connect_path, :class => "custom" do %>
+            <div class="modal-body">
+              <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "large-8" %>
+              <%= hidden_field_tag :connect_user_id, current_user.id %>
+            </div>
+            <div class="modal-footer">
+              <%= submit_tag "Connect", class: "btn btn-primary pull-left" %>
+              <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
+              <span class="pull-left" style="padding:5px 0 0 10px;">Not on the list? <%= link_to "Create a new profile", new_person_path(:user_id => current_user) %></span>
+            </div>
+          <% end %>   
         </div>
       <% end %>
     <% end %>

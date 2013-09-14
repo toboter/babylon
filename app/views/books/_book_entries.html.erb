@@ -1,14 +1,14 @@
 <% books.each do |book| %>
   <%= content_tag :div, class: 'list-entry' do -%>
-    <div class="row">
-      <%= content_tag :div, class: 'large-4 small-4 columns', style: 'text-align:right;' do -%>
-        <ul class="no-bullet">
+    <div class="row-fluid">
+      <%= content_tag :div, class: 'span3 authors' do -%>
+        <ul class="unstyled">
           <%= content_tag :li, book_edited_by(book) %>
           <li><small><%= book.book_type %></small> <%= book.year %></li>
 
         </ul>
       <% end -%>
-      <%= content_tag :div, class: 'large-7 small-7 columns left' do -%>
+      <%= content_tag :div, class: 'span8' do -%>
         <p>
           <%= content_tag :span, book_edited_by(book)+', ' %>
           <%= content_tag :span, book_title(book) %>
@@ -19,7 +19,7 @@
         </p>
       <% end -%>
       <% if can? :edit, book %>
-        <%= content_tag :div, class: 'large-1 small-1 columns right' do -%>
+        <%= content_tag :div, class: 'span1 reference-edit-link' do -%>
           <p><%= link_to "Edit", edit_book_path(book) %></p>
         <% end -%>
       <% end %>
