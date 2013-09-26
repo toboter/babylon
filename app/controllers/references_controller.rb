@@ -97,10 +97,15 @@ class ReferencesController < ApplicationController
   # DELETE /references/1.json
   def destroy
     @reference = Reference.find(params[:id])
+    @book = @reference.book
     @reference.destroy
 
+    if @book.book_type == "Monographie" || @book.book_type == "Monographie in einer Reihe"
+      @book.destroy
+    end
+
     respond_to do |format|
-      format.html { redirect_to references_url }
+      format.html { redirect_to references_url, flash: { alert: 'Reference was successfully deleted.'} }
       format.json { head :no_content }
     end
   end

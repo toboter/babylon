@@ -27,7 +27,7 @@ class InstitutionsController < ApplicationController
     @institution = Institution.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @institution }
     end
   end
@@ -35,6 +35,8 @@ class InstitutionsController < ApplicationController
   # GET /institutions/1/edit
   def edit
     @institution = Institution.find(params[:id])
+
+    render :layout => "form_page"
   end
 
   # POST /institutions

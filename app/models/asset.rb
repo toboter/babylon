@@ -26,8 +26,8 @@ class Asset < ActiveRecord::Base
       self.file_size = assetfile.file.size
       self.file_name = assetfile.file.identifier
       date_taken = get_exif("EXIF:DateTimeOriginal") rescue nil
-      date = date_taken.split(" ")[0].gsub!(/:/, '-')
-      time = date_taken.split(" ")[1]
+      date = date_taken.split(" ")[0].gsub!(/:/, '-') rescue nil
+      time = date_taken.split(" ")[1] rescue nil
       self.date_taken = (date+' '+time).to_datetime rescue nil
       self.width, self.height = `identify -format "%wx%h" #{assetfile.path}`.split(/x/) rescue nil
       self.camera = get_exif("EXIF:MODEL") rescue nil

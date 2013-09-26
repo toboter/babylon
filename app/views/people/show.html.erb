@@ -10,11 +10,6 @@
 <% content_for :main_section do %>
   <div class="span8">
     <%= content_tag :p, (@person.institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institution.present? %>
-    <%= content_tag :p do %>
-      <%= link_to "Add General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information") if !@person.documents.doctype('General Information') %>
-      <%= content_tag :span, ' | ' if (!@person.documents.doctype('General Information') && !@person.documents.doctype('Curriculum Vitae')) %>
-      <%= link_to "Add Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae") if !@person.documents.doctype('Curriculum Vitae') %>   
-    <% end if can? :edit, @person && (!@person.documents.doctype('General Information') || !@person.documents.doctype('Curriculum Vitae')) %>
    
     <div id="general">
       <% if @person.documents.doctype('General Information') %>
@@ -43,7 +38,6 @@
 
     <div id="uploads">
       <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
-      <%= link_to 'Add Bucket', polymorphic_path([:new, @person, :bucket]), class: "btn" if (can? :edit, @person) %>
     </div>
   </div>
 
@@ -52,6 +46,21 @@
     <% if @buckets.with_profile_pictures.first.cover_asset_id %>
       <%= link_to (image_tag @profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @profile_picture %>
     <% end %>
+
+    <% if can? :edit, @person %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information") unless @person.documents.doctype('General Information') %></li>
+            <li><%= link_to "Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae") unless @person.documents.doctype('Curriculum Vitae') %></li>
+            <%= content_tag :li, '', class: "divider" unless (@person.documents.doctype('Curriculum Vitae')) && (@person.documents.doctype('General Information')) %>
+            <li><%= link_to 'Upload bucket', polymorphic_path([:new, @person, :bucket]) %></li>
+          </ul>
+      </div>
+    <% end  %>
 
     <h5 class="muted">Personal Information</h5>
     <ul class="unstyled">

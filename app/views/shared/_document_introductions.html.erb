@@ -3,7 +3,7 @@
       <h3><%= link_to "#{var.name}", var %></h3>
       <% if var.documents.doctype('Introduction').present? %>
         <h4 class="subheader"><%= var.documents.doctype('Introduction').title %></h4>
-        <p><%= var.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [var.documents.doctype('Introduction').documentable, var.documents.doctype('Introduction')] %></p>
+        <p><%= raw(var.documents.doctype('Introduction').content) %> ... <%= link_to 'read more', [var.documents.doctype('Introduction').documentable, var.documents.doctype('Introduction')] %></p>
       <% else %>
         <p>No Introduction available</p>
       <% end %>

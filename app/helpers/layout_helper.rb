@@ -26,4 +26,8 @@ module LayoutHelper
   def javascript(*args)
     content_for(:head) { javascript_include_tag(*args) }
   end
+
+  def what_alert(name)
+    name.to_s == 'notice' ? 'alert-success' : nil # or just nil for a warning or alert-info
+  end
 end

@@ -4,4 +4,5 @@ class Editorship < ActiveRecord::Base
   attr_accessible :creator_id, :updater_id, :book_id, :person_id
 
   stampable
+
 end

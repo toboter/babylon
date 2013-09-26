@@ -1,57 +1,66 @@
-<% title "Add Assets", "Assets will be added to: #{@bucket.name}" %>
+<% title "Add Assets", "to: #{@bucket.name}" %>
+<div class="row">
+  <div class="span12">
+    <%= link_to 'Back', [@bucket.attachable, @bucket] %>
 
-<p><%= link_to 'Back', [@bucket.attachable, @bucket] %></p>
-
-<%= form_tag pailfuls_bucket_path(@bucket), method: :post, class: 'custom' do %>
-  <ul class="small-block-grid-3 large-block-grid-6">
-    <% for asset in @assets_available do %>
-      <li>
-        <% if asset.content_type.include? 'image' %>
-      	  <%= link_to (image_tag asset.assetfile.thumb.url), asset, class: 'th' %>
-        <% else %>
-          <%= image_tag 'dummy.svg', class: 'th' %>
+    <%= form_tag pailfuls_bucket_path(@bucket), method: :post, class: 'custom' do %>
+      <ul class="thumbnails">
+        <% for asset in @assets_available do %>
+          <li class="span2">
+            <div class="thumbnail">
+              <% if asset.content_type.include? 'image' %>
+      	        <%= link_to (image_tag asset.assetfile.thumb.url), asset, class: '' %>
+              <% else %>
+                <%= image_tag 'dummy.svg', class: '' %>
+              <% end %>
+              <div class="caption">
+      	        <p><%= link_to "#{asset.name}", asset %><span class="pull-right"><%= check_box_tag "asset_ids[]", asset.id %></span></p>
+              </div>
+            </div>
+          </li>
         <% end %>
-      	<p><%= link_to "#{asset.name}", asset %><span class="right"><%= check_box_tag "asset_ids[]", asset.id %></span></p>
-      </li>
+      </ul>
+      <div class="form-actions">
+        <%= submit_tag 'Add marked assets to bucket', class: 'btn btn-primary' %>
+        <%= link_to 'Back', :back, class: 'btn' %>
+        or <a href="#add_assets" data-toggle="modal">Upload an asset</a>
+      </div>
     <% end %>
-  </ul>
-  <div class="form-actions">
-    <%= submit_tag 'Add marked assets to bucket', class: 'button' %>
-    <%= link_to 'Back', :back, class: 'button secondary' %>
-    or <a href="#" data-reveal-id="add_assets">Upload an asset</a>
+
+
+<!-- Modals beginn -->
+
+    <div id="add_assets" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Upload a new asset</h3>
+      </div>
+  
+      <%= form_for [@bucket, @bucket.assets.new], :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
+        <div class="modal-body">
+          <%= f.error_messages %>
+    
+          <div class="control-group">
+            <%= f.label :assetfile, class: 'control-label' %>
+            <div class="controls">
+              <%= f.file_field :assetfile %>
+            </div>
+          </div>
+        
+          <div class="control-group">
+            <%= f.label :name, class: 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :name %>
+            </div>
+          </div>
+        
+        </div>
+  
+        <div class="modal-footer">
+          <%= f.submit 'Save', class: 'btn btn-primary pull-left' %>
+          <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
+        </div>
+      <% end %>
+    </div>
   </div>
-<% end %>
-
-
-<div id="add_assets" class="reveal-modal">
-  <a class="close-reveal-modal">&#215;</a>
-  <h3>Upload a new asset</h3>
-  <%= form_for [@bucket, @bucket.assets.new], :html => { :class => 'custom', :multipart => true } do |f| %>
-    <%= f.error_messages %>
-
-    <div class="field">
-      <%= f.label :assetfile %>
-      <%= f.file_field :assetfile %>
-    </div>
-  
-    <div class="field">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-    </div>
-  
-    <div class="field">
-      <%= f.label :parent_id %>
-      <%= f.number_field :parent_id %>
-    </div>
-
-    <div class="form-actions">
-      <%= f.submit 'Speichern', class: 'button' %>
-    </div>
-  <% end %>
-
 </div>
-
-
-
-<%= @bucket.assets.count %>
-<%= @bucket.inspect %>

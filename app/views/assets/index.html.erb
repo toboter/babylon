@@ -1,30 +1,28 @@
 <% title "Assets#{' of ' + @bucket.name if @bucket}", nil %>
 
 <% content_for :breadcrumbs_section do %>
-
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@bucket.name}", [@bucket.attachable, @bucket]) + content_tag(:span, '/', class: 'divider')) if @bucket %>
+  <%= content_tag :li, "Assets", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-<p><%= link_to 'Back', :back %></p>
-
-<div class="row">
   <% @assets.each do |asset| %>
-    <div class="large-4 small-12 columns" style="height:7em; margin-bottom:1em;">
-      <div class="row">
-      <div class="large-3 small-3 columns">
-        <%= link_to (image_tag asset.assetfile.mini_thumb.url, class: "th left"), asset if asset.content_type.include? 'image' %>
-        <%= link_to (image_tag 'mini_dummy.gif', class: "th left"), asset unless asset.content_type.include? 'image' %>
-      </div>
-      <div class="large-9 small-9 columns">
-        <p>
-        <strong>Name: </strong><%= asset.name %><br />
-        <strong>Description: </strong><%= asset.name %><br />
-        <strong>Buckets: </strong><%= asset.buckets.map{ |b| link_to(b.full_bucket_name,b) }.join(", ").html_safe %></p>
-      </div>
+    <div class="span4" style="height:7em; margin-bottom:1em;">
+      <div class="row-fluid">
+        <div class="span3">
+          <%= link_to (image_tag asset.assetfile.mini_thumb.url, class: "thumbnail"), asset if asset.content_type.include? 'image' %>
+          <%= link_to (image_tag 'mini_dummy.gif', class: "thumbnail"), asset unless asset.content_type.include? 'image' %>
+        </div>
+        <div class="span9">
+          <p>
+          <strong>Name: </strong><%= asset.name %><br />
+          <strong>Description: </strong><%= asset.name %><br />
+          <strong>Buckets: </strong><%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %></p>
+        </div>
       </div>
     </div>
   <% end %>
-</div>
 <% end %>
 
 

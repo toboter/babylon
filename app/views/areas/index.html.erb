@@ -1,23 +1,13 @@
 <% title "Research Areas", nil %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-  	<%= link_to "#{@cluster.name}", @cluster if @cluster %>
-    <%= link_to "Reasearch Areas", areas_path %>
-
-  </nav>
-<% end %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-
-    </ul>
-  </div>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@cluster.name}", @cluster) + content_tag(:span, '/', class: 'divider')) if @cluster %>
+  <%= content_tag :li, "Areas", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-
-  <%= render "shared/document_introductions", :vars => @areas %>
-  
+  <div class="span12">
+    <%= render "shared/document_introductions", :vars => @areas %>
+  </div>
 <% end %>

@@ -13,6 +13,6 @@ module ReferencesHelper
   end
 
   def authors_of_article(reference)
-  	reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe
+  	reference.authors.present? ? reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe : 'N.N.'
   end
 end

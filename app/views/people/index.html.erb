@@ -6,7 +6,7 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span12">
+  <div class="span10">
     <ul class="unstyled" style="padding-left:20px;">
       <% @people.each do |person| %>
         <li>
@@ -18,12 +18,18 @@
       <% end %>
     </ul>
   </div>
-<% end %>
-
-<% content_for :footer_section do %>
-  <% if can? :edit, @people %>
-    <div class="span6">
-      <%= link_to 'Add Person', new_person_path, class: "btn btn-large" %><% unless connected_profile %> or create <%= link_to "your profile", new_person_path(:user_id => current_user) %><% end %>
-    </div>
-  <% end %>
+  <div class="span2">
+    <% if can? :edit, @people %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Person', new_person_path %></li>
+            <li><%= link_to "Your profile", new_person_path(:user_id => current_user) unless connected_profile %></li>
+          </ul>
+      </div>
+    <% end  %>
+  </div>
 <% end %>

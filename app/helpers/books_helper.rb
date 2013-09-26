@@ -7,14 +7,14 @@ module BooksHelper
   end
 
   def book_edited_by(book, with_comma=false, without_no_author=false, without_author=false)
-  	unless book.editors.empty?
+  	if book.editors.any?
       if with_comma == true
       	(book.editors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe) + ' (Hrsg.), '
       else
       	(book.editors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe) + ' (Hrsg.)'
       end
     else
-      if book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe"
+      if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
       	if without_author == true
       	  ''
       	else
@@ -36,37 +36,37 @@ module BooksHelper
 
   def book_title(book, without_article_title=false)
   	if book.title && book.serial.blank?
-  	  if book.book_type == "Monographie"
+  	  if book.book_type == "Monographie" && book.articles.any?
   	    link_to "#{book.articles.first.title}", book
   	  else
   	    link_to "#{book.title}", book
   	  end
   	elsif book.title && book.serial
-	  if book.book_type == "Monographie in einer Reihe"
-	  	if without_article_title == true
-	      (link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
+	    if book.book_type == "Monographie in einer Reihe" && book.articles.any?
+	  	  if without_article_title == true
+	        (link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
+	      else
+	  	    (link_to "#{book.articles.first.title}", book.articles.first)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
+	      end
 	    else
-	  	  (link_to "#{book.articles.first.title}", book.articles.first)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
+	  	  if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
+	  	    (link_to "#{book.title}", book)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
+	  	  else
+	  	    (link_to "#{book.serial.name}", book.serial) +' ('+(link_to "#{book.volume}", book)+')'
+	  	  end
 	    end
-	  else
-	  	if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
-	  	  (link_to "#{book.title}", book)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
-	  	else
-	  	  (link_to "#{book.serial.name}", book.serial) +' ('+(link_to "#{book.volume}", book)+')'
-	  	end
 	  end
-	end
   end
 
   def book_short_title(book, abbr=false)
   	if book.title && book.serial.blank?
-  	  if book.book_type == "Monographie"
+  	  if book.book_type == "Monographie" && book.articles.any?
   	    book.articles.first.title
   	  else
   	   book.title
   	  end
   	elsif book.title && book.serial
-	  if book.book_type == "Monographie in einer Reihe"
+	  if book.book_type == "Monographie in einer Reihe" && book.articles.any?
 	  	  book.articles.first.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  else
 	  	if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
@@ -79,10 +79,10 @@ module BooksHelper
   end
 
   def  book_short_edited_by(book)
-  	unless book.editors.empty?
+  	if book.editors.any?
       	book.editors.map{ |a| a.fullname }.join(", ").html_safe + ' (Hrsg.), '
     else
-      if book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe"
+      if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
           book.articles.first.authors.map{ |a| a.fullname }.join(", ").html_safe + ', '
       else
       	  ''

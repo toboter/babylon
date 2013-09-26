@@ -1,13 +1,12 @@
 <fieldset>
-  <div class="controls controls-row">
-      <div class="field">
-        <%= f.label :user_id, 'Member' %>
+  <div class="member-field">
+    <div class="control-group">
+      <%= f.label :user_id, 'Member', class: 'control-label' %>
+      <div class="form-inline controls">
         <%= f.collection_select :user_id, User.all, :id, :available_name %>
-      </div>
-      <div class="field">
-        <%= f.label :role %>
         <%= f.select :role, Membership::ROLES %>
+        <small><%= f.link_to_remove "remove" %></small>
       </div>
-    <small><%= f.link_to_remove "remove" %></small>
+    </div>  
   </div>
 </fieldset>

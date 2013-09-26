@@ -2,38 +2,38 @@
 <% edit_section_for(@project, @project.projectable) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <% if @project.projectable_type == "Group" %>
-      <%= link_to "Module: #{@project.projectable.area.cluster.name}", @project.projectable.area.cluster %>
-      <%= link_to "Area: #{@project.projectable.area.name}", @project.projectable.area %>
-      <%= link_to "Group: #{@project.projectable.name}", @project.projectable %>
-    <% end %>
-    <% if @project.projectable_type == "Cluster" %>
-      <%= link_to "Module: #{@project.projectable.name}", @project.projectable %>
-    <% end %>
-    <%= link_to "Project: #{@project.name}", [@project.projectable, @project] %>
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <% if @project.projectable_type == "Group" %>
+    <%= content_tag(:li, link_to("#{@project.projectable.area.cluster.name}", @project.projectable.area.cluster) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Areas", cluster_areas_path(@project.projectable.area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@project.projectable.area.name}", @project.projectable.area) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Groups", area_groups_path(@project.projectable.area)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
+  <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) if @project.projectable_type == "Cluster" %>
+  <%= content_tag(:li, link_to("Projects", [@project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "#{@project.name}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
-    <h5 class="subheader"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
+  <div class="span8">
+    <h5 class="muted"><small>Belongs_to: </small><%= link_to "#{@project.projectable.name}", @project.projectable %></h5>
 
-    <%= content_tag :h4, 'Documents', class: 'subheader' if @project.documents.any? %>
+    <%= content_tag :h4, 'Documents', class: 'muted' if @project.documents.any? %>
 
     <% if @project.documents.doctype('Introduction') %>
       <%= render "shared/document_first", var: @project, dtype: "Introduction" %>
     <% else %>
-      <%= link_to "Add Introduction", polymorphic_path([:new, @project, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @project %>    
+      <%= link_to "Add Introduction", polymorphic_path([:new, @project, :document], :document_type => "Introduction"), class: 'btn btn-small' if can? :edit, @project %> <br /><br />
     <% end %>
 
     <%= render "shared/document_docs_without_type", :var => @project %>
 
-    <%= render "shared/add_document_box", :add_doc => @project %>
+    <%= link_to 'Add Document', polymorphic_path([:new, @project, :document]), class: "btn btn-large" %>
 
     <% if can? :follow, @project %>
-      <h4 class="subheader"><%= link_to "Todolists", project_todolists_path(@project) %></h5>
-      <ul class="no-bullet">
+      <h4 class="muted"><%= link_to "Todolists", project_todolists_path(@project) %></h5>
+      <ul class="unstyled">
         <% for todolist in @project.todolists do %>
           <li>
             <%= link_to "#{todolist.name}", [todolist.project, todolist] %>
@@ -42,20 +42,13 @@
           </li>
         <% end %>
       </ul>
-      <div class="row" style="margin-top:40px;margin-bottom:40px;">
-        <div class="large-6 columns">
-          <ul class="pricing-table">
-            <li class="description">Hier ergänzender Text über die Möglichkeiten</li>
-            <li class="cta-button"><%= link_to 'Add Todolist', new_project_todolist_path(@project), class: "button" %></li>
-          </ul>
-        </div>
-      </div>
+      <%= link_to 'Add Todolist', new_project_todolist_path(@project), class: "btn btn-large" %>
     <% end %>
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Creator</h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@project.creator) %>
           <%= @project.creator.available_name %>
@@ -65,9 +58,9 @@
       </li>
     </ul>
 
-    <h5 class="subheader">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></small></h5>
+    <h5 class="muted">Members<small> <%= link_to " (add)", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></small></h5>
     <% if @project.memberships.present? %>
-      <ul class="no-bullet">
+      <ul class="unstyled">
         <% for membership in @project.memberships do %>
           <li>
             <% if connected_profile(membership.user) %>

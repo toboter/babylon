@@ -23,18 +23,22 @@
     </div>
   </div>
     
-  <% unless @book %>  <!--Wenn das Formular aus dem Book-form als nested_field aufgerufen wird-->
-    <% unless @reference.book %> <!--Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde-->
+  <% if !@book %>  <!--Wenn das Formular aus dem Book-form als nested_field aufgerufen wird-->
+    <% if !@reference.book %> <!--Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde-->
       <div class="control-group">
         <%= f.label :book_id, 'Select Book', :class => 'control-label' %>
         <div class="controls">
           <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: 'input-xxlarge') %>
         </div>
       </div>
+    <% else %>
+      <%= f.hidden_field :book_id %>
     <% end %>
+  <% else %>
+    <%= f.hidden_field :book_id %>
   <% end %>
     
-  <% if @book || @reference.book %>
+
     <div class="control-group">
       <%= f.label :first_page, "Erste Seite", :class => 'control-label' %>
       <div class="controls">
@@ -47,7 +51,7 @@
         <%= f.text_field :last_page, :class => 'text_field' %>
       </div>
     </div>
-  <% end %>
+
   <div class="control-group">
     <%= f.label :uri, 'Internet Resource URI', :class => 'control-label' %>
     <div class="controls">

@@ -1,6 +1,6 @@
 <% title "Oops. (500)", nil %>
 <% content_for :main_section do %>
-  <div class="large-8 columns">
+  <div class="span8">
     <p>We're sorry, but something went wrong. <%= @exception if can? :manage, @exception %></p>
   </div>
 <% end %>

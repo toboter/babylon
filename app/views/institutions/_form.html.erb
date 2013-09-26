@@ -1,61 +1,77 @@
-<%= form_for(@institution, :html => { :class => 'custom'}) do |f| %>
+<%= form_for(@institution, :html => { :class => 'form-horizontal'}) do |f| %>
   <%= f.error_messages %>
 
-  <div class="field">
-    <%= f.label :parent_id, 'Belongs to' %>
-    <%= f.collection_select :parent_id, Institution.possible_parents(@institution), :id, :name, { include_blank: true } %>
-  </div>
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
+    <div class="control-group">
+      <%= f.label :parent_id, 'Belongs to', class: 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :parent_id, Institution.possible_parents(@institution), :id, :name, { include_blank: true }, class: 'input-xxlarge' %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, class: 'input-xxlarge' %>
+      </div>
+    </div>
 
-  <div class="row">
-    <div class="large-6 columns">
-      <h4 class="subheader">Contact Information</h4>
-      <div class="field">
-        <%= f.label :phone %>
+    <h4 class="muted">Contact Information</h4>
+    <div class="control-group">
+      <%= f.label :phone, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :phone %>
       </div>
-      <div class="field">
-        <%= f.label :fax %>
+    </div>
+    <div class="control-group">
+      <%= f.label :fax, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :fax %>
       </div>
-      <div class="field">
-        <%= f.label :uri %>
+    </div>
+    <div class="control-group">
+      <%= f.label :uri, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :uri %>
       </div>
-    
-      <h5 class="subheader">Address</h5>
-      <div class="field">
-        <%= f.label :street %>
-        <%= f.text_field :street %>
+    </div>    
+
+    <h5 class="muted controls">Address</h5>
+    <div class="control-group">
+      <%= f.label :street, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :street, class: 'input-xxlarge' %>
       </div>
-      <div class="field">
-        <%= f.label :zip %>
+    </div>
+    <div class="control-group">
+      <%= f.label :zip, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :zip %>
       </div>
-      <div class="field">
-        <%= f.label :city %>
+    </div>
+    <div class="control-group">
+      <%= f.label :city, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :city %>
       </div>
-      <div class="field">
-        <%= f.label :country %>
+    </div>
+    <div class="control-group">
+      <%= f.label :country, class: 'control-label' %>
+      <div class="controls">
         <%= f.text_field :country %>
       </div>
     </div>
-  </div>
+
+
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @institution.new_record? %>
       <% if @institution.parent_id %>
-        <%= link_to 'Abbrechen', @institution.parent, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', @institution.parent, :class => 'btn' %>
       <% else %>
-        <%= link_to 'Abbrechen', institutions_path, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', institutions_path, :class => 'btn' %>
       <% end %>
     <% else %>
-      <%= link_to 'Abbrechen', @institution, :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', @institution, :class => 'btn' %>
     <% end %>
   </div>
 <% end %>

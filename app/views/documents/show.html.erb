@@ -3,17 +3,13 @@
 <% edit_section_for(@document, @document.documentable) %>
 
 <% content_for :breadcrumbs_section do %>
-  <% unless @document.page? %>
-  <nav class="breadcrumbs">
-    <%= link_to "#{@document.documentable.name}", @document.documentable unless @document.person? %>
-    <%= link_to "#{@document.documentable.fullname}", @document.documentable if @document.person? %>
-    <%= @document.title.present? ? (link_to "#{@document.title}", [@document]) : (link_to "#{@document.document_type}", [@document]) %>
-  </nav>
-  <% end %>
-<% end %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to "#{@document.person? ? @document.documentable.fullname : @document.documentable.name}", @document.documentable %> <span class="divider">/</span></li>
+  <li class="active"><%= @document.title.present? ? @document.title : @document.document_type %></li>
+<% end unless @document.page? %>
 
 <% content_for :main_section do %>
-  <div class="large-9 columns">
+  <div class="span9">
     <% if @document.abstract && !@document.title_readonly? %>
       <div class="abstract_section">
         <b>Abstract: </b><%= @document.abstract %>
@@ -28,17 +24,16 @@
   </div>
 
 
-  <div class="large-2 columns right">
+  <div class="span2 offset1">
     <% unless @document.page? %>
-    <h6 class="subheader">Belongs to</h6>
-    <ul class="no-bullet">
-      <%= content_tag :li, link_to("#{@document.documentable.name}", @document.documentable) unless @document.person? %>
-      <%= content_tag :li, link_to("#{@document.documentable.fullname}", @document.documentable) if @document.person? %>
+    <h5 class="muted">Belongs to</h5>
+    <ul class="unstyled">
+      <%= content_tag :li, link_to("#{@document.person? ? @document.documentable.fullname : @document.documentable.name}", @document.documentable) %>
       <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
     </ul>
     <% end %>
-    <h6 class="subheader">Creator</h6>
-    <ul class="no-bullet">
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@document.creator) %>
           <%= @document.creator.available_name %>
@@ -48,8 +43,8 @@
       </li>
       <li>on: <%= @document.created_at %></li>
     </ul>
-    <h6 class="subheader">Last update by</h6>
-    <ul class="no-bullet">
+    <h5 class="muted">Last update by</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@document.updater) %>
           <%= @document.updater.available_name %>

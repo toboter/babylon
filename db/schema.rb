@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130830121850) do
+ActiveRecord::Schema.define(:version => 20130919132135) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -126,16 +126,6 @@ ActiveRecord::Schema.define(:version => 20130830121850) do
   add_index "editorships", ["book_id"], :name => "index_editorships_on_book_id"
   add_index "editorships", ["person_id"], :name => "index_editorships_on_person_id"
 
-  create_table "engagements", :force => true do |t|
-    t.integer  "person_id"
-    t.datetime "start"
-    t.datetime "end"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-  end
-
   create_table "friendly_id_slugs", :force => true do |t|
     t.string   "slug",                         :null => false
     t.integer  "sluggable_id",                 :null => false
@@ -181,7 +171,10 @@ ActiveRecord::Schema.define(:version => 20130830121850) do
     t.integer  "updater_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "slug"
   end
+
+  add_index "institutions", ["slug"], :name => "index_institutions_on_slug", :unique => true
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"

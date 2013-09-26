@@ -4,7 +4,7 @@ module DashboardHelper
   	  @doc = @page.documents.first
   	  link_to("Edit #{perma.humanize} page", [:edit, @doc.documentable, @doc]) if @doc.present?
   	else
-  	  button_to("Add #{perma.humanize} page", pages_path(:permalink => perma, :type => 'doc'), class: 'button tiny')
+  	  button_to("Add #{perma.humanize} page", pages_path(:permalink => perma, :type => 'doc'), class: 'btn btn-mini')
   	end
   end
 end

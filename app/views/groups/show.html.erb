@@ -2,34 +2,41 @@
 <% edit_section_for(@group, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "Module: #{@group.area.cluster.name}", @group.area.cluster %>
-    <%= link_to "Area: #{@group.area.name}", @group.area %>
-    <%= link_to "Group: #{@group.name}", @group %>
-
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@group.area.cluster.name}", @group.area.cluster) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Areas", cluster_areas_path(@group.area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@group.area.name}", @group.area) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Groups", area_groups_path(@group.area)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "#{@group.name}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
-    <% if @group.documents.doctype('Introduction') %>
-      <%= render "shared/document_first", var: @group, dtype: "Introduction" %>
-    <% else %>
-      <%= link_to "Add Introduction", polymorphic_path([:new, @group, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @group %>    
-    <% end %>
+  <div class="span8">
+    <%= render "shared/document_first", var: @group, dtype: "Introduction" if @group.documents.doctype('Introduction') %>
 
     <%= render "shared/document_docs_without_type", :var => @group %>
 
-    <%= render "shared/add_document_box", :add_doc => @group %>
-
-    <%= content_tag :h4, 'Projects', class: "subheader" if @group.projects.present? %>
+    <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
     <%= render "shared/document_introductions", :vars => @group.projects %>
-
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Creator</h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <% if can? :edit, @group %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Project', new_group_project_path(@group) %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Introduction Document", polymorphic_path([:new, @group, :document], :document_type => "Introduction") unless @group.documents.doctype('Introduction') %></li>
+            <li><%= link_to 'Document', polymorphic_path([:new, @group, :document]) %></li>
+          </ul>
+      </div>
+    <% end  %>
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@group.creator) %>
           <%= @group.creator.available_name %>
@@ -40,9 +47,8 @@
     </ul>
 
     <% if @group.projects.present? %>
-
-      <h5 class="subheader">Members</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Members</h5>
+      <ul class="unstyled">
         <% for membership in Membership.where(:project_id => @group.projects) do %>
           <li>
             <% unless connected_profile(membership.user) %>
@@ -54,28 +60,12 @@
         <% end %>
       </ul>
 
-
-
-      <h5 class="subheader">Projects</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Projects</h5>
+      <ul class="unstyled">
         <% for project in @group.projects do %>
           <li><%= link_to "#{project.name}", project %></li>
         <% end %>
       </ul>
     <% end %>
-
   </div>
-
-<% end %>
-
-<% content_for :footer_section do %>
-  <% if can? :edit, @area %>
-    <div class="large-6 columns">
-      <ul class="pricing-table">
-        <li class="title">Project</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Projektes in einer Group</li>
-        <li class="cta-button"><%= link_to 'Add Project', new_group_project_path(@group), class: "button small" %></li>
-      </ul>
-    </div>
-  <% end %>
 <% end %>

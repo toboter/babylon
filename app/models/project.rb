@@ -15,6 +15,7 @@ class Project < ActiveRecord::Base
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
 
+  validates_associated :memberships
 
   def add_first_admin
   	Membership.create :project_id => self.id, :user_id => self.creator_id, :role => "admin"

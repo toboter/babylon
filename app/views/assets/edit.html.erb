@@ -1,35 +1,32 @@
-<h1>Editing asset</h1>
+<% title "Edit Asset", nil %>
 
-<%= form_for @asset, :html => { :class => 'custom', :multipart => true } do |f| %>
+<%= form_for @asset, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
   <%= f.error_messages %>
 
-  <div class="field">
-    <%= f.label :assetfile %>
-    <%= f.file_field :assetfile %>
+  <div class="control-group">
+    <%= f.label :assetfile, class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :assetfile %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, class: 'span6' %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :caption %>
-    <%= f.text_area :caption %>
-  </div>
-
-
-
-  <div class="field">
-    <%= f.label :parent_id %>
-    <%= f.number_field :parent_id %>
+  <div class="control-group">
+    <%= f.label :caption, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :caption, class: 'span6' %>
+    </div>
   </div>
 
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <%= link_to 'Abbrechen', :back, :class => 'btn' %>
   </div>
 <% end %>
-
-<%= link_to 'Show', @asset %> |
-<%= link_to 'Back', :back %>

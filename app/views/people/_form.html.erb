@@ -116,17 +116,6 @@
     </div>
 
 
-
-    <div style="margin-top:40px;">
-      <div class="span12">
-        <h4 class="muted">Engagement Information</h4>
-      </div>
-      <%= f.fields_for :engagements do |builder| %>
-        <%= render "engagement_fields", :f => builder %>
-      <% end %>
-      <%= f.link_to_add "Add activity timespan", :engagements, class: 'controls' %>
-    </div>
-
     <div class="form-actions">
       <%= f.submit "Speichern", :class => 'btn btn-primary' %>
       <% if @person.new_record? %>

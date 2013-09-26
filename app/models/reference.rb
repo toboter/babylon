@@ -6,7 +6,7 @@ class Reference < ActiveRecord::Base
 
 
   validates_presence_of :title
-  validates_presence_of :book_id, :unless => :uri?
+  #validates_presence_of :book_id, unless: :uri? Die Validierung erfolgt in dem Fall über "reject_if" im book model
 
   has_many :authors, :class_name => 'Person', through: :authorships, :source => :person
   has_many :authorships, :dependent => :destroy, :order => 'position'

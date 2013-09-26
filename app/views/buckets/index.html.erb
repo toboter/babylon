@@ -1,25 +1,28 @@
 <% title "Buckets", nil %>
 
 <% content_for :main_section do %>
+  <div class="span12">
   <p><%= link_to 'Back', :back %></p>
 
   <% @buckets.each do |bucket| %>
-    <div class="panel">
-      <div class="row">
-        <div class="large-3 columns">
+    <div class="well">
+      <div class="row-fluid">
+        <div class="span3">
           <p><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></p>
         </div>
-        <div class="large-2 columns">
-          <%= link_to (image_tag bucket.assets.find_by_id(bucket.cover_asset_id).assetfile.thumb.url), bucket.assets.find_by_id(bucket.cover_asset_id), class: "th radius" if bucket.assets.find_by_id(bucket.cover_asset_id) %>
+        <div class="span2">
+          <span class="thumbnail"><%= link_to (image_tag bucket.assets.find_by_id(bucket.cover_asset_id).assetfile.thumb.url), bucket.assets.find_by_id(bucket.cover_asset_id), class: "" if bucket.assets.find_by_id(bucket.cover_asset_id) %></span>
         </div>
-        <div class="large-7 columns">
+        <div class="span7">
+          <ul class="thumbnails">
           <% for asset in bucket.assets-Array.wrap(bucket.assets.find_by_id(bucket.cover_asset_id)) %>
-            <%= link_to (image_tag asset.assetfile.mini_thumb.url), asset, class: "th radius" if asset.content_type.include? 'image' %>
-            <%= link_to (image_tag 'mini_dummy.gif'), asset, class: "th radius" unless asset.content_type.include? 'image' %>
+            <li class="thumbnail"><%= link_to (image_tag asset.assetfile.mini_thumb.url), asset, class: "" if asset.content_type.include? 'image' %>
+            <%= link_to (image_tag 'mini_dummy.gif'), asset, class: "" unless asset.content_type.include? 'image' %></li>
           <% end %>
+          </ul>
         </div>
       </div>
     </div>
   <% end %>
-
+  </div>
 <% end %>

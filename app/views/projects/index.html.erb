@@ -1,39 +1,37 @@
 <% title "Projects", nil %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "Projects", @projectable unless @projectable %>
-    <%= link_to "#{@projectable.name}", @projectable if @projectable %>
-    <%= link_to "Projects", cluster_projects_path(@projectable) if @projectable %>
-  </nav>
-<% end %>
-
-<% content_for :link_section do %>
-  <div class="button-bar right">
-    <ul class="button-group">
-
-    </ul>
-  </div>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <% if @projectable.class.to_s == 'Group' %>
+    <%= content_tag(:li, link_to("#{@projectable.area.cluster.name}", @projectable.area.cluster) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Areas", cluster_areas_path(@projectable.area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@projectable.area.name}", @projectable.area) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Groups", area_groups_path(@projectable.area)) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
+  <%= content_tag(:li, (link_to "#{@projectable.name}", @projectable) + content_tag(:span, '/', class: 'divider')) if @projectable %>
+  <%= content_tag :li, "Projects", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
+  <div class="span12">
   <% @projects.each do |project| %>
-    <div class="project-entry panel">
-      <h6><small>
+    <div class="well">
+      <h6>
         <% if project.projectable_type == "Cluster" %>
           <%= link_to "#{project.projectable.name}", project.projectable %>
         <% end %>
         <% if project.projectable_type == "Group" %>
           <%= link_to "#{project.projectable.area.cluster.name}", project.projectable.area.cluster %>
         <% end %>
-      </small></h6>
+      </h6>
       <h3><%= link_to "#{project.name}", [project.projectable, project] %></h3>
       <% if project.documents.doctype('Introduction').present? %>
-        <h4 class="subheader"><%= project.documents.doctype('Introduction').title %></h4>
+        <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
         <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
       <% else %>
         <p>No Introduction available</p>
       <% end %>
     </div>
   <% end %>  
+  </div>
 <% end %>

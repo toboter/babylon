@@ -1,5 +1,7 @@
 class Institution < ActiveRecord::Base
-  attr_accessible :city, :country, :creator_id, :fax, :name, :parent_id, :phone, :street, :updater_id, :uri, :zip
+  extend FriendlyId
+  attr_accessible :city, :country, :creator_id, :fax, :name, :parent_id, :phone, :street, :updater_id, :uri, :zip, :slug
+  friendly_id :name, use: [:slugged, :history]
 
   stampable
   acts_as_tree :dependent => :destroy

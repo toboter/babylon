@@ -3,7 +3,7 @@ class Person < ActiveRecord::Base
   friendly_id :fullname, use: [:slugged, :history]
 
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
-                  :last_name, :nickname, :profession, :public_email, :updater_id, :engagements_attributes,
+                  :last_name, :nickname, :profession, :public_email, :updater_id,
                   :phone, :fax, :uri, :institution_id, :show_inst_address
   
   stampable
@@ -11,7 +11,6 @@ class Person < ActiveRecord::Base
   after_create :build_profile_picture_bucket
   
   belongs_to :user
-  has_many :engagements, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   has_many :authorships, :dependent => :destroy
@@ -22,8 +21,6 @@ class Person < ActiveRecord::Base
   has_many :assets, through: :buckets
   has_many :documents, as: :documentable
   belongs_to :institution
-
-  accepts_nested_attributes_for :engagements, allow_destroy: true
 
   validates_presence_of :first_name, :last_name
   validates_uniqueness_of :user_id, :allow_blank => true, :message => "is already connected to someone else"

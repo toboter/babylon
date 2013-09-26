@@ -1,30 +1,34 @@
-<%= form_for [@attachable, @bucket], :html => { :class => 'custom'} do |f| %>
+<%= form_for [@attachable, @bucket], :html => { :class => 'form-horizontal'} do |f| %>
 <%= f.error_messages %>
 
   <%= f.hidden_field :attachable_type %>
   <%= f.hidden_field :attachable_id %>
   <%= f.hidden_field :name_fixed %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :cover_asset_id %>
-    <%= f.collection_select :cover_asset_id, @bucket.assets, :id, :name %>
+  <div class="control-group">
+    <%= f.label :cover_asset_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cover_asset_id, @bucket.assets, :id, :name %>
+    </div>
   </div>
 
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @bucket.new_record? %>
       <% if @bucket.attachable %>
-        <%= link_to 'Abbrechen', @bucket.attachable, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', @bucket.attachable, :class => 'btn' %>
       <% else %>
-        <%= link_to 'Abbrechen', buckets_path, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', buckets_path, :class => 'btn' %>
       <% end %>
     <% else %>
-      <%= link_to 'Abbrechen', [@bucket.attachable, @bucket], :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', [@bucket.attachable, @bucket], :class => 'btn' %>
     <% end %>
   </div>
 <% end %>

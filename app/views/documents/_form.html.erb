@@ -8,34 +8,40 @@
     This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
   <% end unless @document.person? || @document.page? -%>
 
-  <div class="field">
-    <%= f.label :title %>
-    <%= f.text_field :title unless @document.title_readonly? %>
-    <%= f.text_field :title, :readonly => true if @document.title_readonly? %>
+  <div class="control-group">
+    <%= f.label :title, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title unless @document.title_readonly? %>
+      <%= f.text_field :title, :readonly => true if @document.title_readonly? %>
+    </div>
   </div>
 
   <% unless @document.title_readonly? %>
-  <div class="field">
-    <%= f.label :abstract %>
-    <%= f.text_area :abstract, class: 'abstract_area' %>
+  <div class="control-group">
+    <%= f.label :abstract, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :abstract, class: 'abstract_area' %>
+    </div>
   </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :content %>
-    <%= f.text_area :content, class: 'ckeditor', id: 'content_field', html: {:toolbar => 'Simple'} %>
+  <div class="control-group">
+    <%= f.label :content, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :content, class: 'ckeditor', id: 'content_field' %>
+    </div>
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @document.new_record? %>
       <% if @document.documentable %>
-        <%= link_to 'Abbrechen', @document.documentable, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', @document.documentable, :class => 'btn' %>
       <% else %>
-        <%= link_to 'Abbrechen', documents_path, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', documents_path, :class => 'btn' %>
       <% end %>
     <% else %>
-      <%= link_to 'Abbrechen', :back, :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
     <% end %>
   </div>
 <% end %>

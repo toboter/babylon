@@ -1,49 +1,51 @@
 <% title "#{@asset.name}", nil %>
 
-<%= link_to "back", :back %>
-
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Assets", assets_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "#{@asset.name}", class: 'active' %>
+<% end %>
 
 <% content_for :main_section do %>
 <% edit_section_for(@asset, nil) if can? :edit, @asset %>
-  <div class="large-8 small-12 columns">   
+  <div class="span8">
     <% if @asset.content_type.include? 'image' %>
-      <%= image_tag(@asset.assetfile.normal.url) %>
+      <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
     <% else %>
       <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
     <% end %>
-    <p><b>Caption: </b><%= @asset.caption %></p>
+    
   </div>
-  <div class="large-4 small-12 columns">
-    <dl class="dl-horizontal">
-      <dt>Content type</dt><dd><%= @asset.content_type %></dd>
-      <dt>Dimensions</dt><dd><%= @asset.width %> x <%= @asset.height %></dd>
-      <dt>File size</dt><dd><%= @asset.file_size %></dd>
-      <dt>File Name</dt><dd><%= @asset.file_name %></dd>
-      <dt>Date Taken</dt><dd><%= @asset.date_taken %></dd>
-      <dt>Location</dt><dd><%= @asset.latitude %>, <%= @asset.longitude %></dd>
-      <dt>Camera</dt><dd><%= @asset.camera %></dd>
-      <dt>Manufacturer</dt><dd><%= @asset.camera_make %></dd>
-      <dt>Flash</dt><dd><%= @asset.flash %></dd>
-      <dt>Focal length</dt><dd><%= @asset.focal_length %></dd>
-      <dt>Exposure</dt><dd><%= @asset.exposure %></dd>
-      <dt>f_number</dt><dd><%= @asset.f_number %></dd>
-      <dt>ISO</dt><dd><%= @asset.iso %></dd>
-      <dt>Versions</dt><dd><%= @asset.parent_id %></dd>
+  <div class="span4">
+    <%= content_tag :h5, 'Caption', class: "muted" if @asset.caption %>
+    <%= content_tag :p, @asset.caption if @asset.caption %>
+    <dl class="dl">
+      <%= asset_description('Content type', @asset.content_type) %>
+      <%= asset_description('Dimensions', @asset.width, @asset.height) %>
+      <%= asset_description('File size', @asset.file_size) %>
+      <%= asset_description('File Name', @asset.file_name) %>
+      <%= asset_description('Date Taken', @asset.date_taken) %>
+      <%= asset_description('Location', @asset.latitude, @asset.longitude) %>
+      <%= asset_description('Camera', @asset.camera) %>
+      <%= asset_description('Manufacturer', @asset.camera_make) %>
+      <%= asset_description('Flash', @asset.flash) %>
+      <%= asset_description('Focal length', @asset.focal_length) %>
+      <%= asset_description('Exposure', @asset.exposure) %>
+      <%= asset_description('f number', @asset.f_number) %>
+      <%= asset_description('ISO', @asset.iso) %>
+      <%= asset_description('Versions', @asset.parent_id) %>
     </dl>
 
-<br />
-
-    <%= content_tag :h5, 'Buckets', class: "subheader" if @buckets.any? %>
-    <ul class="no-bullet">
+    <%= content_tag :h5, 'Buckets', class: "muted" if @buckets.any? %>
+    <ul class="unstyled">
     <% for bucket in @buckets do %>
       <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
     <% end %>
     </ul>
 
-<br />
     <% if can? :read, @asset %>
-      <h5 class="subheader">Download</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Download</h5>
+      <ul class="unstyled">
         <li><%= link_to 'Original File', download_asset_path(@asset, size: 'original') %></li>
         <% if @asset.content_type.include? 'image' %>
           <li><%= link_to '1600px file', download_asset_path(@asset, size: 'xlarge') %></li>

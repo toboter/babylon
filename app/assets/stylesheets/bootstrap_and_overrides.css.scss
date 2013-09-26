@@ -11,6 +11,22 @@
 	@media (min-width: 768px) { text-align:right }
 }
 
+.border-right {
+	@media (min-width: 768px) { 
+		border-right:1px solid #efefef; 
+		padding-right:20px;
+		}
+}
+
+.border-top {
+	@media (min-width: 768px) { 
+		border-top:1px solid #efefef;
+		margin-top:20px;
+		padding-top:20px; 
+		}
+}
+
+
 h4 {
 	margin-top: 2em;
 }

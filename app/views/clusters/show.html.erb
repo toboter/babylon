@@ -2,37 +2,43 @@
 <% edit_section_for(@cluster, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "Modules ", clusters_path if @clusters.count > 1 %>
-    <%= link_to "Module: #{@cluster.name}", @module %>
-
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) if @clusters.count > 1 %>
+  <%= content_tag :li, "#{@cluster.name}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
+  <div class="span8">
+    <%= render "shared/document_first", var: @cluster, dtype: "Introduction" if @cluster.documents.doctype('Introduction') %>
 
-  <div class="large-8 columns">
-    <% if @cluster.documents.doctype('Introduction') %>
-        <%= render "shared/document_first", var: @cluster, dtype: "Introduction" %>
-    <% else %>
-      <%= link_to "Add Introduction", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @cluster %>    
-    <% end %>
-  
     <%= render "shared/document_docs_without_type", :var => @cluster %>
-
-    <%= render "shared/add_document_box", :add_doc => @cluster %>
   
-    <%= content_tag :h4, 'Areas', class: "subheader" if @cluster.areas.present? %>
+    <%= content_tag :h4, link_to("Areas", cluster_areas_path(@cluster)), class: "muted" if @cluster.areas.present? %>
     <%= render "shared/document_introductions", :vars => @cluster.areas %>
   
-    <%= content_tag :h4, 'Projects', class: "subheader" if @cluster.projects.present? %>
+    <%= content_tag :h4, 'Projects', class: "muted" if @cluster.projects.present? %>
     <%= render "shared/document_introductions", :vars => @cluster.projects %>  
-
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Creator</h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <% if can? :edit, @cluster %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Project', new_cluster_project_path(@cluster) %></li>
+            <li><%= link_to 'Area', new_area_path(:cluster_id => @cluster) %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') %></li>
+            <li><%= link_to 'Document', polymorphic_path([:new, @cluster, :document]) %></li>
+          </ul>
+      </div>
+    <% end  %>
+
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@cluster.creator) %>
           <%= @cluster.creator.available_name %>
@@ -43,8 +49,8 @@
     </ul>
 
     <% if @cluster.areas.present? %>
-      <h5 class="subheader">Areas</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Areas</h5>
+      <ul class="unstyled">
         <% for area in @cluster.areas do %>
           <li><%= link_to "#{area.name}", area %></li>
         <% end %>
@@ -52,45 +58,25 @@
     <% end %>
     
     <% if @cluster.projects.present? %>
-      <h5 class="subheader">Ungrouped Projects</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Ungrouped Projects</h5>
+      <ul class="unstyled">
         <% for project in @cluster.projects do %>
           <li><%= link_to "#{project.name}", project %></li>
         <% end %>
       </ul>
     <% end %>
 
-      <h5 class="subheader">Members of <%= @cluster.name %></h5>
-      <ul class="no-bullet">
-        <% for member in @members do %>
-          <li>
-          <% unless connected_profile(member) %>
-            <%= member.available_name %>
-          <% else %>
-            <%= link_to "#{member.available_name}", member.people.first %>
-          <% end %>
-          </li>
+    <h5 class="muted">Members of <%= @cluster.name %></h5>
+    <ul class="unstyled">
+      <% for member in @members do %>
+        <li>
+        <% unless connected_profile(member) %>
+          <%= member.available_name %>
+        <% else %>
+          <%= link_to "#{member.available_name}", member.people.first %>
         <% end %>
-      </ul>
+        </li>
+      <% end %>
+    </ul>
   </div>
-
-<% end %>
-
-<% content_for :note_section do %>
-  <% if can? :edit, @cluster %>
-    <div class="large-6 columns">
-      <ul class="pricing-table">
-        <li class="title">Project</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Projektes in einem Modul</li>
-        <li class="cta-button"><%= link_to 'Add Project', new_cluster_project_path(@cluster), class: "button" %></li>
-      </ul>
-    </div>
-    <div class="large-6 columns">
-      <ul class="pricing-table">
-        <li class="title">Area</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen eines neuen Areas mit darauf folgenden Gruppen und Projekten in einem Modul</li>
-        <li class="cta-button"><%= link_to 'Add Area', new_area_path(:cluster_id => @cluster), class: "button" %></li>
-      </ul>
-    </div>
-  <% end %>
 <% end %>

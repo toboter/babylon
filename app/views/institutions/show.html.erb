@@ -2,23 +2,22 @@
 <% edit_section_for(@institution, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "Institutions", institutions_path %>
-    <% for institution in @institution.root.self_and_descendants-@institution.descendants-@institution.siblings do %>
-      <%= link_to "#{institution.name}", institution %>
-    <% end %>
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Institutions", institutions_path) + content_tag(:span, '/', class: 'divider')) %>
+  <% for institution in @institution.root.self_and_descendants-@institution.descendants-@institution.siblings do %>
+    <%= content_tag :li, institution == @institution ? (institution.name) : (link_to(institution.name, institution) + content_tag(:span, '/', class: 'divider')), class: 'active' %>
+  <% end %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
+  <div class="span8">
     <%= content_tag :p, raw('Belongs to: '+(@institution.ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe)) unless @institution.root? %></p>
 
-    <%= content_tag :h4, 'Sub-Institutions', class: "subheader" if @institution.children.present? %>
+    <%= content_tag :h4, 'Sub-Institutions', class: "muted" if @institution.children.present? %>
     <%= render 'institution_tree', :institution => @institution, :tag => 'p', :indent => 0 %>
 
-    <h4 class="subheader">Members</h4>
-    <ul class="no-bullet">
+    <h4 class="muted">Members</h4>
+    <ul class="unstyled">
       <% Person.where('institution_id IN (?)', @institution.self_and_descendants).each do |member| %>
         <li><%= link_to "#{graded_fullname(member)}", member %></li>
       <% end %>
@@ -26,36 +25,40 @@
 
   </div>
 
-  <div class="large-3 columns right">
-    <%= link_to (image_tag('microformat-logo-small.png', class: "right", style: "")), page_path('help', anchor: 'microformats') %>
-    <h5 class="subheader">Contact Info</h5>
-    <ul class="no-bullet vcard">
-      <li class="fn"><%= @institution.name %></li>
-      <li class="tel"><abbr class="type" title="Phone"><span class="value"><%= @institution.phone %></span></abbr></li>
-      <li class="tel"><abbr class="type" title="Fax"><span class="value"><%= @institution.fax %></span></abbr></li>
-      <li class="url"><%= link_to "#{@institution.uri}", "#{@institution.uri}" %></li>
-      <span class="adr">
-        <li><span class="street-address"><%= @institution.street %></span></li>
-        <li><span class="postal-code"><%= @institution.zip %></span> <span class="locality"><%= @institution.city %></span></li>
-        <li><span class="country-name"><%= @institution.country %></span></li>
-      </span>
+  <div class="vcard span3 offset1">
+    <% if can? :edit, @institution %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Sub-Institution', new_institution_path(:parent_id => @institution) %></li>
+          </ul>
+      </div>
+    <% end  %>
+    <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right")), page_path('help', anchor: 'microformats') %>
+    <h4 class="muted">Contact Info</h4>
+    <ul class="unstyled">
+      <address>
+        <%= content_tag :li, (@institution.root.self_and_descendants-@institution.descendants-@institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
+        <%= content_tag :li, @institution.name, class: "fn hide" %>
+        <%= content_tag :li, (content_tag :abbr, (content_tag :span, @institution.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @institution.phone.present? %>
+        <%= content_tag :li, (content_tag :abbr, (content_tag :span, @institution.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @institution.fax.present? %>
+        <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;" do %>
+          <%= content_tag :li, @institution.street, class: "street-address" %>
+          <%= content_tag :li, (content_tag :span, @institution.zip, class: "postal-code")+' '+(content_tag :span, @institution.city, class: "locality") %>
+          <%= content_tag :li, @institution.country, class: "country-name" %>
+        <% end %>
+        <%= content_tag :li, link_to("#{@institution.uri}", "#{@institution.uri}"), class: "url" if @institution.uri.present? %>
+      </address>
     </ul> 
 
-    <h5 class="subheader" style="margin-top:50px;">Record Info</h5>
-    <ul class="no-bullet">
+    <h4 class="muted" style="margin-top:50px;">Record Info</h4>
+    <ul class="unstyled">
       <li>Created by: <%= @institution.creator.available_name %></li>
       <li>Updated by: <%= @institution.updater.available_name %></li>
     </ul>
   </div>
   
-
-  <% if can? :edit, @institution %>
-    <div class="large-6 columns left">
-      <ul class="pricing-table">
-        <li class="title">Institution</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen einer neuen Institution</li>
-        <li class="cta-button"><%= link_to 'Add Sub-Institution', new_institution_path(:parent_id => @institution), class: "button small" %></li>
-      </ul>
-    </div>
-  <% end %>
 <% end %>

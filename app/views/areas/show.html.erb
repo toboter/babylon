@@ -2,33 +2,40 @@
 <% edit_section_for(@area, nil) %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-  	<%= link_to "Module: #{@area.cluster.name}", @area.cluster %>
-    <%= link_to "Area: #{@area.name}", @area %>
-
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@area.cluster.name}", @area.cluster) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Areas", cluster_areas_path(@area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "#{@area.name}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="large-8 columns">
-    <% if @area.documents.doctype('Introduction') %>
-      <%= render "shared/document_first", var: @area, dtype: "Introduction" %>
-    <% else %>
-      <%= link_to "Add Introduction", polymorphic_path([:new, @area, :document], :document_type => "Introduction"), class: 'button small' if can? :edit, @area %>    
-    <% end %>
+  <div class="span8">
+    <%= render "shared/document_first", var: @area, dtype: "Introduction" if @area.documents.doctype('Introduction') %>
 
     <%= render "shared/document_docs_without_type", :var => @area %>
 
-    <%= render "shared/add_document_box", :add_doc => @area %>
-
-    <%= content_tag :h4, 'Groups', class: "subheader" if @area.groups.present? %>
+    <%= content_tag :h4, link_to("Groups", area_groups_path(@area)), class: "muted" if @area.groups.present? %>
     <%= render "shared/document_introductions", :vars => @area.groups %>
-
   </div>
 
-  <div class="large-3 columns right">
-    <h5 class="subheader">Creator</h5>
-    <ul class="no-bullet">
+  <div class="span3 offset1">
+    <% if can? :edit, @area %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Group', new_group_path(:area_id => @area) %></li>
+            <li class="divider"></li>
+            <li><%= link_to "Introduction Document", polymorphic_path([:new, @area, :document], :document_type => "Introduction") if !@area.documents.doctype('Introduction') %></li>
+            <li><%= link_to 'Document', polymorphic_path([:new, @area, :document]) %></li>
+          </ul>
+      </div>
+    <% end  %>
+
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
       <li>
         <% unless connected_profile(@area.creator) %>
           <%= @area.creator.available_name %>
@@ -39,26 +46,12 @@
     </ul>
 
     <% if @area.groups.present? %>
-      <h5 class="subheader">Groups</h5>
-      <ul class="no-bullet">
+      <h5 class="muted">Groups</h5>
+      <ul class="unstyled">
         <% for group in @area.groups do %>
           <li><%= link_to "#{group.name}", group %></li>
         <% end %>
       </ul>
     <% end %>
-
   </div>
-
-<% end %>
-
-<% content_for :footer_section do %>
-  <% if can? :edit, @area %>
-    <div class="large-6 columns">
-      <ul class="pricing-table">
-        <li class="title">Group</li>
-        <li class="description">Hier ergänzender Text über die Möglichkeiten und Konsequenzen einer neuen Gruppe in einem Area</li>
-        <li class="cta-button"><%= link_to 'Add group', new_group_path(:area_id => @area), class: "button" %></li>
-      </ul>
-    </div>
-  <% end %>
 <% end %>

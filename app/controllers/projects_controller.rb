@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
     # @project.memberships.build
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @project }
     end
   end
@@ -49,6 +49,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @project = @projectable.projects.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /projects

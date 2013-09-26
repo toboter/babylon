@@ -36,14 +36,17 @@
     <% end %>
   </div>
   <div class="span2 offset1">
+    <% if can? :edit, @serials %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Periodical or Serial', new_serial_path %></li>
+          </ul>
+      </div>
+    <% end  %>
     <%= render "shared/bibliographic_cat_navs", :obj => @serials %>
   </div>
-<% end %>
-
-<% content_for :footer_section do %>
-  <% if can? :edit, @serials %>
-    <div class="span12">
-      <%= link_to 'Add Periodical or Serial', new_serial_path, class: "btn btn-large" %></li>
-    </div>
-  <% end %>
 <% end %>

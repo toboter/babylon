@@ -4,11 +4,11 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     if params[:area_id]
-      @area = Area.find(params[:area_id])
-      @groups = @area.groups
+      @parent = Area.find(params[:area_id])
+      @groups = @parent.groups
     elsif params[:cluster_id]
-      @cluster = Cluster.find(params[:cluster_id])
-      @groups = @cluster.groups
+      @parent = Cluster.find(params[:cluster_id])
+      @groups = @parent.groups
     else
       @groups = Group.all
     end

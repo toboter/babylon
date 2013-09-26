@@ -13,18 +13,24 @@ class Book < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
-  accepts_nested_attributes_for :articles, allow_destroy: true
+  accepts_nested_attributes_for :articles, :reject_if => lambda { |a| a[:title].blank? }, allow_destroy: true
   accepts_nested_attributes_for :editorships, allow_destroy: true
 
   validates_presence_of :book_type
   validates_presence_of :year, :unless => "unpublished == true"
-  validates_presence_of :title, :unless => :title_not_needed?
-  validates_associated :articles
+  validates_presence_of :title, unless: :book_title_not_needed?
+  validates_presence_of :volume, if: :book_is_serial?
+  validates_uniqueness_of :book_identifier, :allow_blank => true, :message => "The Identifier is already taken"
+  #validates_associated Die Validierung des genesteten Artikels erfolgt über reject_if
 
   BOOKTYPES = %w[Monographie Sammelband Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe Band\ einer\ Zeitschrift]
 
-  def title_not_needed?
+  def book_title_not_needed?
     book_type == 'Monographie' || book_type == 'Monographie in einer Reihe' || book_type == 'Band einer Zeitschrift'
+  end
+
+  def book_is_serial?
+    book_type == 'Band einer Zeitschrift' || book_type == "Sammelband in einer Reihe" || book_type == 'Monographie in einer Reihe'
   end
 
 
