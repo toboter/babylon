@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
-  has_many :todolists, dependent: :destroy
+  has_many :todos, dependent: :destroy
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
 

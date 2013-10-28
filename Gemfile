@@ -22,11 +22,14 @@ group :assets do
 
   # https://github.com/thomas-mcdonald/bootstrap-sass
   gem 'bootstrap-sass'
+  # https://github.com/Nerian/bootstrap-datepicker-rails
+  gem 'bootstrap-datepicker-rails'
 
   # gem 'zurb-foundation'
   # gem 'foundation-icons-sass-rails'
 
   gem 'jquery-fileupload-rails'
+  gem 'chosen-rails'
 end
 
 # https://github.com/plataformatec/simple_form
@@ -49,6 +52,9 @@ gem 'nested_form'
 # https://github.com/swanandp/acts_as_list
 gem 'acts_as_list'
 
+# https://github.com/mbleigh/acts-as-taggable-on
+# gem 'acts-as-taggable-on'
+
 # weil https://github.com/stefankroes/ancestry nicht funktioniert jetzt
 # https://github.com/mceachen/closure_tree
 gem 'closure_tree'
@@ -69,6 +75,9 @@ gem 'ransack'
 # gem 'ckeditor'
 # https://github.com/tsechingho/ckeditor-rails
 gem 'ckeditor_rails'
+
+# https://github.com/mislav/will_paginate
+gem 'will_paginate', '~> 3.0'
 
 
 # To use ActiveModel has_secure_password

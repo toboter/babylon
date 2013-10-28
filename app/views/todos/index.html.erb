@@ -1,33 +1,49 @@
 <% title "Todos", nil %>
 
 <% content_for :breadcrumbs_section do %>
-  <nav class="breadcrumbs">
-    <%= link_to "Project: #{@todolist.project.name}", [@todolist.project.projectable, @todolist.project] %>
-    <%= link_to "Todolists", project_todolists_path(@todolist.project) %>
-    <%= link_to "#{@todolist.name}", [@todolist.project, @todolist] %>
-    <%= link_to "Todos", project_todolist_todos_path(@todolist.project, @todolist) %>
-  </nav>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <li>... <%= content_tag(:span, '/', class: 'divider') %></li>
+  <%= content_tag(:li, link_to("Projects", [@project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@project.name}", [@project.projectable, @project]) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "Todos", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <%= link_to 'Add Todo', new_project_todolist_todo_path(@todolist.project, @todolist), class: "button", id: "new_link" %>
-<div class="row">
-  <div class="large-6 columns">
-    <h4 class="subheader">Incomplete</h4>
-    <div class="todos" id="incomplete_todos">
-      <%= render @incomplete_todos %>
+  <div class="span12">
+    <div class="well">
+      <%= render 'form' %>
     </div>
-  </div>
-  <div class="large-6 columns">
-    <h4 class="subheader">Complete</h4>
-    <div class="todos" id="complete_todos">
-      <%= render @complete_todos %>
-    </div>
-  </div>
-</div>
-<% end %>
 
-<% content_for :footer_section do %>
+    <%= content_tag :h4, 'Incomplete' %>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td>Completed?</td>
+          <td>Task</td>
+          <td>Assigned User</td>
+          <td>Due to</td>
+          <td>Starts at</td>
+          <td>Depends on</td>   
+        </tr>
+      </thead>
+      <%= render @incomplete_todos %>
+    </table>
+
+    <%= content_tag :h4, 'Completed' %>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td>Completed?</td>
+          <td>Task</td>
+          <td>Assigned User</td>
+          <td>Due to</td>
+          <td>Starts at</td>
+          <td>Depends on</td>
+        </tr>
+      </thead>
+      <%= render @complete_todos %>
+    </table>
+  </div>
 
 <% end %>
 

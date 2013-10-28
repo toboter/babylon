@@ -16,8 +16,6 @@ class Bucket < ActiveRecord::Base
   # validates limitation by person of Profile Pictures to one
   # validates :name, :exclusion => { :in => %w(profile\ pictures ..) }
 
-  scope :with_profile_pictures, where('name = ?', 'Profile Pictures')
-
   def full_bucket_name
     if name == 'Profile Pictures' && attachable_type == 'Person'
       name+' of '+attachable.fullname
@@ -32,11 +30,8 @@ class Bucket < ActiveRecord::Base
     name == 'Profile Pictures'
   end
 
-  #def cover_asset
-    #if cover_asset_id
-      #assets.where('asset.id = ?', cover_asset_id).first
-    #end
-  #end
-
+  def cover
+    cover = assets.find_by_id(cover_asset_id) if cover_asset_id
+  end
 
 end

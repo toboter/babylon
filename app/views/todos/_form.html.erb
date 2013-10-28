@@ -1,27 +1,31 @@
-<%= form_for [@todolist.project, @todolist, @todo], :html => { class: "custom" } do |f| %>
+<%= nested_form_for [@project, @project.todos.new], :html => { class: "form-inline" } do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :todolist_id %>
+  <%= f.hidden_field :project_id %>
   <%= f.hidden_field :completed, value: 'f' %>
 
-  <div class="row">
-    <div class="large-6 columns left">
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-    </div>
-    
-    <div class="large-3 columns">
-      <%= f.label :assigned_id, 'Assigned to' %>
-      <%= f.collection_select :assigned_id, @todolist.project.members, :id, :available_name, {:selected => current_user.id.to_s} %>
+
+    <div class="controls">
+      <%= f.text_field :name, placeholder: 'Task' %>
+      <%= f.collection_select :assigned_id, @project.members, :id, :available_name, prompt: "Who's assigned?" %>
+      <div class="input-append date">
+        <%= f.text_field :due_to_text, placeholder: 'Due to', :'data-behaviour' => 'datepicker' %>
+        <span class="add-on"><i class="icon-th"></i></span>
+      </div>
+      <small><a href="#" data-toggle="collapse" data-target="#todo-options">More options</a></small>
+      <%= f.submit "Add", class: 'btn btn-primary pull-right' %>
+      <div class="collapse form-horizontal" id="todo-options">
+        <br />
+        <div class="control-group">
+          <%= f.label :starts_at, 'Start', class: 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :starts_at_text, placeholder: 'Starts at' %>
+          </div>
+        </div>
+        <%= f.fields_for :todo_dependencies do |builder| %>
+          <%= render "todo_dependency_fields", :f => builder %>
+        <% end %>
+        <%= f.link_to_add "Add Dependency", :todo_dependencies, class: 'controls' %>           
+      </div>
     </div>
 
-    <div class="large-2 columns left">
-      <%= f.label :due_to %>
-      <%= f.text_field :due_to, class: "datepicker" %>
-    </div>
-  </div>
-
-  <div class="form-actions">
-    <%= f.submit "Speichern", class: 'button' %>
-    <%= link_to 'Abbrechen', project_todolist_todos_path(@todo.todolist.project, @todo.todolist), class: 'button secondary' %>
-  </div>
 <% end %>

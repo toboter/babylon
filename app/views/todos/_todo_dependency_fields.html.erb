@@ -1,0 +1,7 @@
+<div class="control-group">
+  <%= f.label :depends_on_id, 'Depends on', class: 'control-label' %>
+  <div class="form-inline controls">
+    <%= f.collection_select :depends_on_id, @project.todos, :id, :name, prompt: 'Depends on' %>
+    <small><%= f.link_to_remove "remove" %></small>
+  </div>
+</div> 

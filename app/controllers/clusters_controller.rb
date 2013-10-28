@@ -32,7 +32,7 @@ class ClustersController < ApplicationController
     @cluster = Cluster.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @cluster }
     end
   end
@@ -40,6 +40,7 @@ class ClustersController < ApplicationController
   # GET /clusters/1/edit
   def edit
     @cluster = Cluster.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /clusters

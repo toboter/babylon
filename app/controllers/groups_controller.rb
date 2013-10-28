@@ -36,7 +36,7 @@ class GroupsController < ApplicationController
     @group = Group.new(:area_id => params[:area_id])
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @group }
     end
   end
@@ -44,6 +44,7 @@ class GroupsController < ApplicationController
   # GET /groups/1/edit
   def edit
     @group = Group.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /groups

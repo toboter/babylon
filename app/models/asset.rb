@@ -10,15 +10,12 @@ class Asset < ActiveRecord::Base
 
   has_many :buckets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
+  has_many :comments, as: :commentable
 
   validates_presence_of :assetfile, :name, :content_type
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload is already in stock"
 
-  def self.has_cover_id(cover_id)
-    where('id = ?', cover_id).first
-  end
-
-  private
+private
   
   def update_asset_attributes
     if assetfile.present? && assetfile_changed?

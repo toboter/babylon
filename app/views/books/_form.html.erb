@@ -31,11 +31,11 @@
 
     <hr class="controls">
 
-    <div id="if_editorial">
-      <%= f.fields_for :editorships do |builder| %>
-        <%= render "editorship_fields", :f => builder %>
-      <% end %>
-      <%= f.link_to_add "Add Editor", :editorships, class: 'controls' %>
+    <div class="control-group" id="if_editorial">
+      <%= f.label :editor_ids, "Editors", :class => 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :editor_ids, Person.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+      </div>
     </div>
 
     <div id="if_collection">

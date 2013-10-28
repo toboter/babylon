@@ -1,0 +1,5 @@
+<% if @todo.completed? %>
+  $('#edit_todo_<%= @todo.id %>').appendTo('#complete_todos');
+<% else %>
+  $('#edit_todo_<%= @todo.id %>').appendTo('#incomplete_todos');
+<% end %>

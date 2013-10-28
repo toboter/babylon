@@ -7,7 +7,9 @@
 
 <% content_for :main_section do %>
   <div class="span9">
+    
     <%= render "book_entries", :books => @books %>
+    <%= will_paginate(@books, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
   </div>
   <div class="span2 offset1">
     <% if can? :edit, @books %>

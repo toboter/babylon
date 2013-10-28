@@ -3,7 +3,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.order("year DESC")
+    @books = Book.order("year DESC").paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
     @books_all = @books
 
     if params[:type]

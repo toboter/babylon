@@ -57,3 +57,5 @@ jQuery ->
       $("#year").hide()
       $("#articles").hide()
       $('#book-submit').attr('disabled','disabled') ).trigger('change')
+
+  $('.chosen-select').chosen()

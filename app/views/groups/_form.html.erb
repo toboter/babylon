@@ -1,24 +1,24 @@
-<%= form_for(@group, :html => { :class => 'custom'}) do |f| %>
+<%= form_for(@group, :html => { :class => 'form-horizontal'}) do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field :area_id %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :area_id %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name %>
+    </div>
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @group.new_record? %>
       <% if @group.area %>
-        <%= link_to 'Abbrechen', @group.area, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', @group.area, :class => 'btn' %>
       <% else %>
-        <%= link_to 'Abbrechen', groups_path, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', groups_path, :class => 'btn' %>
       <% end %>
     <% else %>
-      <%= link_to 'Abbrechen', @group, :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', @group, :class => 'btn' %>
     <% end %>
   </div>
 

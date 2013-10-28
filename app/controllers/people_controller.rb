@@ -22,8 +22,7 @@ class PeopleController < ApplicationController
     else
       @attachable = @person
       @buckets = @attachable.buckets
-      @profile_picture = Asset.find(@buckets.with_profile_pictures.first.cover_asset_id) if @buckets.with_profile_pictures.first.cover_asset_id
-      @bucket = Bucket.new
+      @references = @person.references #.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
   
       respond_to do |format|
         format.html { render :layout => "show_page" } # show.html.erb
@@ -37,7 +36,7 @@ class PeopleController < ApplicationController
   # GET /people/new.json
   def new
     if params[:user_id]
-      @person = Person.new(:user_id => params[:user_id])
+      @person = Person.new(:user_id => params[:user_id], :nickname => params[:alias])
     else
       @person = Person.new(:user_id => nil)
     end

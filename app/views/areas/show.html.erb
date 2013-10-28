@@ -1,5 +1,5 @@
 <% title "Research Area: #{@area.name}", nil %>
-<% edit_section_for(@area, nil) %>
+<% edit_section_for(@area, nil) if can? :edit, @area %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -37,10 +37,10 @@
     <h5 class="muted">Creator</h5>
     <ul class="unstyled">
       <li>
-        <% unless connected_profile(@area.creator) %>
+        <% unless @area.creator.person %>
           <%= @area.creator.available_name %>
         <% else %>
-          <%= link_to "#{@area.creator.available_name}", @area.creator.people.first %>
+          <%= link_to "#{@area.creator.available_name}", @area.creator.person %>
         <% end %>
       </li>
     </ul>

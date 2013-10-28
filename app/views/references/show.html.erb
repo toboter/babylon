@@ -1,5 +1,5 @@
-<% title "#{@reference.title}", nil %>
-<% edit_section_for(@reference, nil) %>
+<% title "#{@reference.title}", nil, false %>
+<% edit_section_for(@reference, nil) if can? :edit, @reference %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -10,17 +10,34 @@
 
 <% content_for :main_section do %>
   <div class="span8">
-    <%= content_tag :h3, 'Documents', class: 'muted' if @reference.documents.any? %>
-    <%= render "shared/document_docs_without_type", :var => @reference %>
+    <h3><%= @reference.title %><%= tagging_infos_for(@reference) %></h3>
+    <ul class="nav nav-tabs">
+      <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
+      <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
+      <%= content_tag :li, link_to('Comments', "#comments", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}) %>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="docs"> 
+        <%= content_tag :h3, 'Documents', class: 'muted' if @reference.documents.any? %>
+        <%= render "shared/document_docs_without_type", :var => @reference %>
+      </div>
+      <div class="tab-pane" id="uploads">
+        <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
+      </div>
+      <div class="tab-pane active" id="comments">
+        <%= content_tag :h3, 'Comments', class: 'muted' %>
+        <%= render 'comments/list', comments: @reference.comments %>
+        <% if @reference.comments.any? %><hr><% end %>
+        <%= render 'comments/form', commentable: @reference, size: 'input-xxlarge' %>
+      </div>
+      <div class="tab-pane" id="connections">
+        <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
+        <p>Außerdem in diesem Buch</p>
+      </div>
+    </div>
 
-    <hr>
 
-    <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
-
-    <hr>
-
-    <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
-    <p>Außerdem in diesem Buch</p>
   </div>
 
   <div class="span3 offset1">
@@ -39,7 +56,7 @@
 
     <h5 class="muted">Title</h5>
     <ul class="unstyled">
-      <li><%= @reference.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe %></li>
+      <li><%= @reference.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>
       <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") if @reference.uri.present? %>
     </ul>

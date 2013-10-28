@@ -1,5 +1,5 @@
 <% title @serial.name, nil %>
-<% edit_section_for(@serial, nil) %>
+<% edit_section_for(@serial, nil) if can? :edit, @serial %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

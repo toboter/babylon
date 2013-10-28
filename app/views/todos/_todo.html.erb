@@ -1,16 +1,12 @@
-<%= form_for [todo.todolist.project, todo.todolist, todo], :html => { class: "custom" } do |f| %>
-  <div class="row collapse panel">
-  	<div class="large-3 small-3 columns">
-  	  <%= f.check_box :completed %>
-  	  <%= f.submit "Update", id: "ctodo", class: "button tiny radius" %>
-    </div>
-    <div class="large-9 small-9 columns">
-  	  <h6>
-  	  	<%= todo.name %> <small>(<%= link_to "remove", [todo.todolist.project, todo.todolist, todo], method: :delete, data: {confirm: "Are you sure?"} %>)</small>
-  	  </h6>
-  	  <p>
-  	  	Assigned to <%= todo.assigned.people.first ? link_to("#{todo.assigned.available_name}", todo.assigned.people.first) : todo.assigned.available_name %> and due to <%= todo.due_to.strftime("%d.%m.%Y") %>
-  	  </p>
-    </div>
-  </div>
-<% end %>
+<tbody>
+  <%= form_for [todo.project, todo] do |f| %>
+    <tr>
+      <td><%= f.check_box :completed %> <%= f.submit "Update", class: "btn btn-mini" %></td>
+      <td><strong><%= todo.name %></strong></td>
+      <td><%= todo.assigned.available_name %></td>
+      <td><%= todo.due_to.strftime("%d.%m.%Y") %></td>
+      <td><%= todo.starts_at.strftime("%d.%m.%Y") if todo.starts_at %></td>
+      <td><%= todo.dependencies.map{ |a| content_tag :span, a.name, style: (a.completed ? "color:green;" : "color:red;") }.join(", ").html_safe if todo.dependencies.any? %></td>
+    </tr>
+  <% end %>
+</tbody>

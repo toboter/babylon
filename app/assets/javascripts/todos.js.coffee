@@ -1,10 +1,15 @@
-jQuery.fn.submitOnCheck = ->
-  @find('#ctodo').remove()
-  @find('input[type=checkbox]').click ->
-    $("form").submit()
-  this
+# jQuery.fn.submitOnCheck = ->
+#   @find('input[type=submit]').remove()
+#   @find('input[type=checkbox]').click ->
+#     $(this).parent('form').submit()
+#   this
+# 
+# jQuery ->
+#   $('.edit_todo').submitOnCheck()
 
 jQuery ->
-  $('.edit_todo').submitOnCheck()
-  $('.datepicker').fdatepicker
-    format: 'yy-mm-dd'
+  $('.input-append.date').datepicker(
+    format: "dd.mm.yyyy",
+    todayHighlight: true,
+    forceParse: false
+  )

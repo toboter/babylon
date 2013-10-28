@@ -10,18 +10,17 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :login
   # attr_accessible :title, :body
 
-  has_many :people
+  has_one :person
   has_one :role, :dependent => :destroy
-  has_many :projects, through: :memberships
   has_many :memberships, :dependent => :destroy
+  has_many :projects, through: :memberships
   has_many :todos, foreign_key: "assigned_id"
-  has_many :in_todolists, source: "todolist", through: :todos, uniq: true
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
   attr_accessor :login
   after_create :add_base_role
-  before_destroy :not_destroy_admin
+  before_destroy :check_admin_status
 
   model_stamper
 
@@ -35,7 +34,11 @@ class User < ActiveRecord::Base
   end
 
   def add_base_role
-    Role.create :role => "guest", :user_id => self.id
+    if self.username == 'toboter'
+      Role.create :role => "admin", :user_id => self.id
+    else
+      Role.create :role => "guest", :user_id => self.id
+    end
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -48,17 +51,18 @@ class User < ActiveRecord::Base
   end
 
   def available_name
-    if people.first
-      people.first.fullname
+    if person
+      person.fullname
     else
      username
    end
   end
 
-  def not_destroy_admin
+  def check_admin_status
     if role.role == 'admin'
-      errors.add(:base, "You cannot destroy the last admin!")
+      errors.add(:base, "You cannot destroy the admin!")
       return false
     end
   end
+
 end

@@ -37,7 +37,16 @@ class Person < ActiveRecord::Base
   def fullname
   	"#{first_name} #{last_name}"
   end
-  
+
+  def name
+    fullname
+  end
+
+  def profile_picture
+    bucket = self.buckets.find_by_name('Profile Pictures')
+    profile_picture = bucket.cover
+  end
+
   def self.ransackable_attributes(auth_object = nil)
     %w( first_name last_name ) + _ransackers.keys
   end

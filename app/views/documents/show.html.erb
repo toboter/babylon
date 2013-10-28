@@ -1,6 +1,6 @@
 <% title "#{@document.title}", nil unless @document.page? %>
 <% title "#{@document.documentable.permalink.humanize}", nil if @document.page? %>
-<% edit_section_for(@document, @document.documentable) %>
+<% edit_section_for(@document, @document.documentable) if can? :edit, @document %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -9,7 +9,7 @@
 <% end unless @document.page? %>
 
 <% content_for :main_section do %>
-  <div class="span9">
+  <div class="span7">
     <% if @document.abstract && !@document.title_readonly? %>
       <div class="abstract_section">
         <b>Abstract: </b><%= @document.abstract %>
@@ -24,41 +24,64 @@
   </div>
 
 
-  <div class="span2 offset1">
+  <div class="span4 offset1">
     <% unless @document.page? %>
-    <h5 class="muted">Belongs to</h5>
-    <ul class="unstyled">
-      <%= content_tag :li, link_to("#{@document.person? ? @document.documentable.fullname : @document.documentable.name}", @document.documentable) %>
-      <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
-    </ul>
+      <div class="accordion" id="doc-accordion">
+        <%= content_tag :div, class: "accordion-group" do %>
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#doc-accordion" href="#collapseThree">
+              Info
+            </a>
+          </div>
+          <div id="collapseThree" class="accordion-body collapse in">
+            <div class="accordion-inner">
+              <h5 class="muted">Belongs to</h5>
+              <ul class="unstyled">
+              <%= content_tag :li, link_to("#{@document.person? ? @document.documentable.fullname : @document.documentable.name}", @document.documentable) %>
+                <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
+              </ul>
+  
+              <h5 class="muted">Creator</h5>
+              <ul class="unstyled">
+                <li>
+                  <% unless @document.creator.person %>
+                    <%= @document.creator.available_name %>
+                  <% else %>
+                    <%= link_to "#{@document.creator.available_name}", @document.creator.person %>
+                  <% end %>
+                </li>
+                <li>on: <%= @document.created_at %></li>
+              </ul>
+              <h5 class="muted">Last update by</h5>
+              <ul class="unstyled">
+                <li>
+                  <% unless @document.updater.person %>
+                    <%= @document.updater.available_name %>
+                  <% else %>
+                    <%= link_to "#{@document.updater.available_name}", @document.updater.person %>
+                  <% end %>
+                </li>
+                <li>on: <%= @document.updated_at %></li>
+              </ul>
+            </div>
+          </div>
+        <% end %>
+        <%= content_tag :div, class: "accordion-group" do %>
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#doc-accordion" href="#collapseTwo">
+              Comments
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <%= render 'comments/list', comments: @document.comments %>
+              <hr>
+              <%= render 'comments/form', commentable: @document, size: 'input-xlarge' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-    <h5 class="muted">Creator</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless connected_profile(@document.creator) %>
-          <%= @document.creator.available_name %>
-        <% else %>
-          <%= link_to "#{@document.creator.available_name}", @document.creator.people.first %>
-        <% end %>
-      </li>
-      <li>on: <%= @document.created_at %></li>
-    </ul>
-    <h5 class="muted">Last update by</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless connected_profile(@document.updater) %>
-          <%= @document.updater.available_name %>
-        <% else %>
-          <%= link_to "#{@document.updater.available_name}", @document.updater.people.first %>
-        <% end %>
-      </li>
-      <li>on: <%= @document.updated_at %></li>
-    </ul>
-
   </div>
-
-<% end %>
-
-<% content_for :footer_section do %>
 
 <% end %>

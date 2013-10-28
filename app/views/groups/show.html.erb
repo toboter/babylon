@@ -1,5 +1,5 @@
 <% title "Research Group: #{@group.name}", nil %>
-<% edit_section_for(@group, nil) %>
+<% edit_section_for(@group, nil) if can? :edit, @group %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -38,10 +38,10 @@
     <h5 class="muted">Creator</h5>
     <ul class="unstyled">
       <li>
-        <% unless connected_profile(@group.creator) %>
+        <% unless @group.creator.person %>
           <%= @group.creator.available_name %>
         <% else %>
-          <%= link_to "#{@group.creator.available_name}", @group.creator.people.first %>
+          <%= link_to "#{@group.creator.available_name}", @group.creator.person %>
         <% end %>
       </li>
     </ul>
@@ -51,10 +51,10 @@
       <ul class="unstyled">
         <% for membership in Membership.where(:project_id => @group.projects) do %>
           <li>
-            <% unless connected_profile(membership.user) %>
+            <% unless membership.user.person %>
               <%= membership.user.available_name %>
             <% else %>
-              <%= link_to "#{membership.user.available_name}", membership.user.people.first %>
+              <%= link_to "#{membership.user.available_name}", membership.user.person %>
             <% end %>
           </li>
         <% end %>

@@ -1,17 +1,19 @@
-<%= form_for @cluster, :html => { :class => 'custom'} do |f| %>
+<%= form_for @cluster, :html => { :class => 'form-horizontal'} do |f| %>
   <%= f.error_messages %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name %>
+    </div>
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'button' %>
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @cluster.new_record? %>
-        <%= link_to 'Abbrechen', clusters_path, :class => 'button secondary' %>
+        <%= link_to 'Abbrechen', clusters_path, :class => 'btn' %>
     <% else %>
-      <%= link_to 'Abbrechen', @cluster, :class => 'button secondary' %>
+      <%= link_to 'Abbrechen', @cluster, :class => 'btn' %>
     <% end %>
   </div>
 

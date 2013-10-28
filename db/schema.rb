@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130919132135) do
+ActiveRecord::Schema.define(:version => 20131024165143) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -99,6 +99,26 @@ ActiveRecord::Schema.define(:version => 20130919132135) do
     t.integer  "updater_id"
   end
 
+  create_table "comment_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "comment_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "comment_anc_desc_udx", :unique => true
+  add_index "comment_hierarchies", ["descendant_id"], :name => "comment_desc_idx"
+
+  create_table "comments", :force => true do |t|
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.text     "content"
+    t.integer  "parent_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
   create_table "documents", :force => true do |t|
     t.string   "title"
     t.string   "documentable_type"
@@ -121,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20130919132135) do
     t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "position"
   end
 
   add_index "editorships", ["book_id"], :name => "index_editorships_on_book_id"
@@ -284,31 +305,62 @@ ActiveRecord::Schema.define(:version => 20130919132135) do
     t.string   "serial_type"
   end
 
-  create_table "todolists", :force => true do |t|
-    t.string   "name"
-    t.integer  "project_id"
-    t.integer  "responsible_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+  create_table "tag_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "tag_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "tag_anc_desc_udx", :unique => true
+  add_index "tag_hierarchies", ["descendant_id"], :name => "tag_desc_idx"
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
 
-  add_index "todolists", ["project_id"], :name => "index_todolists_on_project_id"
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "parent_id"
+  end
+
+  create_table "todo_dependencies", :force => true do |t|
+    t.integer  "todo_id"
+    t.integer  "depends_on_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "todo_dependencies", ["todo_id"], :name => "index_todo_dependencies_on_todo_id"
 
   create_table "todos", :force => true do |t|
     t.string   "name"
-    t.datetime "due_to"
-    t.integer  "todolist_id"
+    t.date     "due_to"
+    t.integer  "project_id"
     t.integer  "assigned_id"
     t.boolean  "completed"
+    t.date     "starts_at"
+    t.integer  "depends_on"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
 
-  add_index "todos", ["todolist_id"], :name => "index_todos_on_todolist_id"
+  add_index "todos", ["project_id"], :name => "index_todos_on_project_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

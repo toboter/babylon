@@ -11,8 +11,8 @@
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title unless @document.title_readonly? %>
-      <%= f.text_field :title, :readonly => true if @document.title_readonly? %>
+      <%= f.text_field :title, class: 'span8' unless @document.title_readonly? %>
+      <%= f.text_field :title, class: 'span8', :readonly => true if @document.title_readonly? %>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
   <div class="control-group">
     <%= f.label :abstract, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :abstract, class: 'abstract_area' %>
+      <%= f.text_area :abstract, rows: 4, class: 'span8' %>
     </div>
   </div>
   <% end %>

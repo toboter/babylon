@@ -1,5 +1,5 @@
 <% title graded_fullname(@person), nil %>
-<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person.user_id == current_user.id)) %>
+<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -10,44 +10,60 @@
 <% content_for :main_section do %>
   <div class="span8">
     <%= content_tag :p, (@person.institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institution.present? %>
-   
-    <div id="general">
-      <% if @person.documents.doctype('General Information') %>
-        <%= render "shared/document_first", var: @person, dtype: "General Information" %> 
-      <% end %>
-    </div>
+    <ul class="nav nav-tabs">
+      <%= content_tag :li, link_to('Docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Public Activity', "#updates", data: {toggle: 'tab'}) if @person.user %>
+      <%= content_tag :li, link_to('Projects', "#memberships", data: {toggle: 'tab'}) if @person.user %>
+      <%= content_tag :li, link_to('Publications', "#pubs", data: {toggle: 'tab'}) %>
+      <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
+    </ul>
 
-    <div id="cv">
-      <% if @person.documents.doctype('Curriculum Vitae') %>
-        <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>  
-      <% end %>
-    </div>
-
-    <div id="publications">
-      <% if @person.references.present? %>
-        <h4 class="muted">Publications on Babylon as author</h4>
-        <%= render "references/bib_entries", :references => @person.references %>
-      <% end %>
-
-      <% if @person.books.present? %>
-        <h4 class="muted">Publications on Babylon as editor</h4>
-        <%= render "books/book_entries", :books => @person.books %>
-      <% end %>
-    </div>
-
-
-    <div id="uploads">
-      <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+    <div class="tab-content">
+      <div class="tab-pane active" id="docs">
+        <div id="general">
+          <% if @person.documents.doctype('General Information') %>
+            <%= render "shared/document_first", var: @person, dtype: "General Information" %> 
+          <% end %>
+        </div>
+    
+        <div id="cv">
+          <% if @person.documents.doctype('Curriculum Vitae') %>
+            <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>  
+          <% end %>
+        </div>
+      </div>
+      <%= content_tag :div, class: 'tab-pane', id: 'updates' do %>
+        Activity feed
+      <% end if @person.user %>
+      <%= content_tag :div, class: 'tab-pane', id: 'memberships' do %>
+        <%= render "shared/document_introductions", :vars => @person.user.projects %>     
+      <% end if @person.user %>
+      <div class="tab-pane" id="pubs">
+        <div id="publications">
+          <% if @person.references.present? %>
+            <h4 class="muted">Authorship</h4>
+            <%= render "references/bib_entries", :references => @references %>
+          <% end %>
+    
+          <% if @person.books.present? %>
+            <h4 class="muted">Editorship</h4>
+            <%= render "books/book_entries", :books => @person.books %>
+          <% end %>
+        </div>     
+      </div>
+      <div class="tab-pane" id="uploads">
+        <div id="uploads">
+          <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="vcard span3 offset1">
     <address>
-    <% if @buckets.with_profile_pictures.first.cover_asset_id %>
-      <%= link_to (image_tag @profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @profile_picture %>
-    <% end %>
+    <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @person.profile_picture if @person.profile_picture %>
 
-    <% if can? :edit, @person %>
+    <% if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
         <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
           Add

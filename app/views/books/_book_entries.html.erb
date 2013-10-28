@@ -1,10 +1,11 @@
+<p class="text text-info"><%= books.count %><%= content_tag :span, raw(' of ' + (link_to @books_all.count, books_path)) if @books_all %> entries</p>
 <% books.each do |book| %>
   <%= content_tag :div, class: 'list-entry' do -%>
     <div class="row-fluid">
       <%= content_tag :div, class: 'span3 authors' do -%>
         <ul class="unstyled">
           <%= content_tag :li, book_edited_by(book) %>
-          <li><small><%= book.book_type %></small> <%= book.year %></li>
+          <li><small><%= book.book_type %></small> <%= book.year.present? ? book.year : '[unpublished]' %></li>
         </ul>
       <% end -%>
       <%= content_tag :div, class: 'span8' do -%>
@@ -13,8 +14,7 @@
           <%= content_tag :span, book_title(book) %>
           <%= content_tag :span, ', '+book.publisher if book.publisher.present? %>
           <%= content_tag :span, ', '+book.place if book.place.present? %>
-          <%= content_tag :span, '('+book.year+')' if book.year.present? %>.
-          <%= content_tag :span, '[unpublished]' if book.unpublished? %>
+          <%= content_tag :span,  book.year.present? ? "(#{book.year})" : '[unpublished]' %>.
         </p>
       <% end -%>
       <% if can? :edit, book %>

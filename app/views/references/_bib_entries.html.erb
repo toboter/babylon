@@ -1,12 +1,11 @@
+<p class="text text-info"><%= references.count %><%= content_tag :span, raw(' of ' + (link_to @references_all.count, references_path)) if @references_all %> entries</p>
 <% references.each do |reference| %>
   <%= content_tag :div, class: 'list-entry' do -%>
     <div class="row-fluid">
       <%= content_tag :div, class: 'span3 authors' do -%>
         <ul class="unstyled">
           <li><%= authors_of_article(reference) %></li>
-          <%= content_tag :li, reference.book.year if reference.book.present? %>
-          <%= content_tag :li, reference.original_date unless reference.book.present? %>
-
+          <%= content_tag :li, reference.book.present? ? reference.book.year : reference.original_date %>
         </ul>
       <% end -%>
       <%= content_tag :div, class: 'span8' do -%>

@@ -9,9 +9,9 @@ module BooksHelper
   def book_edited_by(book, with_comma=false, without_no_author=false, without_author=false)
   	if book.editors.any?
       if with_comma == true
-      	(book.editors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe) + ' (Hrsg.), '
+      	(book.editorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe) + ' (Hrsg.), '
       else
-      	(book.editors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe) + ' (Hrsg.)'
+      	(book.editorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe) + ' (Hrsg.)'
       end
     else
       if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
@@ -19,9 +19,9 @@ module BooksHelper
       	  ''
       	else
           if with_comma == true
-            book.articles.first.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe + ', '
+            book.articles.first.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe + ', '
           else
-            book.articles.first.authors.map{ |a| link_to(a.fullname,a) }.join(", ").html_safe
+            book.articles.first.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe
           end
         end
       else
@@ -80,10 +80,10 @@ module BooksHelper
 
   def  book_short_edited_by(book)
   	if book.editors.any?
-      	book.editors.map{ |a| a.fullname }.join(", ").html_safe + ' (Hrsg.), '
+      	book.editorships.map{ |a| a.person.fullname }.join(", ").html_safe + ' (Hrsg.), '
     else
       if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
-          book.articles.first.authors.map{ |a| a.fullname }.join(", ").html_safe + ', '
+          book.articles.first.authorships.map{ |a| a.person.fullname }.join(", ").html_safe + ', '
       else
       	  ''
       end

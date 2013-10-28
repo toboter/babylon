@@ -33,7 +33,7 @@ class AreasController < ApplicationController
     @area = Area.new(:cluster_id => params[:cluster_id])
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @area }
     end
   end
@@ -41,6 +41,7 @@ class AreasController < ApplicationController
   # GET /areas/1/edit
   def edit
     @area = Area.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /areas

@@ -1,6 +1,6 @@
 <div class="field">
  	<%= f.attribute_fields do |a| %>
-     <%= a.attribute_select associations: [:book, :authors] %>
+     <%= a.attribute_select associations: [:book, :authors, :tags] %>
  	<% end %>
  	<%= f.predicate_select compounds: false %>
  	<%= f.value_fields do |v| %>

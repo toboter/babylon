@@ -10,7 +10,7 @@
   	<title>BABylo-tec: <%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
 
   	<%= stylesheet_link_tag    "application" %>
-  	<%= javascript_include_tag "vendor/custom.modernizr" %>
+  	<%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
 
@@ -78,6 +78,8 @@
                   <li><%= link_to "Institutions", institutions_path %></li>
                 </ul>
               </li>
+              <li class="divider-vertical"></li>
+              <li><%= link_to "Search" %></li>
             </ul>
 
             <ul class="nav pull-right">
@@ -88,12 +90,16 @@
                 <% end %>
                 <li><%= link_to "Dashboard", dashboard_path %></li>
                 <li class="divider-vertical"></li>
-                <% if connected_profile %>
-                  <li><%= link_to "#{current_user.available_name}", person_path(connected_profile) %></li>
+                <% if current_user.person %>
+                  <li>
+                    <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded visible-desktop', style: 'width:25px;margin-top:7px;') if current_user.person.profile_picture %>
+                  </li>
+                  <li>
+                    <%= link_to "#{current_user.available_name}", current_user.person %>
+                  </li>
                 <% else %>
                   <li><%= link_to "#{current_user.available_name}", dashboard_path %></li>
                 <% end %>
-                <li class="divider-vertical"></li>
 
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -111,13 +117,14 @@
                           <li><%= link_to "Add Institution", new_institution_path %></li>
                           <li><%= link_to "Add Module", new_cluster_path %></li>
                           <li><%= link_to "Manage Predicates" %></li>
+                          <li><%= link_to "Terms of interest", tags_path %></li>
                         </ul>
                       </li>
                     <% end %>
-                    <% unless connected_profile %>
+                    <% unless current_user.person %>
                       <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
                     <% end %>
-                    <% if connected_profile %>
+                    <% if current_user.person %>
                       <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
                     <% else %>
                       <li>
@@ -265,7 +272,7 @@
     <!-- Modals beginn -->
 
     <% if user_signed_in? %>
-      <% unless connected_profile %>
+      <% unless current_user.person %>
         <div id="connect_profile_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -279,7 +286,7 @@
             <div class="modal-footer">
               <%= submit_tag "Connect", class: "btn btn-primary pull-left" %>
               <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
-              <span class="pull-left" style="padding:5px 0 0 10px;">Not on the list? <%= link_to "Create a new profile", new_person_path(:user_id => current_user) %></span>
+              <span class="pull-left" style="padding:5px 0 0 10px;">Not on the list? <%= link_to "Create a new profile", new_person_path(:user_id => current_user, :alias => current_user.username) %></span>
             </div>
           <% end %>   
         </div>
@@ -287,6 +294,6 @@
     <% end %>
 
     
-    <%= javascript_include_tag "application" %>
+    
   </body>
 </html>

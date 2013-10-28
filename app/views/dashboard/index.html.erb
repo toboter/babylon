@@ -6,23 +6,40 @@
 
 
 <% content_for :main_section do %>
-  <div class="span8">
+  <div class="span9">
     <ul class="nav nav-tabs">
-      <%= content_tag :li, link_to('Todolists', "#todolists", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Activity feed', "#updates", data: {toggle: 'tab'}) %>
+      <%= content_tag :li, link_to('Your Projects', "#memberships", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Personal todos', "#todos", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Roles', "#roles", data: {toggle: 'tab'}) if can? :manage, "roles" %>
       <%= content_tag :li, link_to('Pages', "#pages", data: {toggle: 'tab'}) if can? :manage, "pages" %>
     </ul>
 
     <div class="tab-content">
-      <div class="tab-pane active" id="todolists">
-        <ul class="unstyled">
-          <% for todolist in current_user.in_todolists %>
-            <h5><%= link_to "#{todolist.name}", [todolist.project, todolist] %></h5>
-            <% for todo in todolist.todos.where(:assigned_id => current_user).order('due_to ASC').limit(5) %>
-              <li><%= todo.name %>, <%= todo.due_to %></li>
-            <% end %>
+      <div class="tab-pane" id="updates">
+        <p>activity feed hier?</p>
+        <%= User.joins(:role).where(["role = ?", "admin"]).count <= 1 %>
+      </div>
+      <div class="tab-pane active" id="memberships">
+        <%= render "shared/document_introductions", :vars => current_user.projects %>
+      </div>
+
+      <div class="tab-pane" id="todos">
+        <h2 id="month" class="muted">
+          <%= link_to "<", date: @date.prev_month %>
+          <%= @date.strftime("%B %Y") %>
+          <%= link_to ">", date: @date.next_month %>
+        </h2>
+        <%= calendar @date do |date| %>
+          <%= link_to "#{date.day}"  %>
+          <% if @todos_by_date[date] %>
+            <ul>
+              <% @todos_by_date[date].each do |todo| %>
+                <li><%= link_to "#{todo.name}", [todo.project, todo] %></li>
+              <% end %>
+            </ul>
           <% end %>
-        </ul>
+        <% end %>
       </div>
 
 
@@ -41,7 +58,7 @@
                       <%= f.select(:role, User::ROLES) %>
                     </div>
                   </div>
-                <% end %>
+                <% end unless role.user.username == 'toboter' %>
               <% end %>
             </ul>
             <div class="form-actions">
@@ -53,24 +70,22 @@
 
       <% if can? :manage, "pages" %>
         <div class="tab-pane" id="pages">
-          <ul class="unstyled">
-            <%= content_tag :li, page_doc_path_for('about'), class: 'well' %>
-            <%= content_tag :li, page_doc_path_for('API'), class: 'well' %>
-            <%= content_tag :li, page_doc_path_for('help'), class: 'well' %>
-            <%= content_tag :li, page_doc_path_for('resources'), class: 'well' %>
-            <%= content_tag :li, page_doc_path_for('research'), class: 'well' %>
-            <%= content_tag :li, page_doc_path_for('contact'), class: 'well' %>
-          </ul>
+            <%= content_tag :div, page_doc_path_for('about'), class: 'well' %>
+            <%= content_tag :div, page_doc_path_for('API'), class: 'well' %>
+            <%= content_tag :div, page_doc_path_for('help'), class: 'well' %>
+            <%= content_tag :div, page_doc_path_for('resources'), class: 'well' %>
+            <%= content_tag :div, page_doc_path_for('research'), class: 'well' %>
+            <%= content_tag :div, page_doc_path_for('contact'), class: 'well' %>
         </div>
       <% end %>
 
     </div>
   </div>
 
-  <div class="span3 offset1">
+  <div class="span3">
     <h4 class="muted">Account</h4>
     <ul class="unstyled">
-      <li><%= connected_profile ? link_to("#{current_user.available_name}", person_path(connected_profile)) : current_user.available_name %></li>
+      <li><%= current_user.person ? link_to("#{current_user.available_name}", current_user.person) : current_user.available_name %></li>
       <li><%= current_user.username %> (<%= current_user.role.role %>)</li>
       <li><%= current_user.email %></li>
       <li>Created at: <%= current_user.created_at %>

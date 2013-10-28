@@ -11,7 +11,7 @@ class DocumentsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @documents }
     end
   end
@@ -37,7 +37,7 @@ class DocumentsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @document }
     end
   end
@@ -45,7 +45,7 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document = @documentable.documents.find(params[:id])
-
+    render :layout => "form_page"
   end
 
   # POST /documents

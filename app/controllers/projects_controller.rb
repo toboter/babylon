@@ -27,6 +27,9 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find(params[:id])
+    @todos = @project.todos
+    @todos_by_date = @todos.group_by(&:due_to)
+    @date = params[:date] ? Date.parse(params[:date]) : Date.today
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

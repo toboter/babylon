@@ -9,36 +9,38 @@
   <div class="span9">
     <div id="search-and-sort">
       <h5 class="muted">Filter &amp; Sort</h5>
-      <%= search_form_for @search, html: { class: 'form-inline' } do |f| %>
-        <%= f.condition_fields do |c| %>
-          Filter:
-          <%= render "condition_fields", f: c %>
-        <% end %>
+      <%= search_form_for @search, html: { class: 'form-inline'} do |f| %>
+        <div class="">
+          <%= f.condition_fields do |c| %>
+            Filter:
+            <%= render "condition_fields", f: c %>
+          <% end %>
+        </div>
         <p><%= link_to_add_fields "Add Conditions", f, :condition %></p>
-        <div class="form-inline">
+        <div class="row-fluid">
+        <div class="span7">
           Sort:<br />
           <%= f.sort_fields do |s| %>
             <%= s.sort_select associations: [:authors, :book] %>
           <% end %>
         </div>
+        <div class="span4">
+          Results per Page:<br />
+          <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10) %>
+        </div>
+      </div>
         <div class="other-actions">
-          <%= f.submit "Go", class: 'btn btn-info btn-block' %>
+          <%= f.submit "Search", class: 'btn btn-info btn-block' %>
         </div>
       <% end %>
     </div>
     <%= render "bib_entries", :references => @references %>
+    <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
   </div>
 
   <div class="span2 offset1">
     <%= render "shared/bibliographic_cat_navs", :obj => @references %>
 
-    <h5 class="muted">Filter by type</h5>
-    <ul class="unstyled">
-      <li><%= link_to "All entries", references_path %> (<%= @references_all.count %>)</li>
-      <li><%= link_to "in Collections", references_path(:type => 'in-collection') %> (<%= @collections.count %>)</li>
-      <li><%= link_to "as Monographs", references_path(:type => 'as-monograph') %> (<%= @monographs.count %>)</li>
-      <li><%= link_to "misc", references_path(:type => 'misc') %> (<%= @misc.count %>)</li>
-    </ul>
   </div>
 
 <% end %>

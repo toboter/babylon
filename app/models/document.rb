@@ -8,7 +8,7 @@ class Document < ActiveRecord::Base
   belongs_to :page, foreign_key: "documentable_id", conditions: "documentable_type = 'Page'"
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-
+  has_many :comments, as: :commentable
 
   GENERALDOCUMENTTYPES = %w[Introduction]
   PEOPLEDOCUMENTTYPES = %w[General\ Information Curriculum\ Vitae]

@@ -37,8 +37,9 @@ GEM
     acts_as_list (0.2.0)
       activerecord (>= 3.0)
     arel (3.0.2)
-    bcrypt-ruby (3.0.1)
     bcrypt-ruby (3.0.1-x86-mingw32)
+    bootstrap-datepicker-rails (1.1.1.8)
+      railties (>= 3.0)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
     builder (3.0.4)
@@ -47,6 +48,12 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
+    chosen-rails (1.0.1)
+      coffee-rails (>= 3.2)
+      compass-rails (>= 1.0)
+      railties (>= 3.0)
+      sass-rails (>= 3.2)
+    chunky_png (1.2.9)
     ckeditor_rails (4.2)
       railties (>= 3.0)
     closure_tree (4.2.6)
@@ -59,6 +66,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    compass (0.12.2)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
+    compass-rails (1.0.3)
+      compass (>= 0.12.2, < 0.14)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -68,6 +81,7 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     friendly_id (4.0.9)
+    fssm (0.2.10)
     hike (1.2.3)
     i18n (0.6.1)
     journey (1.0.4)
@@ -145,6 +159,7 @@ GEM
       multi_json (~> 1.0, >= 1.0.2)
     warden (1.2.1)
       rack (>= 1.0)
+    will_paginate (3.0.5)
     with_advisory_lock (0.0.10)
       activerecord (>= 3.0.0)
 
@@ -153,9 +168,11 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
+  bootstrap-datepicker-rails
   bootstrap-sass
   cancan
   carrierwave
+  chosen-rails
   ckeditor_rails
   closure_tree
   coffee-rails (~> 3.2.1)
@@ -172,3 +189,4 @@ DEPENDENCIES
   simple_form
   uglifier (>= 1.0.3)
   userstamp!
+  will_paginate (~> 3.0)

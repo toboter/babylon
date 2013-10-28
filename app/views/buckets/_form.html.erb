@@ -11,12 +11,12 @@
       <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
     </div>
   </div>
-  <div class="control-group">
+  <!-- <div class="control-group">
     <%= f.label :cover_asset_id, class: 'control-label' %>
     <div class="controls">
       <%= f.collection_select :cover_asset_id, @bucket.assets, :id, :name %>
     </div>
-  </div>
+  </div> -->
 
 
   <div class="form-actions">

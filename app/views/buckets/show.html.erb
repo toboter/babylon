@@ -1,5 +1,5 @@
 <% title "#{@bucket.name}", nil %>
-<% edit_section_for(@bucket, @bucket.attachable) %>
+<% edit_section_for(@bucket, @bucket.attachable) if can? :edit, @bucket %>
 
 <% content_for :breadcrumbs_section do %>
   <% unless @bucket.attachable_type == 'Page' %>

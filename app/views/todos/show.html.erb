@@ -1,0 +1,49 @@
+<% title "#{@todo.name}", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <li>... <%= content_tag(:span, '/', class: 'divider') %></li>
+  <%= content_tag(:li, link_to("Projects", [@todo.project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@todo.project.name}", [@todo.project.projectable, @todo.project]) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "#{@todo.name}", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span8">
+    <%= form_for [@todo.project, @todo] do |f| %>
+      <div class="row-fluid">
+        <div class="span3" style="padding-bottom:20px;">
+        <p class="form-inline"><%= f.label :completed, class: "checkbox" do %><%= f.check_box :completed %>Completed<% end %> <%= f.submit "Update", class: "btn btn-mini" %></p>
+        </div>
+        <div class="span7">
+          <p><strong><%= @todo.name %></strong>:
+          Assigned to <strong><%= @todo.assigned.available_name %></strong>, 
+          due to <%= @todo.due_to.strftime("%d.%m.%Y") %>
+          <%= 'Starts on '+@todo.starts_at.strftime("%d.%m.%Y") if @todo.starts_at %>
+          <%= raw('Todos to be completed first: '+@todo.dependencies.map{ |a| content_tag :span, a.name, style: (a.completed ? "color:green;" : "color:red;") }.join(", ").html_safe) if @todo.dependencies.any? %></p>
+        </div>
+        <div class="span2">
+          <%= link_to 'Delete', [@todo.project, @todo], method: :delete, confirm: 'Are you sure' %>
+        </div>
+      </div>
+      <%= render 'comments/list', comments: @todo.comments %>
+      <hr>
+      <%= render 'comments/form', commentable: @todo, size: 'span6' %>
+    <% end %>
+  </div>
+
+  <div class="span3 offset1">
+
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
+      <li>
+        <% unless @todo.creator.person %>
+          <%= @todo.creator.available_name %>
+        <% else %>
+          <%= link_to "#{@todo.creator.available_name}", @todo.creator.person %>
+        <% end %>
+      </li>
+    </ul>
+
+  </div>
+<% end %>

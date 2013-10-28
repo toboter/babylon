@@ -1,29 +1,12 @@
-<%= form_for [@bucket, @asset], :html => { :class => 'custom', :multipart => true } do |f| %>
-  <%= f.error_messages %>
-<%= @bucket.inspect %>
+<%= form_for [@bucket, @bucket.assets.new] do |f| %>        
 
-  <div class="field">
-    <%= f.label :assetfile %><br />
-    <%= f.file_field :assetfile %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :parent_id %><br />
-    <%= f.number_field :parent_id %>
-  </div>
+  <%= f.file_field :assetfile, multiple: true %>
 
-  <div class="field">
-    <%= f.label :file_name %><br />
-    <%= f.text_field :file_name %>
+  <script id="template-upload" type="text/x-tmpl">
+  <div class="upload">
+    {%=o.name%}
+    <div class="progress"><div class="bar" style="width: 0%"></div></div>
   </div>
-  <div class="field">
-    <%= f.label :file_datetime %><br />
-    <%= f.datetime_select :file_datetime %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  </script>        
+
 <% end %>

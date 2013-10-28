@@ -1,4 +1,6 @@
 Babylon::Application.routes.draw do
+  resources :tags
+
 
   resources :pages, only: [:show, :create] do
     resources :buckets
@@ -22,11 +24,10 @@ Babylon::Application.routes.draw do
     resources :documents
   end
 
+
   resources :projects, only: [:index, :show] do
     resources :documents
-    resources :todolists do
-      resources :todos, except: [:show]
-    end
+    resources :todos, except: :edit
   end
 
   resources :institutions
@@ -35,6 +36,7 @@ Babylon::Application.routes.draw do
   resources :references, :path => 'bibliography' do
     resources :documents
     resources :buckets
+    resources :comments, except: [:index, :show]
   end
 
   resources :people do
@@ -43,7 +45,9 @@ Babylon::Application.routes.draw do
   end
 
   # Standard Document routes
-  resources :documents, only: [:index, :show]
+  resources :documents, only: [:index, :show] do
+    resources :comments, except: [:index, :show]
+  end
 
   # Standard Bucket und Asset routes
   # Assets sind immer die gleichen, können aber in verschiedenen Buckets vorkommen.
@@ -57,9 +61,14 @@ Babylon::Application.routes.draw do
   end
 
   resources :assets, except: [:new, :create] do
+    resources :comments, except: [:index, :show]
     member do
       get :download, to: 'assets#show'
     end
+  end
+
+  resources :todos, only: :show do
+    resources :comments, except: [:index, :show]
   end
 
   get 'dashboard', to: 'dashboard#index'

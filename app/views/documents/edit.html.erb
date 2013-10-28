@@ -1,3 +1,12 @@
 <% title ('Edit document'), nil %>
+<div class="row">
+<div class="span8">
+  <%= render 'form' %>
+</div>
 
-<%= render 'form' %>
+<div class="span4">
+  <%= render 'comments/list', comments: @document.comments %>
+  <hr>
+  <%= render 'comments/form', commentable: @document, size: 'input-xlarge' %>
+</div>
+</div>

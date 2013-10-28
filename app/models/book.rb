@@ -1,20 +1,19 @@
 class Book < ActiveRecord::Base
   attr_accessible :editor_ids, :book_identifier, :book_type, :place, :publisher, :serial_id, :title, :volume, 
-                  :unpublished, :year, :uri, :creator_id, :updater_id, :articles_attributes, :editorships_attributes
+                  :unpublished, :year, :uri, :creator_id, :updater_id, :articles_attributes
 
   stampable
 
   default_scope order('year DESC')
 
-  has_many :articles, :class_name => 'Reference', :dependent => :destroy
+  has_many :articles, :class_name => 'Reference', :dependent => :destroy, :order => 'first_page'
   has_many :editors, :class_name => 'Person', through: :editorships, :source => :person
-  has_many :editorships, :dependent => :destroy
+  has_many :editorships, :dependent => :destroy , :order => 'position'
   belongs_to :serial
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
   accepts_nested_attributes_for :articles, :reject_if => lambda { |a| a[:title].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :editorships, allow_destroy: true
 
   validates_presence_of :book_type
   validates_presence_of :year, :unless => "unpublished == true"

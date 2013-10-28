@@ -1,0 +1,17 @@
+<% title "#{@tag.name}", nil, false %>
+<% edit_section_for(@tag, nil) if can? :edit, @tag %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Terms of interest', tags_path %> <span class="divider">/</span></li>
+  <li class="active"><%= @tag.name %></li>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span8">
+    <p>
+      <b>Name:</b>
+      <%= @tag.name %>
+    </p>
+  </div>
+<% end %>

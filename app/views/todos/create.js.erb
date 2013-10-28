@@ -1,0 +1,4 @@
+$('#new_todo').remove();
+$('#new_link').show();
+$('#incomplete_todos').append('<%= j render(@todo) %>');
+$('#edit_todo_<%= @todo.id %>').submitOnCheck();

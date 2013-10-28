@@ -1,0 +1,21 @@
+<% title ('Edit comment'), nil %>
+
+<%= form_for [@commentable, @comment] do |f| %>
+  <%= f.hidden_field :commentable_type %>
+  <%= f.hidden_field :commentable_id %>
+  <%= f.hidden_field :parent_id %>
+  
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select span6'} %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :content, 'Comment', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :content, rows: 4, class: 'span6' %>
+    </div>
+  </div>
+  <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+<% end if user_signed_in? %>

@@ -1,5 +1,5 @@
 <% title "#{@institution.name}", nil %>
-<% edit_section_for(@institution, nil) %>
+<% edit_section_for(@institution, nil) if can? :edit, @institution %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>

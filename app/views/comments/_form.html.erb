@@ -1,0 +1,20 @@
+<%= form_for [commentable, commentable.comments.new] do |f| %>
+  <%= f.hidden_field :commentable_type %>
+  <%= f.hidden_field :commentable_id %>
+  <%= f.hidden_field :parent_id %>
+  <%= content_tag :h6, params[:parent_id] ? "Reply on a comment as #{current_user.available_name}" : "Add a new comment as #{current_user.available_name}" %></h6>
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, { multiple: true, class: "#{size ||= nil} form-control chosen-select" } %>
+    </div>
+
+  </div>
+  <div class="control-group">
+    <%= f.label :content, 'Comment', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :content, rows: 4, class: size ||= nil %>
+    </div>
+  </div>
+  <%= f.submit "Speichern", :class => 'btn btn-mini' %>
+<% end if user_signed_in? %>

@@ -10,6 +10,8 @@
  *
  *= require_self
  *= require_tree .
+ *= require bootstrap-datepicker
+ *= require chosen
  */
 
 .field_with_errors input[type="text"], .field_with_errors textarea {

@@ -5,11 +5,11 @@ class ReferencesController < ApplicationController
   # GET /references.json
   def index
     @search = Reference.search(params[:q])
-    @references = @search.result # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
+    @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
     @references_all = Reference.all
-    @collections = @references_all.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
-    @monographs = @references_all.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
-    @misc = @references_all.select { |reference| reference.book_id == nil }
+    # @collections = @references_all.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
+    # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
+    # @misc = @references_all.select { |reference| reference.book_id == nil }
 
     @search.build_sort if @search.sorts.empty?
     @search.build_condition if @search.conditions.empty?
@@ -24,10 +24,9 @@ class ReferencesController < ApplicationController
       end
     end
 
-
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
-      format.json { render json: @references }
+      format.json { render json: @reference }
     end
   end
 

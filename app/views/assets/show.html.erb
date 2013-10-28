@@ -1,4 +1,4 @@
-<% title "#{@asset.name}", nil %>
+<% title "#{@asset.name}", nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -17,45 +17,84 @@
     
   </div>
   <div class="span4">
-    <%= content_tag :h5, 'Caption', class: "muted" if @asset.caption %>
-    <%= content_tag :p, @asset.caption if @asset.caption %>
-    <dl class="dl">
-      <%= asset_description('Content type', @asset.content_type) %>
-      <%= asset_description('Dimensions', @asset.width, @asset.height) %>
-      <%= asset_description('File size', @asset.file_size) %>
-      <%= asset_description('File Name', @asset.file_name) %>
-      <%= asset_description('Date Taken', @asset.date_taken) %>
-      <%= asset_description('Location', @asset.latitude, @asset.longitude) %>
-      <%= asset_description('Camera', @asset.camera) %>
-      <%= asset_description('Manufacturer', @asset.camera_make) %>
-      <%= asset_description('Flash', @asset.flash) %>
-      <%= asset_description('Focal length', @asset.focal_length) %>
-      <%= asset_description('Exposure', @asset.exposure) %>
-      <%= asset_description('f number', @asset.f_number) %>
-      <%= asset_description('ISO', @asset.iso) %>
-      <%= asset_description('Versions', @asset.parent_id) %>
-    </dl>
-
-    <%= content_tag :h5, 'Buckets', class: "muted" if @buckets.any? %>
-    <ul class="unstyled">
-    <% for bucket in @buckets do %>
-      <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
-    <% end %>
-    </ul>
-
     <% if can? :read, @asset %>
-      <h5 class="muted">Download</h5>
-      <ul class="unstyled">
-        <li><%= link_to 'Original File', download_asset_path(@asset, size: 'original') %></li>
-        <% if @asset.content_type.include? 'image' %>
-          <li><%= link_to '1600px file', download_asset_path(@asset, size: 'xlarge') %></li>
-          <li><%= link_to '1280px file', download_asset_path(@asset, size: 'large') %></li>
-          <li><%= link_to '800px file', download_asset_path(@asset, size: 'normal') %></li>
-        <% end %>
-      </ul>
-    <% end %>
+      <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          Download
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Original File', download_asset_path(@asset, size: 'original') %></li>
+          <% if @asset.content_type.include? 'image' %>
+            <li><%= link_to '1600px file', download_asset_path(@asset, size: 'xlarge') %></li>
+            <li><%= link_to '1280px file', download_asset_path(@asset, size: 'large') %></li>
+            <li><%= link_to '800px file', download_asset_path(@asset, size: 'normal') %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end  %>
+    <%= content_tag :h3, "#{@asset.name}", class: "muted" %>
+    <div class="accordion" id="asset-accordion">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#asset-accordion" href="#collapseOne">
+            Asset Info
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <table class="table table-bordered table-hover">
+              <%= asset_description('Caption', @asset.caption) %>
+              <%= asset_description('Content type', @asset.content_type) %>
+              <%= asset_description('File size', number_to_human_size(@asset.file_size, precision: 2, separator: ',')) %>
+              <%= asset_description('Date Taken', @asset.date_taken) %>
+              <%= asset_description('Dimensions', @asset.width, @asset.height) %>
+              <%= asset_description('File Name', @asset.file_name) %>
+              <%= asset_description('Location', @asset.latitude, @asset.longitude) %>
+              <%= asset_description('Camera', @asset.camera) %>
+              <%= asset_description('Manufacturer', @asset.camera_make) %>
+              <%= asset_description('Flash', @asset.flash) %>
+              <%= asset_description('Focal length', @asset.focal_length) %>
+              <%= asset_description('Exposure', @asset.exposure) %>
+              <%= asset_description('f number', @asset.f_number) %>
+              <%= asset_description('ISO', @asset.iso) %>
+              <%= asset_description('Versions', @asset.parent_id) %>
+            </table>      
+          </div>
+        </div>
+      </div>
+      <%= content_tag :div, class: "accordion-group" do %>
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#asset-accordion" href="#collapseTwo">
+            Comments
+          </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse in">
+          <div class="accordion-inner">
+            <%= render 'comments/list', comments: @asset.comments %>
+            <hr>
+            <%= render 'comments/form', commentable: @asset, size: 'input-xlarge' %>
+          </div>
+        </div>
+      <% end %>
+      <%= content_tag :div, class: "accordion-group" do %>
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#asset-accordion" href="#collapseThree">
+            Buckets
+          </a>
+        </div>
+        <div id="collapseThree" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <ul class="unstyled">
+              <% for bucket in @buckets do %>
+                <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end if @buckets.any? %>
+    </div>
   </div>
-
 <% end %>
 
 

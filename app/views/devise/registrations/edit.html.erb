@@ -17,7 +17,7 @@
       <div class="control-group">
         <%= f.label :username, class: 'control-label' %>
         <div class="controls">
-          <%= f.text_field :username %>
+          <%= f.text_field :username, :readonly => User.find(resource).username == 'toboter' %>
         </div>
       </div>
     
@@ -50,7 +50,7 @@
 
       <div class="form-actions" style="margin-top:20px;">
         <%= f.submit "Update", class: 'btn btn-primary' %>
-        <%= link_to "Cancel", :back, class: 'btn' %>
+        <%= link_to "Cancel", root_path, class: 'btn' %>
       </div>
     <% end %>
 

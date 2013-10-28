@@ -74,9 +74,11 @@ class AssetsController < ApplicationController
       if @asset.save
         format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
         format.json { render json: @asset, status: :created, location: @asset }
+        format.js
       else
         format.html { render action: "new" }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
