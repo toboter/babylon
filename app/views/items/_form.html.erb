@@ -1,0 +1,40 @@
+<%= form_for(@item) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="field">
+    <%= f.label :collection_id %><br />
+    <%= f.collection_select :collection_id, Collection.all, :id, :shortcut %>
+  </div>
+
+  <div class="field">
+    <%= f.label :accession_number %><br />
+    <%= f.text_field :accession_number %>
+  </div>
+  <div class="field">
+    <%= f.label :accession_number_index %><br />
+    <%= f.text_field :accession_number_index %>
+  </div>
+  <div class="field">
+    <%= f.label :accession_date %><br />
+    <%= f.datetime_select :accession_date %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :context_id %><br />
+    <%= f.number_field :context_id %>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

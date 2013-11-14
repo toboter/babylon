@@ -9,8 +9,11 @@ class Pailful < ActiveRecord::Base
   belongs_to :bucket
 
   def reset_cover
-  	if bucket.cover_asset_id == asset_id
-  	  Bucket.update(bucket, :cover_asset_id => Bucket.find(bucket).assets.first.id)
+    asset = Bucket.find(bucket).assets.first
+  	if asset.present? && bucket.cover_asset_id == asset_id
+  	  Bucket.update(bucket, :cover_asset_id => asset.id)
+    elsif asset.blank?
+      Bucket.update(bucket, :cover_asset_id => nil)
   	end
   end
 

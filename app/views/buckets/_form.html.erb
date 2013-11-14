@@ -8,7 +8,7 @@
   <div class="control-group">
     <%= f.label :name, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :name, :readonly => !@bucket.name_fixed.blank? %>
+      <%= f.text_field :name, value: (@bucket.attachable_type == 'Person' ? "" : "#{@bucket.attachable.name+' Album'}"), :readonly => !@bucket.name_fixed.blank? %>
     </div>
   </div>
   <!-- <div class="control-group">

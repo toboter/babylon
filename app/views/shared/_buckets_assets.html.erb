@@ -4,12 +4,10 @@
       <% if can? :edit, obj %>
         <% if personal == true %>
           <% if (!obj.user_id?) || (obj.user_id == current_user.id) %>
-            <%= link_to "Show", polymorphic_path([obj, bucket]) %> | 
-            <%= link_to "Add assets to #{bucket.name}", new_bucket_asset_path(bucket) %>
+            <%= link_to "Show or add assets to #{bucket.name}", polymorphic_path([obj, bucket]) %>
           <% end %>
         <% else %>
-          <%= link_to "Show", polymorphic_path([obj, bucket]) %> | 
-          <%= link_to "Add assets to #{bucket.name}", new_bucket_asset_path(bucket) %>
+          <%= link_to "Show or add assets to #{bucket.name}", polymorphic_path([obj, bucket]) %>
         <% end %>
       <% end %>
     </p>

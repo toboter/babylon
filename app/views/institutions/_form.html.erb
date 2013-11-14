@@ -1,4 +1,4 @@
-<%= form_for(@institution, :html => { :class => 'form-horizontal'}) do |f| %>
+<%= nested_form_for(@institution, :html => { :class => 'form-horizontal'}) do |f| %>
   <%= f.error_messages %>
 
     <div class="control-group">
@@ -60,7 +60,10 @@
       </div>
     </div>
 
-
+    <%= f.fields_for :collections do |builder| %>
+      <%= render "collection_fields", :f => builder %>
+    <% end %>
+    <%= f.link_to_add "Add Collection", :collections, class: 'controls' %>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

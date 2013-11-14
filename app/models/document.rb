@@ -1,6 +1,6 @@
 class Document < ActiveRecord::Base
   attr_accessible :content, :document_type, :documentable_id, :documentable_type, :title, 
-  				  :creator_id, :updater_id, :abstract
+  				  :creator_id, :updater_id, :abstract, :tag_ids
 
   stampable
 
@@ -9,11 +9,14 @@ class Document < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   has_many :comments, as: :commentable
+  has_many :taggings, as: :taggable
+  has_many :tags, through: :taggings
 
   GENERALDOCUMENTTYPES = %w[Introduction]
   PEOPLEDOCUMENTTYPES = %w[General\ Information Curriculum\ Vitae]
+  ITEMDOCUMENTTYPES = %w[Description]
 
-  DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES
+  DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES+ITEMDOCUMENTTYPES
 
   validates_presence_of :title, :unless => :document_type?
   validates_presence_of :content, :unless => :page? # wenn diese validierung eintritt können pages nicht mehr automatisch erstellt werden.
@@ -34,12 +37,16 @@ class Document < ActiveRecord::Base
     documentable_type == 'Person'
   end
 
+  def item_description?
+    document_type == 'Description'
+  end
+
   def intro?
     document_type == 'Introduction'
   end
 
   def title_readonly?
-    page? || person? || intro?
+    page? || person? || intro? || item_description?
   end
 
 end

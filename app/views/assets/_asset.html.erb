@@ -1,0 +1,14 @@
+<%= content_tag :li, class: (asset.is_cover ? size_b : size_a) do %>
+  <div class="thumbnail">
+    <%= link_to (image_tag (asset.is_cover ? asset.assetfile.big_thumb.url : asset.assetfile.thumb.url)), asset if asset.content_type.include? 'image' %>
+    <%= link_to (image_tag 'mini_dummy.gif'), asset unless asset.content_type.include? 'image' %>
+    <p>
+      <strong><%= asset.name %></strong><br />
+      <% if asset.caption %><%= asset.caption %><br /><% end %>
+      <strong>Buckets: </strong><%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %><br />
+      <% if can? :publish, asset %>
+        <%= check_box_tag "asset_ids[]", asset.id if can? :publish, asset %> Mark deleted
+      <% end %>
+    </p>
+  </div>
+<% end %>

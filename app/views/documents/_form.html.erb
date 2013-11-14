@@ -16,6 +16,13 @@
     </div>
   </div>
 
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+    </div>
+  </div>
+
   <% unless @document.title_readonly? %>
   <div class="control-group">
     <%= f.label :abstract, class: 'control-label' %>

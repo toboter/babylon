@@ -24,13 +24,17 @@ class AssetsController < ApplicationController
 
     if params[:size] && (can? :read, @asset) && (request.path.include? 'download')
       if params[:size] == 'original'
-        send_file @asset.assetfile.path, type: @asset.content_type, filename: @asset.name
+        send_data @asset.assetfile.read, type: @asset.content_type, filename: @asset.file_name,
+        :disposition => 'attachment'
       elsif params[:size] == 'xlarge' && (@asset.content_type.include? 'image')
-        send_file @asset.assetfile.xlarge.path, type: @asset.content_type, filename: @asset.name
+        send_data @asset.assetfile.xlarge.read, type: @asset.content_type, filename: @asset.file_name,
+        :disposition => 'attachment'
       elsif params[:size] == 'large' && (@asset.content_type.include? 'image')
-        send_file @asset.assetfile.large.path, type: @asset.content_type, filename: @asset.name
+        send_data @asset.assetfile.large.read, type: @asset.content_type, filename: @asset.file_name,
+        :disposition => 'attachment'
       elsif params[:size] == 'normal' && (@asset.content_type.include? 'image')
-        send_file @asset.assetfile.normal.path, type: @asset.content_type, filename: @asset.name
+        send_data @asset.assetfile.normal.read, type: @asset.content_type, filename: @asset.file_name,
+        :disposition => 'attachment'
       else
         params[:size] = nil
         redirect_to @asset
@@ -48,7 +52,11 @@ class AssetsController < ApplicationController
   # GET /assets/new.json
   def new
     @bucket = Bucket.find(params[:bucket_id])
-    @assets_available = Asset.all-@bucket.assets
+    @asset = @bucket.assets.new
+
+    @assets_pre = Asset.all-@bucket.assets
+    # @search = Asset.search(params[:q])
+    @assets_available = @assets_pre.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 12)
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb
@@ -90,9 +98,9 @@ class AssetsController < ApplicationController
 
     #Nur Administratoren können die Bildversionen neu erstellen. 
     #Das aber dann automatisch durch einmaliges editieren und wieder speichern.
-    if can? :manage, @asset
-      @asset.assetfile.recreate_versions!
-    end
+    #if can? :manage, @asset
+      #@asset.assetfile.recreate_versions!
+    #end
 
     respond_to do |format|
       if @asset.update_attributes(params[:asset])
@@ -102,6 +110,18 @@ class AssetsController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def recreate_versions
+    @asset = Asset.find(params[:id])
+
+    #Nur Administratoren können die Bildversionen neu erstellen. 
+    if can? :manage, @asset
+      @asset.assetfile.recreate_versions!
+      redirect_to @asset, notice: 'Versions were successfully recreated.'
+    else
+      redirect_to @asset, notice: 'You have no permission for this action!'
     end
   end
 
@@ -115,6 +135,11 @@ class AssetsController < ApplicationController
       format.html { redirect_to assets_url }
       format.json { head :no_content }
     end
+  end
+
+  def destroy_multiple
+    Asset.where(:id => params[:asset_ids]).destroy_all
+    redirect_to assets_url
   end
 
 end

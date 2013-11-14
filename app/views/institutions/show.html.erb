@@ -23,12 +23,20 @@
       <% end %>
     </ul>
 
+    <h4 class="muted">Collections</h4>
+    <ul class="unstyled">
+      <% for collection in @institution.collections do %>
+        <li><%= link_to "#{collection.name+' ('+collection.shortcut+')'}", items_path(collection: collection.shortcut) %></li>
+      <% end %>
+    </ul>
+
   </div>
 
   <div class="vcard span3 offset1">
     <% if can? :edit, @institution %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>

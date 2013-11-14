@@ -1,72 +1,27 @@
-<% title "Add Assets", "to: #{@bucket.name}" %>
-<div class="row">
-  <div class="span12">
-    <%= link_to 'Back', [@bucket.attachable, @bucket] %>
+<% title "New Asset", "to: #{@bucket.name}" %>
 
-    <%= form_tag pailfuls_bucket_path(@bucket), method: :post, class: 'custom' do %>
-      <ul class="thumbnails">
-        <% for asset in @assets_available do %>
-          <li class="span2">
-            <div class="thumbnail">
-              <% if asset.content_type.include? 'image' %>
-      	        <%= link_to (image_tag asset.assetfile.thumb.url), asset, class: '' %>
-              <% else %>
-                <%= image_tag 'dummy.svg', class: '' %>
-              <% end %>
-              <div class="caption">
-      	        <p><%= link_to "#{asset.name}", asset %><span class="pull-right"><%= check_box_tag "asset_ids[]", asset.id %></span></p>
-              </div>
-            </div>
-          </li>
-        <% end %>
-      </ul>
-      <div class="form-actions">
-        <%= submit_tag 'Add marked assets to bucket', class: 'btn btn-primary' %>
-        <%= link_to 'Back', :back, class: 'btn' %>
-        or <a href="#add_asset" data-toggle="modal">Upload a single asset</a> | <a href="#add_multiple_assets" data-toggle="modal">Upload multiple assets</a>
-      </div>
-    <% end %>
+<%= form_for [@bucket, @asset], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_messages %>
 
+  <%= @asset.inspect %>
 
-<!-- Modals beginn -->
-
-    <div id="add_multiple_assets" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Upload assets</h3>
-      </div>
-      <div class="modal-body">
-        <%= render 'form' %>
-      </div> 
-    </div>
-
-    <div id="add_asset" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Upload a single asset</h3>
-      </div>
-      
-      <%= form_for [@bucket, @bucket.assets.new], :html => { :class => 'form-horizontal' } do |f| %>
-        <div class="modal-body">
-          <%= f.error_messages %>
-          <div class="control-group">
-            <%= f.label :assetfile, class: 'control-label' %>
-            <div class="controls">
-              <%= f.file_field :assetfile %>
-            </div>
-          </div>
-          <div class="control-group">
-            <%= f.label :name, class: 'control-label' %>
-            <div class="controls">
-              <%= f.text_field :name %>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <%= f.submit 'Save', class: 'btn btn-primary pull-left' %>
-          <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
-        </div>
-      <% end %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, value: @asset.asset_name, class: 'span6' %>
     </div>
   </div>
-</div>
+
+  <div class="control-group">
+    <%= f.label :caption, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :caption, class: 'span6' %>
+    </div>
+  </div>
+
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+  </div>
+<% end %>

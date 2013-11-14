@@ -10,9 +10,9 @@ module ApplicationHelper
 
   def tagging_infos_for(obj)
     content_tag(:span, class: 'pull-right') do 
-	  for tag in obj.tags
-	    concat content_tag :span, tag.name, class: 'label label-info', style: 'margin-left:5px;'
-	  end
+	    for tag in obj.tags
+	      concat content_tag :span, tag.name, class: 'label label-info', style: 'margin-left:5px;'
+	    end
     end if obj.tags.any?
   end
 end

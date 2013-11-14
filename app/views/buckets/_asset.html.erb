@@ -1,0 +1,16 @@
+        <li class="span2">
+          <% if asset.content_type.include? 'image' %>  
+            <div class="thumbnail">
+              <%= link_to (image_tag asset.assetfile.thumb.url), asset, class: "" %>
+              <div class="caption">  
+                <h5><%= link_to "#{asset.name}", asset %></h5>
+                <ul class="unstyled">
+                  <% if can? :edit, @bucket %>
+                    <li><%= link_to 'Set as cover', set_as_cover_bucket_path(@bucket, :cover_asset_id => asset), method: :put %><%= content_tag :span, ' (x)' if asset.id == @bucket.cover_asset_id %></li>
+                    <li><%= link_to 'Delete from bucket', pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure?' } %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+        </li>

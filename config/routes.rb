@@ -1,6 +1,13 @@
 Babylon::Application.routes.draw do
-  resources :tags
 
+
+  resources :items do
+    resources :buckets
+    resources :documents
+    resources :comments, except: [:index, :show]
+  end
+
+  resources :tags
 
   resources :pages, only: [:show, :create] do
     resources :buckets
@@ -64,6 +71,10 @@ Babylon::Application.routes.draw do
     resources :comments, except: [:index, :show]
     member do
       get :download, to: 'assets#show'
+      put :recreate_versions
+    end
+    collection do
+      delete :destroy_multiple
     end
   end
 

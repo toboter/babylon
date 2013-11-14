@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  collection: 
+  c_name: MyString
+  e_name: MyString
+  c_index: MyString
+  e_index: MyString
+  e_date: 2013-11-13 12:08:01
+  in_c_date: 2013-11-13 12:08:01
+  context_id: 1
+  item_type_id: 1
+  localisation_id: 1
+
+two:
+  collection: 
+  c_name: MyString
+  e_name: MyString
+  c_index: MyString
+  e_index: MyString
+  e_date: 2013-11-13 12:08:01
+  in_c_date: 2013-11-13 12:08:01
+  context_id: 1
+  item_type_id: 1
+  localisation_id: 1

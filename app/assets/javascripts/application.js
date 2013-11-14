@@ -15,8 +15,7 @@
 //= require jquery_nested_form
 //= require ckeditor-jquery
 //= require bootstrap-datepicker/core
-//= require jquery-fileupload/basic
-//= require jquery-fileupload/vendor/tmpl
+//= require jquery-fileupload
 //= require bootstrap
 //= require chosen-jquery
 //= require_tree .

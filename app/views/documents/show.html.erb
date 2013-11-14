@@ -1,4 +1,4 @@
-<% title "#{@document.title}", nil unless @document.page? %>
+<% title "#{@document.title}", nil, false unless @document.page? %>
 <% title "#{@document.documentable.permalink.humanize}", nil if @document.page? %>
 <% edit_section_for(@document, @document.documentable) if can? :edit, @document %>
 
@@ -9,23 +9,20 @@
 <% end unless @document.page? %>
 
 <% content_for :main_section do %>
-  <div class="span7">
-    <% if @document.abstract && !@document.title_readonly? %>
-      <div class="abstract_section">
-        <b>Abstract: </b><%= @document.abstract %>
-      </div>
-    <% end %>
-    <p>tags</p>
-    <% if @document.content %>
-      <div class="content_section">
-        <%= raw@document.content %>
-      </div>
-    <% end %>
+  <div class="span8">
+    <h1 style="margin-bottom:40px;margin-top:60px;"><%= @document.title %></h1>
+    <%= content_tag :div, class: "abstract_section" do %>
+      <b>Abstract: </b><%= @document.abstract %>
+    <% end if @document.abstract %>
+    <%= content_tag :div, class: "content_section" do %>
+      <%= raw@document.content %>
+    <% end if @document.content %>
   </div>
 
 
-  <div class="span4 offset1">
+  <div class="span4">
     <% unless @document.page? %>
+      <p style="margin-bottom:50px;"><%= tagging_infos_for(@document) %></p>
       <div class="accordion" id="doc-accordion">
         <%= content_tag :div, class: "accordion-group" do %>
           <div class="accordion-heading">
@@ -35,7 +32,7 @@
           </div>
           <div id="collapseThree" class="accordion-body collapse in">
             <div class="accordion-inner">
-              <h5 class="muted">Belongs to</h5>
+              <h5 class="muted">Cross reference</h5>
               <ul class="unstyled">
               <%= content_tag :li, link_to("#{@document.person? ? @document.documentable.fullname : @document.documentable.name}", @document.documentable) %>
                 <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>

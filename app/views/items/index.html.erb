@@ -1,0 +1,49 @@
+<% title "Items", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li class="active">Items</li>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span10">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Accession Number</th>
+          <th>Title</th>
+          <th>Accession Date</th>
+          <th>Context</th>
+          <th>Tags</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @items.each do |item| %>
+          <tr>
+            <td><%= item.accession_name %></td>
+            <td><%= item.title %></td>
+            <td><%= item.accession_date.strftime("%d.%m.%Y") %></td>
+            <td><%= item.context_id %></td>
+            <td><%= item.tags.map{ |a| a.name }.join(", ").html_safe %></td>
+            <td><%= link_to 'Show', item %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="span2">
+    <% if can? :edit, @items %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Item', new_item_path %></li>
+          </ul>
+      </div>
+    <% end  %>
+  </div>
+<% end %>

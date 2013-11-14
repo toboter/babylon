@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131024165143) do
+ActiveRecord::Schema.define(:version => 20131113110800) do
 
   create_table "areas", :force => true do |t|
     t.string   "name"
@@ -98,6 +98,18 @@ ActiveRecord::Schema.define(:version => 20131024165143) do
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
+
+  create_table "collections", :force => true do |t|
+    t.integer  "institution_id"
+    t.string   "name"
+    t.string   "shortcut"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "collections", ["institution_id"], :name => "index_collections_on_institution_id"
 
   create_table "comment_hierarchies", :id => false, :force => true do |t|
     t.integer "ancestor_id",   :null => false
@@ -196,6 +208,21 @@ ActiveRecord::Schema.define(:version => 20131024165143) do
   end
 
   add_index "institutions", ["slug"], :name => "index_institutions_on_slug", :unique => true
+
+  create_table "items", :force => true do |t|
+    t.integer  "collection_id"
+    t.string   "accession_number"
+    t.string   "accession_number_index"
+    t.datetime "accession_date"
+    t.integer  "context_id"
+    t.string   "title"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"

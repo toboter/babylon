@@ -65,7 +65,8 @@
 
     <% if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>

@@ -7,6 +7,10 @@ gem 'rails', '3.2.13'
 
 gem 'pg'
 
+# http://railsapps.github.io/rails-environment-variables.html
+# https://github.com/laserlemon/figaro
+gem "figaro"
+
 # active_record_hstore
 
 # Gems used only for assets and not required
@@ -67,6 +71,9 @@ gem 'friendly_id'
 # gem "rmagick"
 gem 'mini_magick', '~> 3.5.0'
 gem 'carrierwave'
+gem 'fog'
+gem 'carrierwave_direct'
+gem 'sidekiq'
 
 # https://github.com/ernie/ransack/
 gem 'ransack'

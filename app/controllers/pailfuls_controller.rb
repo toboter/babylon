@@ -1,4 +1,5 @@
 class PailfulsController < ApplicationController
+  before_filter :authenticate_user!
   def create
   	@bucket = Bucket.find(params[:id])
   	@assets = Asset.find(params[:asset_ids])

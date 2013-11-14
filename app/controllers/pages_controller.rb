@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-
+  before_filter :authenticate_user!, except: [:show]
   # GET /pages/1
   # GET /pages/1.json
   def show
