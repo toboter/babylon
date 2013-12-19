@@ -14,7 +14,7 @@ module BooksHelper
       	(book.editorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe) + ' (Hrsg.)'
       end
     else
-      if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
+      if (book.book_type == "Monograph" || book.book_type == "Monograph in a serial") && book.articles.any?
       	if without_author == true
       	  ''
       	else
@@ -36,20 +36,20 @@ module BooksHelper
 
   def book_title(book, without_article_title=false)
   	if book.title && book.serial.blank?
-  	  if book.book_type == "Monographie" && book.articles.any?
+  	  if book.book_type == "Monograph" && book.articles.any?
   	    link_to "#{book.articles.first.title}", book
   	  else
   	    link_to "#{book.title}", book
   	  end
   	elsif book.title && book.serial
-	    if book.book_type == "Monographie in einer Reihe" && book.articles.any?
+	    if book.book_type == "Monograph in a serial" && book.articles.any?
 	  	  if without_article_title == true
 	        (link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
 	      else
 	  	    (link_to "#{book.articles.first.title}", book.articles.first)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
 	      end
 	    else
-	  	  if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
+	  	  if book.book_type == "Collection in a serial" # || book.book_type == "Band einer Reihe"
 	  	    (link_to "#{book.title}", book)+', '+(link_to "#{book.serial.name}", book.serial)+' ('+(link_to "#{book.volume}", book)+')'
 	  	  else
 	  	    (link_to "#{book.serial.name}", book.serial) +' ('+(link_to "#{book.volume}", book)+')'
@@ -60,16 +60,16 @@ module BooksHelper
 
   def book_short_title(book, abbr=false)
   	if book.title && book.serial.blank?
-  	  if book.book_type == "Monographie" && book.articles.any?
+  	  if book.book_type == "Monograph" && book.articles.any?
   	    book.articles.first.title
   	  else
   	   book.title
   	  end
   	elsif book.title && book.serial
-	  if book.book_type == "Monographie in einer Reihe" && book.articles.any?
+	  if book.book_type == "Monograph in a serial" && book.articles.any?
 	  	  book.articles.first.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  else
-	  	if book.book_type == "Band einer Reihe" || book.book_type == "Sammelband in einer Reihe"
+	  	if book.book_type == "Collection in a serial" # || book.book_type == "Band einer Reihe"
 	  	  book.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
 	  	else
 	  	  (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
@@ -82,7 +82,7 @@ module BooksHelper
   	if book.editors.any?
       	book.editorships.map{ |a| a.person.fullname }.join(", ").html_safe + ' (Hrsg.), '
     else
-      if (book.book_type == "Monographie" || book.book_type == "Monographie in einer Reihe") && book.articles.any?
+      if (book.book_type == "Monograph" || book.book_type == "Monograph in a serial") && book.articles.any?
           book.articles.first.authorships.map{ |a| a.person.fullname }.join(", ").html_safe + ', '
       else
       	  ''

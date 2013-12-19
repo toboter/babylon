@@ -9,7 +9,7 @@ class Institution < ActiveRecord::Base
 
   has_many :people
   has_many :collections
-  # has_many :items, through: :collections
+  has_many :items, through: :collections
 
   validates_presence_of :name
   validates_associated :collections
@@ -20,4 +20,8 @@ class Institution < ActiveRecord::Base
     possible_parents = all-inst.self_and_descendants
   end
  
+  def include_all_members
+    Person.where('institution_id IN (?)', self.self_and_descendants)
+  end
+
 end

@@ -11,16 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131113110800) do
-
-  create_table "areas", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-    t.integer  "cluster_id"
-  end
+ActiveRecord::Schema.define(:version => 20131212152230) do
 
   create_table "assets", :force => true do |t|
     t.string   "assetfile"
@@ -90,6 +81,20 @@ ActiveRecord::Schema.define(:version => 20131113110800) do
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
+
+  create_table "citations", :force => true do |t|
+    t.integer  "reference_id"
+    t.string   "ref_target"
+    t.integer  "citable_id"
+    t.string   "citable_type"
+    t.integer  "predicate_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "citations", ["reference_id"], :name => "index_citations_on_reference_id"
 
   create_table "clusters", :force => true do |t|
     t.string   "name"
@@ -172,14 +177,14 @@ ActiveRecord::Schema.define(:version => 20131113110800) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
-    t.integer  "area_id"
+    t.integer  "cluster_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
 
-  add_index "groups", ["area_id"], :name => "index_groups_on_area_id"
+  add_index "groups", ["cluster_id"], :name => "index_groups_on_area_id"
 
   create_table "institution_hierarchies", :id => false, :force => true do |t|
     t.integer "ancestor_id",   :null => false
@@ -307,6 +312,7 @@ ActiveRecord::Schema.define(:version => 20131113110800) do
     t.string   "last_page"
     t.integer  "book_id"
     t.string   "uri"
+    t.boolean  "babylon_specific"
   end
 
   add_index "references", ["slug"], :name => "index_references_on_slug", :unique => true

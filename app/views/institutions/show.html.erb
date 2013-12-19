@@ -13,22 +13,35 @@
   <div class="span8">
     <%= content_tag :p, raw('Belongs to: '+(@institution.ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe)) unless @institution.root? %></p>
 
-    <%= content_tag :h4, 'Sub-Institutions', class: "muted" if @institution.children.present? %>
-    <%= render 'institution_tree', :institution => @institution, :tag => 'p', :indent => 0 %>
+    <%= content_tag :div, class: 'subinstitutions' do %>
+      <%= content_tag :h4, 'Sub-Institutions', class: "muted" %>
+      <%= render 'institution_tree', :institution => @institution, :tag => 'p', :indent => 0 %>
+    <% end if @institution.children.any? %>
 
-    <h4 class="muted">Members</h4>
-    <ul class="unstyled">
-      <% Person.where('institution_id IN (?)', @institution.self_and_descendants).each do |member| %>
-        <li><%= link_to "#{graded_fullname(member)}", member %></li>
-      <% end %>
-    </ul>
+    <%= content_tag :div, class: 'members' do %>
+      <h4 class="muted">Members</h4>
+      <ul class="unstyled">
+        <% @institution.include_all_members.each do |member| %>
+          <li><%= link_to graded_fullname(member), member %></li>
+        <% end %>
+      </ul>
+    <% end if @institution.include_all_members.any? %>
 
-    <h4 class="muted">Collections</h4>
-    <ul class="unstyled">
-      <% for collection in @institution.collections do %>
-        <li><%= link_to "#{collection.name+' ('+collection.shortcut+')'}", items_path(collection: collection.shortcut) %></li>
-      <% end %>
-    </ul>
+    <%= content_tag :div, class: 'collections' do %>
+      <h4 class="muted">Collections</h4>
+      <ul class="unstyled">
+        <% for collection in @institution.collections do %>
+          <li>
+            <%= link_to collection.name+' ('+collection.shortcut+')', items_path(collection: collection.shortcut) %>
+            <ul class="unstyled">
+              <% for item in collection.items do %>
+                <li><%= link_to item.name, item %> </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% end if @institution.collections.any? %>
 
   </div>
 
@@ -58,7 +71,7 @@
           <%= content_tag :li, (content_tag :span, @institution.zip, class: "postal-code")+' '+(content_tag :span, @institution.city, class: "locality") %>
           <%= content_tag :li, @institution.country, class: "country-name" %>
         <% end %>
-        <%= content_tag :li, link_to("#{@institution.uri}", "#{@institution.uri}"), class: "url" if @institution.uri.present? %>
+        <%= content_tag :li, link_to(@institution.uri, "#{@institution.uri}"), class: "url" if @institution.uri.present? %>
       </address>
     </ul> 
 

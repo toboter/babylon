@@ -1,0 +1,11 @@
+<fieldset>
+  <div class="citation-field">
+    <div class="control-group">
+      <%= f.label :reference_id, 'Bibliographic Entry', class: 'control-label' %>
+      <div class="form-inline controls">
+        <%= f.collection_select :reference_id, Reference.all, :id, :entries_for_select, class: 'input-xxlarge' %>
+        <small><%= f.link_to_remove "remove" %></small>
+      </div>
+    </div>  
+  </div>
+</fieldset>

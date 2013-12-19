@@ -18,7 +18,7 @@
       <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}) %>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane active" id="docs"> 
+      <div class="tab-pane" id="docs"> 
         <%= content_tag :h3, 'Documents', class: 'muted' if @reference.documents.any? %>
         <%= render "shared/document_docs_without_type", :var => @reference %>
       </div>
@@ -32,6 +32,12 @@
         <%= render 'comments/form', commentable: @reference, size: 'input-xxlarge' %>
       </div>
       <div class="tab-pane" id="connections">
+        <ul class="unstyled">
+          <% for item in @reference.items do %>
+            <li><%= link_to "#{item.citable.name}", item.citable %></li>
+          <% end %>
+        </ul>        
+
         <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
         <p>Außerdem in diesem Buch</p>
       </div>
@@ -43,7 +49,8 @@
   <div class="span3 offset1">
     <% if can? :edit, @reference %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>
@@ -55,6 +62,7 @@
     <% end  %>
 
     <h5 class="muted">Title</h5>
+    <p><%= @reference.babylon_specific %>
     <ul class="unstyled">
       <li><%= @reference.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>

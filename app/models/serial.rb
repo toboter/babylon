@@ -9,17 +9,17 @@ class Serial < ActiveRecord::Base
   validates_uniqueness_of :uri, :allow_blank => true
   validates_uniqueness_of :shortcut, :allow_blank => true
 
-  has_many :books
+  has_many :books, dependent: :destroy
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
-  SERIALTYPES = %w[Zeitschrift Reihe]
+  SERIALTYPES = %w[Journal Serial]
 
   def serial_types
-    if serial_type == 'Zeitschrift'
-      %w[Band\ einer\ Zeitschrift]
+    if serial_type == 'Journal'
+      %w[Issue\ of\ a\ journal]
     else
-      %w[Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe]
+      %w[Monograph\ in\ a\ serial Collection\ in\ a\ serial]
     end
   end
 

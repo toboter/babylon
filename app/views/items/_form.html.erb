@@ -1,4 +1,4 @@
-<%= form_for(@item) do |f| %>
+<%= nested_form_for(@item) do |f| %>
   <%= f.error_messages %>
 
   <div class="field">
@@ -30,9 +30,14 @@
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
     </div>
   </div>
+
+  <%= f.fields_for :citations do |builder| %>
+    <%= render "citation_fields", :f => builder %>
+  <% end %>
+  <%= f.link_to_add "Add Citation", :citations, class: 'controls' %>
 
   <div class="actions">
     <%= f.submit %>

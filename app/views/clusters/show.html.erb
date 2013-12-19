@@ -13,23 +13,46 @@
 
     <%= render "shared/document_docs_without_type", :var => @cluster %>
   
-    <%= content_tag :h4, link_to("Areas", cluster_areas_path(@cluster)), class: "muted" if @cluster.areas.present? %>
-    <%= render "shared/document_introductions", :vars => @cluster.areas %>
+    <%= content_tag :h4, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" if @cluster.groups.present? %>
+    <%= render "shared/document_introductions", :vars => @cluster.groups %>
   
-    <%= content_tag :h4, 'Projects', class: "muted" if @cluster.projects.present? %>
-    <%= render "shared/document_introductions", :vars => @cluster.projects %>  
+    <%= content_tag :h4, link_to("Projects", [@cluster, 'projects']), class: "muted" if @cluster.projects.present? %>
+    <% @all_projects.each do |project| %>
+      <div class="well">
+        <h4>
+          <%= link_to [project.projectable, project] do %>
+            <%= project.projectable.name if project.projectable_type == "Cluster" %>
+            <% if project.projectable_type == "Group" %>
+              <%= project.projectable.cluster.name %> /
+              <%= project.projectable.name %>
+            <% end %>
+            /
+            <%= project.name %>
+          <% end %>
+        </h4>
+  
+        <% if project.documents.doctype('Introduction').present? %>
+          <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
+        <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+        <% else %>
+          <p>No Introduction available</p>
+        <% end %>
+      </div>
+    <% end %>  
+
   </div>
 
   <div class="span3 offset1">
     <% if can? :edit, @cluster %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>
           <ul class="dropdown-menu">
             <li><%= link_to 'Ungrouped project', new_cluster_project_path(@cluster) %></li>
-            <li><%= link_to 'Area', new_area_path(:cluster_id => @cluster) %></li>
+            <li><%= link_to 'Group', new_group_path(:cluster_id => @cluster) %></li>
             <li class="divider"></li>
             <li><%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') %></li>
             <li><%= link_to 'Document', polymorphic_path([:new, @cluster, :document]) %></li>
@@ -48,11 +71,11 @@
       </li>
     </ul>
 
-    <% if @cluster.areas.present? %>
-      <h5 class="muted">Areas</h5>
+    <% if @cluster.groups.present? %>
+      <h5 class="muted">Groups</h5>
       <ul class="unstyled">
-        <% for area in @cluster.areas do %>
-          <li><%= link_to "#{area.name}", area %></li>
+        <% for group in @cluster.groups do %>
+          <li><%= link_to "#{group.name}", group %></li>
         <% end %>
       </ul>
     <% end %>

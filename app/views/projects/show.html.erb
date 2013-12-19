@@ -4,10 +4,8 @@
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <% if @project.projectable_type == "Group" %>
-    <%= content_tag(:li, link_to("#{@project.projectable.area.cluster.name}", @project.projectable.area.cluster) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, link_to("Areas", cluster_areas_path(@project.projectable.area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, link_to("#{@project.projectable.area.name}", @project.projectable.area) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, link_to("Groups", area_groups_path(@project.projectable.area)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@project.projectable.cluster.name}", @project.projectable.cluster) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Groups", cluster_groups_path(@project.projectable)) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) %>
   <% end %>
   <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) if @project.projectable_type == "Cluster" %>
@@ -103,7 +101,8 @@
   <div class="span3 offset1">
     <% if can? :edit, @project %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>

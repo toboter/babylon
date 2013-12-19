@@ -13,9 +13,9 @@
           <%= authors_of_article(reference)+', ' %>
           <%= link_to "#{reference.title}", reference %>
           <% if reference.book.present? %>
-            <%= raw(', in: '+editors(reference)) unless reference.book.book_type == 'Monographie' || reference.book.book_type == 'Monographie in einer Reihe' %>
-            <%= content_tag :span, ', ' if reference.book.book_type == 'Monographie in einer Reihe' %>
-            <%= article_in_book(reference) unless reference.book.book_type == 'Monographie' %>
+            <%= raw(', in: '+editors(reference)) unless reference.book.book_type == 'Monograph' || reference.book.book_type == 'Monograph in a serial' %>
+            <%= content_tag :span, ', ' if reference.book.book_type == 'Monograph in a serial' %>
+            <%= article_in_book(reference) unless reference.book.book_type == 'Monograph' %>
             <%= content_tag :span, ', ' if reference.book.publisher.present? %>
             <%= reference.book.publisher if reference.book.publisher.present? %>
             <%= content_tag :span, ', ' if reference.book.place.present? %>

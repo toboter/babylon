@@ -15,14 +15,8 @@ Babylon::Application.routes.draw do
   end
 
   resources :clusters, :path => 'modules' do
-    resources :areas, only: [:index]
     resources :groups, only: [:index]
     resources :projects
-    resources :documents
-  end
-
-  resources :areas do
-    resources :groups
     resources :documents
   end
 
@@ -30,7 +24,6 @@ Babylon::Application.routes.draw do
     resources :projects
     resources :documents
   end
-
 
   resources :projects, only: [:index, :show] do
     resources :documents

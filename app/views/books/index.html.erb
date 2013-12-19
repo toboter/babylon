@@ -14,7 +14,8 @@
   <div class="span2 offset1">
     <% if can? :edit, @books %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>
@@ -28,9 +29,9 @@
     <%= render "shared/bibliographic_cat_navs", :obj => @books %>
     <h5 class="muted">Filter by type</h5>
     <ul class="unstyled">
-      <li><%= link_to "All Books", books_path %> (<%= @books_all.count %>)</li>
-      <li><%= link_to "Collections", books_path(:type => 'collections') %> (<%= @books_all.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
-      <li><%= link_to "Monographs", books_path(:type => 'monographs') %> (<%= @books_all.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe']).count %>)</li>
+      <li><%= link_to "All books", books_path %> (<%= @books_all.count %>)</li>
+      <li><%= link_to "Collections", books_path(:type => 'collections') %> (<%= @books_all.where('book_type NOT IN (?)', ['Monograph', 'Monograph in a serial']).count %>)</li>
+      <li><%= link_to "Monographs", books_path(:type => 'monographs') %> (<%= @books_all.where('book_type IN (?)', ['Monograph', 'Monograph in a serial']).count %>)</li>
     </ul>
   </div>
 <% end %>

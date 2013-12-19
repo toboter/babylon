@@ -10,7 +10,7 @@
 <% content_for :main_section do %>
   <div class="span8">
     <br />
-    <%= image_tag @images.first.assetfile.normal.url %>
+    <%= image_tag @images.first.assetfile.normal.url if @images.first %>
   </div>   
 
   <div class="span4">
@@ -22,18 +22,21 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li><%= link_to "Description", polymorphic_path([:new, @item, :document], :document_type => "Description") unless @item.documents.doctype('Description') %></li>
-          <li><%= link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket]) %></li>
+          <%= content_tag :li, (link_to "Description Document", polymorphic_path([:new, @item, :document], :document_type => "Description")) unless @item.documents.doctype('Description') %>
+          <%= content_tag :li, (link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket])) %>
+          <%= content_tag :li, (link_to 'Document', polymorphic_path([:new, @item, :document])) %>
         </ul>
       </div>
     <% end  %>
-    <%= content_tag :h3, "#{@item.title}", class: "muted" %>
+    <%= content_tag :h3, "#{@item.title? ? @item.title : @item.accession_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">
         <%= item_description('Accession Number', @item.accession_name) %>
         <%= item_description('Accession Date', @item.accession_date) %>
         <%= item_description('Context', @item.context_id) %>
-        <%= item_description('Classification', @item.tags.map{ |a| a.name }.join(", ").html_safe) %>
+        <% for tag in @item.tags do %>
+          <%= item_description(tag.root.name, tag.name) %>
+        <% end %>
       </table> 
     </div>
     <div class="accordion" id="item-accordion">
@@ -71,7 +74,7 @@
         </div>
         <div id="collapseThree" class="accordion-body collapse">
           <div class="accordion-inner">
-            <p>References</p>
+            <small><%= render "references/bib_entries", :references => @item.references %></small>
           </div>
         </div>
       <% end %>
@@ -91,6 +94,18 @@
           </div>
         </div>
       <% end if @item.buckets.any? %>
+      <%= content_tag :div, class: "accordion-group" do %>
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseFive">
+            Docs
+          </a>
+        </div>
+        <div id="collapseFive" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <%= render "shared/document_docs_without_type", :var => @item %> 
+          </div>
+        </div>
+      <% end if @item.documents.any? %>
     </div>
   </div>
 <% end %>

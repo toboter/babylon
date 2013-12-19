@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  reference: 
+  ref_target: MyString
+  citable: 
+  predicate_id: 1
+
+two:
+  reference: 
+  ref_target: MyString
+  citable: 
+  predicate_id: 1

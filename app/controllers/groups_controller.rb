@@ -3,10 +3,7 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    if params[:area_id]
-      @parent = Area.find(params[:area_id])
-      @groups = @parent.groups
-    elsif params[:cluster_id]
+    if params[:cluster_id]
       @parent = Cluster.find(params[:cluster_id])
       @groups = @parent.groups
     else
@@ -33,7 +30,7 @@ class GroupsController < ApplicationController
   # GET /groups/new
   # GET /groups/new.json
   def new
-    @group = Group.new(:area_id => params[:area_id])
+    @group = Group.new(:cluster_id => params[:cluster_id])
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

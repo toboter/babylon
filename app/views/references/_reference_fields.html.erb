@@ -30,7 +30,7 @@
       <div class="control-group">
         <%= f.label :book_id, 'Select Book', :class => 'control-label' %>
         <div class="controls">
-          <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: 'input-xxlarge') %>
+          <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monograph', 'Monograph in a serial']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: 'input-xxlarge') %>
         </div>
       </div>
     <% else %>

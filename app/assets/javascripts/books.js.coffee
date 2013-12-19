@@ -9,7 +9,7 @@ jQuery ->
   $('#book_book_type').change( ->
     book_type = $("#book_book_type option").filter(':selected').text()
     # alert('Handler for .change() called. from ' + book_type)
-    if book_type == 'Monographie'
+    if book_type == 'Monograph'
       $("#if_serial").hide()
       $("#if_editorial").hide()
       $("#if_collection").hide()
@@ -17,7 +17,7 @@ jQuery ->
       $("#year").show()
       $("#articles").show()
       $('#book-submit').removeAttr('disabled')
-    if book_type == 'Sammelband'
+    if book_type == 'Collection'
       $("#if_serial").hide()
       $("#if_editorial").show()
       $("#if_collection").show()
@@ -25,7 +25,7 @@ jQuery ->
       $("#year").show()
       $("#articles").show()
       $('#book-submit').removeAttr('disabled')
-    if book_type == 'Monographie in einer Reihe'
+    if book_type == 'Monograph in a serial'
       $("#if_serial").show()
       $("#if_editorial").hide()
       $("#if_collection").hide()
@@ -33,7 +33,7 @@ jQuery ->
       $("#year").show()
       $("#articles").show()
       $('#book-submit').removeAttr('disabled')
-    if book_type == 'Sammelband in einer Reihe'
+    if book_type == 'Collection in a serial'
       $("#if_serial").show()
       $("#if_editorial").show()
       $("#if_collection").show()
@@ -41,7 +41,7 @@ jQuery ->
       $("#year").show()
       $("#articles").show()
       $('#book-submit').removeAttr('disabled')
-    if book_type == 'Band einer Zeitschrift'
+    if book_type == 'Issue of a journal'
       $("#if_serial").show()
       $("#if_editorial").hide()
       $("#if_collection").hide()

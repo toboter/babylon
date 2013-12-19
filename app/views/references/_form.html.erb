@@ -4,6 +4,8 @@
   <%= render 'reference_fields', :f => f %>
 
   <div class="form-actions">
+  	<%= f.label :babylon_specific, "integrate into babylon bibliography?", :class => 'control-label' %>
+	<%= f.check_box :babylon_specific %>
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <%= link_to 'Abbrechen', :back, :class => 'btn' %>
   </div>

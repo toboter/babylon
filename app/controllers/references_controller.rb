@@ -7,8 +7,8 @@ class ReferencesController < ApplicationController
     @search = Reference.search(params[:q])
     @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
     @references_all = Reference.all
-    # @collections = @references_all.select { |reference| reference.book.book_type == 'Sammelband' || reference.book.book_type == 'Sammelband in einer Reihe' || reference.book.book_type == 'Band einer Zeitschrift' if reference.book } 
-    # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monographie in einer Reihe' || reference.book.book_type == 'Monographie' if reference.book } 
+    # @collections = @references_all.select { |reference| reference.book.book_type == 'Collection' || reference.book.book_type == 'Collection in a serial' || reference.book.book_type == 'Issue of a journal' if reference.book } 
+    # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monograph in a serial' || reference.book.book_type == 'Monograph' if reference.book } 
     # @misc = @references_all.select { |reference| reference.book_id == nil }
 
     @search.build_sort if @search.sorts.empty?
@@ -99,7 +99,7 @@ class ReferencesController < ApplicationController
     @book = @reference.book
     @reference.destroy
 
-    if @book.book_type == "Monographie" || @book.book_type == "Monographie in einer Reihe"
+    if @book && (@book.book_type == "Monograph" || @book.book_type == "Monograph in a serial")
       @book.destroy
     end
 

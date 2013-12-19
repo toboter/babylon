@@ -19,6 +19,7 @@ class ClustersController < ApplicationController
     @group_project_members = @cluster.group_projects.map {|project| [project.members.map {|member| member.id }]}.flatten
     @raw_members = @project_members+@group_project_members
     @members = User.find(@raw_members)
+    @all_projects = @cluster.projects+@cluster.group_projects
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

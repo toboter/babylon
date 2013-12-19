@@ -2,11 +2,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <% if @parent %>
-  	<%= content_tag(:li, link_to("#{@parent.cluster.name}", @parent.cluster) + content_tag(:span, '/', class: 'divider')) unless @parent.class.to_s == 'Cluster' %>
-  	<%= content_tag(:li, link_to("#{@parent.class.to_s.pluralize}", cluster_areas_path(@parent.cluster)) + content_tag(:span, '/', class: 'divider')) unless @parent.class.to_s == 'Cluster' %>
-  	<%= content_tag(:li, link_to("#{@parent.name}", @parent) + content_tag(:span, '/', class: 'divider')) %>
-  <% end %>
+  <%= content_tag(:li, link_to("#{@parent.name}", @parent) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "Groups", class: 'active' %>
 <% end %>
 

@@ -22,14 +22,16 @@ class Book < ActiveRecord::Base
   validates_uniqueness_of :book_identifier, :allow_blank => true, :message => "The Identifier is already taken"
   #validates_associated Die Validierung des genesteten Artikels erfolgt über reject_if
 
-  BOOKTYPES = %w[Monographie Sammelband Monographie\ in\ einer\ Reihe Sammelband\ in\ einer\ Reihe Band\ einer\ Zeitschrift]
+  BOOKTYPES = %w[Monograph Collection Monograph\ in\ a\ serial Collection\ in\ a\ serial Issue\ of\ a\ journal]
+  # "Proceeding" "Reference book"
+  # -> in monograph, in collection, in proceedings, in journal, in reference book
 
   def book_title_not_needed?
-    book_type == 'Monographie' || book_type == 'Monographie in einer Reihe' || book_type == 'Band einer Zeitschrift'
+    book_type == 'Monograph' || book_type == 'Monograph in a serial' || book_type == 'Issue of a journal'
   end
 
   def book_is_serial?
-    book_type == 'Band einer Zeitschrift' || book_type == "Sammelband in einer Reihe" || book_type == 'Monographie in einer Reihe'
+    book_type == 'Issue of a journal' || book_type == "Collection in a serial" || book_type == 'Monograph in a serial'
   end
 
 

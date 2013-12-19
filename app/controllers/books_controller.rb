@@ -8,9 +8,9 @@ class BooksController < ApplicationController
 
     if params[:type]
       if params[:type] == 'collections'
-        @books = @books.where('book_type NOT IN (?)', ['Monographie', 'Monographie in einer Reihe'])
+        @books = @books.where('book_type NOT IN (?)', ['Monograph', 'Monograph in a serial'])
       elsif params[:type] == 'monographs'
-        @books = @books.where('book_type IN (?)', ['Monographie', 'Monographie in einer Reihe'])
+        @books = @books.where('book_type IN (?)', ['Monograph', 'Monograph in a serial'])
       end
     end
 

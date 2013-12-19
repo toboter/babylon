@@ -36,11 +36,27 @@
     </div>
     <%= render "bib_entries", :references => @references %>
     <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+
+    <div class="well" style="margin-top:100px;">
+      <h4>GLOSSARY</h4>
+      <ul class="unstyled">
+        <li>Monographs / Monographien — <em>Book with an explicit author</em></li>
+        <li>In Books / Buchbeitrag — <em>An untitled part, section or chapter of a monograph</em></li>
+        <li>Collections / Sammelband — <em>A collection of texts contributed by different authors</em></li>
+        <li>In Collections / Sammelbandbeitrag — <em>Part of a superior work with its own title</em></li>
+        <li>Proceedings / Konferenzband/Tagungsband — <em>A collection of contributions published in the context of a conference or workshop</em></li>
+        <li>In Proceedings / Konferenzbeitrag — <em>Contribution in a conference proceedings</em></li>
+        <li>Journal / Zeitschrift — <em>A periodical published at regular intervals</em></li>
+        <li>Issue / Ausgabe — <em>Issue of a journal</em></li>
+        <li>In Journal / Zeitschriftenartikel — <em>Article in a journal</em></li>
+        <li>Reference / Nachschlagewerk — <em>References including encyclopedia, dictionaries, compendia, bibliographies and online-references</em></li>
+        <li>In Reference / Lexikonartikel — <em>Contribution in a reference</em></li>
+      </ul>
+    </div>
   </div>
 
   <div class="span2 offset1">
     <%= render "shared/bibliographic_cat_navs", :obj => @references %>
-
   </div>
 
 <% end %>

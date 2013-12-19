@@ -13,10 +13,10 @@
     <h1 style="margin-bottom:40px;margin-top:60px;"><%= @document.title %></h1>
     <%= content_tag :div, class: "abstract_section" do %>
       <b>Abstract: </b><%= @document.abstract %>
-    <% end if @document.abstract %>
+    <% end if @document.abstract? %>
     <%= content_tag :div, class: "content_section" do %>
       <%= raw@document.content %>
-    <% end if @document.content %>
+    <% end if @document.content? %>
   </div>
 
 

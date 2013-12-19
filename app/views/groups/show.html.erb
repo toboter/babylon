@@ -3,10 +3,8 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("#{@group.area.cluster.name}", @group.area.cluster) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("Areas", cluster_areas_path(@group.area.cluster)) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("#{@group.area.name}", @group.area) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("Groups", area_groups_path(@group.area)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("#{@group.cluster.name}", @group.cluster) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Groups", cluster_groups_path(@group.cluster)) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "#{@group.name}", class: 'active' %>
 <% end %>
 
@@ -17,13 +15,36 @@
     <%= render "shared/document_docs_without_type", :var => @group %>
 
     <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
-    <%= render "shared/document_introductions", :vars => @group.projects %>
+    <% @group.projects.each do |project| %>
+      <div class="well">
+        <h4>
+          <%= link_to [project.projectable, project] do %>
+            <%= project.projectable.name if project.projectable_type == "Cluster" %>
+            <% if project.projectable_type == "Group" %>
+              <%= project.projectable.cluster.name %> /
+              <%= project.projectable.name %>
+            <% end %>
+            /
+            <%= project.name %>
+          <% end %>
+        </h4>
+  
+        <% if project.documents.doctype('Introduction').present? %>
+          <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
+        <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+        <% else %>
+          <p>No Introduction available</p>
+        <% end %>
+      </div>
+    <% end %>  
+
   </div>
 
   <div class="span3 offset1">
     <% if can? :edit, @group %>
       <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-large" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
           Add
           <span class="caret"></span>
         </a>

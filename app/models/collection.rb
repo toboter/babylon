@@ -4,7 +4,7 @@ class Collection < ActiveRecord::Base
   stampable
 
   belongs_to :institution
-  # has_many :items
+  has_many :items
 
   validates_presence_of :name, :shortcut
   validates_uniqueness_of :name, :shortcut
