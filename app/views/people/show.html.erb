@@ -9,7 +9,7 @@
 
 <% content_for :main_section do %>
   <div class="span8">
-    <%= content_tag :p, (@person.institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institution.present? %>
+    <%= content_tag :p, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Public Activity', "#updates", data: {toggle: 'tab'}) if @person.user %>
@@ -88,6 +88,28 @@
       <%= content_tag :li, @person.profession if @person.profession.present? %>
       <%= content_tag :li, @person.gender if @person.gender.present? %>
     </ul>
+
+    <% if @person.affiliations.any? %>
+      <%= content_tag :div, style: "margin-top:20px;" do %>
+        <h5 class="muted" style="margin-top:20px;">Primary institution</h5>
+        <ul class="unstyled">
+          <% for affiliation in @person.affiliations.where(primary: true) %>
+            <li><%= link_to "#{affiliation.institution.name}", affiliation.institution %></li>
+          <% end %>
+        </ul>
+      <% end if @person.affiliations.where(primary: true).any? %>
+
+      <%= content_tag :div, style: "margin-top:20px;" do %>
+        <h5 class="muted" style="margin-top:20px;">Other institutions</h5>
+        <ul class="unstyled">
+          <% for affiliation in @person.affiliations.where(primary: false) %>
+            <li><%= link_to "#{affiliation.institution.name}", affiliation.institution %></li>
+          <% end %>
+        </ul>
+      <% end if @person.affiliations.where(primary: false).any? %>
+    <% end %>
+
+
     <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), page_path('help', anchor: 'microformats') %>
     <h5 class="muted">Contact Information</h5>
     <ul class="unstyled">
@@ -95,11 +117,11 @@
       <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
       <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
       <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
-        <%= content_tag :li, prepend('home', '-25px')+(@person.institution.root.self_and_descendants-@person.institution.descendants-@person.institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
-        <%= content_tag :li, @person.institution.street, class: "street-address" %>
-        <%= content_tag :li, (content_tag :span, @person.institution.zip, class: "postal-code")+' '+(content_tag :span, @person.institution.city, class: "locality") %>
-        <%= content_tag :li, @person.institution.country, class: "country-name" %>
-      <% end if @person.institution.present? && @person.show_inst_address == true -%>
+        <%= content_tag :li, prepend('home', '-25px')+(@person.primary_or_first_institution.root.self_and_descendants-@person.primary_or_first_institution.descendants-@person.primary_or_first_institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
+        <%= content_tag :li, @person.primary_or_first_institution.street, class: "street-address" %>
+        <%= content_tag :li, (content_tag :span, @person.primary_or_first_institution.zip, class: "postal-code")+' '+(content_tag :span, @person.primary_or_first_institution.city, class: "locality") %>
+        <%= content_tag :li, @person.primary_or_first_institution.country, class: "country-name" %>
+      <% end if @person.institutions.any? && @person.show_inst_address == true -%>
       <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
     </ul>
     </address>

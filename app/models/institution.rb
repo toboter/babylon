@@ -7,7 +7,8 @@ class Institution < ActiveRecord::Base
   stampable
   acts_as_tree :dependent => :destroy
 
-  has_many :people
+  has_many :affiliations
+  has_many :people, through: :affiliations
   has_many :collections
   has_many :items, through: :collections
 
@@ -21,7 +22,7 @@ class Institution < ActiveRecord::Base
   end
  
   def include_all_members
-    Person.where('institution_id IN (?)', self.self_and_descendants)
+    Person.joins(:affiliations).where('affiliations.institution_id IN (?)', self.self_and_descendants)
   end
 
 end

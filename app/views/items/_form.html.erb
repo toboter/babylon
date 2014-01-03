@@ -1,32 +1,54 @@
-<%= nested_form_for(@item) do |f| %>
+<%= nested_form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
-  <div class="field">
-    <%= f.label :collection_id %><br />
-    <%= f.collection_select :collection_id, Collection.all, :id, :shortcut %>
+  <%= content_tag :h4, 'Meta Information' %>
+  <div class="control-group">
+    <%= f.label :collection_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :accession_number %><br />
-    <%= f.text_field :accession_number %>
-  </div>
-  <div class="field">
-    <%= f.label :accession_number_index %><br />
-    <%= f.text_field :accession_number_index %>
-  </div>
-  <div class="field">
-    <%= f.label :accession_date %><br />
-    <%= f.datetime_select :accession_date %>
-  </div>
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :context_id %><br />
-    <%= f.number_field :context_id %>
+  <div class="control-group">
+    <%= f.label :inventory_number, class: 'control-label' %>
+    <div class="controls form-inline">
+      <%= f.text_field :inventory_number %>
+      <%= f.label :inventory_number_index, 'Index', style: 'margin-left:10px;' %>
+      <%= f.text_field :inventory_number_index %>
+    </div>
   </div>
 
+
+
+  <div class="control-group">
+    <%= f.label :accession_date, class: 'control-label' %>
+    <div class="controls">
+      <%= f.date_select :accession_date %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :classification_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select(:classification_id, ItemClassification.all, :id, :name, :include_blank => true) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :title, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :context_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :context_id %>
+    </div>
+  </div>
+
+  <%= content_tag :h4, 'Tags' %>
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
@@ -34,6 +56,7 @@
     </div>
   </div>
 
+  <%= content_tag :h4, 'Citations' %>
   <%= f.fields_for :citations do |builder| %>
     <%= render "citation_fields", :f => builder %>
   <% end %>

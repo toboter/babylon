@@ -1,19 +1,19 @@
-<% title "#{@item.accession_name}", nil, nil %>
+<% title "#{@item.inventory_name}", nil, nil %>
 <% edit_section_for(@item, nil) if can? :author, @item %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
-  <li class="active"><%= "#{@item.accession_name}" %></li>
+  <li class="active"><%= "#{@item.inventory_name}" %></li>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span8">
+  <div class="span7">
     <br />
     <%= image_tag @images.first.assetfile.normal.url if @images.first %>
   </div>   
 
-  <div class="span4">
+  <div class="span5">
     <% if can? :read, @item %>
       <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
         <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
@@ -28,15 +28,14 @@
         </ul>
       </div>
     <% end  %>
-    <%= content_tag :h3, "#{@item.title? ? @item.title : @item.accession_name}", class: "muted" %>
+    <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">
-        <%= item_description('Accession Number', @item.accession_name) %>
+        <%= item_description('Inventory Number', @item.inventory_name) %>
         <%= item_description('Accession Date', @item.accession_date) %>
         <%= item_description('Context', @item.context_id) %>
-        <% for tag in @item.tags do %>
-          <%= item_description(tag.root.name, tag.name) %>
-        <% end %>
+        <%= item_description('Classification', @item.classification.name) if @item.classification %>
+        <%= item_description('Tags', @item.tags.map{ |a| a.name }.join(", ").html_safe) %>
       </table> 
     </div>
     <div class="accordion" id="item-accordion">

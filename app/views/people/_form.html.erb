@@ -77,18 +77,21 @@
       <div class="span12">
         <h4 class="muted">Contact Information</h4>
       </div>
-      <div class="control-group">
-        <%= f.label :institute, class: 'control-label' %>
-        <div class="controls">
-          <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true}, class: 'input-xxlarge' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :show_inst_address, 'Show the institutes address in the profile', class: 'control-label' %>
-        <div class="controls">
+
+      <%= f.fields_for :affiliations do |builder| %>
+        <%= render "institution_fields", :f => builder %>
+      <% end %>
+      <%= f.link_to_add "Add Institution", :affiliations, class: 'control-label' %>
+
+      <div class="controls">
+        <%= f.label :show_inst_address, class: 'checkbox' do %>
           <%= f.check_box :show_inst_address %>
-        </div>
+          Show the primary institutes address in the profile
+        <% end %>
       </div>
+      
+      <hr class="controls">
+
       <div class="control-group">
         <%= f.label :public_email, class: 'control-label' %>
         <div class="controls">
@@ -114,7 +117,6 @@
         </div>
       </div>
     </div>
-
 
     <div class="form-actions">
       <%= f.submit "Speichern", :class => 'btn btn-primary' %>

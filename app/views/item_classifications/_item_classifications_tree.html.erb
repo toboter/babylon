@@ -1,0 +1,9 @@
+  <%= content_tag :ul, class: 'unstyled', style: "padding-left:#{indent}px;" do -%>
+    <% item_classification.children.each do |leave| %>
+      <%= content_tag :li do -%>
+        <%= link_to "#{leave.name}", leave, class: 'name' %> 
+        <%= link_to 'Add sub classification', new_item_classification_path(:parent_id => leave) %>
+        <%= render 'item_classifications_tree', :item_classification => leave, :indent => (indent+10) %>
+      <% end %>
+    <% end %>
+  <% end if item_classification.children.present? %>

@@ -19,7 +19,7 @@
     <% end if @institution.children.any? %>
 
     <%= content_tag :div, class: 'members' do %>
-      <h4 class="muted">Members</h4>
+      <h4 class="muted">People</h4>
       <ul class="unstyled">
         <% @institution.include_all_members.each do |member| %>
           <li><%= link_to graded_fullname(member), member %></li>
@@ -54,7 +54,7 @@
           <span class="caret"></span>
         </a>
           <ul class="dropdown-menu">
-            <li><%= link_to 'Sub-Institution', new_institution_path(:parent_id => @institution) %></li>
+            <li><%= link_to 'Sub-Institution', new_institution_path(:parent_id => @institution.id) %></li>
           </ul>
       </div>
     <% end  %>

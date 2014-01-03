@@ -61,8 +61,8 @@
       </div>
     <% end  %>
 
+    <%= content_tag :span, 'Babylon', class: 'label label-info pull-right' if @reference.babylon_specific %>
     <h5 class="muted">Title</h5>
-    <p><%= @reference.babylon_specific %>
     <ul class="unstyled">
       <li><%= @reference.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>

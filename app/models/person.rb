@@ -4,7 +4,7 @@ class Person < ActiveRecord::Base
 
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
                   :last_name, :nickname, :profession, :public_email, :updater_id,
-                  :phone, :fax, :uri, :institution_id, :show_inst_address
+                  :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes
   
   stampable
 
@@ -20,10 +20,13 @@ class Person < ActiveRecord::Base
   has_many :buckets, as: :attachable
   has_many :assets, through: :buckets
   has_many :documents, as: :documentable
-  belongs_to :institution
+  has_many :affiliations, :dependent => :destroy
+  has_many :institutions, through: :affiliations
 
   validates_presence_of :first_name, :last_name
   validates_uniqueness_of :user_id, :allow_blank => true, :message => "is already connected to someone else"
+
+  accepts_nested_attributes_for :affiliations, allow_destroy: true
 
   scope :unconnected, where(:user_id => nil)
 
@@ -49,6 +52,14 @@ class Person < ActiveRecord::Base
 
   def self.ransackable_attributes(auth_object = nil)
     %w( first_name last_name ) + _ransackers.keys
+  end
+
+  def primary_or_first_institution
+    if affiliations.where(primary: true).any?
+      affiliations.where(primary: true).first.institution
+    else
+      affiliations.first.institution
+    end
   end
 
 end

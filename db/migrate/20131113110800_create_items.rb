@@ -6,7 +6,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :accession_number_index
       t.datetime :accession_date
       t.integer :context_id
-      # Es erscheint sinnvoller die Items mit der entsprechenden Classification zu taggen
+      # Es erscheint nicht sinnvoll die Items mit der entsprechenden Classification zu taggen
       # t.integer :classification_id
       t.string :title
 

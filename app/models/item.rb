@@ -1,5 +1,5 @@
 class Item < ActiveRecord::Base
-  attr_accessible :collection_id, :accession_number, :accession_number_index, :context_id, 
+  attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, :context_id, 
   				  :accession_date, :creator_id, :updater_id, :title, :tag_ids, :citations_attributes
 
   stampable
@@ -7,6 +7,7 @@ class Item < ActiveRecord::Base
   belongs_to :collection
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
+  belongs_to :classification, class_name: 'ItemClassification', foreign_key: 'classification_id'
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
   has_many :buckets, as: :attachable
@@ -19,17 +20,17 @@ class Item < ActiveRecord::Base
   has_many :documents, as: :documentable
   has_many :comments, as: :commentable
 
-  validates_presence_of :collection_id, :accession_number
-  validates :accession_number, :uniqueness => {:scope => :accession_number_index}
+  validates_presence_of :collection_id, :inventory_number
+  validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
 
   accepts_nested_attributes_for :citations, allow_destroy: true
 
-  def accession_name
-  	collection.shortcut+' '+accession_number+accession_number_index
+  def inventory_name
+  	collection.shortcut+' '+inventory_number+inventory_number_index
   end
 
   def name
-  	accession_name
+  	inventory_name
   end
 
 end

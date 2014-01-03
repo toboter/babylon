@@ -10,7 +10,7 @@
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
-          <th>Accession Number</th>
+          <th>Inventory Number</th>
           <th>Title</th>
           <th>Accession Date</th>
           <th>Context</th>
@@ -21,7 +21,7 @@
       <tbody>
         <% @items.each do |item| %>
           <tr>
-            <td><%= item.accession_name %></td>
+            <td><%= item.inventory_name %></td>
             <td><%= item.title %></td>
             <td><%= item.accession_date.strftime("%d.%m.%Y") %></td>
             <td><%= item.context_id %></td>

@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131212152230) do
+ActiveRecord::Schema.define(:version => 20140102175157) do
+
+  create_table "affiliations", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "institution_id"
+    t.datetime "from"
+    t.datetime "to"
+    t.boolean  "primary"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "affiliations", ["institution_id"], :name => "index_affiliations_on_institution_id"
+  add_index "affiliations", ["person_id"], :name => "index_affiliations_on_person_id"
 
   create_table "assets", :force => true do |t|
     t.string   "assetfile"
@@ -214,10 +229,29 @@ ActiveRecord::Schema.define(:version => 20131212152230) do
 
   add_index "institutions", ["slug"], :name => "index_institutions_on_slug", :unique => true
 
+  create_table "item_classification_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "item_classification_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "item_classification_anc_desc_udx", :unique => true
+  add_index "item_classification_hierarchies", ["descendant_id"], :name => "item_classification_desc_idx"
+
+  create_table "item_classifications", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "parent_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
   create_table "items", :force => true do |t|
     t.integer  "collection_id"
-    t.string   "accession_number"
-    t.string   "accession_number_index"
+    t.string   "inventory_number"
+    t.string   "inventory_number_index"
     t.datetime "accession_date"
     t.integer  "context_id"
     t.string   "title"
@@ -225,6 +259,7 @@ ActiveRecord::Schema.define(:version => 20131212152230) do
     t.datetime "updated_at",             :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "classification_id"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
@@ -283,7 +318,6 @@ ActiveRecord::Schema.define(:version => 20131212152230) do
     t.string   "phone"
     t.string   "fax"
     t.string   "uri"
-    t.integer  "institution_id"
     t.boolean  "show_inst_address"
   end
 

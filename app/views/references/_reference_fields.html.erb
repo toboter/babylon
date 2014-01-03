@@ -78,4 +78,11 @@
   <% if @book %>
     <p class="controls"><small><%= f.link_to_remove "remove" %></small></p>
   <% end %>
+
+  <div class="controls">
+    <%= f.label :babylon_specific, :class => 'checkbox' do %>
+      <%= f.check_box :babylon_specific %>
+      Integrate into <span class="text-info"><strong>Babylon Bibliography</strong></span>?
+    <% end %>
+  </div>
 </fieldset>

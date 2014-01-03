@@ -26,7 +26,7 @@ class Reference < ActiveRecord::Base
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w( title ) + _ransackers.keys
+    %w( title babylon_specific ) + _ransackers.keys
   end
 
   def entries_for_select

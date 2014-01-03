@@ -1,15 +1,29 @@
 Babylon::Application.routes.draw do
 
 
+  # Settings
+  resources :institutions, only: [:show, :index]
+  scope '/settings' do
+    resources :item_classifications
+    resources :tags
+    resources :institutions, except: [:show, :index]
+  end
+  resources :pages, only: [:show, :create] do
+    resources :buckets
+    resources :documents
+  end
+
+
+  # Resource parts
   resources :items do
     resources :buckets
     resources :documents
     resources :comments, except: [:index, :show]
   end
 
-  resources :tags
 
-  resources :pages, only: [:show, :create] do
+  # Research Group Management
+  resources :people do
     resources :buckets
     resources :documents
   end
@@ -30,7 +44,12 @@ Babylon::Application.routes.draw do
     resources :todos, except: :edit
   end
 
-  resources :institutions
+  resources :todos, only: :show do
+    resources :comments, except: [:index, :show]
+  end
+
+
+  # Bibliography Management
   resources :serials
   resources :books
   resources :references, :path => 'bibliography' do
@@ -39,11 +58,8 @@ Babylon::Application.routes.draw do
     resources :comments, except: [:index, :show]
   end
 
-  resources :people do
-    resources :buckets
-    resources :documents
-  end
 
+  # Documents & Assets
   # Standard Document routes
   resources :documents, only: [:index, :show] do
     resources :comments, except: [:index, :show]
@@ -71,10 +87,8 @@ Babylon::Application.routes.draw do
     end
   end
 
-  resources :todos, only: :show do
-    resources :comments, except: [:index, :show]
-  end
 
+  # Sys
   get 'dashboard', to: 'dashboard#index'
   get 'explore', to: 'explore#index'
 
@@ -89,6 +103,7 @@ Babylon::Application.routes.draw do
       put :update_multiple
     end
   end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

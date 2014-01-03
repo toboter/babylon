@@ -1,0 +1,24 @@
+<%= link_to 'New Item classification', new_item_classification_path %>
+
+<% title "Item classifications", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "Item classifications", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <% @item_classifications.each do |classification| %>
+      <%= content_tag :ul, class: "classification-entry unstyled" do %>
+        <li>
+          <%= link_to "#{classification.name}", classification, class: 'name' %><br />
+          <%= classification.description %><br />
+          <%= link_to 'Add sub classification', new_item_classification_path(:parent_id => classification) %>
+        </li>
+        <li><%= render 'item_classifications_tree', :item_classification => classification, :indent => 20 %></li>
+      <% end if classification.root? %>
+    <% end %>
+    <%= link_to 'New classification', new_item_classification_path %>
+  </div>
+<% end %>
