@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @predicate.name %>
+</p>
+
+<p>
+  <b>Inverse name:</b>
+  <%= @predicate.inverse_name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @predicate.description %>
+</p>
+
+<p>
+  <b>Scope type:</b>
+  <%= @predicate.scope_type %>
+</p>
+
+
+<%= link_to 'Edit', edit_predicate_path(@predicate) %> |
+<%= link_to 'Back', predicates_path %>

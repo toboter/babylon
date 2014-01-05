@@ -21,7 +21,7 @@
     <%= content_tag :div, class: 'members' do %>
       <h4 class="muted">People</h4>
       <ul class="unstyled">
-        <% @institution.include_all_members.each do |member| %>
+        <% for member in @institution.include_all_members.flatten.uniq %>
           <li><%= link_to graded_fullname(member), member %></li>
         <% end %>
       </ul>
