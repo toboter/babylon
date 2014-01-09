@@ -1,11 +1,27 @@
 <fieldset>
   <div class="citation-field">
+
     <div class="control-group">
-      <%= f.label :reference_id, 'Bibliographic Entry', class: 'control-label' %>
+      <%= f.label :predicate_id, 'Predicate', class: 'control-label' %>
       <div class="form-inline controls">
-        <%= f.collection_select :reference_id, Reference.all, :id, :entries_for_select, class: 'input-xxlarge' %>
+        <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Citation'), :id, :name, class: 'span6' %>
         <small><%= f.link_to_remove "remove" %></small>
       </div>
-    </div>  
+    </div>
+
+    <div class="control-group">
+      <%= f.label :reference_id, 'Bibliographic Entry', class: 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :reference_id, Reference.all, :id, :entries_for_select, class: 'span6' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :ref_target, 'Target (Page, Image)', class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :ref_target %>
+      </div>
+    </div>
+
   </div>
 </fieldset>

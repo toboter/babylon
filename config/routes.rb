@@ -1,12 +1,9 @@
 Babylon::Application.routes.draw do
 
-
-  resources :predicates
-
-
   # Settings
   resources :institutions, only: [:show, :index]
   scope '/settings' do
+    resources :predicates
     resources :item_classifications
     resources :tags
     resources :institutions, except: [:show, :index]

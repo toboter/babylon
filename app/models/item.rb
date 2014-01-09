@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, :context_id, 
-  				  :accession_date, :creator_id, :updater_id, :title, :tag_ids, :citations_attributes
+  				  :accession_date, :creator_id, :updater_id, :title, :tag_ids, :citations_attributes, :actions_attributes
 
   stampable
 
@@ -15,7 +15,7 @@ class Item < ActiveRecord::Base
   has_many :citations, as: :citable
   has_many :references, through: :citations
   # has_many :measurements, as: measureable
-  # has_many :actions, as: :actable
+  has_many :actions, as: :actable
   # has_many :connections, as: :connectable
   has_many :documents, as: :documentable
   has_many :comments, as: :commentable
@@ -24,6 +24,7 @@ class Item < ActiveRecord::Base
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
 
   accepts_nested_attributes_for :citations, allow_destroy: true
+  accepts_nested_attributes_for :actions, allow_destroy: true
 
   def inventory_name
   	collection.shortcut+' '+inventory_number+inventory_number_index

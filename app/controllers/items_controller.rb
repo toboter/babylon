@@ -27,6 +27,8 @@ class ItemsController < ApplicationController
   # GET /items/new.json
   def new
     @item = Item.new
+    @item.citation.build
+    @item.action.build
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

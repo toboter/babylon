@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140102175157) do
+ActiveRecord::Schema.define(:version => 20140109153139) do
+
+  create_table "actions", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "predicate_id"
+    t.date     "actable_date"
+    t.string   "actable_type"
+    t.integer  "actable_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "actions", ["person_id"], :name => "index_actions_on_person_id"
+  add_index "actions", ["predicate_id"], :name => "index_actions_on_predicate_id"
 
   create_table "affiliations", :force => true do |t|
     t.integer  "person_id"
@@ -322,6 +337,17 @@ ActiveRecord::Schema.define(:version => 20140102175157) do
   end
 
   add_index "people", ["slug"], :name => "index_people_on_slug", :unique => true
+
+  create_table "predicates", :force => true do |t|
+    t.string   "name"
+    t.string   "inverse_name"
+    t.text     "description"
+    t.string   "scope_type"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
 
   create_table "projects", :force => true do |t|
     t.string   "name"

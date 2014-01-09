@@ -9,7 +9,7 @@
 
 <% content_for :main_section do %>
   <div class="span7">
-    <br />
+    <%= tagging_infos_for(@item) %><br />
     <%= image_tag @images.first.assetfile.normal.url if @images.first %>
   </div>   
 
@@ -32,10 +32,8 @@
     <div class="info_section">
       <table class="table table-bordered table-hover">
         <%= item_description('Inventory Number', @item.inventory_name) %>
-        <%= item_description('Accession Date', @item.accession_date) %>
         <%= item_description('Context', @item.context_id) %>
         <%= item_description('Classification', @item.classification.name) if @item.classification %>
-        <%= item_description('Tags', @item.tags.map{ |a| a.name }.join(", ").html_safe) %>
       </table> 
     </div>
     <div class="accordion" id="item-accordion">
@@ -51,6 +49,21 @@
           </div>
         </div>
       <% end if @item.documents.doctype('Description') %>
+
+      <%= content_tag :div, class: "accordion-group" do %>
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseOneB">
+            History
+          </a>
+        </div>
+        <div id="collapseOneB" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <%= item_description('Accession Date', @item.accession_date) %><br />
+            <%= @item.actions.inspect %> 
+          </div>
+        </div>
+      <% end if @item.documents.doctype('Description') %>
+
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseTwo">
@@ -65,6 +78,7 @@
           </div>
         </div>
       <% end %>
+
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseThree">
@@ -73,10 +87,11 @@
         </div>
         <div id="collapseThree" class="accordion-body collapse">
           <div class="accordion-inner">
-            <small><%= render "references/bib_entries", :references => @item.references %></small>
+            <small><%= render "reference_entries", :citations => @item.citations %></small>
           </div>
         </div>
       <% end %>
+
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseFour">
@@ -93,6 +108,7 @@
           </div>
         </div>
       <% end if @item.buckets.any? %>
+
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseFive">
@@ -105,6 +121,7 @@
           </div>
         </div>
       <% end if @item.documents.any? %>
+
     </div>
   </div>
 <% end %>

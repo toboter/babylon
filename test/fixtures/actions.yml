@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  person: 
+  predicate: 
+  actable_date: 2014-01-09
+  actable_type: MyString
+  actable_id: 1
+
+two:
+  person: 
+  predicate: 
+  actable_date: 2014-01-09
+  actable_type: MyString
+  actable_id: 1

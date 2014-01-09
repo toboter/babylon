@@ -62,7 +62,18 @@
   <% end %>
   <%= f.link_to_add "Add Citation", :citations, class: 'controls' %>
 
-  <div class="actions">
-    <%= f.submit %>
+  <%= content_tag :h4, 'Actions' %>
+  <%= f.fields_for :actions do |builder| %>
+    <%= render "action_fields", :f => builder %>
+  <% end %>
+  <%= f.link_to_add "Add Action", :actions, class: 'controls' %>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <% if @item.new_record? %>
+        <%= link_to 'Abbrechen', items_path, :class => 'btn' %>
+    <% else %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    <% end %>
   </div>
 <% end %>

@@ -1,33 +1,40 @@
-<%= form_for(@predicate) do |f| %>
-  <% if @predicate.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@predicate.errors.count, "error") %> prohibited this predicate from being saved:</h2>
+<%= form_for(@predicate, :html => { :class => 'form-horizontal'}) do |f| %>
+  <%= f.error_messages %>
 
-      <ul>
-      <% @predicate.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+  <div class="control-group">
+    <%= f.label :scope_type, class: 'control-label' %>
+    <div class="controls">
+      <%= f.select(:scope_type, Predicate::SCOPE_TYPES) %>
     </div>
-  <% end %>
+  </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :inverse_name %><br />
-    <%= f.text_field :inverse_name %>
+
+  <div class="control-group">
+    <%= f.label :inverse_name, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :inverse_name %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
+
+  <div class="control-group">
+    <%= f.label :description, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, rows: 4, class: 'span6' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :scope_type %><br />
-    <%= f.text_field :scope_type %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <% if @predicate.new_record? %>
+        <%= link_to 'Abbrechen', predicates_path, :class => 'btn' %>
+    <% else %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    <% end %>
   </div>
 <% end %>

@@ -1,25 +1,42 @@
-<p id="notice"><%= notice %></p>
+<% title @predicate.name, nil %>
+<% edit_section_for(@predicate, nil) if can? :edit, @predicate %>
 
-<p>
-  <b>Name:</b>
-  <%= @predicate.name %>
-</p>
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Predicates", predicates_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, @predicate.name, class: 'active' %>
+<% end %>
 
-<p>
-  <b>Inverse name:</b>
-  <%= @predicate.inverse_name %>
-</p>
+<% content_for :main_section do %>
+  <div class="span8">
+    <p>
+  	  <b>Name:</b>
+  	  <%= @predicate.name %>
+	</p>
+	  
+	<p>
+  	  <b>Inverse name:</b>
+  	  <%= @predicate.inverse_name %>
+	</p>
+	  
+	<p>
+  	  <b>Description:</b>
+  	  <%= @predicate.description %>
+	</p>
+	  
+	<p>
+  	  <b>Scope type:</b>
+  	  <%= @predicate.scope_type %>
+	</p>
 
-<p>
-  <b>Description:</b>
-  <%= @predicate.description %>
-</p>
+  </div>
 
-<p>
-  <b>Scope type:</b>
-  <%= @predicate.scope_type %>
-</p>
-
-
-<%= link_to 'Edit', edit_predicate_path(@predicate) %> |
-<%= link_to 'Back', predicates_path %>
+  <div class="span3 offset1">
+    <h4 class="muted">Record Info</h4>
+    <ul class="unstyled">
+      <li>Created by: <%= @predicate.creator.available_name %></li>
+      <li>Updated by: <%= @predicate.updater.available_name %></li>
+    </ul>
+  </div>
+  
+<% end %>

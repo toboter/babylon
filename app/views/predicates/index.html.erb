@@ -1,29 +1,46 @@
-<h1>Listing predicates</h1>
+<% title "Predicates", nil %>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Inverse name</th>
-    <th>Description</th>
-    <th>Scope type</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @predicates.each do |predicate| %>
-  <tr>
-    <td><%= predicate.name %></td>
-    <td><%= predicate.inverse_name %></td>
-    <td><%= predicate.description %></td>
-    <td><%= predicate.scope_type %></td>
-    <td><%= link_to 'Show', predicate %></td>
-    <td><%= link_to 'Edit', edit_predicate_path(predicate) %></td>
-    <td><%= link_to 'Destroy', predicate, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, "Predicates", class: 'active' %>
 <% end %>
-</table>
 
-<br />
+<% content_for :main_section do %>
+  <div class="span10">
 
-<%= link_to 'New Predicate', new_predicate_path %>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Inverse name</th>
+          <th>Description</th>
+          <th>Scope type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @predicates.each do |predicate| %>
+          <tr>
+            <td><%= link_to predicate.name, predicate %></td>
+            <td><%= predicate.inverse_name %></td>
+            <td><%= predicate.description %></td>
+            <td><%= predicate.scope_type %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="span2">
+    <% if can? :edit, @predicates %>
+      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+          <i class="icon-plus icon-white"></i>
+          Add
+          <span class="caret"></span>
+        </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'Predicate', new_predicate_path %></li>
+          </ul>
+      </div>
+    <% end  %>
+  </div>
+<% end %>

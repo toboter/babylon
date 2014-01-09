@@ -1,0 +1,31 @@
+<fieldset>
+  <div class="action-field">
+
+    <div class="control-group">
+      <%= f.label :predicate_id, 'Predicate', class: 'control-label' %>
+      <div class="form-inline controls">
+        <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Action'), :id, :name, class: 'span6' %>
+        <small><%= f.link_to_remove "remove" %></small>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :person_id, 'Person Entry', class: 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :person_id, Person.all, :id, :name, class: 'span6' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :actable_date_text, 'Date of action', class: 'control-label' %>
+      <div class="controls">
+        <div class="input-append date">
+          <%= f.text_field :actable_date_text, placeholder: 'Date', :'data-behaviour' => 'datepicker' %>
+          <span class="add-on"><i class="icon-th"></i></span>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+</fieldset>

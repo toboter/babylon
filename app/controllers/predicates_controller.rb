@@ -1,11 +1,12 @@
 class PredicatesController < ApplicationController
+  before_filter :authenticate_user!
   # GET /predicates
   # GET /predicates.json
   def index
-    @predicates = Predicate.all
+    @predicates = Predicate.order("scope_type ASC", "name ASC")
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @predicates }
     end
   end
@@ -16,7 +17,7 @@ class PredicatesController < ApplicationController
     @predicate = Predicate.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @predicate }
     end
   end
@@ -27,7 +28,7 @@ class PredicatesController < ApplicationController
     @predicate = Predicate.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @predicate }
     end
   end
@@ -35,6 +36,7 @@ class PredicatesController < ApplicationController
   # GET /predicates/1/edit
   def edit
     @predicate = Predicate.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /predicates
