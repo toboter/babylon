@@ -20,5 +20,5 @@ module PeopleHelper
     end
     content_tag :i, '', class: 'icon-'+icon, style: style
   end
-  	  		
+	
 end

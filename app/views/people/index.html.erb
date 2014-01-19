@@ -6,31 +6,24 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span10">
-    <ul class="unstyled" style="padding-left:20px;">
-      <% @people.each do |person| %>
-        <li>
-          <% if person.user_id %>
-            <span data-tooltip class="has-tip" title="This Person has a connected user-account in BABylo-tec." style="margin-left:-20px;"><i class="icon-resize-small"></i></span>
-          <% end %>
-          <%= link_to "#{graded_fullname(person)}", person %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-  <div class="span2">
-    <% if can? :edit, @people %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Person', new_person_path %></li>
-            <li><%= link_to "Your profile", new_person_path(:user_id => current_user, :alias => current_user.username) unless current_user.person %></li>
-          </ul>
-      </div>
-    <% end  %>
-  </div>
+  <%= content_tag :div, class: set_edit_ability_class(@people) do %>
+    <h4>People who are members in projects</h4>
+    <%= render "people_groups", people: @people.joins(user: :memberships).uniq %>
+
+    <h4>All people</h4>
+    <%= render "people_groups", people: @people %>
+  <% end %>
+  <%= content_tag :div, class: 'span2' do %>
+    <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
+      <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+        <i class="icon-plus icon-white"></i>
+        Add
+        <span class="caret"></span>
+      </a>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Person', new_person_path %></li>
+          <li><%= link_to "Your profile", new_person_path(:user_id => current_user, :alias => current_user.username) unless current_user.person %></li>
+        </ul>
+    </div>
+  <% end if can? :edit, @people %>
 <% end %>

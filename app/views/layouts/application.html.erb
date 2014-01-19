@@ -15,14 +15,14 @@
   </head>
 
   <body>
-    <div class="navbar navbar-static-top navbar-inverse">
+    <div class="navbar navbar-static-top">
       <div class="navbar-inner">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <%= link_to "#Babylon", root_url, :class => "brand", style: 'margin-left:0' %>
+          <%= link_to "#Babylon", root_url, class: "brand", style: 'margin-left:0' %>
 
           <div class="nav-collapse collapse">
             <ul class="nav pull-left">
@@ -79,80 +79,91 @@
               <li class="divider-vertical"></li>
               <li></li>
             </ul>
-
-            <ul class="nav pull-right">
-              <% if user_signed_in? %>
-                <% if can? :manage, 'development' %>
-                  <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
-                  <li class="divider-vertical"></li>
-                <% end %>
-                <li><%= link_to "Dashboard", dashboard_path %></li>
-                <li class="divider-vertical"></li>
-                <% if current_user.person %>
-                  <li>
-                    <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded visible-desktop', style: 'width:25px;margin-top:7px;') if current_user.person.profile_picture %>
-                  </li>
-                  <li>
-                    <%= link_to "#{current_user.available_name}", current_user.person %>
-                  </li>
-                <% else %>
-                  <li><%= link_to "#{current_user.available_name}", dashboard_path %></li>
-                <% end %>
-
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-cog icon-white"></i>
-                  </a>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                    <% if can? :manage, 'settings' %>
-                      <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">
-                          Manage
-                        </a>
-                        <ul class="dropdown-menu">
-                          <li><%= link_to "Active accounts", dashboard_path(anchor:"roles") %></li>
-                          <li><%= link_to "Static Pages", dashboard_path(anchor:"static") %></li>
-                          <li><%= link_to "Add Institution", new_institution_path %></li>
-                          <li><%= link_to "Add Module", new_cluster_path %></li>
-                          <li><%= link_to "Item classifications", item_classifications_path %></li>
-                          <li><%= link_to "Terms of interest (tags)", tags_path %></li>
-                          <li><%= link_to "Predicates", predicates_path %></li>
-                        </ul>
-                      </li>
-                    <% end %>
-                    <% unless current_user.person %>
-                      <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
-                    <% end %>
-                    <% if current_user.person %>
-                      <li><%= link_to 'Account Settings', edit_user_registration_path %></li>
-                    <% elsif can? :follow, 'all' %>
-                      <li>
-                        <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
-                      </li>
-                    <% end %>
-                    <li><%= link_to "Help", page_path('help') %></li>          
-                    <li class="divider"></li>
-                    <li><%= link_to "Log Out", destroy_user_session_path, method: :delete %></li>
-                  </ul>
-                </li>
-              <% else %>
-                <%- if controller_name != 'sessions' %>
-                  <li><%= link_to "Sign in", new_session_path(:user) %></li>
-                <% end -%>
-                <li class="divider"></li>
-                <%- if controller_name != 'registrations' %>
-                  <li><%= link_to "Sign up", new_registration_path(:user) %></li>
-                <% end -%>
-              <% end %>
-            </ul>
           </div>
+
+          <div class="nav-collapse collapse">
+            <%= content_tag :ul, class: 'nav pull-right' do %>
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Personal" id="personal-menu">
+                  <% if current_user.person && current_user.person.profile_picture %>
+                    <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon', style: 'width:30px;') %>
+                    <% else %>
+                    <%= image_tag('icons/super.svg', class: 'navbar-icon', style: 'width:30px;') %>
+                  <% end %>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <%= content_tag :li, (link_to 'Edit your profile', edit_person_path(current_user.person)) if current_user.person %>
+                  <%= content_tag :li, (link_to 'Account Settings', edit_user_registration_path) if current_user %>
+                  <% unless current_user.person && (can? :follow, 'all') %>
+                    <li>
+                      <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
+                    </li>
+                  <% end %>
+                  <li class="divider"></li>
+                  <li><%= link_to "Your Dashboard", dashboard_path %></li>
+                  <%= content_tag :li, (link_to "Your Profile", current_user.person) if current_user.person %>
+                </ul>
+              <% end if can? :follow, 'settings' %>
+
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Add" id="add-menu">
+                  <%= image_tag("icons/plus24.svg", class: 'navbar-icon', style: 'width:20px;') %>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <li><%= link_to "Institution", new_institution_path %></li>
+                  <li><%= link_to "Module", new_cluster_path %></li>
+                </ul>
+              <% end if can? :manage, 'settings' %>
+
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Settings" id="settings-menu">
+                  <%= image_tag("icons/tools.svg", class: 'navbar-icon') %>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <li><%= link_to "Roles & Pages", dashboard_path %></li>
+                  <li><%= link_to "Item classifications", item_classifications_path %></li>
+                  <li><%= link_to "Terms of interest (tags)", tags_path %></li>
+                  <li><%= link_to "Predicates", predicates_path %></li>
+                </ul>
+              <% end if can? :manage, 'settings' %>
+              <li><%= link_to image_tag("icons/information3.svg", class: 'navbar-icon'), page_path('help'), title: 'Help' %></li>
+              <li class="divider-vertical"></li>
+              <li><%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %></li>
+            <% end if user_signed_in? %>
+
+            <%= content_tag :ul, class: 'nav pull-right visible-desktop' do %>
+              <% if can? :manage, 'development' %>
+                <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
+                <li class="divider-vertical"></li>
+              <% end %>
+              <% if current_user.person %>
+                <%= content_tag :li, (link_to "#{current_user.available_name}", current_user.person) %>
+              <% else %>
+                <%= content_tag :li, (link_to "#{current_user.available_name}", dashboard_path) %>
+              <% end %>
+            <% end if user_signed_in? %>
+
+          </div>
+
+          <%= content_tag :ul, class: 'nav pull-right' do %>
+            <%- if controller_name != 'sessions' %>
+              <li>
+                <%= link_to image_tag("icons/sign3.svg", class: 'navbar-icon', style: 'width:35px;'), new_session_path(:user), title: 'Sign in', id: 'sign-in-link' %>
+              </li>
+            <% end -%>
+            <li class="divider"></li>
+            <%- if controller_name != 'registrations' %>
+              <li><%= link_to "Register", new_registration_path(:user), title: 'Register', id: 'register-link' %></li>
+            <% end -%>
+          <% end if !user_signed_in? %>
+
       </div>
     </div>
 
 
 
     <!-- Main Section -->
-    <%= yield(:explore) %>
+    
     <div class="container">
       <% if can? :manage, 'development' %>
         <div class="row">
@@ -241,7 +252,7 @@
       <div class="babylo-tec-footer-bottom">
         <div class="container">
           <div class="row">
-            <div class="span7">            
+            <div class="span12">            
               <ul class="babylo-tec-links inline">
                 <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
                 <li><%= link_to "About", page_path('about') %></li>
@@ -252,14 +263,14 @@
               </ul>
               <p class="copyright">&copy; 2013 BABylo-tec. All rights reserved.</p>​
             </div>
-          
-  
-            <div class="span5">
-              <ul class="co-operation-links">
-                <li><%= link_to "", "http://www.vam.de", class: "vam" %></li>
-                <li><%= link_to "", "http://www.deutsche-orientgesellschaft.de", class: "dog" %></li>
-                <li><%= link_to "", "http://www.fu-berlin.de", class: "fu-berlin" %></li>
-              </ul>
+          </div>
+          <div class="row">
+            <div class="span12">
+              <div class="row logos">
+                <%= link_to image_tag("smb-logo.png"), "http://www.vam.de", class: "span1" %>
+                <%= link_to image_tag("dog-logo.png"), "http://www.deutsche-orientgesellschaft.de", class: "span2" %>
+                <%= link_to image_tag("FULogo-3.svg"), "http://www.fu-berlin.de", class: "span3" %>
+              </div>
             </div>
           </div>
         </div>

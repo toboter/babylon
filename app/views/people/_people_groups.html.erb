@@ -1,0 +1,20 @@
+<div class="row-fluid">
+  <div class="span12">
+    <% people.in_groups_of(3, false).each do |row_people| %>
+      <div class="row-fluid">
+        <% for person in row_people do %>
+          <div class="span4">
+            <%= link_to person, style:'text-decoration:none' do %>
+              <div class="well well-small">
+                <%= graded_fullname(person) %>
+                <% if person.user_id %>
+                  <span data-tooltip class="has-tip pull-right" title="This Person has a connected user-account in $Babylon."><i class="icon-resize-small"></i></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

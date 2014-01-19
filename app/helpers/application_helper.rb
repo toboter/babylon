@@ -15,4 +15,12 @@ module ApplicationHelper
 	    end
     end if obj.tags.any?
   end
+
+  def set_edit_ability_class(object)
+    if can? :edit, object
+      'span10'
+    else
+      'span12'
+    end
+  end
 end

@@ -31,13 +31,24 @@ class PagesController < ApplicationController
       if @bucket.save
         redirect_to [@page, @bucket], notice: 'Page and bucket created. Please add a picture.'
       else
-        redirect_to root_url, notice: 'Error'
+        redirect_to root_url, notice: 'Error in image container creation'
         # redirect_to polymorphic_url([:new, @page, :bucket]), notice: 'Error! Bucket not created.'
       end
     else
-      redirect_to root_url, notice: 'Error'
+      redirect_to root_url, notice: 'Error in doc container creation'
     end
     
+  end
+
+  def destroy
+    @page = Page.find(params[:id])
+    @page.destroy
+
+    respond_to do |format|
+      format.html { redirect_to dashboard_path }
+      format.json { head :no_content }
+      format.js
+    end
   end
 
 end
