@@ -8,7 +8,7 @@
           <%= content_tag :li, reference.book.present? ? reference.book.year : reference.original_date %>
         </ul>
       <% end -%>
-      <%= content_tag :div, class: 'span8' do -%>
+      <%= content_tag :div, class: 'span9' do -%>
         <p>
           <%= authors_of_article(reference)+', ' %>
           <%= link_to "#{reference.title}", reference %>
@@ -28,11 +28,7 @@
           <%= reference.last_page if reference.last_page.present? %>.
         </p>
       <% end -%>
-      <% if can? :edit, reference %>
-        <%= content_tag :div, class: 'span1 reference-edit-link' do -%>
-          <p><%= link_to "Edit", edit_reference_path(reference) %></p>
-        <% end -%>
-      <% end %>
+
     </div>
-  <% end -%>
+  <% end %>
 <% end %>

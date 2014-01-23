@@ -1,5 +1,10 @@
 <% title "Books", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Book', new_book_path %></li>
+  <li><%= link_to 'Single Resource', new_reference_path %></li>
+<% end if can? :edit, @books %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li class="active">Books</li>
@@ -12,20 +17,6 @@
     <%= will_paginate(@books, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
   </div>
   <div class="span2 offset1">
-    <% if can? :edit, @books %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Book', new_book_path %></li>
-            <li><%= link_to 'Single Resource', new_reference_path %></li>
-          </ul>
-      </div>
-    <% end  %>
-
     <%= render "shared/bibliographic_cat_navs", :obj => @books %>
     <h5 class="muted">Filter by type</h5>
     <ul class="unstyled">

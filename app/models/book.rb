@@ -1,6 +1,6 @@
 class Book < ActiveRecord::Base
   attr_accessible :editor_ids, :book_identifier, :book_type, :place, :publisher, :serial_id, :title, :volume, 
-                  :unpublished, :year, :uri, :creator_id, :updater_id, :articles_attributes
+                  :unpublished, :year, :uri, :creator_id, :updater_id, :articles_attributes, :edition, :abbreviation
 
   stampable
 

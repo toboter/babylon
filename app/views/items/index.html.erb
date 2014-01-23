@@ -1,12 +1,16 @@
 <% title "Items", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Item', new_item_path %></li>
+<% end if can? :edit, @items %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li class="active">Items</li>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span10">
+  <div class="span12">
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -32,18 +36,5 @@
       </tbody>
     </table>
   </div>
-  <div class="span2">
-    <% if can? :edit, @items %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Item', new_item_path %></li>
-          </ul>
-      </div>
-    <% end  %>
-  </div>
+
 <% end %>

@@ -1,8 +1,8 @@
 <% content_for :content do %>
   <div class="row">
     <div class="span12">
-      <%= content_tag :h2, yield(:title) if show_title? %>
-      <%= content_tag :h4, yield(:subtitle), :class => "subtitle" if show_title? %>
+      <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
+      <%= content_tag :h2, yield(:subtitle), class: 'subtitle' if show_title? %>
   	</div>
   </div>
 
@@ -10,9 +10,6 @@
     <%= yield(:main_section) %>
   </div>
 
-  <div class="row" style="margin-top:70px;">
-    <%= yield(:footer_section) %>
-  </div>
 <% end %>
 
 <%= render :template => 'layouts/application' %>

@@ -9,7 +9,7 @@ class Action < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
-  validates_presence_of :actable_id, :actable_type, :person_id, :predicate_id
+  validates_presence_of :person_id, :predicate_id
 
 
   attr_writer :actable_date_text

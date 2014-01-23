@@ -6,14 +6,14 @@
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, { multiple: true, class: "#{size ||= nil} form-control chosen-select" } %>
+      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, { multiple: true, class: "input-block-level form-control chosen-select" } %>
     </div>
 
   </div>
   <div class="control-group">
     <%= f.label :content, 'Comment', class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :content, rows: 4, class: size ||= nil %>
+      <%= f.text_area :content, rows: 4, class: 'input-block-level' %>
     </div>
   </div>
   <%= f.submit "Speichern", :class => 'btn btn-mini' %>

@@ -1,6 +1,11 @@
 <% title "#{@reference.title}", nil, false %>
 <% edit_section_for(@reference, nil) if can? :edit, @reference %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Document', polymorphic_path([:new, @reference, :document]) %></li>
+  <li><%= link_to 'Bucket', polymorphic_path([:new, @reference, :bucket]) %></li>
+<% end if can? :edit, @reference %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li><%= link_to 'Bibliography', references_path %> <span class="divider">/</span></li>
@@ -19,8 +24,7 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="docs"> 
-        <%= content_tag :h3, 'Documents', class: 'muted' if @reference.documents.any? %>
-        <%= render "shared/document_docs_without_type", :var => @reference %>
+        <%= render "shared/document_docs_without_type", :var => @reference if @reference.documents.any? %>
       </div>
       <div class="tab-pane" id="uploads">
         <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
@@ -47,21 +51,7 @@
   </div>
 
   <div class="span3 offset1">
-    <% if can? :edit, @reference %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Document', polymorphic_path([:new, @reference, :document]) %></li>
-            <li><%= link_to 'Bucket', polymorphic_path([:new, @reference, :bucket]) %></li>
-          </ul>
-      </div>
-    <% end  %>
-
-    <%= content_tag :span, 'Babylon', class: 'label label-info pull-right' if @reference.babylon_specific %>
+    <%= content_tag :span, 'Babylon Bibliography', class: 'label label-info pull-right' if @reference.babylon_specific %>
     <h5 class="muted">Title</h5>
     <ul class="unstyled">
       <li><%= @reference.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe %></li>

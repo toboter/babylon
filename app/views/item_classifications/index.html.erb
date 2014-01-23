@@ -1,6 +1,8 @@
-<%= link_to 'New Item classification', new_item_classification_path %>
-
 <% title "Item classifications", nil %>
+
+<% content_for :add_section do %>
+  <li><%= link_to 'Item classification', new_item_classification_path %></li>
+<% end if can? :edit, @item_classifications %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -19,6 +21,5 @@
         <li><%= render 'item_classifications_tree', :item_classification => classification, :indent => 20 %></li>
       <% end if classification.root? %>
     <% end %>
-    <%= link_to 'New classification', new_item_classification_path %>
   </div>
 <% end %>

@@ -9,7 +9,7 @@
           <%= content_tag :li, citation.reference.book.present? ? citation.reference.book.year : citation.reference.original_date %>
         </ul>
       <% end -%>
-      <%= content_tag :div, class: 'span8' do -%>
+      <%= content_tag :div, class: 'span9' do -%>
         <p>
           <%= authors_of_article(citation.reference)+', ' %>
           <%= link_to "#{citation.reference.title}", citation.reference %>
@@ -27,11 +27,6 @@
           <%= citation.ref_target if citation.ref_target.present? %>
         </p>
       <% end -%>
-      <% if can? :edit, citation %>
-        <%= content_tag :div, class: 'span1 citation-edit-link' do -%>
-          <p><%= link_to "Edit", edit_reference_path(citation.reference) %></p>
-        <% end -%>
-      <% end %>
     </div>
   <% end -%>
 <% end %>

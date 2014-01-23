@@ -28,14 +28,6 @@
 	height: 100px;
 }
 
-.subtitle {
-	line-height: 1.4;
-	color: #6f6f6f;
-	font-weight: 300;
-	margin-top: -0.7em;
-	margin-bottom: 1em;
-}
-
 .list-entry {
 	border-bottom: 1px dashed #e6e6e6;
 	margin-bottom: .8em;

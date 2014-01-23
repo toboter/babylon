@@ -1,18 +1,27 @@
 <%= form_for(@tag) do |f| %>
   <%= f.error_messages %>
+  <div class="row">
+    <div class="control-group span4">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, class: 'input-block-level' %>
+      </div>
+    </div>
   
-  <div class="control-group">
-    <%= f.label :parent_id, 'Belongs to', class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :parent_id, Tag.possible_parents(@tag), :id, :name, { include_blank: true }, class: 'input-xxlarge' %>
+    <div class="control-group span4">
+      <%= f.label :parent_id, 'sub-category-of', class: 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :parent_id, Tag.possible_parents(@tag), :id, :name, { include_blank: true }, class: 'input-block-level' %>
+      </div>
     </div>
   </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <% if @tag.new_record? %>
+        <%= link_to 'Abbrechen', tags_path, :class => 'btn' %>
+    <% else %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    <% end %>
   </div>
 <% end %>

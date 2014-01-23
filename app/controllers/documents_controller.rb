@@ -7,7 +7,7 @@ class DocumentsController < ApplicationController
     if @documentable
       @documents = @documentable.documents.all
     else
-      @documents = Document.all
+      @documents = Document.order('documentable_type ASC')
     end
 
     respond_to do |format|

@@ -28,7 +28,7 @@ class TagsController < ApplicationController
     @tag = Tag.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @tag }
     end
   end
@@ -36,6 +36,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
     @tag = Tag.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /tags

@@ -1,0 +1,9 @@
+<% tags.each do |tag| %>
+  <%= content_tag :ul, class: "tag-entry unstyled well" do %>
+    <li>
+      <%= link_to "#{tag.name}", tag, class: (tag == highlight ? 'name highlight' : 'name') %>
+      <%= link_to image_tag("icons/plus24.svg", style: 'width:.7em;padding-bottom:.1em;')+' sub-category', new_tag_path(:parent_id => tag), style: 'font-size:90%;margin-left:10px;' if add_links_visible || tag == highlight %>
+    </li>
+    <li><%= render 'tag_tree', :tag => tag, :indent => 20, :add_links_visible => add_links_visible, :highlight => highlight %></li>
+  <% end if tag.root? %>
+<% end %>

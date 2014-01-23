@@ -1,8 +1,11 @@
 class Item < ActiveRecord::Base
-  attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, :context_id, 
-  				  :accession_date, :creator_id, :updater_id, :title, :tag_ids, :citations_attributes, :actions_attributes
+  attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
+            :context_id, :accession_date, :creator_id, :updater_id, :title, :tag_ids, 
+            :citations_attributes, :actions_attributes, :documents_attributes
 
   stampable
+
+  after_create :add_description
 
   belongs_to :collection
   belongs_to :creator, class_name: "User"
@@ -25,6 +28,7 @@ class Item < ActiveRecord::Base
 
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
+  accepts_nested_attributes_for :documents, allow_destroy: true
 
   def inventory_name
   	collection.shortcut+' '+inventory_number+inventory_number_index
@@ -32,6 +36,10 @@ class Item < ActiveRecord::Base
 
   def name
   	inventory_name
+  end
+
+  def add_description
+    Document.create :document_type => 'Description', :documentable_id => self.id, :documentable_type => 'Item', :title => 'Description'
   end
 
 end

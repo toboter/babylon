@@ -1,6 +1,10 @@
 <% title "#{@tag.name}", nil, false %>
 <% edit_section_for(@tag, nil) if can? :edit, @tag %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Sub-category', new_tag_path(:parent_id => @tag) %></li>
+<% end if can? :edit, @tag %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li><%= link_to 'Terms of interest', tags_path %> <span class="divider">/</span></li>
@@ -9,9 +13,14 @@
 
 <% content_for :main_section do %>
   <div class="span8">
-    <p>
-      <b>Name:</b>
-      <%= @tag.name %>
-    </p>
+    <%= render 'full_tag_tree', :tags => @tag.root.self_and_descendants, add_links_visible: false, highlight: @tag %>
+  </div>
+  <div class="span4">
+    <h4 class="muted">Tagging activity for <%= @tag.name %></h4>
+    <ul class="unstyled">
+      <% for tagging in @tag.taggings.order('created_at DESC') do %>
+        <li><%= tagging.creator.available_name %> tagged a <%= tagging.taggable_type == 'Comment' ? 'Comment on a '+tagging.taggable.commentable_type : link_to(tagging.taggable_type, tagging.taggable) %></li>
+      <% end %>
+    </ul>
   </div>
 <% end %>

@@ -5,7 +5,7 @@
   <table class="table table-bordered table-hover">
     <% @documents.each do |document| %>
       <tr>
-        <td><%= link_to "#{document.title}", document %> <small>(<%= link_to "#{document.documentable.name}", document.documentable %>)</small></td>
+        <td><%= link_to "#{document.title}", document %> <small>(<%= link_to document.documentable.name, document.documentable %>)</small></td>
         <td><%= document.abstract ? truncate(document.abstract, length: 100, separator: ' ') : raw(truncate(document.content, length: 100, separator: ' ')) %> (...)</td>
       </tr>
     <% end %>

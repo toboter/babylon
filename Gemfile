@@ -81,7 +81,8 @@ gem 'ransack'
 # https://github.com/galetahub/ckeditor
 # gem 'ckeditor'
 # https://github.com/tsechingho/ckeditor-rails
-gem 'ckeditor_rails'
+# gem 'ckeditor_rails'
+gem 'redcarpet'
 
 # https://github.com/mislav/will_paginate
 gem 'will_paginate', '~> 3.0'

@@ -8,8 +8,8 @@ class Document < ActiveRecord::Base
   belongs_to :page, foreign_key: "documentable_id", conditions: "documentable_type = 'Page'"
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-  has_many :comments, as: :commentable
-  has_many :taggings, as: :taggable
+  has_many :comments, as: :commentable, :dependent => :destroy
+  has_many :taggings, as: :taggable, :dependent => :destroy
   has_many :tags, through: :taggings
 
   GENERALDOCUMENTTYPES = %w[Introduction]
@@ -19,7 +19,7 @@ class Document < ActiveRecord::Base
   DOKUMENTTYPES = GENERALDOCUMENTTYPES+PEOPLEDOCUMENTTYPES+ITEMDOCUMENTTYPES
 
   validates_presence_of :title, :unless => :document_type?
-  validates_presence_of :content, :unless => :page? # wenn diese validierung eintritt können pages nicht mehr automatisch erstellt werden.
+  validates_presence_of :content, :unless => :page?, :unless => :item_description? # wenn diese validierung eintritt können pages nicht mehr automatisch erstellt werden.
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
   validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
 

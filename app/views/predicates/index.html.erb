@@ -1,12 +1,16 @@
 <% title "Predicates", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Predicate', new_predicate_path %></li>
+<% end if can? :edit, @predicates %>
+
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "Predicates", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span10">
+  <div class="span12">
 
     <table class="table table-bordered table-hover">
       <thead>
@@ -28,19 +32,5 @@
         <% end %>
       </tbody>
     </table>
-  </div>
-  <div class="span2">
-    <% if can? :edit, @predicates %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Predicate', new_predicate_path %></li>
-          </ul>
-      </div>
-    <% end  %>
   </div>
 <% end %>

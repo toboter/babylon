@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery_nested_form
-//= require ckeditor-jquery
 //= require bootstrap-datepicker/core
 //= require jquery-fileupload
 //= require bootstrap

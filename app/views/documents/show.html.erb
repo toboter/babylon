@@ -1,4 +1,4 @@
-<% title "#{@document.title}", nil, false unless @document.page? %>
+<% title "#{@document.title}", nil unless @document.page? %>
 <% title "#{@document.documentable.permalink.humanize}", nil if @document.page? %>
 <% edit_section_for(@document, @document.documentable) if can? :edit, @document %>
 
@@ -10,12 +10,11 @@
 
 <% content_for :main_section do %>
   <div class="span8">
-    <h1 style="margin-bottom:40px;margin-top:60px;"><%= @document.title %></h1>
-    <%= content_tag :div, class: "abstract_section" do %>
-      <b>Abstract: </b><%= @document.abstract %>
+    <%= content_tag :div, class: "lead" do %>
+      <%= markdown(@document.abstract) %>
     <% end if @document.abstract? %>
     <%= content_tag :div, class: "content_section" do %>
-      <%= raw@document.content %>
+      <%= markdown(@document.content) %>
     <% end if @document.content? %>
   </div>
 

@@ -10,7 +10,11 @@ module LayoutHelper
   end
 
   def edit_section_for(var, polymorphic, polymorphicl2=nil)
-    content_for(:edit_section) { content_tag :div, h(link_to 'Edit', [:edit, polymorphicl2, polymorphic, var], class: 'btn btn-info') + h(link_to 'Delete', [polymorphicl2, polymorphic, var], class: 'btn btn-warning', method: :delete, data: { confirm: 'Are you sure?' }), class: 'btn-group'}
+    content_for(:edit_section) { 
+      content_tag :li, 
+        h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit') + 
+        h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' })
+    }
   end
 
   def show_title?

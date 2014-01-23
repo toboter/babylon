@@ -1,21 +1,16 @@
 <% title "Terms of interest", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Term', new_tag_path %></li>
+<% end if can? :edit, @tags %>
+
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "Terms of interest", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span12">
-    <% @tags.each do |tag| %>
-      <%= content_tag :ul, class: "tag-entry unstyled" do %>
-        <li>
-          <%= link_to "#{tag.name}", tag, class: 'name' %> 
-          <%= link_to 'Add sub category', new_tag_path(:parent_id => tag) %>
-        </li>
-        <li><%= render 'tag_tree', :tag => tag, :indent => 20 %></li>
-      <% end if tag.root? %>
-    <% end %>
-    <%= link_to 'New Term', new_tag_path %>
+  <div class="span6">
+    <%= render 'full_tag_tree', :tags => @tags, add_links_visible: true, highlight: nil %>
   </div>
 <% end %>

@@ -1,5 +1,9 @@
 <% title "Research Modules", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to "Module", new_cluster_path %></li>
+<% end %>
+
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "Modules", class: 'active' %>

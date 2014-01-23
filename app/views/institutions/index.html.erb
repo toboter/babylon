@@ -1,5 +1,9 @@
 <% title "Institutions", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to "Institution", new_institution_path %></li>
+<% end if can? :edit, @institutions %>
+
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "Institutions", class: 'active' %>

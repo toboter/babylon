@@ -1,29 +1,21 @@
 <% title "People", nil %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Person', new_person_path %></li>
+  <li><%= link_to "Your profile", new_person_path(:user_id => current_user, :alias => current_user.username) unless current_user.person %></li>
+<% end if can? :edit, @people %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li class="active">People</li>
 <% end %>
 
 <% content_for :main_section do %>
-  <%= content_tag :div, class: set_edit_ability_class(@people) do %>
+  <%= content_tag :div, class: 'span12' do %>
     <h4>People who are members in projects</h4>
     <%= render "people_groups", people: @people.joins(user: :memberships).uniq %>
 
     <h4>All people</h4>
     <%= render "people_groups", people: @people %>
   <% end %>
-  <%= content_tag :div, class: 'span2' do %>
-    <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-      <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-        <i class="icon-plus icon-white"></i>
-        Add
-        <span class="caret"></span>
-      </a>
-        <ul class="dropdown-menu">
-          <li><%= link_to 'Person', new_person_path %></li>
-          <li><%= link_to "Your profile", new_person_path(:user_id => current_user, :alias => current_user.username) unless current_user.person %></li>
-        </ul>
-    </div>
-  <% end if can? :edit, @people %>
 <% end %>

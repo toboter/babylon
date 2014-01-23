@@ -1,6 +1,12 @@
 <% title "#{@item.inventory_name}", nil, nil %>
 <% edit_section_for(@item, nil) if can? :author, @item %>
 
+<% content_for :add_section do %>
+  <%= content_tag :li, (link_to "Description Document", polymorphic_path([:new, @item, :document], :document_type => "Description")) unless @item.documents.doctype('Description') %>
+  <%= content_tag :li, (link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket])) %>
+  <%= content_tag :li, (link_to 'Document', polymorphic_path([:new, @item, :document])) %>
+<% end if can? :edit, @item %>
+
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
@@ -14,20 +20,6 @@
   </div>   
 
   <div class="span5">
-    <% if can? :read, @item %>
-      <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
-        <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <%= content_tag :li, (link_to "Description Document", polymorphic_path([:new, @item, :document], :document_type => "Description")) unless @item.documents.doctype('Description') %>
-          <%= content_tag :li, (link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket])) %>
-          <%= content_tag :li, (link_to 'Document', polymorphic_path([:new, @item, :document])) %>
-        </ul>
-      </div>
-    <% end  %>
     <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">
@@ -62,7 +54,7 @@
             <%= @item.actions.inspect %> 
           </div>
         </div>
-      <% end if @item.documents.doctype('Description') %>
+      <% end %>
 
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">

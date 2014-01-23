@@ -49,15 +49,29 @@
 
     <div id="year">
       <div class="control-group">
+        <%= f.label :unpublished, class: 'control-label' %>
+        <div class="controls">
+          <%= f.check_box :unpublished %>
+        </div>
+      </div>
+      <div class="control-group">
         <%= f.label :year, class: 'control-label' %>
         <div class="controls">
           <%= f.text_field :year %>
         </div>
       </div>
+
       <div class="control-group">
-        <%= f.label :unpublished, class: 'control-label' %>
+        <%= f.label :edition, class: 'control-label' %>
         <div class="controls">
-          <%= f.check_box :unpublished %>
+          <%= f.text_field :edition, placeholder: "1st, 2nd etc." %>
+        </div>
+      </div>
+  
+      <div class="control-group">
+        <%= f.label :abbreviation, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :abbreviation, placeholder: "FS someone" %>
         </div>
       </div>
     </div>
@@ -83,6 +97,8 @@
         </div>
       </div>
     </div>
+
+
 
     <div id="articles">
       <%= f.fields_for :articles do |builder| %>

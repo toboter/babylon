@@ -23,13 +23,13 @@ $linkColor: #648564;
 	font-weight: bold;
 }
 
-.navbar .navbar-icon {
+.navbar-icon {
 	width:25px;
 	margin-top:-8px;
 	margin-bottom:-8px;
 }
 
-.navbar .navbar-icon:hover {
+.navbar-icon:hover {
 	opacity: .5;
 	-webkit-transition: all .2s linear;
 	-moz-transition: all .2s linear;
@@ -95,12 +95,28 @@ footer {
 
 .bucket-asset-thumbs { @media (min-width: 768px) { margin-left: 25px !important; } }
 
-h4 {
-	margin-top: 1em;
+h1 {
+	font-size: 2.2em;
+	
 }
-
-h5 {
-	margin-top: 1.5em;
+h1.pagetop {
+	font-size: 2.5em;
+	color: black;
+	margin-top: 0.5em;
+}
+h2 {
+	font-size: 1.9em;
+	
+}
+h2.subtitle {
+	font-size: 1.8em;
+	color: #6f6f6f;
+	font-weight: 300;
+	margin-top: -0.5em;
+	margin-bottom: 1em;
+}
+h3 {
+	font-size: 1.65em;
 }
 
 

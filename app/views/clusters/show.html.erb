@@ -1,6 +1,14 @@
 <% title "Research Modul: #{@cluster.name}", nil %>
 <% edit_section_for(@cluster, nil) if can? :edit, @cluster %>
 
+<% content_for :add_section do %>
+  <li><%= link_to 'Ungrouped project', new_cluster_project_path(@cluster) %></li>
+  <li><%= link_to 'Group', new_group_path(:cluster_id => @cluster) %></li>
+  <li class="divider"></li>
+  <li><%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') %></li>
+  <li><%= link_to 'Document', polymorphic_path([:new, @cluster, :document]) %></li>
+<% end if can? :edit, @cluster %>
+
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) if @clusters.count > 1 %>
@@ -43,22 +51,6 @@
   </div>
 
   <div class="span3 offset1">
-    <% if can? :edit, @cluster %>
-      <div class="btn-group pull-right" style="margin-left:100%;margin-bottom:20px;">
-        <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-          <i class="icon-plus icon-white"></i>
-          Add
-          <span class="caret"></span>
-        </a>
-          <ul class="dropdown-menu">
-            <li><%= link_to 'Ungrouped project', new_cluster_project_path(@cluster) %></li>
-            <li><%= link_to 'Group', new_group_path(:cluster_id => @cluster) %></li>
-            <li class="divider"></li>
-            <li><%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') %></li>
-            <li><%= link_to 'Document', polymorphic_path([:new, @cluster, :document]) %></li>
-          </ul>
-      </div>
-    <% end  %>
 
     <h5 class="muted">Creator</h5>
     <ul class="unstyled">
