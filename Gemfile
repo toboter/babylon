@@ -87,6 +87,9 @@ gem 'redcarpet'
 # https://github.com/mislav/will_paginate
 gem 'will_paginate', '~> 3.0'
 
+# http://railscasts.com/episodes/396-importing-csv-and-excel
+# https://github.com/Empact/roo
+gem 'roo'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

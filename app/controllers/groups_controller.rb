@@ -20,6 +20,8 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
     @group = Group.find(params[:id])
+    @group_members = @group.projects.map {|project| [project.members.map {|member| member.id }]}.flatten
+    @members = User.find(@group_members)
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

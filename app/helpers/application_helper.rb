@@ -16,14 +16,6 @@ module ApplicationHelper
     end if obj.tags.any?
   end
 
-  def set_edit_ability_class(object)
-    if can? :edit, object
-      'span10'
-    else
-      'span12'
-    end
-  end
-
   def markdown(text)
     renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true)
     options = {
@@ -35,5 +27,13 @@ module ApplicationHelper
       superscript: true
     }
     Redcarpet::Markdown.new(renderer, options).render(text).html_safe
+  end
+
+  def name_only_or_link_to(obj)
+    unless obj.person
+      obj.available_name
+    else
+      link_to obj.available_name, obj.person
+    end
   end
 end

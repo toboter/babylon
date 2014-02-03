@@ -7,7 +7,13 @@
   </div>
 
   <div class="row">
-    <%= yield(:main_section) %>     
+  	<div class="span8">
+      <%= yield(:main_section) %>
+    </div>
+    <div class="span4">
+      <%= yield(:publishing_section) %>
+      <%= yield(:sidebar_section) %>
+    </div>  
   </div>
 
 <% end %>

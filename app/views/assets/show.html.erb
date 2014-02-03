@@ -1,4 +1,6 @@
 <% title "#{@asset.name}", nil, nil %>
+<% edit_section_for(@asset, nil) %>
+<% publishing_section_for(@asset) %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -7,16 +9,14 @@
 <% end %>
 
 <% content_for :main_section do %>
-<% edit_section_for(@asset, nil) if can? :edit, @asset %>
-  <div class="span8">
-    <% if @asset.content_type.include? 'image' %>
-      <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
-    <% else %>
-      <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
-    <% end %>
-    
-  </div>
-  <div class="span4">
+  <% if @asset.content_type.include? 'image' %>
+    <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
+  <% else %>
+    <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
+  <% end %>
+<% end %>
+
+<% content_for :sidebar_section do %>
     <% if can? :read, @asset %>
       <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -35,10 +35,12 @@
       </div>
     <% end  %>
     <%= content_tag :h3, "#{@asset.name}", class: "muted" %>
-    <p><%= link_to recreate_versions_asset_path(@asset.id), method: :put, class: 'btn btn-warning btn-small' do %>
-      <i class="icon-repeat icon-white"></i>
-      Recreate Versions
-    <% end if (@asset.content_type.include? 'image') && (can? :manage, @asset) %></p>
+    <p>
+      <%= link_to recreate_versions_asset_path(@asset.id), method: :put, class: 'btn btn-warning btn-small' do %>
+        <i class="icon-repeat icon-white"></i>
+        Recreate Versions
+      <% end if (@asset.content_type.include? 'image') && (can? :administrate, @asset) %>
+    </p>
     <div class="accordion" id="asset-accordion">
       <div class="accordion-group">
         <div class="accordion-heading">
@@ -100,7 +102,6 @@
         </div>
       <% end if @buckets.any? %>
     </div>
-  </div>
 <% end %>
 
 

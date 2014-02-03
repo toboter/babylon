@@ -27,7 +27,7 @@ class Document < ActiveRecord::Base
     where(:document_type => type).first
   end
 
-  scope :all_but_typelist, where('document_type NOT IN (?)', Document::DOKUMENTTYPES)
+  scope :without_document_type, where('document_type NOT IN (?)', Document::DOKUMENTTYPES)
 
   def page?
     documentable_type == 'Page'
@@ -41,12 +41,8 @@ class Document < ActiveRecord::Base
     document_type == 'Description'
   end
 
-  def intro?
-    document_type == 'Introduction'
-  end
-
   def title_readonly?
-    page? || person? || intro? || item_description?
+    page? || person? || (document_type == 'Introduction') || item_description?
   end
 
 end

@@ -4,7 +4,7 @@ class ItemClassification < ActiveRecord::Base
   stampable
   acts_as_tree :dependent => :destroy
 
-  has_many :items
+  has_many :items, foreign_key: 'classification_id'
 
 
   def self.possible_parents(classification)

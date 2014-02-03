@@ -4,7 +4,8 @@ class Person < ActiveRecord::Base
 
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
                   :last_name, :nickname, :profession, :public_email, :updater_id,
-                  :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes
+                  :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes,
+                  :names_attributes
   
   stampable
 
@@ -13,19 +14,24 @@ class Person < ActiveRecord::Base
   belongs_to :user
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-  has_many :authorships, :dependent => :destroy
+
+  has_many :names, :class_name => 'PersonName', :dependent => :destroy
+
+  has_many :authorships, through: :names
   has_many :references, through: :authorships
-  has_many :editorships, :dependent => :destroy
+
+  has_many :editorships, through: :names
   has_many :books, through: :editorships
+
   has_many :buckets, as: :attachable
   has_many :assets, through: :buckets
   has_many :documents, as: :documentable
   has_many :affiliations, :dependent => :destroy
   has_many :institutions, through: :affiliations
-
-  validates_presence_of :first_name, :last_name
+  
   validates_uniqueness_of :user_id, :allow_blank => true, :message => "is already connected to someone else"
 
+  accepts_nested_attributes_for :names, allow_destroy: true
   accepts_nested_attributes_for :affiliations, allow_destroy: true
 
   scope :unconnected, where(:user_id => nil)
@@ -38,7 +44,8 @@ class Person < ActiveRecord::Base
   end
 
   def fullname
-  	"#{first_name} #{last_name}"
+  	# "#{first_name} #{last_name}"
+    self.names.first.first_name + ' ' + self.names.first.last_name
   end
 
   def name

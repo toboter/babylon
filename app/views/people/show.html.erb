@@ -1,5 +1,6 @@
 <% title graded_fullname(@person), nil %>
-<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
+<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) || (can? :administrate, 'all') %>
+<% publishing_section_for(@person) %>
 
 <% content_for :add_section do %>
   <li><%= link_to "General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information") unless @person.documents.doctype('General Information') %></li>
@@ -15,7 +16,6 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span8">
     <%= content_tag :p, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
@@ -29,13 +29,13 @@
       <div class="tab-pane active" id="docs">
         <div id="general">
           <% if @person.documents.doctype('General Information') %>
-            <%= render "shared/document_first", var: @person, dtype: "General Information" %> 
+            <%= render "documents/with_document_type", var: @person, dtype: "General Information" %> 
           <% end %>
         </div>
     
         <div id="cv">
           <% if @person.documents.doctype('Curriculum Vitae') %>
-            <%= render "shared/document_first", var: @person, dtype: "Curriculum Vitae" %>  
+            <%= render "documents/with_document_type", var: @person, dtype: "Curriculum Vitae" %>  
           <% end %>
         </div>
       </div>
@@ -43,7 +43,16 @@
         Activity feed
       <% end if @person.user %>
       <%= content_tag :div, class: 'tab-pane', id: 'memberships' do %>
-        <%= render "shared/document_introductions", :vars => @person.user.projects %>     
+        <% @person.user.projects.each do |project| %>
+          <div class="project-entry well">
+            <h3><%= link_to "#{project.name}", project %></h3>
+            <% if project.documents.doctype('Introduction').present? %>
+              <%= render "documents/with_document_type", var: project, dtype: "Introduction" if project.documents.doctype('Introduction') %>
+            <% else %>
+              <p>No Introduction available</p>
+            <% end %>
+          </div>
+        <% end %>    
       <% end if @person.user %>
       <div class="tab-pane" id="pubs">
         <div id="publications">
@@ -64,9 +73,10 @@
         </div>
       </div>
     </div>
-  </div>
+<% end %>
 
-  <div class="vcard span3 offset1">
+<% content_for :sidebar_section do %>
+  <div class="vcard">
     <address>
     <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @person.profile_picture if @person.profile_picture %>
 

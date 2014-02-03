@@ -41,6 +41,7 @@ class ProjectsController < ApplicationController
   # GET /projects/new.json
   def new
     @project = @projectable.projects.new
+    @users = User.without_user(current_user)
     # @project.memberships.build
 
     respond_to do |format|
@@ -52,6 +53,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @project = @projectable.projects.find(params[:id])
+    @users = User.all
     render :layout => "form_page"
   end
 

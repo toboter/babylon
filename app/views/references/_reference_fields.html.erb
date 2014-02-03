@@ -4,7 +4,7 @@
     <div class="control-group">
       <%= f.label :author_ids, "Authors", :class => 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :author_ids, Person.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+        <%= f.collection_select :author_ids, PersonName.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
   <div class="control-group">
     <%= f.label :title, "Titel", :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title, :class => 'input-xxlarge' %>
+      <%= f.text_field :title, :class => 'input-block-level' %>
     </div>
   </div>
     
@@ -57,7 +57,7 @@
   <div class="control-group">
     <%= f.label :uri, 'Internet Resource URI', :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :uri %>
+      <%= f.text_field :uri, class: 'input-block-level' %>
     </div>
   </div>
   <p class="controls"><small><%= link_to("Add specific date", '#', class: "add_fields", id: 'add-date') %></small></p>
@@ -71,7 +71,7 @@
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
     </div>
   </div>
 

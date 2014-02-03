@@ -6,13 +6,12 @@
 
   <%= content_tag :p do -%>
     This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
-  <% end unless @document.person? || @document.page? -%>
+  <% end unless @document.page? -%>
 
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title, class: 'input-block-level' unless @document.title_readonly? %>
-      <%= f.text_field :title, class: 'input-block-level', :readonly => true if @document.title_readonly? %>
+      <%= f.text_field :title, class: 'input-block-level', :readonly => @document.title_readonly? %>
     </div>
   </div>
 
@@ -23,18 +22,15 @@
     </div>
   </div>
 
-  <% unless @document.title_readonly? %>
   <div class="control-group">
     <%= f.label :abstract, class: 'control-label' %>
     <div class="controls">
       <%= f.text_area :abstract, rows: 4, class: 'input-block-level' %>
     </div>
   </div>
-  <% end %>
 
   <div class="control-group">
     <label class="control-label" for="content_field">Content <%= link_to 'Howto use Markdown', "http://markdown.de/syntax/", :target => "_blank", class: 'pull-right' %></label>
-    
     <div class="controls">
       <%= f.text_area :content, class: 'input-block-level', id: 'content_field' %>
     </div>

@@ -6,6 +6,7 @@ class ReferencesController < ApplicationController
   def index
     @search = Reference.search(params[:q])
     @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
+    @references_unpaginated = @search.result
     @references_all = Reference.all
     # @collections = @references_all.select { |reference| reference.book.book_type == 'Collection' || reference.book.book_type == 'Collection in a serial' || reference.book.book_type == 'Issue of a journal' if reference.book } 
     # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monograph in a serial' || reference.book.book_type == 'Monograph' if reference.book } 
@@ -26,6 +27,8 @@ class ReferencesController < ApplicationController
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
+      format.csv { send_data @references_unpaginated.to_csv }
+      format.xls # { send_data @references.to_csv(col_sep: "\t") }
       format.json { render json: @reference }
     end
   end
@@ -108,4 +111,5 @@ class ReferencesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 end

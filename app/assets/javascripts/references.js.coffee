@@ -19,4 +19,4 @@ jQuery ->
     $(this).before($(this).data('fields').replace(regexp, time))
     event.preventDefault()
 
-  $('.chosen-select').chosen()
+  $('#csv-link').removeAttr('href')

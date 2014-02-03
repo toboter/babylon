@@ -10,16 +10,7 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span12">
-    <% @item_classifications.each do |classification| %>
-      <%= content_tag :ul, class: "classification-entry unstyled" do %>
-        <li>
-          <%= link_to "#{classification.name}", classification, class: 'name' %><br />
-          <%= classification.description %><br />
-          <%= link_to 'Add sub classification', new_item_classification_path(:parent_id => classification) %>
-        </li>
-        <li><%= render 'item_classifications_tree', :item_classification => classification, :indent => 20 %></li>
-      <% end if classification.root? %>
-    <% end %>
+  <div class="span6">
+    <%= render 'full_classification_tree', :item_classifications => @item_classifications, add_links_visible: true, highlight: nil %>
   </div>
 <% end %>

@@ -34,7 +34,7 @@
     <div class="control-group" id="if_editorial">
       <%= f.label :editor_ids, "Editors", :class => 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :editor_ids, Person.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+        <%= f.collection_select :editor_ids, PersonName.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
       </div>
     </div>
 
@@ -42,7 +42,7 @@
       <div class="control-group">
         <%= f.label :title, class: 'control-label' %>
         <div class="controls">
-          <%= f.text_field :title, class: 'input-xxlarge' %>
+          <%= f.text_field :title, class: 'input-block-level' %>
         </div>
       </div>
     </div>

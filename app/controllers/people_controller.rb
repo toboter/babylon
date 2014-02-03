@@ -40,6 +40,7 @@ class PeopleController < ApplicationController
     else
       @person = Person.new(:user_id => nil)
     end
+    @person.names.build
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

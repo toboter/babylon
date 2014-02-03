@@ -4,28 +4,31 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
 
-    if user.role? :guest
+    if user.role? :guest #kann 'published' db Informationen lesen, Bilder herunterladen
       can :read, :all
+      cannot :destroy, :all
     end
 
-    if user.role? :fellow
+    if user.role? :fellow #kann Informationen lesen die noch nicht published sind
       can :follow, :all
+      cannot :destroy, :all
     end
 
-    if user.role? :author
+    if user.role? :author #kann Informationen hinzufügen, Datensätze anlegen
       can :edit, :all
     end
 
-    if user.role? :editor
+    if user.role? :editor #kann hinzugefügte Informationen auf published setzen, Standardseiten editieren
       can :publish, :all
     end
 
-    # Wenn jemand 'admin' ist soll er nur ein Häckchen bei published (jeder Datensatz) 
-    # bzw die Rollenzuweisung und activated bei User machen können.
-    if user.role? :admin
+    if user.role? :admin #kann Rollen editieren (außer su), Module hinzufügen (in seinen Modulen Gruppen und Projekte hinzufügen. Da kann das aber auch der Modul-/Gruppenadmin)
       can :manage, :all
     end
 
+    if user.role? :superuser #kann alles, überall
+      can :administrate, :all
+    end
 
     # Define abilities for the passed in user here. For example:
     #

@@ -1,8 +1,6 @@
-<% if can? :edit, obj %>
-  <h5 class="muted">Categories</h5>
-  <ul class="nav nav-tabs nav-stacked">
-  	<%= content_tag :li, link_to("Bibliography", references_path), class: ('active' if obj == @references) %>
-  	<%= content_tag :li, link_to("Books", books_path), class: ('active' if obj == @books) %>
-  	<%= content_tag :li, link_to("Journals and serials", serials_path), class: ('active' if obj == @serials) %>
-  </ul>
-<% end %>
+<h5 class="muted">Categories</h5>
+<ul class="nav nav-tabs nav-stacked">
+  <%= content_tag :li, link_to("Bibliography", references_path), class: ('active' if obj == @references) %>
+  <%= content_tag :li, link_to("Books", books_path), class: ('active' if obj == @books) %>
+  <%= content_tag :li, link_to("Journals and serials", serials_path), class: ('active' if obj == @serials) %>
+</ul>

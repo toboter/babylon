@@ -1,5 +1,5 @@
 <% title @serial.name, nil %>
-<% edit_section_for(@serial, nil) if can? :edit, @serial %>
+<% edit_section_for(@serial, nil) %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Volume', new_book_path(:serial_id => @serial) %></li>
@@ -12,24 +12,20 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span8">
-    <h4 class="muted">Content</h4>
-    <%= render "books/book_entries", :books => @serial.books.order("volume ASC") %>
-  </div>
+  <h4 class="muted">Volumes / Issues</h4>
+  <%= render "books/book_entries", :books => @serial.books.order("volume ASC") %>
+<% end %>
 
-  <div class="span3 offset1">
-    <h5 class="muted">Info <small><%= @serial.serial_type %></small></h5>
-    <ul class="unstyled">
-      <li><%= @serial.name %> (<%= @serial.shortcut %>)</li>
-      <li><%= link_to "#{@serial.uri}", "#{@serial.uri}", :target => '_blank' %></li>
-      <%= content_tag :li, 'ISSN'+@serial.serial_identifier if @serial.serial_identifier.present? %>
-    </ul>
-
-    <h5 class="muted" style="margin-top:50px;">Record Info</h5>
-    <ul class="unstyled">
-      <li>Created by: <%= @serial.creator.available_name %></li>
-      <li>Updated by: <%= @serial.updater.available_name %></li>
-    </ul>
-  </div>
-
+<% content_for :sidebar_section do %>
+  <h5 class="muted">Info <small><%= @serial.serial_type %></small></h5>
+  <ul class="unstyled">
+    <li><%= @serial.name %> (<%= @serial.shortcut %>)</li>
+    <li><%= link_to "#{@serial.uri}", "#{@serial.uri}", :target => '_blank' %></li>
+    <%= content_tag :li, 'ISSN'+@serial.serial_identifier if @serial.serial_identifier.present? %>
+  </ul>
+  <h5 class="muted" style="margin-top:50px;">Record Info</h5>
+  <ul class="unstyled">
+    <li>Created by: <%= @serial.creator.available_name %></li>
+    <li>Updated by: <%= @serial.updater.available_name %></li>
+  </ul>
 <% end %>

@@ -1,5 +1,5 @@
 <% title "Project: #{@project.name}", nil %>
-<% edit_section_for(@project, @project.projectable) if can? :edit, @project %>
+<% edit_section_for(@project, @project.projectable) %>
 
 <% content_for :add_section do %>
   <li><%= link_to "People", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></li>
@@ -22,7 +22,6 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span8">
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Project Todos', "#todos", data: {toggle: 'tab'}) if can? :follow, "projects" %>
@@ -30,9 +29,9 @@
     <div class="tab-content">
       <div class="tab-pane active" id="docs"> 
         <%= content_tag :h4, 'Documents', class: 'muted' if @project.documents.any? %>
-        <%= render "shared/document_first", var: @project, dtype: "Introduction" if @project.documents.doctype('Introduction') %>
+        <%= render "documents/with_document_type", var: @project, dtype: "Introduction" if @project.documents.doctype('Introduction') %>
 
-        <%= render "shared/document_docs_without_type", :var => @project %>
+        <%= render "documents/without_document_type", :var => @project %>
       </div>
       <% if can? :follow, @project %>
         <div class="tab-pane" id="todos">
@@ -104,36 +103,39 @@
         </div>
       <% end %>
     </div>
-  </div>
+<% end %>
 
-  <div class="span3 offset1">
-    <h5 class="muted">Creator</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless @project.creator.person %>
-          <%= @project.creator.available_name %>
-        <% else %>
-          <%= link_to "#{@project.creator.available_name}", @project.creator.person %>
-        <% end %>
-      </li>
+<% content_for :sidebar_section do %>
+    <ul class="nav nav-tabs" style="margin-left:20px;">
+      <%= content_tag :li, link_to('Overview', "#overview", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Members', "#members", data: {toggle: 'tab'}) %>
     </ul>
 
-    <h5 class="muted">Members</h5>
-    <% if @project.memberships.present? %>
-      <ul class="unstyled">
-        <% for membership in @project.memberships do %>
-          <li>
-            <% if membership.user.person %>
-              <%= link_to "#{membership.user.available_name}", membership.user.person %>
-            <% else %>
-              <%= membership.user.available_name %>
-            <% end %>
-            <%= ' ('+membership.role+')' if can? :edit, @project %>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
+    <div class="tab-content" id="sidebar" style="margin-left:20px;">
+      <div class="tab-pane active" id="overview">
+        <ul class="unstyled">
+          <% if @project.projectable_type == "Group" %>
+            <li>Module: <%= link_to(@project.projectable.cluster.name, @project.projectable.cluster) %></li>
+            <li>Group: <%= link_to(@project.projectable.name, @project.projectable) %></li>
+          <% else %>
+            <li>Module: <%= link_to(@project.projectable.name, @project.projectable) %></li>
+          <% end %>
+          <small>
+            <li style="margin-top:20px;">Creator: <%= name_only_or_link_to(@project.creator) %></li>
+            <li>Created on: <%= @project.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
+          </small>
+        </ul>
+      </div>
+      <div class="tab-pane" id="members">
+        <ul class="unstyled">
+          <% for membership in @project.memberships do %>
+            <li><%= name_only_or_link_to(membership.user) %><%= ' ('+membership.role+')' if can? :edit, @project %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+
 
 
 <!-- Modals beginn -->

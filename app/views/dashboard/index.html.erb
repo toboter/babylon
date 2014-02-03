@@ -12,7 +12,7 @@
       <%= content_tag :li, link_to('Your Projects', "#memberships", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Personal todos', "#todos", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Roles', "#roles", data: {toggle: 'tab'}) if can? :manage, "roles" %>
-      <%= content_tag :li, link_to('Pages', "#pages", data: {toggle: 'tab'}) if can? :manage, "pages" %>
+      <%= content_tag :li, link_to('Pages', "#pages", data: {toggle: 'tab'}) if can? :publish, "pages" %>
     </ul>
 
     <div class="tab-content">
@@ -21,7 +21,16 @@
         <%= User.joins(:role).where(["role = ?", "admin"]).count <= 1 %>
       </div>
       <div class="tab-pane active" id="memberships">
-        <%= render "shared/document_introductions", :vars => current_user.projects %>
+        <% current_user.projects.each do |project| %>
+          <div class="project-entry well">
+            <h3><%= link_to "#{project.name}", project %></h3>
+            <% if project.documents.doctype('Introduction').present? %>
+              <%= render "documents/with_document_type", var: project, dtype: "Introduction" if project.documents.doctype('Introduction') %>
+            <% else %>
+              <p>No Introduction available</p>
+            <% end %>
+          </div>
+        <% end %>
       </div>
 
       <div class="tab-pane" id="todos">
@@ -55,10 +64,14 @@
                       <%= f.label :role, "#{role.user.available_name}", class: "right inline" %>
                     </div>
                     <div class="span9">
-                      <%= f.select(:role, User::ROLES) %>
+                      <% if current_user.role.role == 'superuser' %>
+                        <%= f.select(:role, User::ABILITYROLES) %>
+                      <% else %>
+                        <%= f.select(:role, User::ROLES) %>
+                      <% end %>
                     </div>
                   </div>
-                <% end unless role.user.username == 'toboter' %>
+                <% end unless role.user.username == 'toboter' || role.user == current_user %>
               <% end %>
             </ul>
             <div class="form-actions">
@@ -68,7 +81,7 @@
         </div> 
       <% end %>
 
-      <% if can? :manage, "pages" %>
+      <% if can? :publish, "pages" %>
         <div class="tab-pane" id="pages">
             <%= content_tag :div, page_doc_path_for('about'), class: 'well' %>
             <%= content_tag :div, page_doc_path_for('API'), class: 'well' %>

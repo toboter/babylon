@@ -119,5 +119,22 @@ h3 {
 	font-size: 1.65em;
 }
 
+.tag-entry a.name, .ic-entry a.name {
+	font-size: 115%;
+	font-weight: bold;
+	line-height: 2em;
+}
+
+.tag-entry a.highlight, .ic-entry a.highlight {
+	font-size: 150%;
+	font-weight: bolder;
+	line-height: 3em;
+	text-decoration: underline;
+}
+
+.well h1, .well .lead {
+	font-size: 135%;
+}
+
 
 @import "bootstrap-responsive";

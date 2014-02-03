@@ -18,17 +18,11 @@
       <h4 class="muted">Personal</h4>
     </div>
 
-    <div class="control-group">
-      <%= f.label :first_name, class: 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :first_name %>
-      </div>
-    </div>
-    <div class="control-group">
-      <%= f.label :last_name, class: 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :last_name %>
-      </div>
+    <%= f.fields_for :names do |builder| %>
+      <%= render "name_fields", :f => builder %>
+    <% end %>
+    <div style='margin-top:-15px; padding-bottom:15px;'>
+      <small><%= f.link_to_add "Add Name", :names, class: 'controls' %></small>
     </div>
 
     <div class="control-group">
@@ -81,8 +75,10 @@
       <%= f.fields_for :affiliations do |builder| %>
         <%= render "institution_fields", :f => builder %>
       <% end %>
-      <%= f.link_to_add "Add Institution", :affiliations, class: 'control-label' %>
-
+      <div style='margin-top:-15px; padding-bottom:15px;'>
+        <small><%= f.link_to_add "Add Institution", :affiliations, class: 'controls' %></small>
+      </div>
+      
       <div class="controls">
         <%= f.label :show_inst_address, class: 'checkbox' do %>
           <%= f.check_box :show_inst_address %>

@@ -7,8 +7,10 @@ class Book < ActiveRecord::Base
   default_scope order('year DESC')
 
   has_many :articles, :class_name => 'Reference', :dependent => :destroy, :order => 'first_page'
-  has_many :editors, :class_name => 'Person', through: :editorships, :source => :person
+
   has_many :editorships, :dependent => :destroy , :order => 'position'
+  has_many :editors, :class_name => 'PersonName', through: :editorships, :source => :person_name
+
   belongs_to :serial
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"

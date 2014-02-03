@@ -6,7 +6,7 @@ class Membership < ActiveRecord::Base
   belongs_to :user
   belongs_to :project
 
-  validates_uniqueness_of :user_id, :scope => :project_id
+  validates :user_id, uniqueness: { scope: :project_id, message: 'You cannot add a member twice' }
 
   ROLES = %w[student fellow member admin]
 

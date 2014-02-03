@@ -17,11 +17,6 @@
           <%= content_tag :span,  book.year.present? ? "(#{book.year})" : '[unpublished]' %>.
         </p>
       <% end -%>
-      <% if can? :edit, book %>
-        <%= content_tag :div, class: 'span1 reference-edit-link' do -%>
-          <p><%= link_to "Edit", edit_book_path(book) %></p>
-        <% end -%>
-      <% end %>
     </div>
   <% end -%>
 <% end %>

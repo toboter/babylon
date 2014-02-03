@@ -17,7 +17,7 @@
     <%= will_paginate(@books, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
   </div>
   <div class="span2 offset1">
-    <%= render "shared/bibliographic_cat_navs", :obj => @books %>
+    <%= render "shared/bibliographic_cat_navs", :obj => @books if can? :follow, @books %>
     <h5 class="muted">Filter by type</h5>
     <ul class="unstyled">
       <li><%= link_to "All books", books_path %> (<%= @books_all.count %>)</li>

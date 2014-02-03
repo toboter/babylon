@@ -1,5 +1,5 @@
 <% title "#{@bucket.name}", nil %>
-<% edit_section_for(@bucket, @bucket.attachable) if can? :edit, @bucket %>
+<% edit_section_for(@bucket, @bucket.attachable) %>
 
 <% content_for :breadcrumbs_section do %>
   <% unless @bucket.attachable_type == 'Page' %>
@@ -12,21 +12,17 @@
 <% end %>
 
 <% content_for :main_section do %>
-  
-  <div class="span8">
-    <ul class="thumbnails">
-      <%= render partial: 'asset', collection: @bucket.assets.order('content_type DESC', 'name ASC') %>
-    </ul>
+  <ul class="thumbnails">
+    <%= render partial: 'asset', collection: @bucket.assets.order('content_type DESC', 'name ASC') %>
+  </ul>
+  <% if @bucket.attachable_type == 'Person' %>
+    <%= render 'upload_asset' if (!@bucket.attachable.user_id?) || (@bucket.attachable.user.id == current_user.id) %>
+  <% else %>
+    <%= render 'upload_asset' %>
+  <% end %>
+<% end %>
 
-    <% if @bucket.attachable_type == 'Person' %>
-      <%= render 'upload_asset' if (!@bucket.attachable.user_id?) || (@bucket.attachable.user.id == current_user.id) %>
-    <% else %>
-      <%= render 'upload_asset' %>
-    <% end %>
-
-  </div>
-
-  <div class="span3 offset1">
+<% content_for :sidebar_section do %>
     <%= content_tag :h4, 'Other files', class: 'muted' %>
     <% for asset in @bucket.assets.order('content_type DESC', 'name ASC') do %>
       <% unless asset.content_type.include? 'image' %>
@@ -41,7 +37,6 @@
       <%= content_tag :li, 'Created by: '+@bucket.creator.available_name if @bucket.creator.present? %>
       <%= content_tag :li, 'Updated by: '+@bucket.creator.available_name if @bucket.updater.present? %>
     </ul>
-  </div>
   
 
 <!-- Modals beginn -->

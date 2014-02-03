@@ -1,5 +1,5 @@
-<% title "#{@reference.title}", nil, false %>
-<% edit_section_for(@reference, nil) if can? :edit, @reference %>
+<% title "#{@reference.title}", nil %>
+<% edit_section_for(@reference, nil) %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Document', polymorphic_path([:new, @reference, :document]) %></li>
@@ -14,8 +14,7 @@
 
 
 <% content_for :main_section do %>
-  <div class="span8">
-    <h3><%= @reference.title %><%= tagging_infos_for(@reference) %></h3>
+    <%= tagging_infos_for(@reference) %>
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
@@ -24,7 +23,7 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="docs"> 
-        <%= render "shared/document_docs_without_type", :var => @reference if @reference.documents.any? %>
+        <%= render "documents/without_document_type", :var => @reference if @reference.documents.any? %>
       </div>
       <div class="tab-pane" id="uploads">
         <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
@@ -46,15 +45,13 @@
         <p>Außerdem in diesem Buch</p>
       </div>
     </div>
+<% end %>
 
-
-  </div>
-
-  <div class="span3 offset1">
+<% content_for :sidebar_section do %>
     <%= content_tag :span, 'Babylon Bibliography', class: 'label label-info pull-right' if @reference.babylon_specific %>
     <h5 class="muted">Title</h5>
     <ul class="unstyled">
-      <li><%= @reference.authorships.map{ |a| link_to(a.person.fullname,a.person) }.join(", ").html_safe %></li>
+      <li><%= @reference.authorships.map{ |a| link_to(a.person_name.name,a.person_name.person) }.join(", ").html_safe %></li>
       <li><%= @reference.title %></li>
       <%= content_tag :li, link_to("#{@reference.uri}", "#{@reference.uri}") if @reference.uri.present? %>
     </ul>
@@ -85,7 +82,6 @@
       <li>Created by: <%= @reference.creator.available_name %></li>
       <li>Updated by: <%= @reference.updater.available_name %></li>
     </ul>
-  </div>
 
 <% end %>
 

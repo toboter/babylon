@@ -1,5 +1,6 @@
 <% title "#{@item.inventory_name}", nil, nil %>
-<% edit_section_for(@item, nil) if can? :author, @item %>
+<% edit_section_for(@item, nil) %>
+<% publishing_section_for(@item) %>
 
 <% content_for :add_section do %>
   <%= content_tag :li, (link_to "Description Document", polymorphic_path([:new, @item, :document], :document_type => "Description")) unless @item.documents.doctype('Description') %>
@@ -14,12 +15,11 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span7">
-    <%= tagging_infos_for(@item) %><br />
-    <%= image_tag @images.first.assetfile.normal.url if @images.first %>
-  </div>   
+  <%= tagging_infos_for(@item) %><br />
+  <%= image_tag @images.first.assetfile.normal.url if @images.first %>
+<% end %>
 
-  <div class="span5">
+<% content_for :sidebar_section do %>
     <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">
@@ -37,7 +37,7 @@
         </div>
         <div id="collapseOne" class="accordion-body collapse">
           <div class="accordion-inner">
-            <%= render "shared/document_first", var: @item, dtype: "Description" %> 
+            <%= render "documents/with_document_type", var: @item, dtype: "Description" %> 
           </div>
         </div>
       <% end if @item.documents.doctype('Description') %>
@@ -109,11 +109,10 @@
         </div>
         <div id="collapseFive" class="accordion-body collapse">
           <div class="accordion-inner">
-            <%= render "shared/document_docs_without_type", :var => @item %> 
+            <%= render "documents/without_document_type", :var => @item %> 
           </div>
         </div>
       <% end if @item.documents.any? %>
 
     </div>
-  </div>
 <% end %>

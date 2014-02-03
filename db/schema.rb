@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140123121211) do
+ActiveRecord::Schema.define(:version => 20140131164348) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -73,12 +73,12 @@ ActiveRecord::Schema.define(:version => 20140123121211) do
   end
 
   create_table "authorships", :force => true do |t|
-    t.integer  "person_id"
+    t.integer  "person_name_id"
     t.integer  "reference_id"
     t.integer  "predicate_id"
     t.integer  "position"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
@@ -130,10 +130,12 @@ ActiveRecord::Schema.define(:version => 20140123121211) do
 
   create_table "clusters", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "speaker_id"
+    t.integer  "cluster_admin_id"
   end
 
   create_table "collections", :force => true do |t|
@@ -185,16 +187,16 @@ ActiveRecord::Schema.define(:version => 20140123121211) do
 
   create_table "editorships", :force => true do |t|
     t.integer  "book_id"
-    t.integer  "person_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "person_name_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "position"
   end
 
   add_index "editorships", ["book_id"], :name => "index_editorships_on_book_id"
-  add_index "editorships", ["person_id"], :name => "index_editorships_on_person_id"
+  add_index "editorships", ["person_name_id"], :name => "index_editorships_on_person_id"
 
   create_table "friendly_id_slugs", :force => true do |t|
     t.string   "slug",                         :null => false
@@ -210,10 +212,12 @@ ActiveRecord::Schema.define(:version => 20140123121211) do
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.integer  "cluster_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "speaker_id"
+    t.integer  "group_admin_id"
   end
 
   add_index "groups", ["cluster_id"], :name => "index_groups_on_area_id"
@@ -339,6 +343,17 @@ ActiveRecord::Schema.define(:version => 20140123121211) do
   end
 
   add_index "people", ["slug"], :name => "index_people_on_slug", :unique => true
+
+  create_table "person_names", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.boolean  "primary"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
 
   create_table "predicates", :force => true do |t|
     t.string   "name"

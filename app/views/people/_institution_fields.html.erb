@@ -4,7 +4,7 @@
       <%= f.label :institution_id, 'Institution', class: 'control-label' %>
       <div class="form-inline controls">
         <%= f.collection_select :institution_id, Institution.all, :id, :name, {include_blank: true}, class: 'input-xxlarge' %>  
-        <small><%= f.link_to_remove "remove" %></small>
+        
       </div>
       <div class="controls" style="margin-top:5px;">
         <div id="affiliated-from-to" class="form-inline">
@@ -21,7 +21,9 @@
           <%= f.label :primary, class: 'checkbox' do %>
             <%= f.check_box :primary %>
             Primary?
+
           <% end %>
+          <small><%= f.link_to_remove "remove" %></small>
         </div>
       </div>
     </div>  

@@ -3,7 +3,7 @@
     <div class="control-group">
       <%= f.label :user_id, 'Member', class: 'control-label' %>
       <div class="form-inline controls">
-        <%= f.collection_select :user_id, User.all, :id, :available_name %>
+        <%= f.collection_select :user_id, @users, :id, :available_name %>
         <%= f.select :role, Membership::ROLES %>
         <small><%= f.link_to_remove "remove" %></small>
       </div>

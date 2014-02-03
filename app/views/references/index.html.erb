@@ -7,8 +7,12 @@
 
 <% content_for :main_section do %>
   <div class="span9">
-    <%= content_tag :div, class: "search-and-sort" do %>
-      <h5 class="muted">Filter &amp; Sort</h5>
+    <h5 class="muted">
+      Filter &amp; Sort 
+      <small><a href="#" data-toggle="collapse" data-target="#search-sort-well">(toggle)</a></small>
+    </h5>
+    <%= content_tag :div, class: "", id: 'search-sort-well' do %>
+      <div class="well weel-small">
       <%= search_form_for @search, html: { class: 'form-inline'} do |f| %>
         <div class="">
           <%= f.condition_fields do |c| %>
@@ -24,7 +28,7 @@
               <%= s.sort_select associations: [:authors, :book] %>
             <% end %>
           </div>
-          <div class="span4">
+          <div class="span4 pull-right">
             Results per Page:<br />
             <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10) %>
           </div>
@@ -33,6 +37,7 @@
           <%= f.submit "Search", class: 'btn btn-info btn-block' %>
         </div>
       <% end %>
+    </div>
     <% end if @search %>
     <%= render "bib_entries", :references => @references %>
     <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
@@ -55,8 +60,13 @@
     </div>
   </div>
 
-  <div class="span2 offset1">
-    <%= render "shared/bibliographic_cat_navs", :obj => @references %>
+  <div class="span3">
+    <%= render "shared/bibliographic_cat_navs", :obj => @references if can? :follow, @references %>
+    <%= content_tag :p do %>
+      Download:
+      <%= link_to "CSV", references_path(format: "csv"), class: 'btn btn-mini disabled', id: 'csv-link' %>
+      <%= link_to "Excel", references_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
+    <% end if can? :follow, @references %>
   </div>
 
 <% end %>

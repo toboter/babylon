@@ -27,18 +27,21 @@ class User < ActiveRecord::Base
   validates_presence_of :username
   validates_uniqueness_of :username
 
+  ABILITYROLES = %w[guest fellow author editor admin superuser]
   ROLES = %w[guest fellow author editor admin]
 
+  scope :without_user, lambda{|user| user ? {:conditions => ["users.id != ?", user.id]} : {}}
+
   def role?(base_role)
-    role.present? && ROLES.index(base_role.to_s) <= ROLES.index(role.role)
+    role.present? && ABILITYROLES.index(base_role.to_s) <= ABILITYROLES.index(role.role)
+  end
+
+  def superuser?
+    self.role.role == 'superuser'
   end
 
   def add_base_role
-    if self.username == 'toboter'
-      Role.create :role => "admin", :user_id => self.id
-    else
-      Role.create :role => "guest", :user_id => self.id
-    end
+    Role.create :role => "guest", :user_id => self.id unless self.username == 'toboter'
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)
@@ -59,8 +62,11 @@ class User < ActiveRecord::Base
   end
 
   def check_admin_status
-    if role.role == 'admin'
+    if role.role == 'superuser'
       errors.add(:base, "You cannot destroy the admin!")
+      return false
+    else
+      errors.add(:base, "You cannot destroy any user! This is an implementation error. Perhaps there are records associated to the user in question.")
       return false
     end
   end

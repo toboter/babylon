@@ -1,0 +1,13 @@
+<% item_classifications.each do |ic| %>
+  <%= content_tag :ul, class: "ic-entry unstyled well" do %>
+    <li>
+      <%= link_to "#{ic.name}", ic, class: (ic == highlight ? 'name highlight' : 'name') %>
+      <%= link_to image_tag("icons/plus24.svg", style: 'width:.7em;padding-bottom:.1em;')+' sub-class', new_item_classification_path(:parent_id => ic), style: 'font-size:90%;margin-left:10px;' if add_links_visible || ic == highlight %>
+    </li>
+    <li><%= render 'item_classifications_tree', :ic => ic, :indent => 20, :add_links_visible => add_links_visible, :highlight => highlight %></li>
+
+    <%= content_tag :p, style: 'padding-top: 30px;' do %>
+	  <%= markdown @item_classification.description %>
+    <% end if params[:action] == "show" %> 
+  <% end if ic.root? %>
+<% end %>

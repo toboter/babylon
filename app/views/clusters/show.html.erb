@@ -1,5 +1,5 @@
 <% title "Research Modul: #{@cluster.name}", nil %>
-<% edit_section_for(@cluster, nil) if can? :edit, @cluster %>
+<% edit_section_for(@cluster, nil) if @cluster.cluster_admin == current_user || @cluster.creator == current_user || current_user.superuser? %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Ungrouped project', new_cluster_project_path(@cluster) %></li>
@@ -11,22 +11,29 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) if @clusters.count > 1 %>
+  <%= content_tag :li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider') %>
   <%= content_tag :li, "#{@cluster.name}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span8">
-    <%= render "shared/document_first", var: @cluster, dtype: "Introduction" if @cluster.documents.doctype('Introduction') %>
+    <%= render "documents/with_document_type", var: @cluster, dtype: "Introduction" if @cluster.documents.doctype('Introduction') %>
+    <%= render "documents/without_document_type", :var => @cluster %>
 
-    <%= render "shared/document_docs_without_type", :var => @cluster %>
-  
     <%= content_tag :h4, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" if @cluster.groups.present? %>
-    <%= render "shared/document_introductions", :vars => @cluster.groups %>
+    <% @cluster.groups.each do |group| %>
+      <div class="group-entry well">
+      <h3><%= link_to "#{group.name}", group %></h3>
+      <% if group.documents.doctype('Introduction').present? %>
+          <%= render "documents/with_document_type", var: group, dtype: "Introduction" if group.documents.doctype('Introduction') %>
+        <% else %>
+        <p>No Introduction available</p>
+        <% end %>
+      </div>
+    <% end %>
   
     <%= content_tag :h4, link_to("Projects", [@cluster, 'projects']), class: "muted" if @cluster.projects.present? %>
     <% @all_projects.each do |project| %>
-      <div class="well">
+      <div class="project-entry well">
         <h4>
           <%= link_to [project.projectable, project] do %>
             <%= project.projectable.name if project.projectable_type == "Cluster" %>
@@ -38,60 +45,59 @@
             <%= project.name %>
           <% end %>
         </h4>
-  
+
         <% if project.documents.doctype('Introduction').present? %>
-          <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
-        <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+          <%= render "documents/with_document_type", var: project, dtype: "Introduction" if project.documents.doctype('Introduction') %>
         <% else %>
           <p>No Introduction available</p>
         <% end %>
       </div>
     <% end %>  
+<% end %>
 
-  </div>
-
-  <div class="span3 offset1">
-
-    <h5 class="muted">Creator</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless @cluster.creator.person %>
-          <%= @cluster.creator.available_name %>
-        <% else %>
-          <%= link_to "#{@cluster.creator.available_name}", @cluster.creator.person %>
-        <% end %>
-      </li>
+<% content_for :sidebar_section do %>
+    <ul class="nav nav-tabs" style="margin-left:20px;">
+      <%= content_tag :li, link_to('Overview', "#overview", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Members', "#members", data: {toggle: 'tab'}) if @members %>
+      <%= content_tag :li, link_to('Groups & Projects', "#projects", data: {toggle: 'tab'}) if @cluster.projects || @cluster.groups %>
     </ul>
 
-    <% if @cluster.groups.present? %>
-      <h5 class="muted">Groups</h5>
-      <ul class="unstyled">
-        <% for group in @cluster.groups do %>
-          <li><%= link_to "#{group.name}", group %></li>
-        <% end %>
-      </ul>
-    <% end %>
-    
-    <% if @cluster.projects.present? %>
-      <h5 class="muted">Ungrouped Projects</h5>
-      <ul class="unstyled">
-        <% for project in @cluster.projects do %>
-          <li><%= link_to "#{project.name}", project %></li>
-        <% end %>
-      </ul>
-    <% end %>
+    <div class="tab-content" id="sidebar" style="margin-left:20px;">
+      <div class="tab-pane active" id="overview">
+        <ul class="unstyled">
+          <li>Speaker: <%= name_only_or_link_to(@cluster.speaker) %></li>
+          <li>Admin: <%= name_only_or_link_to(@cluster.cluster_admin) %></li>
 
-    <h5 class="muted">Members of <%= @cluster.name %></h5>
-    <ul class="unstyled">
-      <% for member in @members do %>
-        <li>
-        <% unless member.person %>
-          <%= member.available_name %>
-        <% else %>
-          <%= link_to "#{member.available_name}", member.person %>
+          <small>
+            <li style="margin-top:20px;">Creator: <%= name_only_or_link_to(@cluster.creator) %></li>
+            <li>Created on: <%= @cluster.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
+          </small>
+        </ul>
+      </div>
+      <%= content_tag :div, class: 'tab-pane', id: 'members' do %>
+        <ul class="unstyled">
+          <% for member in @members do %>
+            <li><%= name_only_or_link_to(member) %></li>
+          <% end %>
+        </ul>
+      <% end if @members %>
+      <%= content_tag :div, class: 'tab-pane', id: 'projects' do %>
+        <% if @cluster.groups.present? %>
+          <h5 class="muted">Groups</h5>
+          <ul class="unstyled">
+            <% for group in @cluster.groups do %>
+              <li><%= link_to "#{group.name}", group %></li>
+            <% end %>
+          </ul>
         <% end %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+        <% if @cluster.projects.present? %>
+          <h5 class="muted">Ungrouped Projects</h5>
+          <ul class="unstyled">
+            <% for project in @cluster.projects do %>
+              <li><%= link_to "#{project.name}", project %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end if @cluster.projects || @cluster.groups %>
+    </div>
 <% end %>
