@@ -146,7 +146,7 @@
         <h3>Add a todo</h3>
       </div>
   
-      <%= nested_form_for [@project, @project.todos.new], :html => { :class => 'form-horizontal' } do |f| %>
+      <%= form_for [@project, @project.todos.new], :html => { :class => 'form-horizontal' } do |f| %>
         <div class="modal-body">
           <%= f.error_messages %>
           <%= f.hidden_field :project_id %>
@@ -189,7 +189,9 @@
             <%= f.fields_for :todo_dependencies do |builder| %>
               <%= render "todos/todo_dependency_fields", :f => builder %>
             <% end %>
-            <p><%= f.link_to_add "Add Dependency", :todo_dependencies, class: 'controls' %></p>
+            <p class="links controls">
+              <%= link_to_add_association "Add Dependency", f, :todo_dependencies, :partial => 'todos/todo_dependency_fields' %>
+            </p>
           </div>
         
         </div>

@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset class="nested-fields">
   <legend>Article/Content</legend>
   <div id="authors">
     <div class="control-group">
@@ -76,7 +76,7 @@
   </div>
 
   <% if @book %>
-    <p class="controls"><small><%= f.link_to_remove "remove" %></small></p>
+    <p class="controls"><small><%= link_to_remove_association "remove", f %></small></p>
   <% end %>
 
   <div class="controls">

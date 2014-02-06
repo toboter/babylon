@@ -1,4 +1,4 @@
-<%= nested_form_for @book, :html => {:class => "form-horizontal"} do |f| %>
+<%= form_for @book, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
 <fieldset>
@@ -104,7 +104,9 @@
       <%= f.fields_for :articles do |builder| %>
         <%= render "references/reference_fields", :f => builder %>
       <% end %>
-      <%= f.link_to_add "Add Contents", :articles %>
+      <div class="links">
+        <%= link_to_add_association "Add Contents", f, :articles, :partial => 'references/reference_fields' %>
+      </div>
     </div>
 
 

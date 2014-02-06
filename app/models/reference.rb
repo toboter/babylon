@@ -35,7 +35,7 @@ class Reference < ActiveRecord::Base
   end
 
   def authors_of_article
-    authors.present? ? authorships.map{ |a| a.person.fullname }.join(", ") : 'N.N.'
+    authors.present? ? authors.map{ |a| a.name }.join(", ") : 'N.N.'
   end
 
   def self.to_csv(options = {})

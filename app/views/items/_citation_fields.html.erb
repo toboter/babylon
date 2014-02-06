@@ -1,18 +1,18 @@
-<fieldset>
+<fieldset class="nested-fields">
   <div class="citation-field">
 
     <div class="control-group">
       <%= f.label :predicate_id, 'Predicate', class: 'control-label' %>
       <div class="form-inline controls">
         <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Citation'), :id, :name, class: 'span6' %>
-        <small><%= f.link_to_remove "remove" %></small>
+        <small><%= link_to_remove_association "remove", f %></small>
       </div>
     </div>
 
     <div class="control-group">
       <%= f.label :reference_id, 'Bibliographic Entry', class: 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :reference_id, Reference.all, :id, :entries_for_select, class: 'span6' %>
+        <%= f.collection_select :reference_id, Reference.all, :id, :entries_for_select, {}, {multiple: false, class: 'form-control chosen-select input-block-level'} %>
       </div>
     </div>
 

@@ -19,7 +19,7 @@ class Bucket < ActiveRecord::Base
   def full_bucket_name
     if name == 'Profile Pictures' && attachable_type == 'Person'
       name+' of '+attachable.fullname
-    elsif name == 'welcome' && attachable_type == 'Page'
+    elsif name == 'explore' && attachable_type == 'Page'
       'Banner pictures'
     else
       name

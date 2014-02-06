@@ -7,7 +7,7 @@ class DocumentsController < ApplicationController
     if @documentable
       @documents = @documentable.documents.all
     else
-      @documents = Document.order('documentable_type ASC')
+      @documents = Document.where('documentable_type != ?', 'Page').order('documentable_type ASC') #ohne PAGES
     end
 
     respond_to do |format|

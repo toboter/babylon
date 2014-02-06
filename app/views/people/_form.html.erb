@@ -1,4 +1,4 @@
-<%= nested_form_for @person, :html => {:class => "form-horizontal"} do |f| %>
+<%= form_for @person, :html => {:class => "form-horizontal"} do |f| %>
 <%= f.error_messages %>
 <%= f.hidden_field :user_id %>
 
@@ -21,8 +21,8 @@
     <%= f.fields_for :names do |builder| %>
       <%= render "name_fields", :f => builder %>
     <% end %>
-    <div style='margin-top:-15px; padding-bottom:15px;'>
-      <small><%= f.link_to_add "Add Name", :names, class: 'controls' %></small>
+    <div style='margin-top:-15px; padding-bottom:15px;' class="links">
+      <small><%= link_to_add_association "Add Name", f, :names, class: 'controls' %></small>
     </div>
 
     <div class="control-group">
@@ -73,10 +73,10 @@
       </div>
 
       <%= f.fields_for :affiliations do |builder| %>
-        <%= render "institution_fields", :f => builder %>
+        <%= render "affiliation_fields", :f => builder %>
       <% end %>
-      <div style='margin-top:-15px; padding-bottom:15px;'>
-        <small><%= f.link_to_add "Add Institution", :affiliations, class: 'controls' %></small>
+      <div style='margin-top:-15px; padding-bottom:15px;' class="links">
+        <small><%= link_to_add_association "Add Institution", f, :affiliations, class: 'controls' %></small>
       </div>
       
       <div class="controls">

@@ -51,7 +51,8 @@ gem 'cancan'
 gem 'userstamp', :git => "git://github.com/toboter/userstamp.git"
 
 # https://github.com/ryanb/nested_form
-gem 'nested_form'
+#gem 'nested_form'
+gem "cocoon"
 
 # https://github.com/swanandp/acts_as_list
 gem 'acts_as_list'

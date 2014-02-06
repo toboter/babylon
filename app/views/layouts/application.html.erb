@@ -106,7 +106,7 @@
                   <%= image_tag("icons/tools.svg", class: 'navbar-icon') %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, link_to("Pages", dashboard_path) if can? :publish, 'Pages' %></li>
+                  <%= content_tag :li, link_to("Pages", pages_path) if can? :publish, 'Pages' %></li>
                   <li><%= link_to "Item classifications", item_classifications_path %></li>
                   <li><%= link_to "Terms of interest (tags)", tags_path %></li>
                   <li><%= link_to "Predicates", predicates_path %></li>
@@ -281,8 +281,8 @@
             <h3>Connect your account to an existing profile</h3>
           </div>
           <%= form_tag user_connect_path, :class => "custom" do %>
-            <div class="modal-body">
-              <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "large-8" %>
+            <div class="modal-body" style="height:300px;">
+              <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "input-block-level", :id => "person-connect-select" %>
               <%= hidden_field_tag :connect_user_id, current_user.id %>
             </div>
             <div class="modal-footer">

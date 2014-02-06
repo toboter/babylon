@@ -3,8 +3,14 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 jQuery ->
-  $('.input-append.date').datepicker(
-    format: "dd.mm.yyyy",
-    todayHighlight: true,
-    forceParse: false
-  )
+  $("#citations").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Oops, nothing found!"
+      search_contains: true
+    )
+  $("#actions").on('cocoon:after-insert', -> 
+    $('.input-append.date').datepicker(
+      format: "dd.mm.yyyy",
+      todayHighlight: true,
+      forceParse: false)
+    )

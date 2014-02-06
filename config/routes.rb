@@ -8,7 +8,7 @@ Babylon::Application.routes.draw do
     resources :item_classifications
     resources :tags, except: [:index, :show]
   end
-  resources :pages, only: [:show, :create, :destroy] do
+  resources :pages, only: [:show, :create, :destroy, :index] do
     resources :buckets
     resources :documents
   end

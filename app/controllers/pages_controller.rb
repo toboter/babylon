@@ -1,11 +1,22 @@
 class PagesController < ApplicationController
   before_filter :authenticate_user!, except: [:show]
+
+  def index
+    @pages = Page.all
+
+    respond_to do |format|
+      format.html { render :layout => "index_page" }# index.html.erb
+      format.json { render json: @pages }
+    end
+  end
+
+
   # GET /pages/1
   # GET /pages/1.json
   def show
     @page = Page.find_by_permalink!(params[:id])
     @document = Document.find(:first, :joins => :page, :conditions => ['pages.permalink = ?', @page.permalink])
-    if @page.permalink == 'welcome'
+    if !@document
       redirect_to root_url
     else
       redirect_to [@document.documentable, @document]
@@ -19,7 +30,7 @@ class PagesController < ApplicationController
     @page = Page.new(:permalink => params[:permalink])
 
     if @page.save && params[:type] == 'doc'
-      @document = Document.new(:documentable_id => @page.id, :documentable_type => @page.class.name, :title => params[:permalink].humanize)
+      @document = Document.new(:documentable_id => @page.id, :documentable_type => @page.class.name, :title => params[:permalink].humanize, :document_type => @page.class.name)
   
       if @document.save
         redirect_to polymorphic_url([:edit, @page, @document]), notice: 'Page was successfully created please add content.'

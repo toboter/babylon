@@ -8,7 +8,7 @@ jQuery ->
 
   $("#add-date").click ->
     $("#date").toggle()
-
+    
   $('form').on 'click', '.remove_fields', (event) ->
     $(this).closest('.field').remove()
     event.preventDefault()

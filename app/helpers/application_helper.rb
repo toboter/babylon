@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def link_to_add_fields(name, f, type)
+  def link_to_add_fields(name, f, type) # ransack advanced search form
     new_object = f.object.send "build_#{type}"
     id = "new_#{type}"
     fields = f.send("#{type}_fields", new_object, child_index: id) do |builder|

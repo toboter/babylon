@@ -57,3 +57,8 @@ jQuery ->
       $("#year").hide()
       $("#articles").hide()
       $('#book-submit').attr('disabled','disabled') ).trigger('change')
+
+  $("#articles").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Oops, nothing found!"
+      search_contains: true)

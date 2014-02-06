@@ -1,6 +1,6 @@
 <% if doc.present? %>
   <h3><%= doc.documentable.permalink.humanize %></h3>
-  <p><%= truncate(doc.content, length: length, separator: ' ') %><%= link_to " read more", [doc.documentable, doc] %><%= content_tag :span, raw(' | '+link_to('Edit', edit_polymorphic_path([doc.documentable, doc]))) if can? :edit, doc %></p>
+  <p><%= truncate(doc.content, length: length, separator: ' ') %><%= link_to " read more", [doc.documentable, doc] %><%= content_tag :span, raw(' | '+link_to('Edit', edit_polymorphic_path([doc.documentable, doc]))) if can? :publish, "pages" %></p>
 <% else %>
-  <%= button_to "Add #{permalink.humanize} info section", pages_path(:permalink => permalink, :type => 'doc'), method: :post, class: 'btn btn-mini' if !doc.present? && (can? :edit, doc )%>
+  <%= button_to "Add #{permalink.humanize} info section", pages_path(:permalink => permalink, :type => 'doc'), method: :post, class: 'btn btn-mini' if !doc.present? && (can? :publish, "pages" )%>
 <% end %>

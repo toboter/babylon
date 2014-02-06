@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class="content">
-    <%= markdown(var.content) %> 
+    <%= markdown(var.content) unless var.content.blank? %> 
     <%= link_to '... read more', [var.documentable, var] unless var.content.blank? %>
   </div>
 <% end %>

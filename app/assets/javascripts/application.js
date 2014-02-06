@@ -12,14 +12,23 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery_nested_form
+
 //= require bootstrap-datepicker/core
 //= require jquery-fileupload
-//= require bootstrap
 //= require chosen-jquery
+//= require bootstrap
+//= require cocoon
 //= require_tree .
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
-    $('.chosen-select').chosen();
+    $('.chosen-select').chosen({
+    	search_contains: true
+    });
+    $('#connect_profile_modal').on('shown.bs.modal', function () {
+    	$('#person-connect-select').chosen({
+    		no_results_text: "Oops, nothing found!",
+    		width: "98%"
+    	});
+    });
 });

@@ -1,4 +1,4 @@
-<%= nested_form_for @item, :html => {:class => "form-horizontal"} do |f| %>
+<%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
   <div class="row">
     <div class="span2">
@@ -43,7 +43,7 @@
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title %>
+      <%= f.text_field :title, class: 'span6' %>
     </div>
   </div>
 
@@ -58,21 +58,29 @@
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, {multiple: true, class: 'form-control chosen-select'} %>
+      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
     </div>
   </div>
 
+  <div id="citations">
   <%= content_tag :h4, 'Citations' %>
   <%= f.fields_for :citations do |builder| %>
     <%= render "citation_fields", :f => builder %>
   <% end %>
-  <%= f.link_to_add "Add Citation", :citations, class: 'controls' %>
-
+  <div class="links controls">
+    <%= link_to_add_association "Add Citation", f, :citations %>
+  </div>
+  </div>
+  
+  <div id='actions'>
   <%= content_tag :h4, 'Actions' %>
   <%= f.fields_for :actions do |builder| %>
     <%= render "action_fields", :f => builder %>
   <% end %>
-  <%= f.link_to_add "Add Action", :actions, class: 'controls' %>
+  <div class="links controls">
+    <%= link_to_add_association "Add Action", f, :actions %>
+  </div>
+  </div>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

@@ -8,8 +8,15 @@
 <% content_for :content do %>
   <div class="explorer">
     <%= image_tag(@cover.assetfile.normal.url) if @cover %>
-    <%= @cover ? (link_to [@bucket.attachable, @bucket], class: 'change-asset' do %><i class="icon-edit icon-white"></i><% end if @welcome.present? && @bucket.present? && (can? :edit, @bucket)) : (link_to 'Manage bucket', [@bucket.attachable, @bucket]) %>
-    <%= button_to "Add Bucket", pages_path(:permalink => 'welcome', :type => 'img'), method: :post, class: 'button tiny' unless @welcome.present? %>
+    <% if can? :publish, 'pages' %>
+      <% if @explore && @bucket %>
+        <%= link_to [@bucket.attachable, @bucket], class: 'change-asset' do %>
+          <i class="icon-edit icon-white"></i>
+        <% end %>
+      <% end %>
+      <%= button_to "Add Banner & Bucket", pages_path(:permalink => 'explore', :type => 'img'), method: :post, class: 'btn btn-mini' unless @explore %>
+    <% end %>
+
     <!-- Dynamische Anzeige der Pages wenn die selbsterstelbar werden.
     <div class="navbar" style="margin-top:-22px;">
       <div class="navbar-inner">
