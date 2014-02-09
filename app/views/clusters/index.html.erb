@@ -12,14 +12,21 @@
 <% content_for :main_section do %>
   <div class="span12">
   	<% @clusters.each do |cluster| %>
-  	  <div class="cluster-entry well">
-    	<h3><%= link_to "#{cluster.name}", cluster %></h3>
-    	<% if cluster.documents.doctype('Introduction').present? %>
-      	  <%= render "documents/with_document_type", var: cluster, dtype: "Introduction" if cluster.documents.doctype('Introduction') %>
-        <% else %>
-    	  <p>No Introduction available</p>
-        <% end %>
-      </div>
-	<% end %>
+      <%= link_to cluster do %>
+        <div class="well">
+          <div class="row-fluid cluster-entry">
+            <%= content_tag :div, class: 'span2' do %>
+              <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.big_thumb.url) : image_tag("icons/no_picture.svg") %>
+            <% end %>
+            <%= content_tag :div, class: 'span10' do %>
+              <h1><%= cluster.name %></h1>
+              <p><%= markdown(cluster.description) if cluster.description %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+	  <% end %>
   </div>
 <% end %>
+
+

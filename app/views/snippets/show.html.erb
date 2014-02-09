@@ -1,0 +1,17 @@
+<p>
+  <b>Description:</b>
+  <%= @snippet.description %>
+</p>
+
+<p>
+  <b>Snippet type:</b>
+  <%= @snippet.snippet_type %>
+</p>
+
+<p>
+  <b>Pinned?:</b>
+  <%= @snippet.pinned %>
+</p>
+
+<%= link_to 'Edit', edit_snippet_path(@snippet) %> |
+<%= link_to 'Back', snippets_path %>

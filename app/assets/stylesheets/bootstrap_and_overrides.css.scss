@@ -15,6 +15,8 @@ $linkColor: #648564;
     position: static;
 }
 
+body { padding-top: 50px; }
+
 .navbar {
 	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -78,7 +80,7 @@ $linkColor: #648564;
 }
 
 footer {
-	padding-top:3em;
+	padding-top:9em;
 	@media (max-width: 768px) {
 		margin-left: -20px;
 		margin-right: -20px;

@@ -1,4 +1,4 @@
-<% title "Research Modul: #{@cluster.name}", nil %>
+<% title @cluster.name, nil, false %>
 <% edit_section_for(@cluster, nil) if @cluster.cluster_admin == current_user || @cluster.creator == current_user || current_user.superuser? %>
 
 <% content_for :add_section do %>
@@ -15,7 +15,23 @@
   <%= content_tag :li, "#{@cluster.name}", class: 'active' %>
 <% end %>
 
+<%= content_for :top_over do %>
+<div class="hero-unit">
+  <div class="row-fluid" id='about' style="padding-bottom:30px;">
+    <%= content_tag :div, class: 'span3' do %>
+      <%= link_to (image_tag @cluster_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@cluster, @cluster_bucket]) if @cluster_bucket %>
+    <% end if @cluster_bucket.cover %>
+    <%= content_tag :div, class: (@cluster_bucket.cover ? 'span9' : 'span12') do %>
+      <h1><%= @cluster.name %></h1>
+      <p><%= markdown(@cluster.description) if @cluster.description %></p>
+      <%= link_to '(Edit picture)', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' if can? :publish, @cluster %>
+    <% end %>
+  </div>
+</div>
+<% end %>
+
 <% content_for :main_section do %>
+
     <%= render "documents/with_document_type", var: @cluster, dtype: "Introduction" if @cluster.documents.doctype('Introduction') %>
     <%= render "documents/without_document_type", :var => @cluster %>
 
@@ -52,7 +68,7 @@
           <p>No Introduction available</p>
         <% end %>
       </div>
-    <% end %>  
+    <% end %>
 <% end %>
 
 <% content_for :sidebar_section do %>
@@ -73,6 +89,8 @@
             <li>Created on: <%= @cluster.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
           </small>
         </ul>
+        <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if @cluster.contact %>
+        <p><%= markdown(@cluster.contact) if @cluster.contact %></p>
       </div>
       <%= content_tag :div, class: 'tab-pane', id: 'members' do %>
         <ul class="unstyled">

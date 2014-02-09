@@ -4,6 +4,9 @@
 
 <% end %>
 
+<% content_for :add_section do %>
+  <%= content_tag :li, link_to('Module', new_cluster_path) %>
+<% end if can? :manage, 'site' %>
 
 <% content_for :main_section do %>
   <div class="span9">

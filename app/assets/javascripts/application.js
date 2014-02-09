@@ -12,11 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-
+//= require bootstrap
 //= require bootstrap-datepicker/core
 //= require jquery-fileupload
 //= require chosen-jquery
-//= require bootstrap
 //= require cocoon
 //= require_tree .
 

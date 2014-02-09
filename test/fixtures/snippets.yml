@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  permalink: MyString
+  description: MyText
+  snippet_type: MyString
+
+two:
+  permalink: MyString
+  description: MyText
+  snippet_type: MyString

@@ -25,9 +25,9 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 
   # https://github.com/thomas-mcdonald/bootstrap-sass
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '2.3.2.2'
   # https://github.com/Nerian/bootstrap-datepicker-rails
-  gem 'bootstrap-datepicker-rails'
+  gem 'bootstrap-datepicker-rails', '1.1.1.8'
 
   # gem 'zurb-foundation'
   # gem 'foundation-icons-sass-rails'
@@ -41,8 +41,9 @@ gem 'simple_form'
 
 gem 'jquery-rails'
 
+gem 'bcrypt-ruby', '3.1.2'
 # https://github.com/plataformatec/devise
-gem 'devise'
+gem 'devise', '3.0.0'
 
 # https://github.com/ryanb/cancan
 gem 'cancan'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140131164348) do
+ActiveRecord::Schema.define(:version => 20140208185547) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -136,6 +136,8 @@ ActiveRecord::Schema.define(:version => 20140131164348) do
     t.integer  "updater_id"
     t.integer  "speaker_id"
     t.integer  "cluster_admin_id"
+    t.text     "description"
+    t.text     "contact"
   end
 
   create_table "collections", :force => true do |t|
@@ -298,16 +300,6 @@ ActiveRecord::Schema.define(:version => 20140131164348) do
   add_index "memberships", ["project_id"], :name => "index_memberships_on_project_id"
   add_index "memberships", ["user_id"], :name => "index_memberships_on_user_id"
 
-  create_table "pages", :force => true do |t|
-    t.string   "permalink"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-  end
-
-  add_index "pages", ["permalink"], :name => "index_pages_on_permalink"
-
   create_table "pailfuls", :force => true do |t|
     t.integer  "asset_id"
     t.integer  "bucket_id"
@@ -413,6 +405,17 @@ ActiveRecord::Schema.define(:version => 20140131164348) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.string   "serial_type"
+  end
+
+  create_table "snippets", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "snippet_type"
+    t.boolean  "pinned"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
   end
 
   create_table "tag_hierarchies", :id => false, :force => true do |t|

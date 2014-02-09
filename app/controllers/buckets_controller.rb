@@ -116,6 +116,8 @@ private
     else
       if resource == 'bibliography'
         resource = 'references'
+      elsif resource == 'modules'
+        resource = 'clusters'
       end
       @attachable = resource.singularize.classify.constantize.find(id)
     end

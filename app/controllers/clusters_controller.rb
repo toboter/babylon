@@ -20,6 +20,7 @@ class ClustersController < ApplicationController
     @raw_members = @project_members+@group_project_members
     @members = User.find(@raw_members)
     @all_projects = @cluster.projects+@cluster.group_projects
+    @cluster_bucket = @cluster.buckets.find_by_name('Cover Pictures')
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

@@ -31,7 +31,11 @@ class Bucket < ActiveRecord::Base
   end
 
   def cover
-    cover = assets.find_by_id(cover_asset_id) if cover_asset_id
+    if cover_asset_id
+      cover = assets.find_by_id(cover_asset_id)
+    else
+      cover = assets.last
+    end
   end
 
 end

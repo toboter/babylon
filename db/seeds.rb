@@ -11,3 +11,6 @@ User.delete_all
 Role.delete_all
 @user = User.create(email: 't.schmidt@rubidat.de', username: 'toboter', password: 'topsecret', password_confirmation: 'topsecret')
 Role.create(user_id: @user.id, role: 'superuser')
+
+@snippet = Snippet.create(name: 'About', pinned: true, description: 'Sometext', snippet_type: 'about', creator_id: @user.id, updater_id: @user.id)
+Bucket.create(name: 'Explorer Pictures', attachable_id: @snippet.id, attachable_type: 'Snippet', :name_fixed => true, creator_id: @user.id, updater_id: @user.id)

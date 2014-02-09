@@ -1,53 +1,60 @@
 <% title "Explore", nil %>
 
-<% content_for :explore do %>
-
+<% content_for :add_section do %>
+  <%= content_tag :li, link_to('Snippet', new_snippet_path) %>
 <% end %>
-
 
 <% content_for :content do %>
   <div class="explorer">
-    <%= image_tag(@cover.assetfile.normal.url) if @cover %>
-    <% if can? :publish, 'pages' %>
-      <% if @explore && @bucket %>
-        <%= link_to [@bucket.attachable, @bucket], class: 'change-asset' do %>
-          <i class="icon-edit icon-white"></i>
+    <%= image_tag(@about_bucket.cover.assetfile.normal.url) if @about_bucket.cover %>
+    <%= link_to polymorphic_path([@about, @about_bucket]), class: 'change-asset' do %>
+      <i class="icon-edit icon-white"></i>
+    <% end if can? :publish, 'snippets' %>
+  </div>
+
+  <%= content_tag :div, class: 'well', id: 'about-section' do %>
+    <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :publish, @about %></p>
+  <% end if @about %>
+  
+  <div class="" id="modules-section">
+    <%= content_tag :h2, 'Modules' if @clusters %>
+    <ul class="thumbnails">
+      <% for cluster in @clusters do %>
+        <%= link_to cluster do %>
+        <li class="span3">
+          <div class="thumbnail" style="padding:10px;">
+            <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.big_thumb.url) : image_tag("icons/no_picture.svg") %>
+            <h3><%= cluster.name %></h3>
+            <p><%= markdown truncate(cluster.description, length: 100, separator: ' ') %></p>
+          </div>
+        </li>
         <% end %>
       <% end %>
-      <%= button_to "Add Banner & Bucket", pages_path(:permalink => 'explore', :type => 'img'), method: :post, class: 'btn btn-mini' unless @explore %>
-    <% end %>
+    </ul>
+    <%= link_to 'View all modules', clusters_path %>
+  </div>
 
-    <!-- Dynamische Anzeige der Pages wenn die selbsterstelbar werden.
-    <div class="navbar" style="margin-top:-22px;">
-      <div class="navbar-inner">
-        <ul class="nav pull-left">
-          <% for doc in @docs do %>
-            <li><%= link_to doc.title, doc %></li>
-          <% end %>
+  <div class="" id="news-section">
+    <%= content_tag :h2, 'News' if @news %>
+    <div class="row-fluid">
+      <div class="span12">
+        <% @news.in_groups_of(3, false).each do |row_news| %>
+          <div class="row-fluid">
+            <% for novelity in row_news do %>
+              <div class="span4 well" style="height:350px;overflow:hidden;">
+                <h3><%= novelity.name %></h3>
+                <p><small><%= novelity.created_at.strftime("%d.%m.%Y") %></small>
+                <p><%= markdown(novelity.description) %> <%= content_tag :small, link_to('(Edit)', edit_snippet_path(novelity)) if can? :publish, @about %></p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
-    -->
-  </div>
-  <div class="row-fluid">
-  	<div class="span8 border-right">
-  	  <div class="row-fluid">
-  	    <div class="span6 border-right">
-  	      <%= render "doc_panel", doc: @resources, permalink: 'resources', length: 170 %>
-  	    </div>
-  	    <div class="span6">
-  	      <%= render "doc_panel", doc: @research, permalink: 'research', length: 170 %>
-  	    </div>
-  	  </div>
-  	  <div class="row-fluid border-top">
-  	    <div class="span12">
-  	      <%= render "doc_panel", doc: @about, permalink: 'about', length: 360 %>
-  	    </div>
-  	  </div>
-    </div>
-  	<div class="span4">
-  	  <h3>News</h3>
-  	  <p>news about the project news about the project news about the project news about the project news about the project </p>
-  	</div>
+    <p>
+      <%= link_to 'View all', snippets_path %>
+      <%= content_tag :span, raw(' | '+(link_to 'Add novelity', new_snippet_path)) if can? :publish, @news %>
+    </p>
   </div>
 
 <% end %>

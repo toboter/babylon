@@ -1,0 +1,21 @@
+<%= form_for(@snippet) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :snippet_type, value: 'news' if @snippet.new_record? %>
+
+  <div class="field">
+    <%= f.label :name, 'Title' %>
+    <%= f.text_field :name, :readonly => @snippet.snippet_type == 'about' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :pinned %>
+    <%= f.check_box :pinned %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
