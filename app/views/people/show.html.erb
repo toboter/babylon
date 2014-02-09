@@ -111,7 +111,7 @@
     <% end %>
 
 
-    <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), page_path('help', anchor: 'microformats') %>
+    <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
     <h5 class="muted">Contact Information</h5>
     <ul class="unstyled">
       <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
