@@ -36,6 +36,9 @@ group :assets do
   gem 'chosen-rails'
 end
 
+# https://devcenter.heroku.com/articles/getting-started-with-rails3
+gem 'rails_12factor', group: :production
+
 # https://github.com/plataformatec/simple_form
 gem 'simple_form'
 
@@ -107,3 +110,5 @@ gem 'roo'
 
 # To use debugger
 # gem 'debugger'
+
+ruby '2.0.0'

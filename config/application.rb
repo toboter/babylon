@@ -61,5 +61,7 @@ module Babylon
     config.assets.version = '1.0'
 
     config.exceptions_app = self.routes
+
+    config.assets.initialize_on_precompile = false # Heroku Asset Pipeline
   end
 end
