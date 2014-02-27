@@ -5,7 +5,7 @@ class Person < ActiveRecord::Base
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
                   :last_name, :nickname, :profession, :public_email, :updater_id,
                   :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes,
-                  :names_attributes
+                  :names_attributes, :cv, :general
   
   stampable
 

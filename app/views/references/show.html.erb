@@ -64,6 +64,7 @@
         <%= book_title(@reference.book, true) %>
         <%= ', '+@reference.first_page if @reference.first_page.present? %> <%= '- '+@reference.last_page if @reference.last_page.present? %>
       </p>
+      <%= content_tag :p, 'Originaly written on: '+@reference.original_date.strftime("%d.%m.%Y") if @reference.original_date %>
 
       <% unless @reference.book.unpublished? %>
         <h5 class="muted">Issued</h5>

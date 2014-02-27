@@ -1,7 +1,7 @@
 <%= content_tag :div, style: 'border-bottom:1px solid #f6f6f6; padding-bottom:20px;' do %>
   <%= content_tag :h1 do %>
     <%= var.title ? var.title : var.document_type %>
-    <%= link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;'), [:edit, var.documentable, var], class: 'pull-right', title: 'Edit' %>
+    <%= (link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;'), [:edit, var.documentable, var], class: 'pull-right', title: 'Edit') if can? :edit, var %>
   <% end %>
   <% if var.abstract %>
     <div class="abstract lead">

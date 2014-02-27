@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140208185547) do
+ActiveRecord::Schema.define(:version => 20140227144807) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -283,9 +283,12 @@ ActiveRecord::Schema.define(:version => 20140208185547) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.integer  "classification_id"
+    t.text     "description"
+    t.string   "slug"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
+  add_index "items", ["slug"], :name => "index_items_on_slug", :unique => true
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
@@ -332,6 +335,8 @@ ActiveRecord::Schema.define(:version => 20140208185547) do
     t.string   "fax"
     t.string   "uri"
     t.boolean  "show_inst_address"
+    t.text     "cv"
+    t.text     "general"
   end
 
   add_index "people", ["slug"], :name => "index_people_on_slug", :unique => true

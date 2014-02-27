@@ -1,13 +1,15 @@
 class DocumentsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
   before_filter :load_documentable, except: [:show]
+  load_and_authorize_resource
+  
   # GET /documents
   # GET /documents.json
   def index
     if @documentable
       @documents = @documentable.documents.all
     else
-      @documents = Document.where('documentable_type != ?', 'Page').order('documentable_type ASC') #ohne PAGES
+      @documents = Document.all
     end
 
     respond_to do |format|
@@ -84,15 +86,11 @@ class DocumentsController < ApplicationController
   # DELETE /documents/1.json
   def destroy
     @document = @documentable.documents.find(params[:id])
-    if @document.documentable_type == 'Page'
-      redirect_to :back, alert: "You can't delete documents belonging to pages!"
-    else
-      @document.destroy
+    @document.destroy
 
-      respond_to do |format|
-        format.html { redirect_to @documentable }
-        format.json { head :no_content }
-      end
+    respond_to do |format|
+      format.html { redirect_to @documentable }
+      format.json { head :no_content }
     end
   end
 
@@ -108,11 +106,7 @@ private
     if id == nil
       @documentable = nil
     else
-      if resource == 'pages'
-        @documentable = resource.singularize.classify.constantize.find_by_permalink!(id)
-      else
-        @documentable = resource.singularize.classify.constantize.find(id)
-      end
+      @documentable = resource.singularize.classify.constantize.find(id)
     end
   end
 

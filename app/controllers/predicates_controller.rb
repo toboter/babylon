@@ -1,5 +1,7 @@
 class PredicatesController < ApplicationController
   before_filter :authenticate_user!
+  load_and_authorize_resource
+  
   # GET /predicates
   # GET /predicates.json
   def index

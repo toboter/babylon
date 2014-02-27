@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
+  load_and_authorize_resource
 
   # GET /people
   # GET /people.json
@@ -17,6 +18,7 @@ class PeopleController < ApplicationController
   # GET /people/1.json
   def show
     @person = Person.find(params[:id])
+
     if request.path != person_path(@person)
       redirect_to @person, status: :moved_permanently
     else

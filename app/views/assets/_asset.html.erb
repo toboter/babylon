@@ -6,12 +6,10 @@
       <strong><%= asset.name %></strong><br />
       <% if asset.caption %><%= asset.caption %><br /><% end %>
       <strong>Buckets: </strong><%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %><br />
-      <% if can? :publish, asset %>
-        <%= content_tag :span do %>
-          <%= check_box_tag "asset_ids[]", asset.id %> 
-          Mark deleted
-        <% end if (can? :manage, asset) || (asset.creator == current_user) %>
-      <% end %>
+      <%= content_tag :span do %>
+        <%= check_box_tag "asset_ids[]", asset.id %> 
+        Mark deleted
+      <% end if can? :destroy, asset %>
     </p>
   </div>
 <% end %>

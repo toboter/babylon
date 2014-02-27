@@ -1,8 +1,10 @@
 class Reference < ActiveRecord::Base
-  attr_accessible :creator_id, :updater_id, :title, :author_ids, :original_date, :alternative_author, :slug,
+  attr_accessible :creator_id, :updater_id, :title, :author_ids, :original_date_text, :alternative_author, :slug,
                   :first_page, :last_page, :book_id, :uri, :tag_ids, :babylon_specific
 
   stampable
+
+  attr_writer :original_date_text
 
   validates_presence_of :title
   #validates_presence_of :book_id, unless: :uri? Die Validierung erfolgt in dem Fall über "reject_if" im book model
@@ -21,6 +23,8 @@ class Reference < ActiveRecord::Base
   has_many :comments, as: :commentable, :dependent => :destroy
   has_many :citations, :dependent => :destroy
   has_many :items, class_name: 'Citation', conditions: "citable_type = 'Item'"
+
+  before_save :save_original_date_text
 
   def name
     title
@@ -66,5 +70,13 @@ class Reference < ActiveRecord::Base
 #    else raise "Unknown file type: #{file.original_filename}"
 #    end
 #  end
+
+  def original_date_text
+    @original_date_text || original_date.try(:strftime, "%Y-%m-%d %H:%M:%S")
+  end
+  
+  def save_original_date_text
+    self.original_date = Time.zone.parse(@original_date_text) if @original_date_text.present?
+  end
 
 end

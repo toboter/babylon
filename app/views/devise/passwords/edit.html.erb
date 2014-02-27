@@ -1,19 +1,29 @@
 <% title "Change your password", nil %>
 <div class="row">
-  <div class="small-10 large-6 large-centered small-centered columns">
+  <div class="span6 offset3">
     <h3 style="margin-top:10px;">Change your password</h3>
 
-    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, class: 'custom' }) do |f| %>
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, class: 'form-horizontal' }) do |f| %>
       <%= devise_error_messages! %>
       <%= f.hidden_field :reset_password_token %>
   
-      <div><%= f.label :password, "New password" %>
-      <%= f.password_field :password, :autofocus => true %></div>
+      <div class="control-group">
+        <%= f.label :password, "New password", class: 'control-label' %>
+        <div class="controls">
+          <%= f.password_field :password, :autofocus => true %>
+        </div>
+      </div>
   
-      <div><%= f.label :password_confirmation, "Confirm new password" %>
-      <%= f.password_field :password_confirmation %></div>
+      <div class="control-group">
+        <%= f.label :password_confirmation, "Confirm new password", class: 'control-label' %>
+        <div class="controls">
+          <%= f.password_field :password_confirmation %>
+        </div>
+      </div>
   
-      <div style="margin-top:20px;"><%= f.submit "Change my password", class: 'button expand radius' %></div>
+      <div style="margin-top:20px;">
+        <%= f.submit "Change my password", class: 'btn btn-block btn-large btn-primary' %>
+      </div>
     <% end %>
 
     <%= render "devise/shared/links" %>

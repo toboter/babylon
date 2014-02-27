@@ -9,11 +9,11 @@
     <%= image_tag(@about_bucket.cover.assetfile.normal.url) if @about_bucket.cover %>
     <%= link_to polymorphic_path([@about, @about_bucket]), class: 'change-asset' do %>
       <i class="icon-edit icon-white"></i>
-    <% end if can? :publish, 'snippets' %>
+    <% end if can? :manage, 'publishing' %>
   </div>
 
   <%= content_tag :div, class: 'well', id: 'about-section' do %>
-    <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :publish, @about %></p>
+    <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :manage, 'publishing' %></p>
   <% end if @about %>
   
   <div class="" id="modules-section">
@@ -53,7 +53,7 @@
     </div>
     <p>
       <%= link_to 'View all', snippets_path %>
-      <%= content_tag :span, raw(' | '+(link_to 'Add novelity', new_snippet_path)) if can? :publish, @news %>
+      <%= content_tag :span, raw(' | '+(link_to 'Add novelity', new_snippet_path)) if can? :manage, 'publishing' %>
     </p>
   </div>
 

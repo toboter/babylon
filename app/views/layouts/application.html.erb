@@ -17,12 +17,15 @@
   <body>
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
+        <%= link_to "#Babylon", root_url, class: "brand", style: 'margin-left:0' %>
+        <% if user_signed_in? %>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <%= link_to "#Babylon", root_url, class: "brand", style: 'margin-left:0' %>
+          
+          
 
           <%= content_tag :div, class: 'nav-collapse collapse' do %>
             <ul class="nav pull-left">
@@ -37,10 +40,10 @@
                   <%= content_tag :li, link_to("People", people_path) if can? :read, 'People' %>
                   <%= content_tag :li, link_to("Institutions", institutions_path) if can? :read, 'Institutions' %>
                   <%= content_tag :li, link_to("Bibliography", references_path) if can? :read, 'Bibliography' %>
-                  <%= content_tag :li, link_to("Items", items_path) if can? :follow, 'Items' %>
-                  <%= content_tag :li, '',class: 'divider' if can? :follow, 'Documents' %>
-                  <%= content_tag :li, link_to("All uploaded files", assets_path) if can? :follow, 'Assets' %>
-                  <%= content_tag :li, link_to("All documents", documents_path) if can? :follow, 'Documents' %>
+                  <%= content_tag :li, link_to("Items", items_path) if can? :read, 'Items' %>
+                  <%= content_tag :li, '',class: 'divider' if can? :read, 'Documents' %>
+                  <%= content_tag :li, link_to("All uploaded files", assets_path) if can? :read, 'Assets' %>
+                  <%= content_tag :li, link_to("All documents", documents_path) if can? :read, 'Documents' %>
                 </ul>
               </li>
             </ul>
@@ -51,9 +54,13 @@
               <%= content_tag :li, class: 'dropdown' do %>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Personal" id="personal-menu">
                   <% if current_user.person && current_user.person.profile_picture %>
-                    <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon', style: 'width:30px;') %>
+                    <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
                     <% else %>
-                    <%= image_tag('icons/super.svg', class: 'navbar-icon', style: 'width:30px;') %>
+                    <%= image_tag('icons/super.svg', class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
+                  <% end %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    <%= current_user.available_name %> (You)
+                    <b class="caret"></b>
                   <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
@@ -72,52 +79,91 @@
 
               <%= content_tag :li, class: 'dropdown' do %>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Add" id="add-menu">
-                  <%= image_tag("icons/plus24.svg", class: 'navbar-icon', style: 'width:20px;') %>
+                  <%= image_tag("icons/plus24.svg", class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:20px;') %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    Add anything
+                    <b class="caret"></b>
+                  <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <%= content_tag :li, 'Class specific', class: 'nav-header' if content_for?(:add_section) %>
                   <%= yield(:add_section) %>
+                  <li class="nav-header">Basic</li>              
+                  <%= content_tag :li, link_to('Module', new_cluster_path) %>
+                  <%= content_tag :li, link_to('Person', new_person_path) %>
+                  <%= content_tag :li, link_to('Book', new_book_path) %>
+                  <%= content_tag :li, link_to('Item', new_item_path) %>
                 </ul>
-              <% end if content_for?(:add_section) && (can? :edit, 'All') %>
+              <% end if can? :create, :all %>
 
               <%= content_tag :li, class: 'dropdown' do %>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Settings" id="settings-menu">
-                  <%= image_tag("icons/tools.svg", class: 'navbar-icon') %>
+                  <%= image_tag("icons/tools.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    Settings
+                    <b class="caret"></b>
+                  <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, link_to("Snippets", snippets_path) if can? :publish, 'Snippets' %></li>
+                  <%= content_tag :li, link_to("Snippets", snippets_path) if can? :manage, 'publishing' %></li>
                   <li><%= link_to "Item classifications", item_classifications_path %></li>
                   <li><%= link_to "Terms of interest (tags)", tags_path %></li>
                   <li><%= link_to "Predicates", predicates_path %></li>
                 </ul>
-              <% end if can? :follow, 'settings' %>
-              <li><%= link_to image_tag("icons/information3.svg", class: 'navbar-icon'), '', title: 'Help' %></li>
+              <% end if can? :manage, 'publishing' %>
+
               <li class="divider-vertical"></li>
-              <li><%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %></li>
+
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Info" id="info-menu">
+                  <%= image_tag("icons/information3.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    Account Information
+                    <b class="caret"></b>
+                  <% end %>                   
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <li class="nav-header">Account overview</li>
+                  <li><a><%= current_user.available_name %> (<%= current_user.email %>)</a></li>
+                  <li><a><%= current_user.username %> (<%= current_user.role.role %>)</a></li>
+                  <li><a>Account created on: <%= current_user.created_at.strftime("%d.%m.%Y") %></a></li>
+                  <li class="nav-header">Currently signed in from</li>
+                  <li><a><%= current_user.current_sign_in_ip %></a></li>
+                  <li><a>since <%= current_user.current_sign_in_at.strftime("%d.%m.%Y %H:%M") %></a></li>
+                  <li class="nav-header">Last time signed in from</li>
+                  <li><a><%= current_user.last_sign_in_ip %></a></li>
+                  <li><a>at <%= current_user.last_sign_in_at.strftime("%d.%m.%Y %H:%M") %></a></li> 
+                </ul>
+              <% end if can? :read, 'info' %>
+
+              <li class="visible-desktop">
+                <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
+              </li>
+              <li class="hidden-desktop">
+                <%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
+              </li>
             <% end if can? :read, 'Navbar' %>
 
             <%= content_tag :ul, class: 'nav pull-right visible-desktop' do %>
-              <% if can? :administrate, 'development' %>
+              <% if can? :manage, 'development' %>
                 <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
                 <li class="divider-vertical"></li>
               <% end %>
-              <% if current_user.person %>
-                <%= content_tag :li, (link_to "#{current_user.available_name}", current_user.person) %>
-              <% else %>
                 <%= content_tag :li, (link_to "#{current_user.available_name}", dashboard_path) %>
-              <% end %>
             <% end if user_signed_in? %>
 
           </div>
+        <% end %>
 
           <%= content_tag :ul, class: 'nav pull-right' do %>
             <%- if controller_name != 'sessions' %>
               <li>
-                <%= link_to image_tag("icons/sign3.svg", class: 'navbar-icon', style: 'width:35px;'), new_session_path(:user), title: 'Sign in', id: 'sign-in-link' %>
+                <%= link_to (image_tag("icons/sign3.svg", class: 'navbar-icon', style: 'width:35px;')+'Sign in'), new_session_path(:user), title: 'Sign in', id: 'sign-in-link' %>
               </li>
             <% end -%>
             <li class="divider"></li>
             <%- if controller_name != 'registrations' %>
-              <li><%= link_to "Register", new_registration_path(:user), title: 'Register', id: 'register-link' %></li>
+              <li><%= link_to "Sign up", new_registration_path(:user), title: 'Sign up', id: 'register-link' %></li>
             <% end -%>
           <% end if !user_signed_in? %>
 
@@ -152,7 +198,7 @@
         </div>
       </div>
       <div class="main-yield">
-        <% if user_signed_in? || controller_name == 'sessions' || controller_name == 'registrations' %>
+        <% if user_signed_in? || controller_name == 'sessions' || controller_name == 'registrations' || controller_name == 'passwords' %>
           <%= content_for?(:content) ? yield(:content) : yield %>
         <% else %>
           <div class="row">
@@ -234,7 +280,7 @@
           <div class="row">
             <div class="span12">
               <div class="row logos">
-                <%= link_to image_tag("smb-logo.png"), "http://www.vam.de", class: "span1" %>
+                <%= link_to image_tag("spk-logo.png"), "http://www.preussischer-kulturbesitz.de", class: "span1" %>
                 <%= link_to image_tag("dog-logo.png"), "http://www.deutsche-orientgesellschaft.de", class: "span2" %>
                 <%= link_to image_tag("FULogo-3.svg"), "http://www.fu-berlin.de", class: "span3" %>
               </div>

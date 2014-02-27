@@ -24,7 +24,7 @@
     <%= content_tag :div, class: (@cluster_bucket.cover ? 'span9' : 'span12') do %>
       <h1><%= @cluster.name %></h1>
       <p><%= markdown(@cluster.description) if @cluster.description %></p>
-      <%= link_to '(Edit picture)', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' if can? :publish, @cluster %>
+      <%= link_to '(Edit picture)', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' if can? :edit, @cluster %>
     <% end %>
   </div>
 </div>

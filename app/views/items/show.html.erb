@@ -3,7 +3,6 @@
 <% publishing_section_for(@item) %>
 
 <% content_for :add_section do %>
-  <%= content_tag :li, (link_to "Description Document", polymorphic_path([:new, @item, :document], :document_type => "Description")) unless @item.documents.doctype('Description') %>
   <%= content_tag :li, (link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket])) %>
   <%= content_tag :li, (link_to 'Document', polymorphic_path([:new, @item, :document])) %>
 <% end if can? :edit, @item %>
@@ -37,10 +36,10 @@
         </div>
         <div id="collapseOne" class="accordion-body collapse">
           <div class="accordion-inner">
-            <%= render "documents/with_document_type", var: @item, dtype: "Description" %> 
+            <%= markdown(@item.description) if @item.description %> 
           </div>
         </div>
-      <% end if @item.documents.doctype('Description') %>
+      <% end if @item.description.present? %>
 
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">

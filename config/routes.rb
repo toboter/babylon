@@ -6,11 +6,10 @@ Babylon::Application.routes.draw do
 
   # Settings
   scope '/settings' do
-    resources :tags, only: [:index, :show]
     resources :predicates
     resources :item_classifications
-    resources :tags, except: [:index, :show]
   end
+  resources :tags
   resources :institutions
 
 

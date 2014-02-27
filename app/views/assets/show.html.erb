@@ -39,7 +39,7 @@
       <%= link_to recreate_versions_asset_path(@asset.id), method: :put, class: 'btn btn-warning btn-small' do %>
         <i class="icon-repeat icon-white"></i>
         Recreate Versions
-      <% end if (@asset.content_type.include? 'image') && (can? :administrate, @asset) %>
+      <% end if (@asset.content_type.include? 'image') && (can? :manage, 'recreate-versions') %>
     </p>
     <div class="accordion" id="asset-accordion">
       <div class="accordion-group">

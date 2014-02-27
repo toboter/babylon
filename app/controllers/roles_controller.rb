@@ -1,5 +1,6 @@
 class RolesController < ApplicationController
   before_filter :authenticate_user!
+  load_and_authorize_resource
 
   def update_multiple
     @roles = Role.update(params[:roles].keys, params[:roles].values)

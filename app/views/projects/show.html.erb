@@ -1,5 +1,5 @@
 <% title "Project: #{@project.name}", nil %>
-<% edit_section_for(@project, @project.projectable) %>
+<% edit_section_for(@project, @project.projectable) if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
 
 <% content_for :add_section do %>
   <li><%= link_to "People", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></li>
@@ -24,7 +24,7 @@
 <% content_for :main_section do %>
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Project Todos', "#todos", data: {toggle: 'tab'}) if can? :follow, "projects" %>
+      <%= content_tag :li, link_to('Project Todos', "#todos", data: {toggle: 'tab'}) if can? :create, @project.todos %>
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="docs"> 
@@ -33,7 +33,7 @@
 
         <%= render "documents/without_document_type", :var => @project %>
       </div>
-      <% if can? :follow, @project %>
+      <% if can? :read, @project %>
         <div class="tab-pane" id="todos">
           <p><%= link_to 'Manage Todos', project_todos_path(@project) %></p>
           <div class="accordion" id="todo-accordion">
@@ -129,7 +129,7 @@
       <div class="tab-pane" id="members">
         <ul class="unstyled">
           <% for membership in @project.memberships do %>
-            <li><%= name_only_or_link_to(membership.user) %><%= ' ('+membership.role+')' if can? :edit, @project %></li>
+            <li><%= name_only_or_link_to(membership.user) %><%= ' ('+membership.role+')' %></li>
           <% end %>
         </ul>
       </div>

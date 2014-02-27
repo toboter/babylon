@@ -1,5 +1,7 @@
 class ItemsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
+  load_and_authorize_resource
+
   # GET /items
   # GET /items.json
   def index
@@ -27,7 +29,6 @@ class ItemsController < ApplicationController
   # GET /items/new.json
   def new
     @item = Item.new
-
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb

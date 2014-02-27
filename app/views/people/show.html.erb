@@ -1,11 +1,9 @@
 <% title graded_fullname(@person), nil %>
-<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) || (can? :administrate, 'all') %>
+<% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) || (can? :manage, 'personal-informations') %>
 <% publishing_section_for(@person) %>
 
 <% content_for :add_section do %>
-  <li><%= link_to "General Information", polymorphic_path([:new, @person, :document], :document_type => "General Information") unless @person.documents.doctype('General Information') %></li>
-  <li><%= link_to "Curriculum Vitae", polymorphic_path([:new, @person, :document], :document_type => "Curriculum Vitae") unless @person.documents.doctype('Curriculum Vitae') %></li>
-  <%= content_tag :li, '', class: "divider" unless (@person.documents.doctype('Curriculum Vitae')) && (@person.documents.doctype('General Information')) %>
+  <li><%= link_to "Document", polymorphic_path([:new, @person, :document]) %></li>
   <li><%= link_to 'Upload bucket', polymorphic_path([:new, @person, :bucket]) %></li>
 <% end if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
 
@@ -18,7 +16,7 @@
 <% content_for :main_section do %>
     <%= content_tag :p, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
     <ul class="nav nav-tabs">
-      <%= content_tag :li, link_to('Docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
+      <%= content_tag :li, link_to('Intro & docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Public Activity', "#updates", data: {toggle: 'tab'}) if @person.user %>
       <%= content_tag :li, link_to('Projects', "#memberships", data: {toggle: 'tab'}) if @person.user %>
       <%= content_tag :li, link_to('Publications', "#pubs", data: {toggle: 'tab'}) %>
@@ -27,17 +25,17 @@
 
     <div class="tab-content">
       <div class="tab-pane active" id="docs">
-        <div id="general">
-          <% if @person.documents.doctype('General Information') %>
-            <%= render "documents/with_document_type", var: @person, dtype: "General Information" %> 
-          <% end %>
-        </div>
-    
-        <div id="cv">
-          <% if @person.documents.doctype('Curriculum Vitae') %>
-            <%= render "documents/with_document_type", var: @person, dtype: "Curriculum Vitae" %>  
-          <% end %>
-        </div>
+        <%= content_tag :h3, 'General Introduction' if @person.general.present? %>
+        <%= markdown(@person.general) if @person.general %> 
+
+        <%= content_tag :h3, 'Curriculum Vitae' if @person.cv.present? %>
+        <%= markdown(@person.cv) if @person.cv %>
+
+        <% if @person.documents.any? %>
+          <h3>Other documents</h3>
+          <%= render "documents/without_document_type", var: @person %>  
+        <% end %>
+
       </div>
       <%= content_tag :div, class: 'tab-pane', id: 'updates' do %>
         Activity feed

@@ -30,4 +30,9 @@ $(document).ready(function(){
     		width: "98%"
     	});
     });
+    $('.input-append.date').datepicker({
+        format: "dd.mm.yyyy",
+        todayHighlight: true,
+        forceParse: false
+    });
 });

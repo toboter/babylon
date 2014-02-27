@@ -6,7 +6,7 @@
 
   <%= content_tag :p do -%>
     This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
-  <% end unless @document.page? -%>
+  <% end -%>
 
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>

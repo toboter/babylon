@@ -16,7 +16,7 @@
       <%= content_tag :div, class: 'form-actions' do %>
         <%= submit_tag 'Delete Checked', data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
         <%= link_to 'Back', :back, class: 'btn' %>
-      <% end if can? :follow, @assets %>
+      <% end if can? :destroy, Asset %>
     <% end %>
   </div>
 <% end %>

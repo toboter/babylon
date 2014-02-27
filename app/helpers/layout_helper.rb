@@ -10,18 +10,26 @@ module LayoutHelper
   end
 
   def edit_section_for(var, polymorphic, polymorphicl2=nil)
-    edit = h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit') if can? :edit, var
-    delete = h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' }) if (can? :manage, var) || (var.creator == current_user)
+    edit = h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit')
+    delete = h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' })
     content_for(:edit_section) { 
-      content_tag :li, 
-        edit + delete
+      content_tag :li,
+        if (can? :edit, var && (can? :destroy, var)) || (var.creator == current_user)
+          edit + delete 
+        elsif can? :edit, var || (var.creator == current_user)
+          edit
+        elsif (can? :destroy, var) || (var.creator == current_user)
+          delete
+        else
+          ''
+        end
     }
   end
 
   def publishing_section_for(var)
     content_for(:publishing_section) { 
       render 'shared/publishing', var: var
-    } if can? :publish, var
+    } if can? :manage, 'publishing'
   end
 
   def show_title?

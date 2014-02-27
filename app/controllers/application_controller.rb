@@ -7,4 +7,8 @@ class ApplicationController < ActionController::Base
     dashboard_path
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+ 	redirect_to root_url, :alert => exception.message
+  end
+
 end

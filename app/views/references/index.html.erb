@@ -61,12 +61,12 @@
   </div>
 
   <div class="span3">
-    <%= render "shared/bibliographic_cat_navs", :obj => @references if can? :follow, @references %>
+    <%= render "shared/bibliographic_cat_navs", :obj => @references %>
     <%= content_tag :p do %>
       Download:
       <%= link_to "CSV", references_path(format: "csv"), class: 'btn btn-mini disabled', id: 'csv-link' %>
       <%= link_to "Excel", references_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
-    <% end if can? :follow, @references %>
+    <% end if can? :read, @references %>
   </div>
 
 <% end %>

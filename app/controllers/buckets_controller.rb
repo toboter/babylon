@@ -1,6 +1,8 @@
 class BucketsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
   before_filter :load_attachable, except: [:index]
+  load_and_authorize_resource
+  
   # GET /buckets
   # GET /buckets.json
   def index
@@ -111,16 +113,12 @@ private
 
   def load_attachable
     resource, id = request.path.split('/')[1, 2]
-    if resource == 'pages'
-      @attachable = resource.singularize.classify.constantize.find_by_permalink!(id)
-    else
-      if resource == 'bibliography'
-        resource = 'references'
-      elsif resource == 'modules'
-        resource = 'clusters'
-      end
-      @attachable = resource.singularize.classify.constantize.find(id)
+    if resource == 'bibliography'
+      resource = 'references'
+    elsif resource == 'modules'
+      resource = 'clusters'
     end
+    @attachable = resource.singularize.classify.constantize.find(id)
   end
 
 end

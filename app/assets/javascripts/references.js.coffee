@@ -1,13 +1,4 @@
 jQuery ->
-  $("#date").hide()
-  $("#alt-author").hide()
-
-  $("#toggle-authors").click ->
-    $("#alt-author").toggle()
-    $("#authors").toggle()
-
-  $("#add-date").click ->
-    $("#date").toggle()
     
   $('form').on 'click', '.remove_fields', (event) ->
     $(this).closest('.field').remove()
