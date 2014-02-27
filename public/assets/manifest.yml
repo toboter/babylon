@@ -1,8 +1,6 @@
 ---
 FULogo-3.svg: FULogo-3-3085f7ae650d800d02110767b6b536ba.svg
 FULogo-3/index.svg: FULogo-3-3085f7ae650d800d02110767b6b536ba.svg
-SMB.jpeg: SMB-cf5e2ae6d88062056c5fd003f0dd0edb.jpeg
-SMB/index.jpeg: SMB-cf5e2ae6d88062056c5fd003f0dd0edb.jpeg
 dog-logo.png: dog-logo-64ba087ed125e065dc50ae3a439dcaf2.png
 dog-logo/index.png: dog-logo-64ba087ed125e065dc50ae3a439dcaf2.png
 dummy.svg: dummy-3e7e15ca2119cd4ffb8a89f46f9081f0.svg
@@ -31,10 +29,10 @@ microformat-logo.png: microformat-logo-da290bc00a45ff7ab93f967e1feb5abf.png
 microformat-logo/index.png: microformat-logo-da290bc00a45ff7ab93f967e1feb5abf.png
 mini_dummy.gif: mini_dummy-9daca4f70984c1ba29c988d69479f987.gif
 mini_dummy/index.gif: mini_dummy-9daca4f70984c1ba29c988d69479f987.gif
-smb-logo.png: smb-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
-smb-logo/index.png: smb-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
-application.js: application-f1fc0552f416bbedd436aab202c44973.js
-application/index.js: application-f1fc0552f416bbedd436aab202c44973.js
+spk-logo.png: spk-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
+spk-logo/index.png: spk-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
+application.js: application-8193b83ecc40b3f9e00c7b8b9757ec2d.js
+application/index.js: application-8193b83ecc40b3f9e00c7b8b9757ec2d.js
 application.css: application-b3fe1dfed3cafd259d6e10c082f4decd.css
 application/index.css: application-b3fe1dfed3cafd259d6e10c082f4decd.css
 jquery.min.map: jquery.min-1c0cf7b6a3425fbd9a3bfccab0a99a4e.map
