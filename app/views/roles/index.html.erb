@@ -1,0 +1,42 @@
+<% if can? :manage, "roles" %>
+  <% title "Users & Roles", nil %>
+
+  <% content_for :add_section do %>
+
+  <% end if can? :manage, 'roles' %>
+
+  <% content_for :breadcrumbs_section do %>
+    <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+    <li class="active">Users & roles</li>
+  <% end %>
+
+  <% content_for :main_section do %>
+    <div class="span12">       
+          <%= form_tag(update_multiple_roles_path, {method: :put, :class => ''}) do %>
+              <% for role in @roles do %>
+                <%= fields_for "roles[]", role do |f| %>
+                  <%= f.error_messages %>
+                  <div class="row-fluid">
+                    <div class="span3">
+                      <%= f.label :role, "#{role.user.available_name}", class: "right inline" %>
+                      <p><strong>Username: </strong><%= role.user.username %>, <strong>Email: </strong><%= role.user.email %></p>
+                    </div>
+                    <div class="span9">
+                      <% if current_user.role.role == 'superuser' %>
+                        <%= f.select(:role, User::ABILITYROLES) %>
+                      <% else %>
+                        <%= f.select(:role, User::ROLES) %>
+                      <% end %>
+                    </div>
+
+                  </div>
+                <% end unless role.user.username == 'toboter' || role.user == current_user %>
+
+              <% end %>
+            <div class="form-actions">
+              <%= submit_tag "Update Roles", class: "btn" %>
+            </div>
+          <% end %>
+    </div> 
+  <% end %>
+<% end %>

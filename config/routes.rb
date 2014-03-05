@@ -1,5 +1,6 @@
 Babylon::Application.routes.draw do
-  
+
+
   resources :snippets do
     resources :buckets
   end
@@ -91,14 +92,17 @@ Babylon::Application.routes.draw do
   # Sys
   get 'dashboard', to: 'dashboard#index'
   get 'explore', to: 'explore#index'
-
+  
+  get 'aspect/exit' => 'projects_session#destroy', :as => :exit_aspect
+  get 'aspect/change_to' => 'projects_session#create', :as => :change_aspect
+  
   # User routes
   devise_for :users 
 
   post "user_connect" => "people#connect_to_user"
   post "user_disconnect" => "people#disconnect_user"
 
-  resources :roles, only: [] do
+  resources :roles, only: [:index] do
     collection do
       put :update_multiple
     end

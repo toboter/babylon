@@ -1,0 +1,2 @@
+module ProjectsSessionHelper
+end

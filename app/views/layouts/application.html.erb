@@ -105,12 +105,44 @@
                   <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, link_to("Snippets", snippets_path) if can? :manage, 'publishing' %></li>
+                  <%= content_tag :li, link_to("Users & Roles", roles_path) if can? :manage, 'roles' %>
+                  <%= content_tag :li, link_to("Snippets", snippets_path) if can? :manage, 'publishing' %>
                   <li><%= link_to "Item classifications", item_classifications_path %></li>
                   <li><%= link_to "Terms of interest (tags)", tags_path %></li>
                   <li><%= link_to "Predicates", predicates_path %></li>
                 </ul>
               <% end if can? :manage, 'publishing' %>
+
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aspect" id="aspect-menu">
+                  <%= image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    Change Aspect
+                    <b class="caret"></b>
+                  <% end %>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <% current_user.projects.each do |project| %>
+                    <li>        
+                      <%= link_to change_aspect_path(:project_id => project.id) do %>
+                        <%= project.projectable.name if project.projectable_type == "Cluster" %>
+                        <% if project.projectable_type == "Group" %>
+                          <%= project.projectable.cluster.name %> /
+                          <%= project.projectable.name %>
+                        <% end %>
+                        /
+                        <strong><%= project.name %></strong>
+                      <% end %>
+                    </li>
+                  <% end %>
+                  <%= content_tag :li, '', class: 'divider' if aspect? %>
+                  <%= content_tag :li do %>
+                    <%= link_to exit_aspect_path do %>
+                      Exit <strong><%= current_aspect.name %></strong>
+                    <% end %>
+                  <% end if aspect? %>
+                </ul>
+              <% end if can? :read, 'Navbar' %>
 
               <li class="divider-vertical"></li>
 
@@ -123,6 +155,8 @@
                   <% end %>                   
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <%= content_tag :li, 'Current Aspect', class: 'nav-header' if aspect? %>
+                  <%= content_tag :li, link_to(current_aspect.name, [current_aspect.projectable, current_aspect]) if aspect? %>
                   <li class="nav-header">Account overview</li>
                   <li><a><%= current_user.available_name %> (<%= current_user.email %>)</a></li>
                   <li><a><%= current_user.username %> (<%= current_user.role.role %>)</a></li>

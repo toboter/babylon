@@ -5,7 +5,7 @@
 <% content_for :add_section do %>
   <li><%= link_to "Document", polymorphic_path([:new, @person, :document]) %></li>
   <li><%= link_to 'Upload bucket', polymorphic_path([:new, @person, :bucket]) %></li>
-<% end if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) %>
+<% end if user_signed_in? && (can? :manage, @person) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

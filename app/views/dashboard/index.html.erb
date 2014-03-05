@@ -14,11 +14,11 @@
       <%= content_tag :li, link_to('Activity feed', "#updates", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Your Projects', "#memberships", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Personal todos', "#todos", data: {toggle: 'tab'}) %>
-      <%= content_tag :li, link_to('Roles', "#roles", data: {toggle: 'tab'}) if can? :manage, "roles" %>
     </ul>
 
     <div class="tab-content">
       <div class="tab-pane" id="updates">
+
         <p>activity feed hier?</p>
         <%= User.joins(:role).where(["role = ?", "admin"]).count <= 1 %>
       </div>
@@ -26,6 +26,7 @@
         <% current_user.projects.each do |project| %>
           <div class="project-entry well">
             <h3><%= link_to "#{project.name}", project %></h3>
+            <%= link_to "Use this aspect", change_aspect_path(:project_id => project.id) %>
             <% if project.documents.doctype('Introduction').present? %>
               <%= render "documents/with_document_type", var: project, dtype: "Introduction" if project.documents.doctype('Introduction') %>
             <% else %>
@@ -53,35 +54,6 @@
         <% end %>
       </div>
 
-
-      <% if can? :manage, "roles" %>
-        <div class="tab-pane" id="roles">       
-          <%= form_tag(update_multiple_roles_path, {method: :put, :class => 'custom'}) do %>
-            <ul class="unstyled">
-              <% for role in Role.all do %>
-                <%= fields_for "roles[]", role do |f| %>
-                  <%= f.error_messages %>
-                  <div class="row-fluid">
-                    <div class="span3">
-                      <%= f.label :role, "#{role.user.available_name}", class: "right inline" %>
-                    </div>
-                    <div class="span9">
-                      <% if current_user.role.role == 'superuser' %>
-                        <%= f.select(:role, User::ABILITYROLES) %>
-                      <% else %>
-                        <%= f.select(:role, User::ROLES) %>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end unless role.user.username == 'toboter' || role.user == current_user %>
-              <% end %>
-            </ul>
-            <div class="form-actions">
-              <%= submit_tag "Update Roles", class: "btn" %>
-            </div>
-          <% end %>
-        </div> 
-      <% end %>
     </div>
   </div>
 
