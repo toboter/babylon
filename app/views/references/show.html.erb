@@ -43,12 +43,13 @@
 
         <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
         <p>Außerdem in diesem Buch</p>
+
+        <p><%= @reference.projects.inspect %> </p>
       </div>
     </div>
 <% end %>
 
 <% content_for :sidebar_section do %>
-    <%= content_tag :span, 'Babylon Bibliography', class: 'label label-info pull-right' if @reference.babylon_specific %>
     <h5 class="muted">Title</h5>
     <ul class="unstyled">
       <li><%= @reference.authorships.map{ |a| link_to(a.person_name.name,a.person_name.person) }.join(", ").html_safe %></li>

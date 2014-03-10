@@ -100,14 +100,14 @@
 
 
 
-    <div id="articles">
+    <%= content_tag :div, id: "articles" do %>
       <%= f.fields_for :articles do |builder| %>
         <%= render "references/reference_fields", :f => builder %>
       <% end %>
       <div class="links">
         <%= link_to_add_association "Add Contents", f, :articles, :partial => 'references/reference_fields' %>
       </div>
-    </div>
+    <% end if aspect? %>
 
 
     <div class="form-actions">

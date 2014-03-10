@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  attr_accessible :name, :projectable_id, :projectable_type, :memberships_attributes, :creator_id, :updater_id
+  attr_accessible :name, :projectable_id, :projectable_type, :memberships_attributes, :creator_id, :updater_id, :show_references
 
   stampable
 
@@ -12,6 +12,9 @@ class Project < ActiveRecord::Base
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
   has_many :todos, dependent: :destroy
+
+  has_many :project_references, :dependent => :destroy
+  has_many :references, through: :project_references
 
   accepts_nested_attributes_for :memberships, allow_destroy: true
 

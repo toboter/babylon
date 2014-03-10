@@ -25,6 +25,7 @@
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Project Todos', "#todos", data: {toggle: 'tab'}) if can? :create, @project.todos %>
+      <%= content_tag :li, link_to('Bibliography', "#bib", data: {toggle: 'tab'}) if can? :read, @project.references %>
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="docs"> 
@@ -102,6 +103,13 @@
           </div>
         </div>
       <% end %>
+
+      <%= content_tag :div, class: 'tab-pane', id: 'bib' do %> 
+        <p><%= link_to 'View all', project_references_path(@project) %></p>
+        <%= content_tag :h4, 'Bibliography', class: 'muted' %>
+        <%= render "references/bib_entries", :references => @project.references.order('first_page ASC') %>
+      <% end if @project.references.any? %>
+
     </div>
 <% end %>
 
@@ -125,6 +133,7 @@
             <li>Created on: <%= @project.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
           </small>
         </ul>
+        <%= content_tag :p, 'Bibliography is available as root bibliography' if @project.show_references == true %>
       </div>
       <div class="tab-pane" id="members">
         <ul class="unstyled">

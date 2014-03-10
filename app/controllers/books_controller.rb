@@ -59,6 +59,10 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(params[:book])
 
+    for reference in @book.articles
+      reference.projects << current_aspect
+    end
+
     respond_to do |format|
       if @book.save
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
@@ -74,6 +78,10 @@ class BooksController < ApplicationController
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
+
+    # for reference in @book.articles
+    #   reference.projects << current_aspect unless reference.projects.exists?(current_aspect)
+    # end
 
     respond_to do |format|
       if @book.update_attributes(params[:book])

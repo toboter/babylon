@@ -2,8 +2,8 @@
 <% edit_section_for(@book, nil) %>
 
 <% content_for :add_section do %>
-  <li><%= link_to 'Article', new_reference_path(:book_id => @book) unless @book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial' %></li>
-<% end if can? :edit, @book %>
+  <%= content_tag :li, link_to('Article', new_reference_path(:book_id => @book)) unless @book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial' %>
+<% end if aspect? && (can? :edit, @book) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

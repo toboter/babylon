@@ -1,6 +1,6 @@
 class Reference < ActiveRecord::Base
   attr_accessible :creator_id, :updater_id, :title, :author_ids, :original_date_text, :alternative_author, :slug,
-                  :first_page, :last_page, :book_id, :uri, :tag_ids, :babylon_specific
+                  :first_page, :last_page, :book_id, :uri, :tag_ids
 
   stampable
 
@@ -9,7 +9,7 @@ class Reference < ActiveRecord::Base
   validates_presence_of :title
   #validates_presence_of :book_id, unless: :uri? Die Validierung erfolgt in dem Fall über "reject_if" im book model
 
-  has_many :authorships, :dependent => :destroy , :order => 'position'
+  has_many :authorships, :dependent => :destroy, :order => 'position'
   has_many :authors, :class_name => 'PersonName', through: :authorships, :source => :person_name  
 
   has_many :documents, as: :documentable, :dependent => :destroy
@@ -17,6 +17,10 @@ class Reference < ActiveRecord::Base
   has_many :assets, through: :buckets
   has_many :taggings, as: :taggable, :dependent => :destroy
   has_many :tags, through: :taggings
+
+  has_many :project_references, :dependent => :destroy
+  has_many :projects, through: :project_references
+
   belongs_to :book
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
@@ -31,7 +35,7 @@ class Reference < ActiveRecord::Base
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w( title babylon_specific ) + _ransackers.keys
+    %w( title ) + _ransackers.keys
   end
 
   def entries_for_select

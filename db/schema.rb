@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140227144807) do
+ActiveRecord::Schema.define(:version => 20140305161140) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -363,6 +363,15 @@ ActiveRecord::Schema.define(:version => 20140227144807) do
     t.integer  "updater_id"
   end
 
+  create_table "project_references", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "reference_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.datetime "created_at",       :null => false
@@ -371,6 +380,7 @@ ActiveRecord::Schema.define(:version => 20140227144807) do
     t.integer  "updater_id"
     t.integer  "projectable_id"
     t.string   "projectable_type"
+    t.boolean  "show_references"
   end
 
   create_table "references", :force => true do |t|

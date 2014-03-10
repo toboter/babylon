@@ -1,16 +1,22 @@
-<% title "Bibliography", nil %>
+<% title "Bibliography", nil if @search %>
+<% title "Bibliography", @project.name if @project %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <% if @project %>
+    <li>... <%= content_tag(:span, '/', class: 'divider') %></li>
+    <%= content_tag(:li, link_to("Projects", [@project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@project.name}", [@project.projectable, @project]) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
   <li class="active">Bibliography</li>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="span9">
-    <h5 class="muted">
+    <% content_tag :h5, class: "muted" do %>
       Filter &amp; Sort 
       <small><a href="#" data-toggle="collapse" data-target="#search-sort-well">(toggle)</a></small>
-    </h5>
+    <% end if @search %>
     <%= content_tag :div, class: "", id: 'search-sort-well' do %>
       <div class="well well-small">
       <%= search_form_for @search, html: { class: 'form-inline'} do |f| %>

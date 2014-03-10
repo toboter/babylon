@@ -1,6 +1,5 @@
 Babylon::Application.routes.draw do
 
-
   resources :snippets do
     resources :buckets
   end
@@ -43,6 +42,7 @@ Babylon::Application.routes.draw do
   resources :projects, only: [:index, :show] do
     resources :documents
     resources :todos, except: :edit
+    resources :references, :path => 'bibliography'
   end
 
   resources :todos, only: :show do
@@ -51,6 +51,8 @@ Babylon::Application.routes.draw do
 
 
   # Bibliography Management
+  delete 'destroy_project_reference' => 'project_references#destroy', :as => :destroy_project_reference
+  post 'add_to_project_references' => 'project_references#create', :as => :add_to_project_references
   resources :serials
   resources :books
   resources :references, :path => 'bibliography' do

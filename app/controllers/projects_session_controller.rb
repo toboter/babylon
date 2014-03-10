@@ -4,7 +4,7 @@ class ProjectsSessionController < ApplicationController
       project = Project.find(params[:project_id])
       if project
         session[:project_id] = project.id
-        redirect_to project_url(project), :notice => "Changed aspect to #{current_aspect.name}."
+        redirect_to :back, :notice => "Changed aspect to #{current_aspect.name}."
       else
         flash.now[:alert] = "Something went wrong."
         redirect_to :back, :notice => "Error."
@@ -14,6 +14,6 @@ class ProjectsSessionController < ApplicationController
 
   def destroy
     session[:project_id] = nil
-    redirect_to dashboard_url, :notice => "Switched to your personal account."
+    redirect_to dashboard_url, :notice => "Exited project aspect."
   end
 end

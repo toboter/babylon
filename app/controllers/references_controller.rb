@@ -5,16 +5,24 @@ class ReferencesController < ApplicationController
   # GET /references
   # GET /references.json
   def index
-    @search = Reference.search(params[:q])
-    @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
-    @references_unpaginated = @search.result
-    @references_all = Reference.all
-    # @collections = @references_all.select { |reference| reference.book.book_type == 'Collection' || reference.book.book_type == 'Collection in a serial' || reference.book.book_type == 'Issue of a journal' if reference.book } 
-    # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monograph in a serial' || reference.book.book_type == 'Monograph' if reference.book } 
-    # @misc = @references_all.select { |reference| reference.book_id == nil }
+    if params[:project_id]
+      @project = Project.find(params[:project_id])
+      @references = @project.references.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
+      @references_unpaginated = @project.references
+      @references_all = @project.references
+    else
+      @search = Reference.joins(:projects).where('show_references = ?', true).uniq.search(params[:q])
+      @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
+      @references_unpaginated = @search.result
+      @references_all = Reference.joins(:projects).where('show_references = ?', true).uniq
+      # @collections = @references_all.select { |reference| reference.book.book_type == 'Collection' || reference.book.book_type == 'Collection in a serial' || reference.book.book_type == 'Issue of a journal' if reference.book } 
+      # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monograph in a serial' || reference.book.book_type == 'Monograph' if reference.book } 
+      # @misc = @references_all.select { |reference| reference.book_id == nil }
+  
+      @search.build_sort if @search.sorts.empty?
+      @search.build_condition if @search.conditions.empty?
 
-    @search.build_sort if @search.sorts.empty?
-    @search.build_condition if @search.conditions.empty?
+    end
 
     if params[:type]
       if params[:type] == 'in-collection'
@@ -68,6 +76,7 @@ class ReferencesController < ApplicationController
   # POST /references.json
   def create
     @reference = Reference.new(params[:reference])
+    @reference.projects << current_aspect
 
     respond_to do |format|
       if @reference.save
@@ -84,6 +93,7 @@ class ReferencesController < ApplicationController
   # PUT /references/1.json
   def update
     @reference = Reference.find(params[:id])
+    # @reference.projects << current_aspect unless @reference.projects.exists?(current_aspect)
 
     respond_to do |format|
       if @reference.update_attributes(params[:reference])
