@@ -16,36 +16,54 @@
 <% content_for :main_section do %>
     <%= tagging_infos_for(@reference) %>
     <ul class="nav nav-tabs">
+      <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
-      <%= content_tag :li, link_to('Comments', "#comments", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}) %>
+      <%= content_tag :li, link_to('Comments', "#comments", data: {toggle: 'tab'}) %>
     </ul>
     <div class="tab-content">
+
+      <div class="tab-pane active" id="connections">
+        <%= content_tag :div, class: 'citable-items-entry' do %>
+          <h3>Entry cited  </h3>
+          <ul class="unstyled">
+            <% for item in @reference.items do %>
+              <li><%= item.predicate.inverse_name %> <%= link_to "#{item.citable.name}", item.citable %> in <%= item.ref_target %></li>
+            <% end %>
+          </ul>
+        <% end if @reference.items.any? %>    
+
+        <%= content_tag :div, class: 'projects-bib-entry' do %>
+          <h3>Projects which use this entry</h3>
+          <ul class="unstyled">
+            <% for project in @reference.projects do %>
+              <li><%= link_to "#{project.name}", [project.projectable, project] %></li>
+            <% end %>
+          </ul>
+        <% end if @reference.projects.any? %> 
+
+        <%= content_tag :div, class: 'projects-bib-entry' do %>
+          <h3>What else is in this book?</h3>
+          <%= render "references/bib_entries", :references => @reference.book.articles.order('first_page ASC') %>
+        <% end if @reference.book %>
+
+      </div>
+
       <div class="tab-pane" id="docs"> 
         <%= render "documents/without_document_type", :var => @reference if @reference.documents.any? %>
       </div>
+
       <div class="tab-pane" id="uploads">
         <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
       </div>
-      <div class="tab-pane active" id="comments">
+
+      <div class="tab-pane" id="comments">
         <%= content_tag :h3, 'Comments', class: 'muted' %>
         <%= render 'comments/list', comments: @reference.comments %>
         <% if @reference.comments.any? %><hr><% end %>
         <%= render 'comments/form', commentable: @reference, size: 'input-xxlarge' %>
       </div>
-      <div class="tab-pane" id="connections">
-        <ul class="unstyled">
-          <% for item in @reference.items do %>
-            <li><%= link_to "#{item.citable.name}", item.citable %></li>
-          <% end %>
-        </ul>        
 
-        <p>Dieses Artikel hat einen Bezug zu diesen Objekten</p>
-        <p>Außerdem in diesem Buch</p>
-
-        <p><%= @reference.projects.inspect %> </p>
-      </div>
     </div>
 <% end %>
 

@@ -17,7 +17,7 @@
   <body>
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <%= link_to "#Babylon", root_url, class: "brand", style: 'margin-left:0' %>
+        <%= link_to "$babylon", root_url, class: "brand", style: 'margin-left:0' %>
         <% if user_signed_in? %>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -301,14 +301,14 @@
       <div class="babylo-tec-footer-bottom">
         <div class="container">
           <div class="row">
-            <div class="span12">            
+            <div class="span12 app-text-links">            
               <ul class="babylo-tec-links inline">
                 <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
-                <li><%= link_to "Help" %></li>
-                <li><%= link_to "API" %></li>
-                <li><%= link_to "Sitemap" %></li>
+                <li class="upper"><%= link_to "Help" %></li>
+                <li class="upper"><%= link_to "API" %></li>
+                <li class="upper"><%= link_to "Sitemap" %></li>
               </ul>
-              <p class="copyright">&copy; 2013 BABylo-tec. All rights reserved.</p>​
+              <p class="sentence">&copy; 2014 BABylo-tec. All rights reserved. Developed by <%= link_to 'Tobias Schmidt', "https://github.com/toboter" %>. Source code available on <%= link_to 'Github', "https://github.com/toboter/babylon" %>.</p>
             </div>
           </div>
           <div class="row">

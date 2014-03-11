@@ -11,11 +11,7 @@
     <% @groups.each do |group| %>
       <div class="group-entry well">
         <h3><%= link_to "#{group.name}", group %></h3>
-        <% if group.documents.doctype('Introduction').present? %>
-          <%= render "documents/with_document_type", var: group, dtype: "Introduction" if group.documents.doctype('Introduction') %>
-        <% else %>
-          <p>No Introduction available</p>
-        <% end %>
+        <%= group.description ? markdown(group.description) : (content_tag :p, 'No description available') %>
       </div>
     <% end %>
   </div>

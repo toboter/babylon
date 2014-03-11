@@ -1,6 +1,31 @@
-BABylo-tec
+= $babylon
 
-Umfang
-Das Informationssystem BABylo-tec-IS soll einen Umgang und die Diskussion verschiedener Forscher oder Forschergruppen mit und über die standardisierten Primärdaten ermöglichen, modular durch plug-ins oder auf andere Endgeräte je nach angestrebtem Ziel erweiterbar sein und dabei den Auswertungsprozess (vgl. die Themenbereiche des DFG Schwerpunktantrages “Babylon “) mit einbeziehen und an die Basisdaten binden, gleichzeitig aber auch die Möglichkeit bieten den Basisdatenbestand zu erweitern. Die verschiedenen Beschreibungsstandards (Konzepte/Ontologien) unterschiedlicher Auswertungsherangehensweisen sollen konzeptionell/semantisch/ontologisch miteinander und, wo möglich, mit dem nach bekannten Standards (CIDOC, LIDO, DC) aufgebauten Interface der Basisdaten verbunden werden. Eine Ausgabe der Daten soll sowohl visuell für verschiedene menschliche Nutzer/Nutzergruppen, als auch maschinell - semantisch annotiert - für die automatisierte Nachnutzung der Daten erfolgen. 
-Die Projektverwaltung/Projektwebseite, an die auch das Informationssystem gebunden ist, soll, zur besseren Vernetzung der Forscher untereinander und mit der Öffentlichkeit, ein Content Management System BABylo-tec-CMS erhalten, mit dem zum einen allgemeine Informationen zum Projekt und zu Teilprojekten veröffentlicht und intern ausgetauscht, zum anderen auch interne- und öffentliche Termine abgestimmt werden können.
-Die visuelle Ausgabe der Teilelemente der Website (Verwaltung und Informationssystem) soll einem Corporate Design folgen. Funktionen wie Benutzerauthentifikation u.ä. (im weiteren als Core bezeichnet) teilen sich IS und CMS.
+== $babylon is developed as software to collaborate on the materials of the babylon excavation
+* module / group / project management
+* bibliography management for projects
+* museal-Object management
+* citation, document and asset management per object
+* to be continued ...
+
+
+== Compatibility
+Build to run on Rails 3.2.16 with Ruby 2.0.0. Needs PostgreSQL >=9.1 because of the hstore extension.
+
+
+== Installation
+Is not really special. It's a rails app and therefore needs a working Ruby 2.0 installation with ruby gems and a postgres installation for which you have priviledges. 
+You also need to set some variables: 
+GMAIL_USERNAME
+GMAIL_PASSWORD
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_S3_BUCKET
+HEROKUHOST
+HEROKUDB
+HEROKUUSERNAME
+HEROKUPASSWORD
+or you will need to adapt it for your setup. Obviously, the Herokuvariables are for the database, the AWS-variables for file-uploads and gmail is for sending emails from the app.
+
+
+== Thanks!
+Thank you to all those who helped me creating this application. Especially all the people who contribute to the open source community!

@@ -1,9 +1,7 @@
 class AddRemoveColumns < ActiveRecord::Migration
-  def up
+  def change
     remove_column :references, :babylon_specific
     add_column :references, :created_by_project_id, :integer
-  end
-
-  def down
+    add_column :groups, :description, :text
   end
 end

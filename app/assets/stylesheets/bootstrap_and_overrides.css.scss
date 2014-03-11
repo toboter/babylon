@@ -87,10 +87,16 @@ footer {
 		}
 }
 
+.babylo-tec-footer-bottom {
+	@media (max-width: 768px) {
+		padding: 0 20px;
+		}
+}
+
 .babylo-tec-footer-bottom .logos img {
 	@media (max-width: 768px) {
 		max-width: 180px;
-		margin: 0 auto 10px auto;
+		margin: 0 auto 20px auto;
 		}
 }
 

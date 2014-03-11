@@ -105,9 +105,9 @@
         <%= render "references/reference_fields", :f => builder %>
       <% end %>
       <div class="links">
-        <%= link_to_add_association "Add Contents", f, :articles, :partial => 'references/reference_fields' %>
+        <%= link_to_add_association "Add Contents", f, :articles, :partial => 'references/reference_fields' if aspect? %>
       </div>
-    <% end if aspect? %>
+    <% end if !@book.new_record? || aspect? %>
 
 
     <div class="form-actions">

@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  attr_accessible :name, :cluster_id, :creator_id, :updater_id, :speaker_id, :group_admin_id
+  attr_accessible :name, :cluster_id, :creator_id, :updater_id, :speaker_id, :group_admin_id, :description
 
   stampable
 

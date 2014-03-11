@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140305161140) do
+ActiveRecord::Schema.define(:version => 20140306131530) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(:version => 20140305161140) do
     t.integer  "updater_id"
     t.integer  "speaker_id"
     t.integer  "group_admin_id"
+    t.text     "description"
   end
 
   add_index "groups", ["cluster_id"], :name => "index_groups_on_area_id"
@@ -388,15 +389,15 @@ ActiveRecord::Schema.define(:version => 20140305161140) do
     t.datetime "original_date"
     t.string   "alternative_author"
     t.string   "slug"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.string   "first_page"
     t.string   "last_page"
     t.integer  "book_id"
     t.string   "uri"
-    t.boolean  "babylon_specific"
+    t.integer  "created_by_project_id"
   end
 
   add_index "references", ["slug"], :name => "index_references_on_slug", :unique => true

@@ -12,7 +12,6 @@ class Document < ActiveRecord::Base
   has_many :tags, through: :taggings
 
   GENERALDOCUMENTTYPES = %w[Introduction]
-
   DOKUMENTTYPES = GENERALDOCUMENTTYPES
 
   validates_presence_of :title, :unless => :document_type?

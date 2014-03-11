@@ -110,19 +110,17 @@
 	text-decoration: none;
 }
 
-
-.babylo-tec-footer-bottom ul.babylo-tec-links {
-	padding-top: 10px;
-	margin-bottom: 0.7em;
+.babylo-tec-footer-bottom .app-text-links {
+	padding-top: 1em;
+	margin-bottom: 2em;
 }
 
-.babylo-tec-footer-bottom ul.babylo-tec-links li {
+.babylo-tec-footer-bottom ul.babylo-tec-links li.upper {
 	margin-left: 6px;
 	font-family: "Proxima Nova Condensed", "proxima-nova-condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform: uppercase;
 	font-weight: 700;
 	font-size: 13px;
-
 }
 
 .babylo-tec-footer-bottom ul.babylo-tec-links li a {
@@ -130,8 +128,11 @@
 	padding: 0px 2px 3px 2px;
 }
 
-.babylo-tec-footer-bottom p.copyright {
+.babylo-tec-footer-bottom p {
 	font-size: 13px;
 	color: #333;
-	padding: 0 0 0 0.7em;
+}
+.babylo-tec-footer-bottom p a {
+	font-size: 13px;
+	color: #555;
 }

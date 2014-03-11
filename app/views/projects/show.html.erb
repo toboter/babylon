@@ -1,4 +1,4 @@
-<% title "Project: #{@project.name}", nil %>
+<% title "Research Project", @project.name %>
 <% edit_section_for(@project, @project.projectable) if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
 
 <% content_for :add_section do %>

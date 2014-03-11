@@ -1,10 +1,9 @@
-<% title "Research Group: #{@group.name}", nil %>
+<% title "Research Group", @group.name %>
 <% edit_section_for(@group, nil) if @group.group_admin == current_user || @group.creator == current_user || current_user.superuser? %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Project', new_group_project_path(@group) %></li>
   <li class="divider"></li>
-  <li><%= link_to "Introduction Document", polymorphic_path([:new, @group, :document], :document_type => "Introduction") unless @group.documents.doctype('Introduction') %></li>
   <li><%= link_to 'Document', polymorphic_path([:new, @group, :document]) %></li>
 <% end if can? :edit, @group %>
 
@@ -16,9 +15,9 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <%= render "documents/with_document_type", var: @group, dtype: "Introduction" if @group.documents.doctype('Introduction') %>
-
-  <%= render "documents/without_document_type", :var => @group %>
+  <%= content_tag :div, class: 'lead', id: 'about', style: 'margin-bottom:30px;' do %>
+    <%= markdown(@group.description) %>
+  <% end if @group.description %>
 
   <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
   <% @group.projects.each do |project| %>
@@ -37,12 +36,16 @@
 
       <% if project.documents.doctype('Introduction').present? %>
         <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
-      <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+        <p>
+          <%= project.documents.doctype('Introduction').abstract ? project.documents.doctype('Introduction').abstract : markdown(project.documents.doctype('Introduction').content) %>
+          <%= link_to '... read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %>
+        </p>
       <% else %>
         <p>No Introduction available</p>
       <% end %>
     </div>
   <% end %>
+  <%= render "documents/without_document_type", :var => @group %>
 <% end %>
 
 <% content_for :sidebar_section do %>
