@@ -12,6 +12,7 @@ class Project < ActiveRecord::Base
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
   has_many :todos, dependent: :destroy
+  has_many :issues, as: :issuable, dependent: :destroy
 
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references

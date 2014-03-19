@@ -24,7 +24,7 @@ class Item < ActiveRecord::Base
   has_many :actions, as: :actable
   # has_many :connections, as: :connectable
   has_many :documents, as: :documentable
-  has_many :comments, as: :commentable
+  has_many :issues, as: :issuable, dependent: :destroy
 
   validates_presence_of :collection_id, :inventory_number
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}

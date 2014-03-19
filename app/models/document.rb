@@ -7,7 +7,7 @@ class Document < ActiveRecord::Base
   belongs_to :documentable, :polymorphic => true
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-  has_many :comments, as: :commentable, :dependent => :destroy
+  has_many :issues, as: :issuable, :dependent => :destroy
   has_many :taggings, as: :taggable, :dependent => :destroy
   has_many :tags, through: :taggings
 
@@ -18,6 +18,10 @@ class Document < ActiveRecord::Base
   validates_presence_of :content
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
   validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
+
+  def name
+    title ? title : document_type
+  end
 
   def self.doctype(type)
     where(:document_type => type).first

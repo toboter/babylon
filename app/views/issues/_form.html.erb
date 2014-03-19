@@ -1,0 +1,44 @@
+<%= form_for [@issuable, @issue], html: {class: "form-horizontal"} do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :issuable_type %>
+  <%= f.hidden_field :issuable_id %>
+
+  <div class="control-group">
+    <%= f.label :name, class: 'control-label' %>
+    <div class="controls">
+      <div class="form-inline">
+        <%= f.text_field :name, class: 'span6', style: 'margin-right:20px;' %>
+        <label class="checkbox">
+          <%= f.check_box :closed %>
+          Closed
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :assigned_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select(:assigned_id, User.all, :id, :available_name, {include_blank: true}, {class: 'span6'}) %>
+    </div>
+  </div>
+
+
+  <%= f.fields_for :comments do |c| %>
+    <div class="control-group">
+      <%= c.label :content, class: 'control-label' %>
+      <div class="controls">
+        <%= c.text_area :content, rows:8, class: 'span6 new-comment vert', placeholder: 'Leave the first comment' %>
+      </div>
+    </div>
+  <% end if @issue.new_record? %>
+
+  <div class="form-actions">
+    <%= f.submit 'Speichern', class: 'btn btn-primary' %>
+    <% if @issue.new_record? %>
+        <%= link_to 'Abbrechen', [@issuable, 'issues'], :class => 'btn' %>
+    <% else %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    <% end %>
+  </div>
+<% end %>

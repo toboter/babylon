@@ -19,6 +19,7 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
+  <%= link_to 'Issues', item_issues_path(@item) %>
     <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">
@@ -51,21 +52,6 @@
           <div class="accordion-inner">
             <%= item_description('Accession Date', @item.accession_date) %><br />
             <%= @item.actions.inspect %> 
-          </div>
-        </div>
-      <% end %>
-
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseTwo">
-            Comments
-          </a>
-        </div>
-        <div id="collapseTwo" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <%= render 'comments/list', comments: @item.comments %>
-            <hr>
-            <%= render 'comments/form', commentable: @item, size: 'input-xlarge' %>
           </div>
         </div>
       <% end %>

@@ -1,0 +1,19 @@
+<div class="row-fluid">
+  <div class="span1">
+  	<%= image_tag((current_user.person ? (current_user.person.profile_picture ? current_user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:50px;') %>
+  </div>
+  <div class="span11 comment">
+  	<div class="head">
+  	  Write a new comment
+  	</div>
+  	<div class="body">
+      <%= form_tag({controller: "issues", action: "new_comment"}, method: 'post') do %>
+        <%= text_area_tag 'content', nil, rows: 8, class: 'input-block-level new-comment vert' %><br />
+        <%= submit_tag 'Comment', class: 'btn btn-primary pull-right' %>
+      <% end %>
+  	</div>
+  </div>
+</div>
+
+
+

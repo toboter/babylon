@@ -114,6 +114,7 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
+  <%= link_to 'Issues', project_issues_path(@project) %>
     <ul class="nav nav-tabs" style="margin-left:20px;">
       <%= content_tag :li, link_to('Overview', "#overview", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Members', "#members", data: {toggle: 'tab'}) %>

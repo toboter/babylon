@@ -1,0 +1,48 @@
+<% title 'Issues for '+'"'+@issuable.name+'"', nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @issuable.name, @issuable) + content_tag(:span, '/', class: 'divider')) if @issuable %>
+  <%= content_tag :li, "Issues", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span3">
+    <div class="issues-options">
+      <ul class="nav nav-pills nav-stacked">
+        <%= content_tag :li, link_to("Everyone's Issues", polymorphic_url([@issuable, :issues], state: params[:state])), class: "#{'active' unless params[:user]}" %>
+        <%= content_tag :li, link_to("Created by you", polymorphic_url([@issuable, :issues], user: 'created_by', state: params[:state])), class: "#{'active' if params[:user]=='created_by'}" %>
+        <%= content_tag :li, link_to("Assigned to you", polymorphic_url([@issuable, :issues], user: 'mentioned', state: params[:state])), class: "#{'active' if params[:user]=='mentioned'}" %>
+      </ul>
+      <hr>
+      Labels
+      <ul class="nav nav-pills nav-stacked">
+        <li>some</li>
+      </ul>
+    </div>
+  </div>
+  <div class="span9">
+    <div class="issues-options">
+      <div class="btn-group">
+        <%= link_to "#{@pre_issues.where(closed: false).count} Open", polymorphic_url([@issuable, :issues], state: 'open', user: params[:user]), class: "btn btn-small #{'active' if params[:state]=='open'}" %>
+        <%= link_to "#{@pre_issues.where(closed: true).count} Closed", polymorphic_url([@issuable, :issues], state: 'closed', user: params[:user]), class: "btn btn-small #{'active' if params[:state]=='closed'}" %>
+      </div>
+      <div class="pull-right">
+        <%= link_to 'Create Issue', [:new, @issuable, :issue], class: "btn btn-small btn-create" %>
+      </div>
+    </div>
+    <div class="issues-list">
+      <% if @issues.any? %>
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <%= render @issues %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;">
+          <p class="text-center">No issues to show. <%= link_to 'Create a new issue.', polymorphic_path([:new, @issuable, :issue]) if @issuable %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

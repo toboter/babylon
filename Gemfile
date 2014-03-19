@@ -96,6 +96,9 @@ gem 'will_paginate', '~> 3.0'
 # https://github.com/Empact/roo
 gem 'roo'
 
+# https://github.com/djreimer/sequenced
+gem 'sequenced'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

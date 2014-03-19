@@ -41,6 +41,7 @@
         Recreate Versions
       <% end if (@asset.content_type.include? 'image') && (can? :manage, 'recreate-versions') %>
     </p>
+    <%= link_to 'Issues', asset_issues_path(@asset) %>
     <div class="accordion" id="asset-accordion">
       <div class="accordion-group">
         <div class="accordion-heading">
@@ -71,20 +72,7 @@
           </div>
         </div>
       </div>
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#asset-accordion" href="#collapseTwo">
-            Comments
-          </a>
-        </div>
-        <div id="collapseTwo" class="accordion-body collapse in">
-          <div class="accordion-inner">
-            <%= render 'comments/list', comments: @asset.comments %>
-            <hr>
-            <%= render 'comments/form', commentable: @asset, size: 'input-xlarge' %>
-          </div>
-        </div>
-      <% end %>
+
       <%= content_tag :div, class: "accordion-group" do %>
         <div class="accordion-heading">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#asset-accordion" href="#collapseThree">

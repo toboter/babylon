@@ -13,7 +13,7 @@ class Todo < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :assigned, class_name: "User"
-  has_many :comments, as: :commentable
+  has_many :issues, as: :issuable, dependent: :destroy
 
   accepts_nested_attributes_for :todo_dependencies, allow_destroy: true
 

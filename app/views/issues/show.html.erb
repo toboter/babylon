@@ -1,0 +1,71 @@
+<% title @issue.name, ('Issue #'+@issue.sequential_id.to_s) %>
+<% edit_section_for(@issue, @issuable) %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @issuable.name, @issuable) + content_tag(:span, '/', class: 'divider')) if @issuable %>
+  <%= content_tag(:li, (link_to 'Issues', [@issuable, :issues]) + content_tag(:span, '/', class: 'divider')) if @issuable %>
+  <%= content_tag :li, @issue.name, class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <div id="details" class="" style="border-bottom:1px solid #eee;margin-bottom:2.5em;padding-bottom:1.5em;">
+      <span class="label label-info" style="padding:10px 20px;font-size:1em;">
+        <%= @issue.closed? ? 'Closed' : 'Open' %>
+      </span>
+      <%= name_only_or_link_to(@issue.creator) %> opend this issue
+      <%= distance_of_time_in_words_to_now(@issue.created_at) %> ago 
+      <%= content_tag :span do %>
+        <i class="icon-comment"></i> <%= pluralize(@issue.comments.count, 'comment') %> <%= content_tag :span, "later it was closed" if @issue.closed? %>
+      <% end if @issue.comments.any? %>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span9">
+        <div class="row-fluid">
+          <%= render partial: 'comment', collection: @issue.comments %>
+          <% unless @issue.comments %><hr><% end %>
+          <%= render 'comment_fields' if user_signed_in? %>
+        </div>
+      </div>
+
+      <div class="span3">
+
+        <div class="issue-sidebar-item" id="labels">
+          <h6 class="muted">Labels</h6>
+          <% if @issue %>
+            <ul class="nav nav-pills nav-stacked">
+                <li><%= link_to 'label?' %></li>
+            </ul>
+          <% else %>
+            <p>None yet</p>
+          <% end %>
+        </div>
+        
+        <div class="issue-sidebar-item" id="assignee">
+          <h6 class="muted">Assignee</h6>
+          <% if @issue.assigned %>
+            <%= image_tag((@issue.assigned.person ? (@issue.assigned.person.profile_picture ? @issue.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:20px;') %>
+            <span class="name"><%= name_only_or_link_to(@issue.assigned) %></span>
+          <% else %>
+            <p>No one assigned</p>
+          <% end %>
+        </div>
+
+        <div class="issue-sidebar-item" id="participants">
+          <h6 class="muted">Participants</h6>
+          <% if @issue.participants %>
+            <% for participant in @issue.participants do %>
+              <%= link_to participant.person, title: participant.available_name do %>
+                <%= image_tag((participant.person ? (participant.person.profile_picture ? participant.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:20px;') %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p>None yet</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

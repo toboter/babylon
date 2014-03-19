@@ -24,7 +24,7 @@ class Reference < ActiveRecord::Base
   belongs_to :book
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-  has_many :comments, as: :commentable, :dependent => :destroy
+  has_many :issues, as: :issuable, :dependent => :destroy
   has_many :citations, :dependent => :destroy
   has_many :items, class_name: 'Citation', conditions: "citable_type = 'Item'"
 

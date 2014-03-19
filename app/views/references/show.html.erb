@@ -19,7 +19,6 @@
       <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
       <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
-      <%= content_tag :li, link_to('Comments', "#comments", data: {toggle: 'tab'}) %>
     </ul>
     <div class="tab-content">
 
@@ -57,17 +56,12 @@
         <%= render "shared/buckets_assets", :obj => @reference, :personal => false %>
       </div>
 
-      <div class="tab-pane" id="comments">
-        <%= content_tag :h3, 'Comments', class: 'muted' %>
-        <%= render 'comments/list', comments: @reference.comments %>
-        <% if @reference.comments.any? %><hr><% end %>
-        <%= render 'comments/form', commentable: @reference, size: 'input-xxlarge' %>
-      </div>
-
     </div>
 <% end %>
 
 <% content_for :sidebar_section do %>
+    <%= link_to 'Issues', reference_issues_path(@reference) %>
+
     <h5 class="muted">Title</h5>
     <ul class="unstyled">
       <li><%= @reference.authorships.map{ |a| link_to(a.person_name.name,a.person_name.person) }.join(", ").html_safe %></li>

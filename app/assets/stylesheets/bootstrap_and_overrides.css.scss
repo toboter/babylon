@@ -144,5 +144,14 @@ h3 {
 	font-size: 135%;
 }
 
+/* Thx to Github for the color schema of this button */
+.btn-create {
+color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#60b044;background-image:-moz-linear-gradient(#8add6d, #60b044);background-image:-webkit-linear-gradient(#8add6d, #60b044);background-image:linear-gradient(#8add6d, #60b044);background-repeat:repeat-x;border-color:#5ca941}
+.btn-create:hover{color:#fff;background-color:#569e3d;background-image:-moz-linear-gradient(#79d858, #569e3d);background-image:-webkit-linear-gradient(#79d858, #569e3d);background-image:linear-gradient(#79d858, #569e3d);background-repeat:repeat-x;border-color:#4a993e}
+.btn-create:active,.btn-create.selected{background-color:#569e3d;background-image:none;border-color:#418737}
+
+textarea { resize:both; }
+textarea.vert { resize:vertical; }
+textarea.noResize { resize:none }
 
 @import "bootstrap-responsive";

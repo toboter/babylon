@@ -184,6 +184,9 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    sequenced (1.5.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
     sidekiq (2.16.1)
       celluloid (>= 0.15.2)
       connection_pool (>= 1.0.0)
@@ -247,6 +250,7 @@ DEPENDENCIES
   redcarpet
   roo
   sass-rails (~> 3.2.3)
+  sequenced
   sidekiq
   simple_form
   uglifier (>= 1.0.3)

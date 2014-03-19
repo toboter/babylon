@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140306131530) do
+ActiveRecord::Schema.define(:version => 20140313122449) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -162,12 +162,10 @@ ActiveRecord::Schema.define(:version => 20140306131530) do
   add_index "comment_hierarchies", ["descendant_id"], :name => "comment_desc_idx"
 
   create_table "comments", :force => true do |t|
-    t.integer  "commentable_id"
-    t.string   "commentable_type"
+    t.integer  "issue_id"
     t.text     "content"
-    t.integer  "parent_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
@@ -252,6 +250,19 @@ ActiveRecord::Schema.define(:version => 20140306131530) do
   end
 
   add_index "institutions", ["slug"], :name => "index_institutions_on_slug", :unique => true
+
+  create_table "issues", :force => true do |t|
+    t.string   "name"
+    t.integer  "issuable_id"
+    t.string   "issuable_type"
+    t.boolean  "closed"
+    t.integer  "assigned_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.integer  "sequential_id"
+  end
 
   create_table "item_classification_hierarchies", :id => false, :force => true do |t|
     t.integer "ancestor_id",   :null => false

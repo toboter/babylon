@@ -20,6 +20,8 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
+  <%= link_to 'Issues', document_issues_path(@document) %>
+
       <div class="accordion" id="doc-accordion">
         <%= content_tag :div, class: "accordion-group" do %>
           <div class="accordion-heading">
@@ -57,20 +59,6 @@
                 </li>
                 <li>on: <%= @document.updated_at %></li>
               </ul>
-            </div>
-          </div>
-        <% end %>
-        <%= content_tag :div, class: "accordion-group" do %>
-          <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#doc-accordion" href="#collapseTwo">
-              Comments
-            </a>
-          </div>
-          <div id="collapseTwo" class="accordion-body collapse">
-            <div class="accordion-inner">
-              <%= render 'comments/list', comments: @document.comments %>
-              <hr>
-              <%= render 'comments/form', commentable: @document, size: 'input-xlarge' %>
             </div>
           </div>
         <% end %>

@@ -1,0 +1,14 @@
+<div class="row-fluid">
+  <div class="span1">
+  	<%= image_tag((comment.creator.person ? (comment.creator.person.profile_picture ? comment.creator.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:50px;') %>
+  </div>
+  <div class="span11 comment">
+  	<div class="head">
+  	  <span class="name"><%= name_only_or_link_to(comment.creator) %></span> commented 
+  	  <span class="date"><%= distance_of_time_in_words_to_now(comment.created_at) %> ago</span>
+  	</div>
+  	<div class="body">
+  	  <%= markdown(comment.content) %>
+  	</div>
+  </div>
+</div>

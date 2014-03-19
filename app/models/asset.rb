@@ -12,7 +12,7 @@ class Asset < ActiveRecord::Base
 
   has_many :buckets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
-  has_many :comments, as: :commentable
+  has_many :issues, as: :issuable, :dependent => :destroy
 
   validates_presence_of :name, :content_type
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload already exists. Just add it to your desired bucket."

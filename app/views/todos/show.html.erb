@@ -25,13 +25,11 @@
           <%= link_to 'Delete', [@todo.project, @todo], method: :delete, confirm: 'Are you sure' %>
         </div>
       </div>
-      <%= render 'comments/list', comments: @todo.comments %>
-      <hr>
-      <%= render 'comments/form', commentable: @todo, size: 'span6' %>
     <% end %>
 <% end %>
 
 <% content_for :sidebar_section do %>
+  <%= link_to 'Issues', todo_issues_path(@todo) %>
   <h5 class="muted">Creator</h5>
   <ul class="unstyled">
     <li>

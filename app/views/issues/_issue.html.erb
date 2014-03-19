@@ -1,0 +1,17 @@
+<tr>
+  <td width="5%"><%= content_tag :i, '', class: issue.closed ? 'icon-ok-circle' : 'icon-exclamation-sign' %></td>
+  <td width="85%">
+    <span style="font-size:1.5em;font-weight:bold;"><%= link_to issue.name, [issue.issuable, issue] %></span>
+    <%= link_to issue.assigned.person, title: 'Assignee '+issue.assigned.available_name, class: 'pull-right' do %>
+      <%= image_tag((issue.assigned.person ? (issue.assigned.person.profile_picture ? issue.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:20px;') %>
+    <% end if issue.assigned %>
+    <p>
+      Opend by <%= name_only_or_link_to(issue.creator) %> 
+      <%= distance_of_time_in_words_to_now(issue.created_at) %> ago 
+      <%= content_tag :span do %>
+        <i class="icon-comment"></i> <%= link_to pluralize(issue.comments.count, 'comment'), [issue.issuable, issue] %>
+      <% end if issue.comments.any? %>
+    </p>
+  </td>
+  <td width="10%" class="sequential-id">#<%= issue.sequential_id %></td>
+</tr>

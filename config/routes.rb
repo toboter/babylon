@@ -17,7 +17,7 @@ Babylon::Application.routes.draw do
   resources :items do
     resources :buckets
     resources :documents
-    resources :comments, except: [:index, :show]
+    resources :issues
   end
 
 
@@ -43,10 +43,12 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :todos, except: :edit
     resources :references, :path => 'bibliography'
+    resources :issues
   end
 
   resources :todos, only: :show do
-    resources :comments, except: [:index, :show]
+    # resources :comments, except: [:index, :show]
+    resources :issues
   end
 
 
@@ -58,14 +60,14 @@ Babylon::Application.routes.draw do
   resources :references, :path => 'bibliography' do
     resources :documents
     resources :buckets
-    resources :comments, except: [:index, :show]
+    resources :issues
   end
-
 
   # Documents & Assets
   # Standard Document routes
   resources :documents, only: [:index, :show] do
-    resources :comments, except: [:index, :show]
+    # resources :comments, except: [:index, :show]
+    resources :issues
   end
 
   # Standard Bucket und Asset routes
@@ -80,7 +82,8 @@ Babylon::Application.routes.draw do
   end
 
   resources :assets, except: [:new, :create] do
-    resources :comments, except: [:index, :show]
+    # resources :comments, except: [:index, :show]
+    resources :issues
     member do
       get :download, to: 'assets#show'
       put :recreate_versions
@@ -90,6 +93,11 @@ Babylon::Application.routes.draw do
     end
   end
 
+  resources :issues, only: [] do
+    member do
+      post :new_comment, to: 'issues#new_comment'
+    end
+  end
 
   # Sys
   get 'dashboard', to: 'dashboard#index'
