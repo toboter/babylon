@@ -7,10 +7,32 @@ class DocumentsController < ApplicationController
   # GET /documents.json
   def index
     if @documentable
-      @documents = @documentable.documents.all
+      @documents = @documentable.documents
+      @all_documents = @documents
+      @current_user_documents = @documents.created_by(current_user)
+      @need_review_documents = @documents.joins(:issues).where(issues: {assigned_id: current_user.id})
+
+      if params[:ufilter] == 'created_by'
+        @documents = @current_user_documents
+      end
+      if params[:ufilter] == 'need_review'
+        @documents = @need_review_documents
+      end
     else
       @documents = Document.all
+      @all_documents = @documents
+      @current_user_documents = Document.created_by(current_user)
+      @need_review_documents = Document.joins(:issues).where(issues: {assigned_id: current_user.id})
+
+      if params[:ufilter] == 'created_by'
+        @documents = @current_user_documents
+      end
+      if params[:ufilter] == 'need_review'
+        @documents = @need_review_documents
+      end
     end
+
+
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

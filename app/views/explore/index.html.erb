@@ -25,7 +25,7 @@
           <div class="thumbnail" style="padding:10px;">
             <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.big_thumb.url) : image_tag("icons/no_picture.svg") %>
             <h3><%= cluster.name %></h3>
-            <p><%= markdown truncate(cluster.description, length: 100, separator: ' ') %></p>
+            <p><%= cluster.documents.doctype('Introduction').abstract.present? ? cluster.documents.doctype('Introduction').abstract : "No abstract to show." if cluster.documents.doctype('Introduction') %></p>
           </div>
         </li>
         <% end %>

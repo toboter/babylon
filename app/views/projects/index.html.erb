@@ -27,7 +27,7 @@
         <% end %>
       </h4>
 
-      <% if project.documents.doctype('Introduction').present? %>
+      <% if project.documents.doctype('Introduction') %>
         <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
         <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
       <% else %>

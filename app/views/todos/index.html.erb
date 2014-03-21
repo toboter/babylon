@@ -13,8 +13,6 @@
     <div class="well">
       <%= render 'form' %>
     </div>
-
-    <%= content_tag :h4, 'Incomplete' %>
     <table class="table table-bordered table-hover">
       <thead>
         <tr>
@@ -26,22 +24,7 @@
           <td>Depends on</td>   
         </tr>
       </thead>
-      <%= render @incomplete_todos %>
-    </table>
-
-    <%= content_tag :h4, 'Completed' %>
-    <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <td>Completed?</td>
-          <td>Task</td>
-          <td>Assigned User</td>
-          <td>Due to</td>
-          <td>Starts at</td>
-          <td>Depends on</td>
-        </tr>
-      </thead>
-      <%= render @complete_todos %>
+      <%= render @todos %>
     </table>
   </div>
 

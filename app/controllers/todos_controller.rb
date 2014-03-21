@@ -6,9 +6,7 @@ class TodosController < ApplicationController
   # GET /todos
   # GET /todos.json
   def index
-    @todos = @project.todos
-    @incomplete_todos = @todos.where(completed: false).order('due_to ASC')
-    @complete_todos = @todos.where(completed: true).order('due_to DESC')
+    @todos = @project.todos.order('completed ASC, due_to ASC')
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
@@ -20,7 +18,7 @@ class TodosController < ApplicationController
     @todo = Todo.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render :layout => "small_sidebar_right_page" }# show.html.erb
       format.json { render json: @todo }
     end
   end

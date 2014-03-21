@@ -19,7 +19,12 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <%= link_to 'Issues', item_issues_path(@item) %>
+  <div class="issues-options well well-small">
+    <i class="icon-exclamation-sign"></i>
+    <%= link_to 'Issues', item_issues_path(@item) %> 
+    <%= content_tag :span, @item.issues.count, class: 'badge pull-right' %>
+  </div>
+
     <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
     <div class="info_section">
       <table class="table table-bordered table-hover">

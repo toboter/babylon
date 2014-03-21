@@ -23,16 +23,24 @@
     <% end if @cluster_bucket.cover %>
     <%= content_tag :div, class: (@cluster_bucket.cover ? 'span9' : 'span12') do %>
       <h1><%= @cluster.name %></h1>
-      <p><%= markdown(@cluster.description) if @cluster.description %></p>
-      <%= link_to '(Edit picture)', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' if can? :edit, @cluster %>
+      <p><%= @cluster.documents.doctype('Introduction').abstract.present? ? @cluster.documents.doctype('Introduction').abstract : "No abstract to show." if @cluster.documents.doctype('Introduction') %></p>
+      <% if can? :edit, @cluster %> 
+        (<%= link_to 'Edit picture', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' %> | 
+        <%= link_to 'Edit document', polymorphic_path([@cluster, @cluster.documents.doctype('Introduction')]), class: 'change-asset' %>
+        )
+      <% end %>
     <% end %>
   </div>
 </div>
 <% end %>
 
 <% content_for :main_section do %>
+    <p>
+      <%= markdown(truncated_content(@cluster.documents.doctype('Introduction'), length=500)) if @cluster.documents.doctype('Introduction').content if @cluster.documents.doctype('Introduction') %>
+    </p>
 
-    <%= render "documents/with_document_type", var: @cluster, dtype: "Introduction" if @cluster.documents.doctype('Introduction') %>
+    <hr>
+    
     <%= render "documents/without_document_type", :var => @cluster %>
 
     <%= content_tag :h4, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" if @cluster.groups.present? %>

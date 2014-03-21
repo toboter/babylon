@@ -1,12 +1,17 @@
-<% title 'Issues for '+'"'+@issuable.name+'"', nil %>
+<% title 'Issues for '+'"'+@issuable.name+'"', nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @issuable.class.name.pluralize, [@issuable.class]) + content_tag(:span, '/', class: 'divider')) if @issuable %>
   <%= content_tag(:li, (link_to @issuable.name, @issuable) + content_tag(:span, '/', class: 'divider')) if @issuable %>
   <%= content_tag :li, "Issues", class: 'active' %>
 <% end %>
 
+
 <% content_for :main_section do %>
+  <div class="span12">
+    <h1>Issues for "<%= link_to @issuable.name, @issuable %>" <small>[<%= @issuable.class %>]</small></h1>
+  </div>
   <div class="span3">
     <div class="issues-options">
       <ul class="nav nav-pills nav-stacked">
@@ -28,7 +33,7 @@
         <%= link_to "#{@pre_issues.where(closed: true).count} Closed", polymorphic_url([@issuable, :issues], state: 'closed', user: params[:user]), class: "btn btn-small #{'active' if params[:state]=='closed'}" %>
       </div>
       <div class="pull-right">
-        <%= link_to 'Create Issue', [:new, @issuable, :issue], class: "btn btn-small btn-create" %>
+        <%= link_to 'Create Issue', [:new, @issuable, :issue], class: "btn btn-create" %>
       </div>
     </div>
     <div class="issues-list">

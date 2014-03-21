@@ -43,7 +43,8 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :todos, except: :edit
     resources :references, :path => 'bibliography'
-    resources :issues
+    # resources :issues, only: :index
+    # get 'dashboard', to: 'dashboard#project'
   end
 
   resources :todos, only: :show do

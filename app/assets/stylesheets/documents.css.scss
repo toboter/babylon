@@ -1,0 +1,43 @@
+.document-sidebar-item {
+  border-bottom: 1px solid #ddd;
+  margin-bottom:20px;
+  padding-bottom:20px;
+
+  .name {
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  p {
+
+  }
+}
+
+.documents-options {
+  li a {
+    font-size: 1.2em;
+    padding: 20px;
+  }
+  .btn { 
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  span.cnt {
+    font-weight: bold;
+  }
+}
+
+.documents-list .table tr td {
+  padding: 16px;
+  .title {
+    font-size:1.5em;
+    font-weight:bold;
+  }
+
+  .content {
+    font-size: 1em;
+  }
+}

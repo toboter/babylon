@@ -9,15 +9,15 @@ module ApplicationHelper
   end
 
   def tagging_infos_for(obj)
-    content_tag(:span, class: 'pull-right') do 
+    content_tag(:div, class: 'tagging-area') do 
 	    for tag in obj.tags
-	      concat content_tag :span, tag.name, class: 'label label-info', style: 'margin-left:5px;'
+	      concat content_tag :span, tag.name, class: 'label label-info'
 	    end
     end if obj.tags.any?
   end
 
   def markdown(text)
-    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: true)
+    renderer = Redcarpet::Render::HTML.new(hard_wrap: true, filter_html: false)
     options = {
       autolink: true,
       no_intra_emphasis: true,

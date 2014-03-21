@@ -3,7 +3,7 @@ class Project < ActiveRecord::Base
 
   stampable
 
-  after_create :add_first_admin
+  after_create :add_first_admin, :build_project_introduction_document
 
   has_many :memberships, :dependent => :destroy
   has_many :members, :class_name => 'User', through: :memberships, :source => :user
@@ -12,7 +12,6 @@ class Project < ActiveRecord::Base
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
   has_many :todos, dependent: :destroy
-  has_many :issues, as: :issuable, dependent: :destroy
 
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references
@@ -24,5 +23,7 @@ class Project < ActiveRecord::Base
   def add_first_admin
   	Membership.create :project_id => self.id, :user_id => self.creator_id, :role => "admin"
   end
-
+  def build_project_introduction_document
+    Document.create :documentable_id => self.id, :documentable_type => "Project", :document_type => "Introduction", :title => "Introduction"
+  end
 end

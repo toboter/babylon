@@ -6,11 +6,11 @@
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <li><%= link_to @document.documentable.name, @document.documentable %> <span class="divider">/</span></li>
+  <li><%= link_to 'Documents', [@document.documentable, :documents] %> <span class="divider">/</span></li>
   <li class="active"><%= @document.title.present? ? @document.title : @document.document_type %></li>
 <% end %>
 
 <% content_for :main_section do %>
-  <%= tagging_infos_for(@document) %>
   <%= content_tag :div, class: "lead" do %>
     <%= markdown(@document.abstract) %>
   <% end if @document.abstract? %>
@@ -20,47 +20,39 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <%= link_to 'Issues', document_issues_path(@document) %>
-
-      <div class="accordion" id="doc-accordion">
-        <%= content_tag :div, class: "accordion-group" do %>
-          <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#doc-accordion" href="#collapseThree">
-              Info
-            </a>
-          </div>
-          <div id="collapseThree" class="accordion-body collapse in">
-            <div class="accordion-inner">
-              <h5 class="muted">Cross reference</h5>
-              <ul class="unstyled">
-              <%= content_tag :li, link_to(@document.documentable.name, @document.documentable) %>
-                <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
-              </ul>
-  
-              <h5 class="muted">Creator</h5>
-              <ul class="unstyled">
-                <li>
-                  <% unless @document.creator.person %>
-                    <%= @document.creator.available_name %>
-                  <% else %>
-                    <%= link_to "#{@document.creator.available_name}", @document.creator.person %>
-                  <% end %>
-                </li>
-                <li>on: <%= @document.created_at %></li>
-              </ul>
-              <h5 class="muted">Last update by</h5>
-              <ul class="unstyled">
-                <li>
-                  <% unless @document.updater.person %>
-                    <%= @document.updater.available_name %>
-                  <% else %>
-                    <%= link_to "#{@document.updater.available_name}", @document.updater.person %>
-                  <% end %>
-                </li>
-                <li>on: <%= @document.updated_at %></li>
-              </ul>
-            </div>
-          </div>
+  <div class="issues-options well well-small">
+    <i class="icon-exclamation-sign"></i>
+    <%= link_to 'Issues', document_issues_path(@document) %> 
+    <%= content_tag :span, @document.issues.count, class: 'badge pull-right' %>
+  </div>
+  <%= tagging_infos_for(@document) %>
+  <div class="info-box">
+    <h5 class="muted">Cross reference</h5>
+    <ul class="unstyled">
+      <%= content_tag :li, link_to(@document.documentable.name, @document.documentable) %>
+      <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
+    </ul>
+    <h5 class="muted">Creator</h5>
+    <ul class="unstyled">
+      <li>
+        <% unless @document.creator.person %>
+          <%= @document.creator.available_name %>
+        <% else %>
+          <%= link_to "#{@document.creator.available_name}", @document.creator.person %>
         <% end %>
-      </div>
+      </li>
+      <li>on: <%= @document.created_at %></li>
+    </ul>
+    <h5 class="muted">Last update by</h5>
+    <ul class="unstyled">
+      <li>
+        <% unless @document.updater.person %>
+          <%= @document.updater.available_name %>
+        <% else %>
+          <%= link_to "#{@document.updater.available_name}", @document.updater.person %>
+        <% end %>
+      </li>
+      <li>on: <%= @document.updated_at %></li>
+    </ul>
+  </div>
 <% end %>

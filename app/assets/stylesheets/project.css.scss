@@ -1,0 +1,39 @@
+.project-options { 
+  margin: 2em 0;
+  .btn-group {
+    margin: 5px 0 15px;
+    font-weight: bold;
+  }
+  li a {
+    font-size: 1.2em;
+    padding: 20px;
+    .badge {
+      margin-top:-3px;
+    }
+  }
+
+}
+
+.member-view {
+  margin: 1em 0 2em;
+  a.hover {
+    text-decoration: none;
+  }
+  a img {
+    margin: 0 5px 5px 0;
+    width:40px;
+  }
+  a img.mini {
+    margin: -7px 3px 15px 0;
+    width:27px;
+  }
+}
+
+.bibliography-view {}
+
+.project-info {
+  p {
+    font-size: 1em;
+    font-weight: bold;
+  }
+}

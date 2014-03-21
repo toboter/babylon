@@ -20,7 +20,7 @@
             <% end %>
             <%= content_tag :div, class: 'span10' do %>
               <h1><%= cluster.name %></h1>
-              <p><%= markdown(cluster.description) if cluster.description %></p>
+              <p><%= cluster.documents.doctype('Introduction').abstract.present? ? cluster.documents.doctype('Introduction').abstract : "No abstract to show." if cluster.documents.doctype('Introduction') %></p>
             <% end %>
           </div>
         </div>

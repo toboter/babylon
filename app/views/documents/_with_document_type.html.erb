@@ -1,5 +1,5 @@
 <% if var.documents.doctype(dtype).present? %>
-  <%= render "documents/document", :var => var.documents.doctype(dtype) %>
+  <%= render "documents/document", :document => var.documents.doctype(dtype) %>
 <% else %>
   <p>No <%= dtype %> available</p>
 <% end %>

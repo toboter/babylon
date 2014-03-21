@@ -1,8 +1,9 @@
 <tbody>
   <%= form_for [todo.project, todo] do |f| %>
-    <tr>
+    <%= f.error_messages %>
+    <tr class=<%= todo.completed ? "success" : "warning" %>>
       <td><%= f.check_box :completed %> <%= f.submit "Update", class: "btn btn-mini" %></td>
-      <td><strong><%= todo.name %></strong></td>
+      <td><strong><%= link_to todo.name, [todo.project, todo] %></strong></td>
       <td><%= todo.assigned.available_name %></td>
       <td><%= todo.due_to.strftime("%d.%m.%Y") %></td>
       <td><%= todo.starts_at.strftime("%d.%m.%Y") if todo.starts_at %></td>

@@ -1,4 +1,4 @@
-<% title "Research Project", @project.name %>
+<% title "Research Project", @project.name, nil %>
 <% edit_section_for(@project, @project.projectable) if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
 
 <% content_for :add_section do %>
@@ -11,9 +11,10 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) %>
   <% if @project.projectable_type == "Group" %>
     <%= content_tag(:li, link_to("#{@project.projectable.cluster.name}", @project.projectable.cluster) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, link_to("Groups", cluster_groups_path(@project.projectable)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Groups", cluster_groups_path(@project.projectable.cluster)) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) %>
   <% end %>
   <%= content_tag(:li, link_to("#{@project.projectable.name}", @project.projectable) + content_tag(:span, '/', class: 'divider')) if @project.projectable_type == "Cluster" %>
@@ -21,129 +22,94 @@
   <%= content_tag :li, "#{@project.name}", class: 'active' %>
 <% end %>
 
+<%= content_for :top_over do %>
+  <div class="row-fluid" id='about' style="padding-bottom:1em;">
+    <%= content_tag :div, class: 'span6' do %>
+      <%= content_tag :h1, 'Research Project', class: 'pagetop' %>
+      <%= content_tag :h2, @project.name, class: 'subtitle' %>
+    <% end %>
+    <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
+      <p>
+        <%= @project.documents.doctype('Introduction').abstract.present? ? @project.documents.doctype('Introduction').abstract : "No abstract to show." %>
+      </p>
+      <%= link_to 'Edit document', polymorphic_path([:edit, @project, @project.documents.doctype('Introduction')]), class: 'change-asset' if can? :edit, @project %>
+    <% end if @project.documents.doctype('Introduction') %>
+  </div>
+  <hr>
+<% end %>
+
 <% content_for :main_section do %>
-    <ul class="nav nav-tabs">
-      <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Project Todos', "#todos", data: {toggle: 'tab'}) if can? :create, @project.todos %>
-      <%= content_tag :li, link_to('Bibliography', "#bib", data: {toggle: 'tab'}) if can? :read, @project.references %>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="docs"> 
-        <%= content_tag :h4, 'Documents', class: 'muted' if @project.documents.any? %>
-        <%= render "documents/with_document_type", var: @project, dtype: "Introduction" if @project.documents.doctype('Introduction') %>
-
-        <%= render "documents/without_document_type", :var => @project %>
-      </div>
-      <% if can? :read, @project %>
-        <div class="tab-pane" id="todos">
-          <p><%= link_to 'Manage Todos', project_todos_path(@project) %></p>
-          <div class="accordion" id="todo-accordion">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#todo-accordion" href="#collapseOne">
-                  Calendar View
-                </a>
-              </div>
-              <div id="collapseOne" class="accordion-body collapse">
-                <div class="accordion-inner">
-
-                  <h2 id="month" class="muted">
-                    <%= link_to "<", date: @date.prev_month %>
-                    <%= @date.strftime("%B %Y") %>
-                    <%= link_to ">", date: @date.next_month %>
-                  </h2>
-                  <%= calendar @date do |date| %>
-                    <%= link_to "#{date.day}"  %>
-                    <% if @todos_by_date[date] %>
-                      <ul>
-                        <% @todos_by_date[date].each do |todo| %>
-                        <li><%= todo.name %> (<%= todo.assigned.available_name %>)</li>
-                        <% end %>
-                      </ul>
-                    <% end %>
-                  <% end %>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#todo-accordion" href="#collapseTwo">
-                  List View (<%= pluralize(@project.todos.count, 'todo') %>)
-                </a>
-              </div>
-              <div id="collapseTwo" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                  <table class="table table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <td>Task</td>
-                        <td>Assigned User</td>
-                        <td>Due to</td>
-                        <td>Starts at</td>
-                        <td>Depends on</td>
-                        <td>Done?</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <% for todo in @project.todos.order('due_to ASC') do %>
-                      <tr>
-                        <td><strong><%= link_to todo.name, [todo.project, todo] %></strong></td>
-                        <td><%= todo.assigned.available_name %></td>
-                        <td><%= todo.due_to.strftime("%d.%m.%Y") %></td>
-                        <td><%= todo.starts_at.strftime("%d.%m.%Y") if todo.starts_at %></td>
-                        <td><%= todo.dependencies.map{ |a| content_tag :span, a.name, style: (a.completed ? "color:green;" : "color:red;") }.join(", ").html_safe if todo.dependencies.any? %></td>
-                        <td><%= content_tag :i, '', class: 'icon-ok' if todo.completed %></td>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="member-view" id="members">
+    <ul class="unstyled">
+      <% for membership in @project.memberships do %>
+        <%= link_to membership.user.person, title: membership.user.available_name do %>
+          <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone') %>
+        <% end %>
       <% end %>
+    </ul>
+  </div>
 
-      <%= content_tag :div, class: 'tab-pane', id: 'bib' do %> 
-        <p><%= link_to 'View all', project_references_path(@project) %></p>
-        <%= content_tag :h4, 'Bibliography', class: 'muted' %>
-        <%= render "references/bib_entries", :references => @project.references.order('first_page ASC') %>
-      <% end if @project.references.any? %>
+  <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
+    <%= content_tag :h4, 'Documents', class: 'muted' %>  
+      <table class="table table-bordered">
+        <tbody>
+          <%= render "documents/without_document_type", :var => @project %>
+        </tbody>
+      </table>
+  <% end if @project.documents.without_document_type.any? %> 
 
-    </div>
+  <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %> 
+    <%= content_tag :h4, 'Bibliography', class: 'muted' %>
+    <%= render "references/bib_entries", :references => @project.references.order('first_page ASC').limit(5) %>
+  <% end if @project.references.any? %>  
+
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <%= link_to 'Issues', project_issues_path(@project) %>
-    <ul class="nav nav-tabs" style="margin-left:20px;">
-      <%= content_tag :li, link_to('Overview', "#overview", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Members', "#members", data: {toggle: 'tab'}) %>
-    </ul>
+  <p>
+    <%= markdown(truncated_content(@project.documents.doctype('Introduction'), length=300)) if @project.documents.doctype('Introduction').content if @project.documents.doctype('Introduction') %>
+  </p>
 
-    <div class="tab-content" id="sidebar" style="margin-left:20px;">
-      <div class="tab-pane active" id="overview">
-        <ul class="unstyled">
-          <% if @project.projectable_type == "Group" %>
-            <li>Module: <%= link_to(@project.projectable.cluster.name, @project.projectable.cluster) %></li>
-            <li>Group: <%= link_to(@project.projectable.name, @project.projectable) %></li>
-          <% else %>
-            <li>Module: <%= link_to(@project.projectable.name, @project.projectable) %></li>
-          <% end %>
-          <small>
-            <li style="margin-top:20px;">Creator: <%= name_only_or_link_to(@project.creator) %></li>
-            <li>Created on: <%= @project.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
-          </small>
-        </ul>
-        <%= content_tag :p, 'Bibliography is available as root bibliography' if @project.show_references == true %>
-      </div>
-      <div class="tab-pane" id="members">
-        <ul class="unstyled">
-          <% for membership in @project.memberships do %>
-            <li><%= name_only_or_link_to(membership.user) %><%= ' ('+membership.role+')' %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+  <div class="project-options">
+    <ul class="nav nav-pills nav-stacked">
+      <%= content_tag :li do %>
+        <%= link_to [@project, :documents] do %>
+          Documents
+          <span class="badge pull-right"><%= @project.documents.without_document_type.count %></span>
+        <% end %>
+      <% end %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :references] do %>
+          Bibliography
+          <span class="badge pull-right"><%= @project.references.count %></span>
+        <% end %>
+      <% end %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :todos] do %>
+          Todo's
+          <span class="badge badge-important pull-right" style="margin-left:2px;"><%= @project.todos.where(:completed => false).count %></span>
+          <span class="badge badge-success pull-right"><%= @project.todos.where(:completed => true).count %></span>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+  
+  <div class="project-info well">
+    <ul class="unstyled">
+      <% if @project.projectable_type == "Group" %>
+        <li>Module: <%= link_to(@project.projectable.cluster.name, @project.projectable.cluster) %></li>
+        <li>Group: <%= link_to(@project.projectable.name, @project.projectable) %></li>
+      <% else %>
+        <li>Module: <%= link_to(@project.projectable.name, @project.projectable) %></li>
+      <% end %>
+      <small>
+        <li style="margin-top:20px;">Creator: <%= name_only_or_link_to(@project.creator) %></li>
+        <li>Created on: <%= @project.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
+      </small>
+    </ul>
+    <%= content_tag :p, 'Bibliography is available as root bibliography', class: 'text-info' if @project.show_references == true %>
+  </div>
+
 
 
 

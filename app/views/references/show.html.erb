@@ -14,7 +14,6 @@
 
 
 <% content_for :main_section do %>
-    <%= tagging_infos_for(@reference) %>
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
@@ -43,7 +42,7 @@
 
         <%= content_tag :div, class: 'projects-bib-entry' do %>
           <h3>What else is in this book?</h3>
-          <%= render "references/bib_entries", :references => @reference.book.articles.order('first_page ASC') %>
+          <%= render "references/bib_entries", :references => @reference.book.articles.without(@reference).order('first_page ASC') %>
         <% end if @reference.book %>
 
       </div>
@@ -60,7 +59,28 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-    <%= link_to 'Issues', reference_issues_path(@reference) %>
+  <%= content_tag :div, class: "reference-options well well-small" do %>
+    <%= content_tag :div, class: "" do %>
+      <small>Add to your project references</small>
+      <%= link_to add_to_project_references_path(reference_id: @reference.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
+        <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+        <%= current_aspect.name %>
+      <% end %>
+    <% end if !current_aspect.references.include?(@reference) %>
+    <%= content_tag :div, class: "" do %>
+      <small>In your project references</small>
+      <%= link_to destroy_project_reference_path(reference_id: @reference.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
+        <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+        <%= current_aspect.name %>
+      <% end %>
+    <% end if current_aspect.references.include?(@reference) %>
+  <% end if aspect? %>
+  <div class="issues-options well well-small">
+    <i class="icon-exclamation-sign"></i>
+    <%= link_to 'Issues', reference_issues_path(@reference) %> 
+    <%= content_tag :span, @reference.issues.count, class: 'badge pull-right' %>
+  </div>
+  <%= tagging_infos_for(@reference) %>
 
     <h5 class="muted">Title</h5>
     <ul class="unstyled">

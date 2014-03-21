@@ -30,6 +30,8 @@ class Reference < ActiveRecord::Base
 
   before_save :save_original_date_text
 
+  scope :without, lambda { |ref| { :conditions => ['id not in (?)', ref.id] }}
+
   def name
     title
   end

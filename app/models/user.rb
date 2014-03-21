@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   ROLES = %w[guest fellow author editor admin]
 
   scope :without_user, lambda{|user| user ? {:conditions => ["users.id != ?", user.id]} : {}}
+  # named_scope :not_in_forums, lambda { |forums| { :conditions => ['forum_id not in (?)', forums.select(&:id).join(',')] }
 
   def role?(base_role)
     role.present? && ABILITYROLES.index(base_role.to_s) <= ABILITYROLES.index(role.role)

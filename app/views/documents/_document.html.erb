@@ -1,16 +1,20 @@
-<%= content_tag :div, style: 'border-bottom:1px solid #f6f6f6; padding-bottom:20px;' do %>
-  <%= content_tag :h1 do %>
-    <%= var.title ? var.title : var.document_type %>
-    <%= (link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;'), [:edit, var.documentable, var], class: 'pull-right', title: 'Edit') if can? :edit, var %>
-  <% end %>
-  <% if var.abstract %>
-    <div class="abstract lead">
-      <%= markdown(var.abstract) %>
-      <%= link_to '... read more', [var.documentable, var] if !var.content %>
+<tr class="document-entries" id="document-<%= document.id %>">
+  <td width="100%">
+      <span class="title">
+        <%= document.title ? link_to(document.title, document) : link_to(document.document_type, document) %>
+      </span>
+    <p>
+      Created by <%= name_only_or_link_to(document.creator) %> 
+      <%= distance_of_time_in_words_to_now(document.created_at) %> ago 
+      <%= content_tag :span do %>
+        <i class="icon-exclamation-sign"></i> <%= link_to pluralize(document.issues.count, 'issue'), [document, :issues] %>
+      <% end if document.issues.any? %>
+    </p>
+    <div class="content">
+      <% if document.abstract || document.content %>
+      <small>(<%= document.abstract.length+document.content.length %> characters)</small><br />
+      <%= document.abstract.present? ? markdown(document.abstract) : truncated_content(document, length=200) %>
+      <% end %>
     </div>
-  <% end %>
-  <div class="content">
-    <%= markdown(var.content) unless var.content.blank? %> 
-    <%= link_to '... read more', [var.documentable, var] unless var.content.blank? %>
-  </div>
-<% end %>
+  </td>
+</tr>

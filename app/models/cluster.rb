@@ -1,7 +1,7 @@
 class Cluster < ActiveRecord::Base
   attr_accessible :name, :creator_id, :updater_id, :speaker_id, :cluster_admin_id, :description, :contact
 
-  after_create :build_cluster_picture_bucket
+  after_create :build_cluster_picture_bucket, :build_cluster_introduction_document
 
   has_many :groups, dependent: :destroy
   has_many :group_projects, through: :groups, source: 'projects'
@@ -19,6 +19,10 @@ class Cluster < ActiveRecord::Base
   
   def build_cluster_picture_bucket
     Bucket.create :attachable_id => self.id, :attachable_type => "Cluster", :name => "Cover Pictures", :name_fixed => true
+  end
+  
+  def build_cluster_introduction_document
+    Document.create :documentable_id => self.id, :documentable_type => "Cluster", :document_type => "Introduction", :title => "Introduction"
   end
 
   def cluster_bucket

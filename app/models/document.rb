@@ -11,11 +11,10 @@ class Document < ActiveRecord::Base
   has_many :taggings, as: :taggable, :dependent => :destroy
   has_many :tags, through: :taggings
 
-  GENERALDOCUMENTTYPES = %w[Introduction]
-  DOKUMENTTYPES = GENERALDOCUMENTTYPES
+  DOKUMENTTYPES = %w[Introduction]
 
   validates_presence_of :title, :unless => :document_type?
-  validates_presence_of :content
+  validates_presence_of :content, :unless => :document_type?
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
   validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
 
@@ -28,6 +27,7 @@ class Document < ActiveRecord::Base
   end
 
   scope :without_document_type, where('document_type NOT IN (?)', Document::DOKUMENTTYPES)
+  scope :created_by, lambda { |c| where("creator_id = ?", c.id) }
 
   def title_readonly?
     (document_type == 'Introduction')

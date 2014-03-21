@@ -29,15 +29,9 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <%= link_to 'Issues', todo_issues_path(@todo) %>
-  <h5 class="muted">Creator</h5>
-  <ul class="unstyled">
-    <li>
-      <% unless @todo.creator.person %>
-        <%= @todo.creator.available_name %>
-      <% else %>
-        <%= link_to "#{@todo.creator.available_name}", @todo.creator.person %>
-      <% end %>
-    </li>
-  </ul>
+  <div class="issues-options well well-small">
+    <i class="icon-exclamation-sign"></i>
+    <%= link_to 'Issues', todo_issues_path(@todo) %> 
+    <%= content_tag :span, @todo.issues.count, class: 'badge pull-right' %>
+  </div>
 <% end %>

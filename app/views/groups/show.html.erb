@@ -1,62 +1,123 @@
-<% title "Research Group", @group.name %>
+<% title "Research Group", @group.name, nil %>
 <% edit_section_for(@group, nil) if @group.group_admin == current_user || @group.creator == current_user || current_user.superuser? %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Project', new_group_project_path(@group) %></li>
   <li class="divider"></li>
+  <li><%= link_to "Introduction Document", polymorphic_path([:new, @group, :document], :document_type => "Introduction") if !@group.documents.doctype('Introduction') %></li>
   <li><%= link_to 'Document', polymorphic_path([:new, @group, :document]) %></li>
 <% end if can? :edit, @group %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, link_to("#{@group.cluster.name}", @group.cluster) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, link_to("Groups", cluster_groups_path(@group.cluster)) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "#{@group.name}", class: 'active' %>
 <% end %>
 
+<%= content_for :top_over do %>
+  <div class="row-fluid" id='about' style=";">
+    <%= content_tag :div, class: 'span6' do %>
+      <%= content_tag :h1, 'Research Group', class: 'pagetop' %>
+      <%= content_tag :h2, @group.name, class: 'subtitle' %>
+    <% end %>
+    <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
+      <p>
+        <%= @group.documents.doctype('Introduction').abstract.present? ? @group.documents.doctype('Introduction').abstract : "No abstract to show." %>
+      </p>
+      <%= link_to 'Edit document', polymorphic_path([:edit, @group, @group.documents.doctype('Introduction')]), class: 'change-asset' if can? :edit, @group %>
+    <% end if @group.documents.doctype('Introduction') %>
+  </div>
+  <hr>
+<% end %>
+
 <% content_for :main_section do %>
-  <%= content_tag :div, class: 'lead', id: 'about', style: 'margin-bottom:30px;' do %>
-    <%= markdown(@group.description) %>
-  <% end if @group.description %>
+  <div class="member-view" id="members">
+    <ul class="unstyled">
+      <% for member in @members do %>
+        <%= link_to member.person, title: member.available_name do %>
+          <%= image_tag((member.person ? (member.person.profile_picture ? member.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone') %>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
 
   <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
   <% @group.projects.each do |project| %>
     <div class="well">
-      <h4>
-        <%= link_to [project.projectable, project] do %>
-          <%= project.projectable.name if project.projectable_type == "Cluster" %>
-          <% if project.projectable_type == "Group" %>
-            <%= project.projectable.cluster.name %> /
-            <%= project.projectable.name %>
+      <div class="row-fluid">
+        <div class="span12">
+          <h4>
+            <%= link_to [project.projectable, project] do %>
+              <%= project.projectable.name if project.projectable_type == "Cluster" %>
+              <% if project.projectable_type == "Group" %>
+                <%= project.projectable.cluster.name %> /
+                <%= project.projectable.name %>
+              <% end %>
+              /
+              <%= project.name %>
+            <% end %>
+          </h4>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="member-view" id="members-project-<%= project.id %>">
+            <ul class="unstyled">
+              <% for membership in project.memberships do %>
+                <%= link_to membership.user.person, title: membership.user.available_name do %>
+                  <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone mini') %>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <% if project.documents.doctype('Introduction') %>
+            <p>
+              <%= project.documents.doctype('Introduction').abstract ? project.documents.doctype('Introduction').abstract : (markdown(truncated_content(project.documents.doctype('Introduction'), length=300)) if project.documents.doctype('Introduction').content) %>
+            </p>
+          <% else %>
+            No Introduction to show. <%= link_to 'Create one!', [:edit, project.documents.doctype('Introduction')] if project.documents.doctype('Introduction') %>
           <% end %>
-          /
-          <%= project.name %>
-        <% end %>
-      </h4>
-
-      <% if project.documents.doctype('Introduction').present? %>
-        <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
-        <p>
-          <%= project.documents.doctype('Introduction').abstract ? project.documents.doctype('Introduction').abstract : markdown(project.documents.doctype('Introduction').content) %>
-          <%= link_to '... read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %>
-        </p>
-      <% else %>
-        <p>No Introduction available</p>
-      <% end %>
+        </div>
+      </div>
     </div>
   <% end %>
-  <%= render "documents/without_document_type", :var => @group %>
+  <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
+    <%= content_tag :h4, 'Documents', class: 'muted' %>  
+      <table class="table table-bordered">
+        <tbody>
+          <%= render "documents/without_document_type", :var => @group %>
+        </tbody>
+      </table>
+  <% end if @group.documents.without_document_type.any? %> 
 <% end %>
 
 <% content_for :sidebar_section do %>
-    <ul class="nav nav-tabs" style="margin-left:20px;">
-      <%= content_tag :li, link_to('Overview', "#overview", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Members', "#members", data: {toggle: 'tab'}) if @group.projects.present? %>
-      <%= content_tag :li, link_to('Projects', "#projects", data: {toggle: 'tab'}) if @group.projects.present? %>
-    </ul>
+  <p>
+    <%= markdown(truncated_content(@group.documents.doctype('Introduction'), length=300)) if @group.documents.doctype('Introduction').content if @group.documents.doctype('Introduction') %>
+  </p>
 
-    <div class="tab-content" id="sidebar" style="margin-left:20px;">
-      <div class="tab-pane active" id="overview">
+  <div class="project-options">
+    <ul class="nav nav-pills nav-stacked">
+      <%= content_tag :li do %>
+        <%= link_to [@group, :projects] do %>
+          Projects
+          <span class="badge pull-right"><%= @group.projects.count %></span>
+        <% end %>
+      <% end %>
+      <%= content_tag :li do %>
+        <%= link_to [@group, :documents] do %>
+          Documents
+          <span class="badge pull-right"><%= @group.documents.without_document_type.count %></span>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+
+    <div class="group-info well">
         <ul class="unstyled">
           <li>Module: <%= link_to @group.cluster.name, @group.cluster %></li>
           <li>Speaker: <%= name_only_or_link_to(@group.speaker) %></li>
@@ -67,20 +128,5 @@
             <li>Created on: <%= @group.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
           </small>
         </ul>
-      </div>
-      <%= content_tag :div, class: 'tab-pane', id: 'members' do %>
-        <ul class="unstyled">
-          <% for member in @members do %>
-            <li><%= name_only_or_link_to(member) %></li>
-          <% end %>
-        </ul>
-      <% end if @group.projects.present? %>
-      <%= content_tag :div, class: 'tab-pane', id: 'projects' do %>
-        <ul class="unstyled">
-          <% for project in @group.projects do %>
-            <li><%= link_to "#{project.name}", project %></li>
-          <% end %>
-        </ul>
-      <% end if @group.projects.present? %>
     </div>
 <% end %>

@@ -1,14 +1,62 @@
-<% title "Documents", nil %>
+<% @documentable ? (title "Documents for "+@documentable.name, nil, nil) : (title "All documents", nil) %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <%= content_tag(:li, link_to(@documentable.name, @documentable) + content_tag(:span, '/', class: 'divider')) if @documentable %>
+  <li class="active">Documents</li>
+<% end %>
 
 <% content_for :main_section do %>
-<div class="span12">
-  <table class="table table-bordered table-hover">
-    <% @documents.each do |document| %>
-      <tr>
-        <td><%= link_to "#{document.title}", document %> <small>(<%= link_to document.documentable.name, document.documentable %>)</small></td>
-        <td><%= document.abstract ? truncate(document.abstract, length: 100, separator: ' ') : raw(truncate(document.content, length: 100, separator: ' ')) %> (...)</td>
-      </tr>
-    <% end %>
-  </table>
-</div>
+  <%= content_tag :div, class: "span12" do %>
+    <h1>Documents for "<%= link_to @documentable.name, @documentable %>"</h1>
+  <% end if @documentable %>
+  <div class="span3">
+    <div class="documents-options">
+      <ul class="nav nav-pills nav-stacked">
+        <%= content_tag :li, class: "#{'active' unless params[:ufilter]}" do %>
+          <%= link_to polymorphic_url([@documentable, :documents]) do %>
+          	Everyone's Documents
+          	<span class="cnt pull-right"><%= @all_documents.count %></span>
+          <% end %>
+        <% end %>
+        <%= content_tag :li, class: "#{'active' if params[:ufilter]=='created_by'}" do %>
+          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'created_by') do %>
+          	Created by you
+          	<span class="cnt pull-right"><%= @current_user_documents.count %></span>
+          <% end %>
+        <% end %>
+        <%= content_tag :li, class: "#{'active' if params[:ufilter]=='need_review'}" do %>
+          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'need_review') do %>
+          	Need review
+          	<span class="cnt pull-right"><%= @need_review_documents.count %></span>
+          <% end %>
+        <% end %>
+      </ul>
+      <hr>
+      Tags
+      <ul class="nav nav-pills nav-stacked">
+        <li>some</li>
+      </ul>
+    </div>
+  </div>
+  <div class="span9">
+    <div class="documents-options">
+      <div class="pull-right">
+        <%= link_to 'Create Document', [:new, @documentable, :document], class: "btn btn-create" if @documentable %>
+      </div>
+    </div>
+    <div class="documents-list">
+      <% if @documents.any? %>
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <%= render @documents %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:40px;">
+          <p class="text-center">No documents to show. <%= link_to 'Create a new document.', polymorphic_path([:new, @documentable, :document]) if @documentable %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
