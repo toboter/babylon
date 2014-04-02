@@ -5,7 +5,7 @@ class Issue < ActiveRecord::Base
   stampable
   acts_as_sequenced scope: [:issuable_id, :issuable_type]
 
-  LABELS = %w{Adminitrative ...}
+  LABELS = %w{Administrative ...}
 
   belongs_to :issuable, :polymorphic => true
   has_many :comments, dependent: :destroy
@@ -18,9 +18,6 @@ class Issue < ActiveRecord::Base
 
   accepts_nested_attributes_for :comments, allow_destroy: true
 
-  def open
-  	
-  end
 
   def participants
   	participants = comments.map(&:creator)

@@ -1,23 +1,32 @@
 class ProjectsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_projectable, except: [:index, :show]
+  before_filter :load_projectable, except: :show
   load_and_authorize_resource
   
   # GET /projects
   # GET /projects.json
   def index
     if params[:cluster_id]
-      load_projectable
       @cluster_projects =  @projectable.projects
       @group_projects = @projectable.group_projects
-      @projects = @group_projects+@cluster_projects
+      @all_projects = Project.where(id: (@projectable.project_ids+@projectable.group_project_ids))
+
+      if params[:state] == 'group'
+        @projects = @group_projects
+      elsif params[:state] == 'module'
+        @projects = @projectable.projects
+      else
+        @projects = @all_projects
+      end
     elsif params[:group_id]
-      load_projectable
       @projects = Group.find(params[:group_id]).projects
-    else
-      @projects = Project.all
+      @all_projects = @projects
     end
 
+    @current_user_projects = @projects.with_user(current_user)
+    if params[:ufilter] == 'you-are-in'
+      @projects = @current_user_projects
+    end
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

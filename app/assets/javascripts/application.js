@@ -20,7 +20,13 @@
 //= require_tree .
 
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
+    $('.tooltip-bottom').tooltip({
+        placement: 'bottom'
+    });
+    $('.tooltip-right').tooltip({
+        placement: 'right'
+    });
+
     $('.chosen-select').chosen({
     	search_contains: true
     });

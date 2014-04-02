@@ -1,31 +1,70 @@
 <% title "#{@todo.name}", nil %>
+<% edit_section_for(@todo, @todo.project) %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <li>... <%= content_tag(:span, '/', class: 'divider') %></li>
-  <%= content_tag(:li, link_to("Projects", [@todo.project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li do %>
+    ...
+    <%= content_tag(:span, '/', class: 'divider') %>
+  <% end %>
+  <%= content_tag(:li, link_to("Projects", [@todo.project.projectable, :projects]) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, link_to("#{@todo.project.name}", [@todo.project.projectable, @todo.project]) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Tasks", [@todo.project, :todos]) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, "#{@todo.name}", class: 'active' %>
 <% end %>
 
+
 <% content_for :main_section do %>
+  <div class="span12">
+    <% if @todo.dependencies.any? %>
+      <div style="padding-bottom:30px;">
+      <h4 class="muted">"<%= @todo.name %>" depends on</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>   
+          <%= render @todo.dependencies %>
+        </tbody>
+      </table>
+      </div>
+    <% end %>
+
     <%= form_for [@todo.project, @todo] do |f| %>
-      <div class="row-fluid">
-        <div class="span3" style="padding-bottom:20px;">
-        <p class="form-inline"><%= f.label :completed, class: "checkbox" do %><%= f.check_box :completed %>Completed<% end %> <%= f.submit "Update", class: "btn btn-mini" %></p>
+      <div class="row-fluid" style="padding-bottom:30px;">
+        <div class="span2" style="padding-bottom:20px;">
+          <p class="form-inline">
+            <%= f.label :completed, class: "checkbox" do %><%= f.check_box :completed %><% end %> <%= f.submit "Update", class: "btn btn-small" %>
+            <%= link_to 'Delete', [@todo.project, @todo], method: :delete, confirm: 'Are you sure', style: 'margin-left:10px;' %>
+          </p>
         </div>
-        <div class="span7">
-          <p><strong><%= @todo.name %></strong>:
-          Assigned to <strong><%= @todo.assigned.available_name %></strong>, 
-          due to <%= @todo.due_to.strftime("%d.%m.%Y") %>
-          <%= 'Starts on '+@todo.starts_at.strftime("%d.%m.%Y") if @todo.starts_at %>
-          <%= raw('Todos to be completed first: '+@todo.dependencies.map{ |a| content_tag :span, a.name, style: (a.completed ? "color:green;" : "color:red;") }.join(", ").html_safe) if @todo.dependencies.any? %></p>
-        </div>
-        <div class="span2">
-          <%= link_to 'Delete', [@todo.project, @todo], method: :delete, confirm: 'Are you sure' %>
+        <div class="span6">
+          <span style="font-size:1.5em;font-weight:bold;">
+            <%= link_to @todo.name, [@todo.project, @todo] %> 
+          </span>
+          <%= content_tag :span, class: "label label-#{@todo.completed ? 'success' : 'important'} pull-right", style: 'padding: 5px 10px 7px;margin-left:20px;' do %>
+            <%= @todo.completed ? 'completed' : 'asap' %>
+          <% end %>
+          <%= link_to @todo.assigned.person, title: 'Assignee '+@todo.assigned.available_name, class: 'pull-right tooltip-bottom' do %>
+            <%= image_tag((@todo.assigned.person ? (@todo.assigned.person.profile_picture ? @todo.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:25px;') %>
+          <% end if @todo.assigned %>
+          <p>
+            Created by <%= name_only_or_link_to(@todo.creator) %> 
+            <%= distance_of_time_in_words_to_now(@todo.created_at) %> ago, 
+            has <i class="icon-tasks"></i> <%= pluralize(@todo.inverse_dependencies.count, 'dependency') %><br />
+            <%= link_to 'Can start in '+distance_of_time_in_words_to_now(@todo.starts_at)+',', '', title: @todo.starts_at.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' if @todo.starts_at %>
+            <%= link_to distance_of_time_in_words_to_now(@todo.due_to)+' left', '', title: @todo.due_to.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' %>
+          </p>
         </div>
       </div>
     <% end %>
+
+    <% if @todo.inverse_dependencies.any? %>
+      <h4 class="muted">On "<%= @todo.name %>" depending tasks</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>   
+          <%= render @todo.inverse_dependencies %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
 <% end %>
 
 <% content_for :sidebar_section do %>

@@ -25,6 +25,7 @@ Babylon::Application.routes.draw do
   resources :people do
     resources :buckets
     resources :documents
+    resources :issues
   end
 
   resources :clusters, :path => 'modules' do
@@ -39,15 +40,15 @@ Babylon::Application.routes.draw do
     resources :documents
   end
 
-  resources :projects, only: [:index, :show] do
+  resources :projects, only: :show do
+    get 'dashboard', to: 'dashboard#project'
     resources :documents
-    resources :todos, except: :edit
+    resources :todos
     resources :references, :path => 'bibliography'
-    # resources :issues, only: :index
     # get 'dashboard', to: 'dashboard#project'
   end
 
-  resources :todos, only: :show do
+  resources :todos, only: [:index, :show, :new] do
     # resources :comments, except: [:index, :show]
     resources :issues
   end
@@ -94,21 +95,21 @@ Babylon::Application.routes.draw do
     end
   end
 
-  resources :issues, only: [] do
+  resources :issues, only: [:index] do
     member do
       post :new_comment, to: 'issues#new_comment'
     end
   end
 
   # Sys
-  get 'dashboard', to: 'dashboard#index'
+  get 'dashboard', to: 'dashboard#personal'
   get 'explore', to: 'explore#index'
   
   get 'aspect/exit' => 'projects_session#destroy', :as => :exit_aspect
   get 'aspect/change_to' => 'projects_session#create', :as => :change_aspect
   
   # User routes
-  devise_for :users 
+  devise_for :users
 
   post "user_connect" => "people#connect_to_user"
   post "user_disconnect" => "people#disconnect_user"

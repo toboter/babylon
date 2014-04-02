@@ -27,7 +27,7 @@
         <% end %>
         <%= content_tag :li, class: "#{'active' if params[:ufilter]=='need_review'}" do %>
           <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'need_review') do %>
-          	Need review
+          	Need review by you
           	<span class="cnt pull-right"><%= @need_review_documents.count %></span>
           <% end %>
         <% end %>

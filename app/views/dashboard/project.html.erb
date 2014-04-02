@@ -1,0 +1,112 @@
+<% title "Project Dashboard", current_aspect.name %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to current_aspect.name, [current_aspect.projectable, current_aspect]) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, 'Dashboard', class: 'active' %>
+<% end %>
+
+<% content_for :add_section do %>
+
+<% end if can? :manage, 'site' %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <div class="row-fluid">
+
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="well">
+          <h6 class="muted">Upcoming tasks <span class="badge badge-warning pull-right"><%= current_aspect.todos.where(completed: false).count %></span></h6>
+          <ul class="unstyled">
+          <% for todo in current_aspect.todos.where(completed: false).order('due_to DESC').limit(3) do %>
+            <li style="padding-top:1em;">
+              <%= link_to todo.name, [todo.project, todo] %><br />
+              <small>
+                Remaining time <%= distance_of_time_in_words_to_now(todo.due_to) %> 
+                <%= content_tag :span do %>
+                  <i class="icon-tasks"></i> <%= pluralize(todo.todo_dependencies.count, 'pending dependency') %>
+                <% end if todo.todo_dependencies.any? %>
+              </small>
+            </li>
+          <% end %>
+          </ul>
+          <ul class="nav nav-pills">
+          	<%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-create btn-small", style: 'margin-top:4px;' if aspect? %>
+            <%= content_tag :li, class: 'pull-right' do %>
+              <%= link_to [current_aspect, :todos] do %>
+                All Tasks for this project
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="well">
+
+        </div>
+      <% end %>
+
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="dashboard-options">
+          <ul class="nav nav-pills nav-stacked">
+            <%= content_tag :li do %>
+              <%= link_to [current_aspect, :documents] do %>
+                Documents
+                <span class="badge pull-right"><%= current_aspect.documents.without_document_type.count %></span>
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to [current_aspect, :references] do %>
+                Bibliography
+                <span class="badge pull-right"><%= current_aspect.references.count %></span>
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to [current_aspect, :todos] do %>
+                Todo's
+                <span class="badge badge-important pull-right" style="margin-left:2px;"><%= current_aspect.todos.where(:completed => false).count %></span>
+                <span class="badge badge-success pull-right"><%= current_aspect.todos.where(:completed => true).count %></span>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end if can? :manage, 'settings' %>
+    </div>
+    <%= content_tag :div, class: 'row-fluid' do %>
+
+      <div class="span7">
+        
+      </div>
+
+      <div class="span5">
+        <div class="dashboard-options">
+          <ul class="nav nav-pills nav-stacked">
+
+          </ul>
+  		</div>
+
+        <%= render 'shared/calendar' %>
+
+        <div class="row-fluid">
+          <div class="span12 well" style="margin-top:20px;">
+          <div class="span6">
+            <ul class="unstyled">
+              <li><h5>Account overview</h5></li>
+              <li></li>
+            </ul>
+          </div>
+          <div class="span6">
+            <ul class="unstyled">
+              <li><h5>Log in overview</h5></li>
+              <li></li> 
+            </ul>
+          </div>
+          <%= content_tag :h5, 'Current Aspect' if aspect? %>
+          <%= content_tag :p, link_to(full_qualified_name(current_aspect), project_dashboard_path(current_aspect)) if aspect? %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+<% end %>

@@ -32,7 +32,7 @@
               <%= content_tag :li, link_to('Modules', clusters_path), style: 'font-weight:bold;' %>
               <li class="divider-vertical"></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Resources">
                   <strong>Resources</strong>
                   <b class="caret"></b>
                 </a>
@@ -52,7 +52,7 @@
           <div class="nav-collapse collapse">
             <%= content_tag :ul, class: 'nav pull-right' do %>
               <%= content_tag :li, class: 'dropdown' do %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Personal" id="personal-menu">
+                <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Your personal menu" id="personal-menu">
                   <% if current_user.person && current_user.person.profile_picture %>
                     <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
                     <% else %>
@@ -64,6 +64,9 @@
                   <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <li><%= link_to "Your Dashboard", dashboard_path %></li>
+                  <%= content_tag :li, (link_to "Your Profile", current_user.person) if current_user.person %>
+                  <li class="divider"></li>
                   <%= content_tag :li, (link_to 'Edit your profile', edit_person_path(current_user.person)) if current_user.person %>
                   <%= content_tag :li, (link_to 'Account Settings', edit_user_registration_path) if current_user %>
                   <% if can? :edit, 'Profile' %>
@@ -71,9 +74,44 @@
                       <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
                     <% end unless current_user.person %>
                   <% end %>
-                  <li class="divider"></li>
-                  <li><%= link_to "Your Dashboard", dashboard_path %></li>
-                  <%= content_tag :li, (link_to "Your Profile", current_user.person) if current_user.person %>
+                </ul>
+              <% end if can? :read, 'Navbar' %>
+
+              <%= content_tag :li, class: 'dropdown' do %>
+                <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
+                  <%= image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+                  <%= content_tag :span, class: 'hidden-desktop' do %>
+                    Change Aspect        
+                    <b class="caret"></b>
+                  <% end %>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+                  <%= content_tag :li, link_to('Current project dashboard', project_dashboard_path(current_aspect)) if aspect? %>
+
+                  <%= content_tag :li, '', class: 'divider' if aspect? %>   
+
+                  <% current_user.projects.each do |project| %>
+                    <li>       
+                      <%= link_to change_aspect_path(:project_id => project.id) do %>
+                        <%= project.projectable.name if project.projectable_type == "Cluster" %>
+                        <% if project.projectable_type == "Group" %>
+                          <%= project.projectable.cluster.name %> /
+                          <%= project.projectable.name %>
+                        <% end %>
+                        /
+                        <strong><%= project.name %></strong>
+                      <% end %>
+                    </li>
+                  <% end %>
+
+                  <%= content_tag :li, '', class: 'divider' if aspect? %>
+
+                  <%= content_tag :li do %>
+                    <%= link_to exit_aspect_path do %>
+                      Exit <strong><%= current_aspect.name %></strong>
+                    <% end %>
+                  <% end if aspect? %>
+
                 </ul>
               <% end if can? :read, 'Navbar' %>
 
@@ -86,63 +124,9 @@
                   <% end %>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, 'Class specific', class: 'nav-header' if content_for?(:add_section) %>
                   <%= yield(:add_section) %>
-                  <li class="nav-header">Basic</li>              
-                  <%= content_tag :li, link_to('Module', new_cluster_path) %>
-                  <%= content_tag :li, link_to('Person', new_person_path) %>
-                  <%= content_tag :li, link_to('Book', new_book_path) %>
-                  <%= content_tag :li, link_to('Item', new_item_path) %>
                 </ul>
               <% end if can? :create, :all %>
-
-              <%= content_tag :li, class: 'dropdown' do %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Settings" id="settings-menu">
-                  <%= image_tag("icons/tools.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
-                  <%= content_tag :span, class: 'hidden-desktop' do %>
-                    Settings
-                    <b class="caret"></b>
-                  <% end %>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, link_to("Users & Roles", roles_path) if can? :manage, 'roles' %>
-                  <%= content_tag :li, link_to("Snippets", snippets_path) if can? :manage, 'publishing' %>
-                  <li><%= link_to "Item classifications", item_classifications_path %></li>
-                  <li><%= link_to "Terms of interest (tags)", tags_path %></li>
-                  <li><%= link_to "Predicates", predicates_path %></li>
-                </ul>
-              <% end if can? :manage, 'publishing' %>
-
-              <%= content_tag :li, class: 'dropdown' do %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aspect" id="aspect-menu">
-                  <%= image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
-                  <%= content_tag :span, class: 'hidden-desktop' do %>
-                    Change Aspect
-                    <b class="caret"></b>
-                  <% end %>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <% current_user.projects.each do |project| %>
-                    <li>        
-                      <%= link_to change_aspect_path(:project_id => project.id) do %>
-                        <%= project.projectable.name if project.projectable_type == "Cluster" %>
-                        <% if project.projectable_type == "Group" %>
-                          <%= project.projectable.cluster.name %> /
-                          <%= project.projectable.name %>
-                        <% end %>
-                        /
-                        <strong><%= project.name %></strong>
-                      <% end %>
-                    </li>
-                  <% end %>
-                  <%= content_tag :li, '', class: 'divider' if aspect? %>
-                  <%= content_tag :li do %>
-                    <%= link_to exit_aspect_path do %>
-                      Exit <strong><%= current_aspect.name %></strong>
-                    <% end %>
-                  <% end if aspect? %>
-                </ul>
-              <% end if can? :read, 'Navbar' %>
 
               <li class="divider-vertical"></li>
 
@@ -150,28 +134,17 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Info" id="info-menu">
                   <%= image_tag("icons/information3.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
                   <%= content_tag :span, class: 'hidden-desktop' do %>
-                    Account Information
+                    Information
                     <b class="caret"></b>
                   <% end %>                   
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-                  <%= content_tag :li, 'Current Aspect', class: 'nav-header' if aspect? %>
-                  <%= content_tag :li, link_to(current_aspect.name, [current_aspect.projectable, current_aspect]) if aspect? %>
-                  <li class="nav-header">Account overview</li>
-                  <li><a><%= current_user.available_name %> (<%= current_user.email %>)</a></li>
-                  <li><a><%= current_user.username %> (<%= current_user.role.role %>)</a></li>
-                  <li><a>Account created on: <%= current_user.created_at.strftime("%d.%m.%Y") %></a></li>
-                  <li class="nav-header">Currently signed in from</li>
-                  <li><a><%= current_user.current_sign_in_ip %></a></li>
-                  <li><a>since <%= current_user.current_sign_in_at.strftime("%d.%m.%Y %H:%M") %></a></li>
-                  <li class="nav-header">Last time signed in from</li>
-                  <li><a><%= current_user.last_sign_in_ip %></a></li>
-                  <li><a>at <%= current_user.last_sign_in_at.strftime("%d.%m.%Y %H:%M") %></a></li> 
+
                 </ul>
               <% end if can? :read, 'info' %>
 
               <li class="visible-desktop">
-                <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
+                <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', class: 'tooltip-bottom', id: 'sign-out-link' %>
               </li>
               <li class="hidden-desktop">
                 <%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
@@ -183,7 +156,7 @@
                 <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
                 <li class="divider-vertical"></li>
               <% end %>
-                <%= content_tag :li, (link_to "#{current_user.available_name}", dashboard_path) %>
+                <%= content_tag :li, (link_to current_user.available_name, dashboard_path) %>
             <% end if user_signed_in? %>
 
           </div>

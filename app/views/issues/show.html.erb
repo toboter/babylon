@@ -1,4 +1,4 @@
-<% title @issue.name, ('Issue #'+@issue.sequential_id.to_s) %>
+<% title @issue.name, ('Issue #'+@issue.sequential_id.to_s), nil %>
 <% edit_section_for(@issue, @issuable) %>
 
 <% content_for :breadcrumbs_section do %>
@@ -11,6 +11,8 @@
 <% content_for :main_section do %>
   <div class="span12">
     <div id="details" class="" style="border-bottom:1px solid #eee;margin-bottom:2.5em;padding-bottom:1.5em;">
+      <%= content_tag :h1, @issue.name, class: 'pagetop' %>
+      <%= content_tag :h2, link_to(@issue.issuable.name, @issue.issuable)+(' - Issue #'+@issue.sequential_id.to_s), class: 'subtitle' %>
       <span class="label label-info" style="padding:10px 20px;font-size:1em;">
         <%= @issue.closed? ? 'Closed' : 'Open' %>
       </span>

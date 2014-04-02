@@ -6,7 +6,12 @@ class IssuesController < ApplicationController
   # GET /issues
   # GET /issues.json
   def index
-    @pre_issues = @issuable.issues.order('sequential_id DESC')
+    if @issuable
+      @pre_issues = @issuable.issues.order('sequential_id DESC')
+    else
+      @pre_issues = Issue
+    end
+
     @issues = @pre_issues
     
     unless params[:state]
@@ -19,11 +24,15 @@ class IssuesController < ApplicationController
     if params[:state] == 'closed'
       @issues = @issues.where(closed: true)
     end
-    if params[:user] == 'created_by'
-      @issues = @issues.where(creator_id: current_user.id)
+    if params[:creator]
+      @issues = @issues.where(creator_id: params[:creator])
     end
-    if params[:user] == 'mentioned'
-      @issues = @issues.where(assigned_id: current_user.id)
+    if params[:assignee]
+      @issues = @issues.where(assigned_id: params[:assignee])
+    end
+    if params[:aspect]
+      @project = Project.find(params[:aspect])
+      @issues = @issues
     end
 
     respond_to do |format|
@@ -130,6 +139,10 @@ private
     elsif resource == 'modules'
       resource = 'clusters'
     end
-    @issuable = resource.singularize.classify.constantize.find(id)
+    if id == nil || resource == 'issues'
+      @issuable = nil
+    else
+      @issuable = resource.singularize.classify.constantize.find(id)
+    end
   end
 end

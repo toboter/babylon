@@ -30,7 +30,7 @@ class Ability
       can [:edit, :update], Person, :user_id => nil
       can [:edit, :update], Person, :user_id => user.id
       cannot :destroy, Asset
-      cannot :manage, ['publishing', 'roles', 'recreate-versions', 'development', 'personal-informations']
+      cannot :manage, ['project-assignments', 'publishing', 'roles', 'recreate-versions', 'development', 'personal-informations', 'settings']
     end
 
     if user.role? :editor #kann hinzugefügte Informationen auf published setzen, Standardseiten editieren
@@ -38,7 +38,7 @@ class Ability
       cannot [:edit, :update, :destroy], Person # User sollen sich als Personenprofil selbst und unverbundene Profile editieren und löschen können
       can [:edit, :update, :destroy], Person, :user_id => nil
       can [:edit, :update, :destroy], Person, :user_id => user.id
-      cannot :manage, ['roles', 'recreate-versions', 'development', 'personal-informations', 'Memberships']
+      cannot :manage, ['project-assignments', 'roles', 'recreate-versions', 'development', 'personal-informations', 'Memberships']
     end
 
     if user.role? :admin #kann Rollen editieren (außer su), Module hinzufügen (in seinen Modulen Gruppen und Projekte hinzufügen. Da kann das aber auch der Modul-/Gruppenadmin)

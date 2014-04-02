@@ -20,6 +20,8 @@ class Project < ActiveRecord::Base
 
   validates_associated :memberships
 
+  scope :with_user, lambda{|user| user ? {joins: :members, :conditions => ["user_id = ?", user]} : {}}
+
   def add_first_admin
   	Membership.create :project_id => self.id, :user_id => self.creator_id, :role => "admin"
   end

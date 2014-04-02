@@ -127,6 +127,11 @@ h3 {
 	font-size: 1.65em;
 }
 
+a.no-link {
+	text-decoration: none;
+	color: #555;
+}
+
 .tag-entry a.name, .ic-entry a.name {
 	font-size: 115%;
 	font-weight: bold;

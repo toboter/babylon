@@ -1,7 +1,8 @@
-<% title "Projects", nil %>
+<% title "Projects", nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) if @projectable %>
   <% if @projectable.class.to_s == 'Group' %>
 
     <%= content_tag(:li, link_to("#{@projectable.cluster.name}", cluster_path(@projectable.cluster)) + content_tag(:span, '/', class: 'divider')) %>
@@ -11,29 +12,49 @@
   <%= content_tag :li, "Projects", class: 'active' %>
 <% end %>
 
-<% content_for :main_section do %>
-  <div class="span12">
-  <% @projects.each do |project| %>
-    <div class="well">
-      <h4>
-        <%= link_to [project.projectable, project] do %>
-          <%= project.projectable.name if project.projectable_type == "Cluster" %>
-          <% if project.projectable_type == "Group" %>
-            <%= project.projectable.cluster.name %> /
-            <%= project.projectable.name %>
-          <% end %>
-          /
-          <%= project.name %>
-        <% end %>
-      </h4>
 
-      <% if project.documents.doctype('Introduction') %>
-        <h5 class="muted"><%= project.documents.doctype('Introduction').title %></h5>
-        <p><%= project.documents.doctype('Introduction').content %> ... <%= link_to 'read more', [project.documents.doctype('Introduction').documentable, project.documents.doctype('Introduction')] %></p>
+<% content_for :main_section do %>
+  <%= content_tag :div, class: "span12" do %>
+    <h1>Projects in "<%= link_to @projectable.name, @projectable %>"</h1>
+  <% end if @projectable %>
+
+  <div class="span3">
+    <%= content_tag :div, class: "documents-options" do %>
+      <ul class="nav nav-pills nav-stacked">
+        <%= content_tag :li, class: "#{'active' unless params[:ufilter]}" do %>
+          <%= link_to polymorphic_url([@projectable, :projects]) do %>
+            All Projects
+            <span class="cnt pull-right"><%= @all_projects.count %></span>
+          <% end %>
+        <% end %>
+        <%= content_tag :li, class: "#{'active' if params[:ufilter]=='you-are-in'}" do %>
+          <%= link_to polymorphic_url([@projectable, :projects], ufilter: 'you-are-in', state: params[:state]) do %>
+            You are in
+            <span class="cnt pull-right"><%= @current_user_projects.count %></span>
+          <% end %>
+        <% end %>
+      </ul>
+    <% end if @projectable %>
+  </div>
+
+  <div class="span9">
+    <%= content_tag :div, class: "projects-options row-fluid" do %>
+      <%= content_tag :div, class: "btn-group" do %>
+        <%= link_to "#{@projectable.group_projects.count} Group projects", polymorphic_url([@projectable, :projects], state: 'group', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='group'}" %>
+        <%= link_to "#{@projectable.projects.count} Module projects", polymorphic_url([@projectable, :projects], state: 'module', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='module'}" %>
+      <% end if @projectable.class.to_s == 'Cluster' %>
+      <div class="pull-right" style="<%= 'margin: 1em 0;' if @projectable.class.to_s == 'Group' %>">
+        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-create" if @projectable %>
+      </div>
+    <% end if @projectable %>
+    <div class="projects-list row-fluid">
+      <% if @projects.any? %>
+        <%= render @projects %>
       <% else %>
-        <p>No Introduction available</p>
+        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:0px;">
+          <p class="text-center">No projects to show. <%= link_to 'Create a new project.', polymorphic_path([:new, @projectable, :project]) if @projectable %></p>
+        </div>
       <% end %>
     </div>
-  <% end %>  
   </div>
 <% end %>

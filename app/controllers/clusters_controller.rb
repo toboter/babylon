@@ -17,11 +17,14 @@ class ClustersController < ApplicationController
   # GET /clusters/1.json
   def show
     @cluster = Cluster.find(params[:id])
+    
     @project_members = @cluster.projects.map {|project| [project.members.map {|member| member.id }]}.flatten
     @group_project_members = @cluster.group_projects.map {|project| [project.members.map {|member| member.id }]}.flatten
     @raw_members = @project_members+@group_project_members
     @members = User.find(@raw_members)
-    @all_projects = @cluster.projects+@cluster.group_projects
+
+    @projects = Project.where(id: (@cluster.project_ids+@cluster.group_project_ids))
+
     @cluster_bucket = @cluster.buckets.find_by_name('Cover Pictures')
 
     respond_to do |format|

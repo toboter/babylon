@@ -12,19 +12,30 @@
 <% content_for :main_section do %>
   <div class="span12">
   	<% @clusters.each do |cluster| %>
-      <%= link_to cluster do %>
-        <div class="well">
-          <div class="row-fluid cluster-entry">
+      <div class="well">
+        <div class="row-fluid cluster-entry">
+          <%= link_to cluster do %>
             <%= content_tag :div, class: 'span2' do %>
-              <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.big_thumb.url) : image_tag("icons/no_picture.svg") %>
+              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg") %>
             <% end %>
-            <%= content_tag :div, class: 'span10' do %>
-              <h1><%= cluster.name %></h1>
-              <p><%= cluster.documents.doctype('Introduction').abstract.present? ? cluster.documents.doctype('Introduction').abstract : "No abstract to show." if cluster.documents.doctype('Introduction') %></p>
+            <%= content_tag :div, class: 'span7' do %>
+              <h1><%= link_to cluster.name, cluster %></h1>
+              <p><%= cluster.documents.doctype('Introduction').abstract.present? ? markdown(cluster.documents.doctype('Introduction').abstract) : "No abstract to show." if cluster.documents.doctype('Introduction') %></p>
             <% end %>
-          </div>
+          <% end %>
+          <%= content_tag :div, class: 'span3' do %>
+            <ul class="unstyled">
+              <li>Speaker: <%= name_only_or_link_to(cluster.speaker) %></li>
+              <li>Admin: <%= name_only_or_link_to(cluster.cluster_admin) %></li>
+              <small>
+                <li>Created on: <%= cluster.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
+              </small>
+            </ul>
+            <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if cluster.contact.present? %>
+            <p><%= markdown(cluster.contact) if cluster.contact %></p>
+          <% end %>
         </div>
-      <% end %>
+      </div>  
 	  <% end %>
   </div>
 <% end %>

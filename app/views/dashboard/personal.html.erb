@@ -1,0 +1,141 @@
+<% title "Your Dashboard", "#{current_user.available_name}" %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to current_user.available_name, person_path(current_user)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, 'Dashboard', class: 'active' %>
+<% end %>
+
+<% content_for :add_section do %>
+
+<% end if can? :manage, 'site' %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <div class="row-fluid">
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="well">
+          <h6 class="muted">Upcoming tasks <span class="badge badge-warning pull-right"><%= current_user.todos.where(completed: false).count %></span></h6>
+          <ul class="unstyled">
+          <% for todo in current_user.todos.where(completed: false).order('due_to DESC').limit(3) do %>
+            <li style="padding-top:1em;">
+              <%= link_to todo.name, [todo.project, todo] %><br />
+              <small>
+                Remaining time <%= distance_of_time_in_words_to_now(todo.due_to) %> 
+                <%= content_tag :span do %>
+                  <i class="icon-tasks"></i> Depends on <%= pluralize(todo.dependencies.count, 'task') %>
+                <% end if todo.todo_dependencies.any? %>
+              </small>
+            </li>
+          <% end %>
+          </ul>
+          <ul class="nav nav-pills">
+            <%= content_tag :li, class: 'pull-right' do %>
+              <%= link_to todos_path(assignee: current_user) do %>
+                All Tasks you are assigned
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="well">
+          <h6 class="muted">Issues you are assigned <span class="badge badge-warning pull-right"><%= current_user.issues.where(closed: false).count %></span></h6>
+          <ul class="unstyled">
+          <% for issue in current_user.issues.where(closed: false).order('created_at DESC').limit(3) do %>
+            <li style="padding-top:1em;">
+              <%= link_to issue.name, [issue.issuable, issue] %><br />
+              <small>
+                Opend by <%= name_only_or_link_to(issue.creator) %>, 
+                <%= distance_of_time_in_words_to_now(issue.created_at) %> ago 
+                <%= content_tag :span do %>
+                  <i class="icon-comment"></i> <%= pluralize(issue.comments.count, 'comment') %>
+                <% end if issue.comments.any? %>
+              </small>
+            </li>
+          <% end %>
+          </ul>
+          <ul class="nav nav-pills">
+            <%= content_tag :li, class: 'pull-right' do %>
+              <%= link_to issues_path(assignee: current_user) do %>
+                All Issues you are assigned
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= content_tag :div, class: 'span4' do %>
+        <div class="dashboard-options">
+          <ul class="nav nav-pills nav-stacked">
+            <%= content_tag :li do %>
+              <%= link_to roles_path do %>
+                Administrate Users and Roles
+                <span class="badge pull-right"><%= User.without_user(current_user).count %></span>
+              <% end %>
+            <% end if can? :manage, 'roles' %>
+            <%= content_tag :li do %>
+              <%= link_to snippets_path do %>
+                Edit or write news snippets
+                <span class="badge pull-right">-</span>
+              <% end %>
+            <% end if can? :manage, 'publishing' %>
+            <%= content_tag :li do %>
+              <%= link_to item_classifications_path do %>
+                Manage Item classifications
+                <span class="badge pull-right">-</span>
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to tags_path do %>
+                Manage Terms of interest (tags)
+                <span class="badge pull-right">-</span>
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to predicates_path do %>
+                Manage Predicates
+                <span class="badge pull-right">-</span>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end if can? :manage, 'settings' %>
+    </div>
+
+    <%= content_tag :div, class: 'row-fluid' do %>
+      <div class="span7">
+        <%= render current_user.projects %>
+      </div>
+      <div class="span5">
+        <%= render 'shared/calendar' %>
+        <div class="row-fluid">
+          <div class="span12 well" style="margin-top:20px;">
+          <div class="span6">
+            <ul class="unstyled">
+              <li><h5>Account overview</h5></li>
+              <li><%= current_user.available_name %> (<%= current_user.email %>)</li>
+              <%= content_tag :li, link_to(current_user.username+' ('+current_user.role.role+')', dashboard_path) %>
+              <li>Created on: <%= current_user.created_at.strftime("%d.%m.%Y") %></li>
+            </ul>
+          </div>
+          <div class="span6">
+            <ul class="unstyled">
+              <li><h5>Log in overview</h5></li>
+              <li>Currently signed in from: <%= current_user.current_sign_in_ip %></li>
+              <li>since <%= current_user.current_sign_in_at.strftime("%d.%m.%Y %H:%M") %></li>
+              <li>Last time: <%= current_user.last_sign_in_ip %></li>
+              <li>at <%= current_user.last_sign_in_at.strftime("%d.%m.%Y %H:%M") %></li> 
+            </ul>
+          </div>
+          <%= content_tag :h5, 'Current Aspect' if aspect? %>
+          <%= content_tag :p, link_to(full_qualified_name(current_aspect), project_dashboard_path(current_aspect)) if aspect? %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+
+<% end %>

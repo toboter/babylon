@@ -1,12 +1,22 @@
 class TodosController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :load_project, except: :show
+  before_filter :load_project, except: [:show]
   load_and_authorize_resource
   
   # GET /todos
   # GET /todos.json
   def index
-    @todos = @project.todos.order('completed ASC, due_to ASC')
+    if @project
+      @pre_todos = @project.todos.order('completed ASC, due_to ASC')
+    else
+      @pre_todos = Todo.order('completed ASC, due_to ASC')
+    end
+
+    @todos = @pre_todos
+
+    if params[:assignee]
+      @todos = @todos.where(assigned_id: params[:assignee])
+    end
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
@@ -18,7 +28,7 @@ class TodosController < ApplicationController
     @todo = Todo.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "small_sidebar_right_page" }# show.html.erb
+      format.html { render :layout => "index_page" }# show.html.erb
       format.json { render json: @todo }
     end
   end
@@ -26,7 +36,12 @@ class TodosController < ApplicationController
   # GET /todos/new
   # GET /todos/new.json
   def new
-    @todo = @project.todos.new
+    if @project
+      @todo = @project.todos.new
+    elsif aspect?
+      @project = current_aspect
+      @todo = current_aspect.todos.new
+    end
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb
@@ -43,11 +58,16 @@ class TodosController < ApplicationController
   # POST /todos
   # POST /todos.json
   def create
-    @todo =  @project.todos.new(params[:todo])
+    if @project
+      @todo =  @project.todos.new(params[:todo])
+    elsif aspect?
+      @project = current_aspect
+      @todo = current_aspect.todos.new(params[:todo])
+    end
 
     respond_to do |format|
       if @todo.save
-        format.html { redirect_to :back, notice: 'Todo was successfully created.' }
+        format.html { redirect_to [@project, @todo], notice: 'Todo was successfully created.' }
         format.json { render json: @todo, status: :created, location: @todo }
         format.js
       else
@@ -64,7 +84,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.update_attributes(params[:todo])
-        format.html { redirect_to :back, notice: "Todo was successfully updated." }
+        format.html { redirect_to [@project, @todo], notice: "Todo was successfully updated." }
         format.json { head :no_content }
         format.js
       else
@@ -81,7 +101,7 @@ class TodosController < ApplicationController
     @todo.destroy
 
     respond_to do |format|
-      format.html { redirect_to @project }
+      format.html { redirect_to [@project, :todos] }
       format.json { head :no_content }
       format.js
     end
@@ -91,12 +111,10 @@ class TodosController < ApplicationController
 private
 
   def load_project
-    resource, id = request.path.split('/')[1, 2]
-    if resource == 'projects'
-      @project = resource.singularize.classify.constantize.find(id)
+    if params[:project_id]
+      @project = Project.find(params[:project_id])
     else
-      resource, id = request.path.split('/')[3, 4]
-      @project = resource.singularize.classify.constantize.find(id)
+      @project = nil
     end
   end
 end

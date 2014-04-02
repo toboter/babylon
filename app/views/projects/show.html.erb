@@ -70,6 +70,7 @@
     <%= markdown(truncated_content(@project.documents.doctype('Introduction'), length=300)) if @project.documents.doctype('Introduction').content if @project.documents.doctype('Introduction') %>
   </p>
 
+
   <div class="project-options">
     <ul class="nav nav-pills nav-stacked">
       <%= content_tag :li do %>
@@ -119,7 +120,7 @@
     <div id="add_todo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Add a todo</h3>
+        <h3>Add a task to <%= @project.name %></h3>
       </div>
   
       <%= form_for [@project, @project.todos.new], :html => { :class => 'form-horizontal' } do |f| %>

@@ -1,13 +1,30 @@
-<tbody>
+<tr class=<%= todo.completed ? "success" : "warning" %>>
   <%= form_for [todo.project, todo] do |f| %>
-    <%= f.error_messages %>
-    <tr class=<%= todo.completed ? "success" : "warning" %>>
-      <td><%= f.check_box :completed %> <%= f.submit "Update", class: "btn btn-mini" %></td>
-      <td><strong><%= link_to todo.name, [todo.project, todo] %></strong></td>
-      <td><%= todo.assigned.available_name %></td>
-      <td><%= todo.due_to.strftime("%d.%m.%Y") %></td>
-      <td><%= todo.starts_at.strftime("%d.%m.%Y") if todo.starts_at %></td>
-      <td><%= todo.dependencies.map{ |a| content_tag :span, a.name, style: (a.completed ? "color:green;" : "color:red;") }.join(", ").html_safe if todo.dependencies.any? %></td>
-    </tr>
+    <td width="8%"><%= f.check_box :completed %> <%= f.submit "Update", class: "btn btn-mini" %></td>
   <% end %>
-</tbody>
+  <td width="50%">
+  	<span style="font-size:1.5em;font-weight:bold;">
+  		<%= link_to todo.name, [todo.project, todo] %> 
+  		<small></small>
+  	</span>
+  	<%= link_to todo.assigned.person, title: 'Assignee '+todo.assigned.available_name, class: 'pull-right tooltip-right' do %>
+      <%= image_tag((todo.assigned.person ? (todo.assigned.person.profile_picture ? todo.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:25px;') %>
+    <% end if todo.assigned %>
+  	<p>
+  	  Created by <%= name_only_or_link_to(todo.creator) %> 
+  	  <%= distance_of_time_in_words_to_now(todo.created_at) %> ago, 
+  	  has <i class="icon-tasks"></i> <%= pluralize(todo.inverse_dependencies.count, 'dependency') %>
+  	</p>
+  </td>
+  <td width="20%">
+  	<%= link_to 'can start in '+distance_of_time_in_words_to_now(todo.starts_at)+',', '', title: todo.starts_at.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' if todo.starts_at %>
+  	<%= link_to distance_of_time_in_words_to_now(todo.due_to)+' left', '', title: todo.due_to.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' %>
+
+  </td>
+
+  <td>
+  	<%= content_tag :span, style: 'font-size:1.2em;font-weight:bold;color:#555;' do %>
+  	  Depends on "<%= todo.dependencies.map{ |a| link_to a.name, [a.project, a], style: "color:#{a.completed ? 'green' : 'red'}" }.join(", ").html_safe %>"
+  	<% end if todo.dependencies.any? %>
+  </td>
+</tr>

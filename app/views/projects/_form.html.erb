@@ -1,7 +1,6 @@
 <%= form_for [@projectable, @project], :html => { class: "form-horizontal" } do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :projectable_id %>
-  <%= f.hidden_field :projectable_type %>
+
 
   <div class="row">
     <div class="span12">
@@ -24,6 +23,19 @@
     <div class="links controls">
       <%= link_to_add_association "Add Member", f, :memberships %>
     </div>
+
+    <% if can? :manage, 'project-assignments' %>
+      <div class="control-group">
+        <%= f.label :projectable_type, 'Move somewhere else', class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :projectable_id %>
+          <%= f.text_field :projectable_type %>
+        </div>
+      </div>
+    <% else %>
+      <%= f.hidden_field :projectable_id %>
+      <%= f.hidden_field :projectable_type %>
+    <% end %>
 
     <div class="form-actions">
       <%= f.submit "Speichern", :class => 'btn btn-primary' %>
