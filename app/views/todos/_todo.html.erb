@@ -17,8 +17,8 @@
   	</p>
   </td>
   <td width="20%">
-  	<%= link_to 'can start in '+distance_of_time_in_words_to_now(todo.starts_at)+',', '', title: todo.starts_at.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' if todo.starts_at %>
-  	<%= link_to distance_of_time_in_words_to_now(todo.due_to)+' left', '', title: todo.due_to.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' %>
+  	<%= link_to starts_at_state(todo.starts_at)+distance_of_time_in_words_to_now(todo.starts_at)+',', '', title: todo.starts_at.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' if todo.starts_at %>
+  	<%= link_to distance_of_time_in_words_to_now(todo.due_to)+due_to_state(todo.due_to), '', title: todo.due_to.strftime("%d.%m.%Y"), class: 'tooltip-right no-link' %>
 
   </td>
 

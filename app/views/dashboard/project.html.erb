@@ -1,4 +1,5 @@
 <% title "Project Dashboard", current_aspect.name %>
+<% edit_section_for(current_aspect, current_aspect.projectable) %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -22,7 +23,7 @@
             <li style="padding-top:1em;">
               <%= link_to todo.name, [todo.project, todo] %><br />
               <small>
-                Remaining time <%= distance_of_time_in_words_to_now(todo.due_to) %> 
+                <%= link_to distance_of_time_in_words_to_now(todo.due_to)+due_to_state(todo.due_to), '', class: 'no-link tooltip-right', title: todo.due_to.strftime("%d.%m.%Y") %> 
                 <%= content_tag :span do %>
                   <i class="icon-tasks"></i> <%= pluralize(todo.todo_dependencies.count, 'pending dependency') %>
                 <% end if todo.todo_dependencies.any? %>
@@ -50,6 +51,12 @@
         <div class="dashboard-options">
           <ul class="nav nav-pills nav-stacked">
             <%= content_tag :li do %>
+              <%= link_to [current_aspect, :items] do %>
+                Items
+                <span class="badge pull-right"><%= current_aspect.items.count %></span>
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
               <%= link_to [current_aspect, :documents] do %>
                 Documents
                 <span class="badge pull-right"><%= current_aspect.documents.without_document_type.count %></span>
@@ -75,17 +82,35 @@
     <%= content_tag :div, class: 'row-fluid' do %>
 
       <div class="span7">
-        
+    	<table class="table table-bordered table-hover">
+      	  <tbody>
+      		<%= render @current_aspect.items %>
+      	  </tbody>
+    	</table>
+    	<ul class="nav nav-pills">
+          <%= content_tag :li, class: 'pull-right' do %>
+            <%= link_to [current_aspect, :items] do %>
+              All items for this project
+            <% end %>
+          <% end %>
+        </ul>
       </div>
 
       <div class="span5">
-        <div class="dashboard-options">
-          <ul class="nav nav-pills nav-stacked">
 
-          </ul>
-  		</div>
+      <div id="recent-references">
+      	<h6 class="muted">Recently added references</h6>
+  		<%= render 'references/bib_entries', :references => @current_aspect.references.order('project_references.created_at DESC').limit(3) %>
+        <ul class="nav nav-pills">
+          <%= content_tag :li, class: 'pull-right' do %>
+            <%= link_to [current_aspect, :references] do %>
+              All references for this project
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
 
-        <%= render 'shared/calendar' %>
+      <%= render 'shared/calendar' %>
 
         <div class="row-fluid">
           <div class="span12 well" style="margin-top:20px;">
@@ -105,6 +130,20 @@
           <%= content_tag :p, link_to(full_qualified_name(current_aspect), project_dashboard_path(current_aspect)) if aspect? %>
           </div>
         </div>
+      
+      <h6 class="muted">People in this project</h6>
+      <% for membership in current_aspect.memberships do %>
+      <div class="media">
+        <%= link_to membership.user.person, class: 'pull-left tooltip-right', title: membership.user.available_name do %>
+          <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded media-object', :"data-src" => "holder.js/32x32", style: 'width:40px;') %>
+        <% end %>
+        <div class="media-body">
+          <h5 class="media-heading"><%= name_only_or_link_to(membership.user) %></h5>
+          <p><%= membership.role.humanize %></p>
+        </div>
+      </div>
+      <% end %>
+
       </div>
     <% end %>
   </div>

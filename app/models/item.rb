@@ -26,6 +26,9 @@ class Item < ActiveRecord::Base
   has_many :documents, as: :documentable
   has_many :issues, as: :issuable, dependent: :destroy
 
+  has_many :studyassignments, :dependent => :destroy
+  has_many :projects, through: :studyassignments
+
   validates_presence_of :collection_id, :inventory_number
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
 

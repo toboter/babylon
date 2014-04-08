@@ -52,6 +52,7 @@ class TodosController < ApplicationController
   # GET /todos/1/edit
   def edit
     @todo = @project.todos.find(params[:id])
+    session[:redirection] = @todo.id
     render :layout => "form_page"
   end
 
@@ -84,7 +85,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       if @todo.update_attributes(params[:todo])
-        format.html { redirect_to [@project, @todo], notice: "Todo was successfully updated." }
+        format.html { redirect_to (session[:redirection] == @todo.id) ? [@project, @todo] : :back, notice: "Todo was successfully updated." }
         format.json { head :no_content }
         format.js
       else

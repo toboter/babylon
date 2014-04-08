@@ -30,7 +30,7 @@ class Ability
       can [:edit, :update], Person, :user_id => nil
       can [:edit, :update], Person, :user_id => user.id
       cannot :destroy, Asset
-      cannot :manage, ['project-assignments', 'publishing', 'roles', 'recreate-versions', 'development', 'personal-informations', 'settings']
+      cannot :manage, ['curation', 'project-assignments', 'publishing', 'roles', 'recreate-versions', 'development', 'personal-informations', 'settings']
     end
 
     if user.role? :editor #kann hinzugefügte Informationen auf published setzen, Standardseiten editieren

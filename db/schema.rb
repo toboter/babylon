@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140313122449) do
+ActiveRecord::Schema.define(:version => 20140404111240) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -329,8 +329,6 @@ ActiveRecord::Schema.define(:version => 20140313122449) do
 
   create_table "people", :force => true do |t|
     t.integer  "user_id"
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "grade"
     t.string   "nickname"
     t.datetime "date_of_birth"
@@ -441,6 +439,15 @@ ActiveRecord::Schema.define(:version => 20140313122449) do
     t.boolean  "pinned"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  create_table "studyassignments", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "project_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end

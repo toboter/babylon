@@ -4,7 +4,7 @@ class ProjectsSessionController < ApplicationController
       project = Project.find(params[:project_id])
       if project
         session[:project_id] = project.id
-        redirect_to :back, :notice => "Changed aspect to #{current_aspect.name}."
+        redirect_to [project, 'dashboard'], :notice => "Changed aspect to #{current_aspect.name}."
       else
         flash.now[:alert] = "Something went wrong."
         redirect_to :back, :notice => "Error."

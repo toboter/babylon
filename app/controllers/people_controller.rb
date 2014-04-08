@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.order(:last_name)
+    @people = Person.includes(:names).search(params[:search]).order("person_names.last_name ASC")
 
     respond_to do |format|
       format.html { render :layout => "index_page" } # index.html.erb

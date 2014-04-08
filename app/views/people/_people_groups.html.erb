@@ -1,17 +1,18 @@
 <div class="row-fluid">
   <div class="span12">
-    <% people.in_groups_of(3, false).each do |row_people| %>
+    <% people.in_groups_of(4, false).each do |row_people| %>
       <div class="row-fluid">
         <% for person in row_people do %>
-          <div class="span4">
-            <%= link_to person, style:'text-decoration:none' do %>
-              <div class="well well-small">
-                <%= graded_fullname(person) %>
-                <% if person.user_id %>
-                  <span data-tooltip class="has-tip pull-right" title="This Person has a connected user-account in $Babylon."><i class="icon-resize-small"></i></span>
-                <% end %>
+          <div class="span3">
+            <div class="media" style="height:80px;">
+              <%= link_to person, class: 'pull-left tooltip-right', title: person.fullname do %>
+              <%= image_tag((person ? (person.profile_picture ? person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded media-object', style: 'width:40px;') %>
+              <% end %>
+              <div class="media-body">
+                <h5 class="media-heading"><%= link_to person.fullname, person %></h5>
+                <p><%= person.profession %> <%= person.affiliations.where(primary: true).first.institution.name if person.affiliations.where(primary: true).any? %></p>
               </div>
-            <% end %>
+            </div>
           </div>
         <% end %>
       </div>

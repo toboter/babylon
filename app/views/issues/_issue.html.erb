@@ -1,5 +1,5 @@
 <tr>
-  <td width="5%"><%= content_tag :i, '', class: issue.closed ? 'icon-ok-circle' : 'icon-exclamation-sign' %></td>
+  <td width="5%"><%= content_tag :i, '', class: issue.closed ? 'icon-ok' : 'icon-warning-sign' %></td>
   <td width="85%">
     <span style="font-size:1.5em;font-weight:bold;"><%= link_to issue.name, [issue.issuable, issue] %></span><%= ' ['+issue.issuable.class.to_s+': '+issue.issuable.name+']' if !@issuable %>
     <%= link_to issue.assigned.person, title: 'Assignee '+issue.assigned.available_name, class: 'pull-right' do %>

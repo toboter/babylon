@@ -13,6 +13,9 @@ class Project < ActiveRecord::Base
   belongs_to :projectable, :polymorphic => true
   has_many :todos, dependent: :destroy
 
+  has_many :studyassignments, :dependent => :destroy
+  has_many :items, through: :studyassignments
+
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references
 

@@ -46,7 +46,7 @@
           <%= link_to 'Abbrechen', projects_path, :class => 'btn' %>
         <% end %>
       <% else %>
-        <%= link_to 'Abbrechen', [@project.projectable, @project], :class => 'btn' %>
+        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
       <% end %>
     </div>
     </div>

@@ -2,8 +2,8 @@ class Person < ActiveRecord::Base
   extend FriendlyId
   friendly_id :fullname, use: [:slugged, :history]
 
-  attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :first_name, :gender, :grade, 
-                  :last_name, :nickname, :profession, :public_email, :updater_id,
+  attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :gender, :grade, 
+                  :nickname, :profession, :public_email, :updater_id,
                   :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes,
                   :names_attributes, :cv, :general
   
@@ -44,12 +44,11 @@ class Person < ActiveRecord::Base
   end
 
   def fullname
-  	# "#{first_name} #{last_name}"
-    self.names.first.first_name + ' ' + self.names.first.last_name
-  end
-
-  def name
-    fullname
+    if names.where(primary: true).any?
+      names.where(primary: true).first.name
+    else
+      names.first.name
+    end
   end
 
   def profile_picture
@@ -58,7 +57,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w( first_name last_name ) + _ransackers.keys
+    %w( person_names.first_name person_names.last_name ) + _ransackers.keys
   end
 
   def primary_or_first_institution
@@ -66,6 +65,14 @@ class Person < ActiveRecord::Base
       affiliations.where(primary: true).first.institution
     else
       affiliations.first.institution
+    end
+  end
+
+  def self.search(search)
+    if search
+      where("concat(person_names.first_name, ' ', person_names.last_name) ILIKE ?", "%#{search}%")
+    else
+      scoped
     end
   end
 

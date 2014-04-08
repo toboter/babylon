@@ -1,11 +1,16 @@
 class ItemsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
+  before_filter :load_project, except: [:show]
   load_and_authorize_resource
 
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    if @project
+      @items = @project.items
+    else
+      @items = Item.all
+    end
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
@@ -20,7 +25,7 @@ class ItemsController < ApplicationController
     @images = @item.assets.where('content_type LIKE ?', '%image%')
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render :layout => "index_page" }# show.html.erb
       format.json { render json: @item }
     end
   end
@@ -84,6 +89,17 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to items_url }
       format.json { head :no_content }
+    end
+  end
+
+
+private
+
+  def load_project
+    if params[:project_id]
+      @project = Project.find(params[:project_id])
+    else
+      @project = nil
     end
   end
 end

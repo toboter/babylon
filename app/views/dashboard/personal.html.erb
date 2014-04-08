@@ -21,7 +21,7 @@
             <li style="padding-top:1em;">
               <%= link_to todo.name, [todo.project, todo] %><br />
               <small>
-                Remaining time <%= distance_of_time_in_words_to_now(todo.due_to) %> 
+                <%= distance_of_time_in_words_to_now(todo.due_to)+due_to_state(todo.due_to) %> 
                 <%= content_tag :span do %>
                   <i class="icon-tasks"></i> Depends on <%= pluralize(todo.dependencies.count, 'task') %>
                 <% end if todo.todo_dependencies.any? %>

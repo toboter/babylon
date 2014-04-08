@@ -1,38 +1,24 @@
-<% title "Items", nil %>
+<% title 'Items for '+'"'+@project.name+'"', nil, nil if @project %>
+<% title 'All Items', nil unless @project %>
 
-<% content_for :add_section do %>
-  <li><%= link_to 'Item', new_item_path %></li>
-<% end if can? :edit, @items %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <li class="active">Items</li>
+  <%= content_tag(:li, (link_to @project.name, @project) + content_tag(:span, '/', class: 'divider')) if @project %>
+  <%= content_tag :li, "Items", class: 'active' %>
+
 <% end %>
 
 <% content_for :main_section do %>
   <div class="span12">
+
+    <%= content_tag :h1 do %>
+      Items for "<%= link_to @project.name, @project %>"
+    <% end if @project %>
+
     <table class="table table-bordered table-hover">
-      <thead>
-        <tr>
-          <th>Inventory Number</th>
-          <th>Title</th>
-          <th>Accession Date</th>
-          <th>Context</th>
-          <th>Tags</th>
-          <th></th>
-        </tr>
-      </thead>
       <tbody>
-        <% @items.each do |item| %>
-          <tr>
-            <td><%= item.inventory_name %></td>
-            <td><%= item.title %></td>
-            <td><%= item.accession_date.strftime("%d.%m.%Y") %></td>
-            <td><%= item.context_id %></td>
-            <td><%= item.tags.map{ |a| a.name }.join(", ").html_safe %></td>
-            <td><%= link_to 'Show', item %></td>
-          </tr>
-        <% end %>
+        <%= render @items %>
       </tbody>
     </table>
   </div>

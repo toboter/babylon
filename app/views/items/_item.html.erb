@@ -1,0 +1,37 @@
+<tr>
+  <td width="10%">
+  	<%= image_tag item.assets.where('content_type LIKE ?', '%image%').first.assetfile.mini_thumb.url if item.assets.where('content_type LIKE ?', '%image%').first %>
+  </td>
+  <td width="20%">
+    <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.inventory_name, item %></span>
+    <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| c.name }.join(" / ") if item.classification %>
+  </td>
+  <td width="50%">
+    <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, a.name, class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
+    <p>
+      <%= item.title.present? ? item.title : item.inventory_name %><br />
+      Accession <%= item.accession_date.strftime("%d.%m.%Y") %>
+      <%= content_tag :span do %>
+        <i class="icon-warning-sign"></i> <%= link_to pluralize(item.issues.count, 'issue'), [item, :issues] %>
+        <%= content_tag :i, '',class: 'icon-ok' if !item.issues.where(closed: false).any? %>
+      <% end if item.issues.any? %>
+    </p>
+            <%= content_tag :div, class: "" do %>
+              <%= content_tag :div, class: "" do %>
+                <%= link_to add_studyassignment_path(item_id: item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-mini btn-success' do %>
+                  <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+                  <%= current_aspect.name %>
+                <% end %>
+              <% end if !current_aspect.items.include?(item) %>
+              <%= content_tag :div, class: "" do %>
+                <%= link_to destroy_studyassignment_path(item_id: item.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-mini btn-warning' do %>
+                  <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+                  <%= current_aspect.name %>
+                <% end %>
+              <% end if current_aspect.items.include?(item) %>
+            <% end if aspect? && (can? :manage, 'curation') %>
+  </td>
+  <%= content_tag :td, width: "20%", class: "" do %>
+    <%= item.context_id %>
+  <% end %>
+</tr>

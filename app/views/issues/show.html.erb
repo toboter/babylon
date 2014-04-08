@@ -3,6 +3,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @issuable.class.name.pluralize, [@issuable.class.to_s.downcase.pluralize]) + content_tag(:span, '/', class: 'divider')) if @issuable %>
   <%= content_tag(:li, (link_to @issuable.name, @issuable) + content_tag(:span, '/', class: 'divider')) if @issuable %>
   <%= content_tag(:li, (link_to 'Issues', [@issuable, :issues]) + content_tag(:span, '/', class: 'divider')) if @issuable %>
   <%= content_tag :li, @issue.name, class: 'active' %>

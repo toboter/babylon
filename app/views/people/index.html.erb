@@ -12,10 +12,14 @@
 
 <% content_for :main_section do %>
   <%= content_tag :div, class: 'span12' do %>
-    <h4>People who are members in projects</h4>
-    <%= render "people_groups", people: @people.joins(user: :memberships).uniq %>
-
-    <h4>All people</h4>
-    <%= render "people_groups", people: @people %>
+    <div class="options" style="">
+      Other filters
+      <%= form_tag people_path, :method => 'get', :id => "people_search", class: 'form-search pull-right' do %>
+        <%= text_field_tag :search, params[:search], class: 'search-query' %>
+        <%= submit_tag "Search", :name => nil, class: 'btn' %>
+      <% end %>
+    </div>
+    <div id="people" style="padding-top:50px;"><%= render "people_groups", people: @people %></div>
+    
   <% end %>
 <% end %>

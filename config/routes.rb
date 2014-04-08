@@ -14,10 +14,13 @@ Babylon::Application.routes.draw do
 
 
   # Resource parts
+  delete 'destroy_studyassignment' => 'studyassignments#destroy', :as => :destroy_studyassignment
+  post 'add_studyassignment' => 'studyassignments#create', :as => :add_studyassignment
   resources :items do
     resources :buckets
     resources :documents
     resources :issues
+    resources :references
   end
 
 
@@ -45,7 +48,7 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :todos
     resources :references, :path => 'bibliography'
-    # get 'dashboard', to: 'dashboard#project'
+    resources :items
   end
 
   resources :todos, only: [:index, :show, :new] do

@@ -1,6 +1,8 @@
 class PersonName < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :person_id, :primary
 
+  attr_reader :name
+
   stampable
 
   belongs_to :person

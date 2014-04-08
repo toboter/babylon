@@ -1,4 +1,4 @@
-<% title "#{@item.inventory_name}", nil, nil %>
+<% title @item.inventory_name, nil, nil %>
 <% edit_section_for(@item, nil) %>
 <% publishing_section_for(@item) %>
 
@@ -14,95 +14,125 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <%= tagging_infos_for(@item) %><br />
-  <%= image_tag @images.first.assetfile.normal.url if @images.first %>
-<% end %>
-
-<% content_for :sidebar_section do %>
-  <div class="issues-options well well-small">
-    <i class="icon-exclamation-sign"></i>
-    <%= link_to 'Issues', item_issues_path(@item) %> 
-    <%= content_tag :span, @item.issues.count, class: 'badge pull-right' %>
-  </div>
-
+  <div class="span12">
     <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
-    <div class="info_section">
-      <table class="table table-bordered table-hover">
-        <%= item_description('Inventory Number', @item.inventory_name) %>
-        <%= item_description('Context', @item.context_id) %>
-        <%= item_description('Classification', @item.classification.name) if @item.classification %>
-      </table> 
+    <div class="row-fluid">
+      <div class="span4">
+        <%= content_tag :div, id: @item.buckets.first.id.to_s+"-album-carousel", class: "carousel slide", :"data-interval" => false do %>
+          <ol class="carousel-indicators">
+            <% for asset in @item.buckets.first.assets do %>
+              <li data-target="#<%= @item.buckets.first.id %>-album-carousel" data-slide-to="<%= asset.id %>" class="<%= 'active' if asset == @item.buckets.first.cover %>"></li>
+            <% end %>
+          </ol>
+          <!-- Carousel items -->
+          <div class="carousel-inner">
+            <% for asset in @item.buckets.first.assets do %>
+              <div class="item <%= 'active' if asset == @item.buckets.first.cover %>">
+                <div class="crop"><%= image_tag asset.assetfile.large.url %></div>
+                <div class="carousel-caption">
+                  <h4><%= asset.name %></h4>
+                  <p><%= asset.caption %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Carousel nav -->
+          <a class="carousel-control left" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="next">&rsaquo;</a>
+        <% end if @item.buckets.first && @item.buckets.first.assets.any? %>
+      </div>
+  
+      <div class="span8">
+        <div class="row-fluid">
+          <div class="span6">
+            <div class="info_section">
+              <table class="table table-bordered table-hover">
+                <%= item_description('Inventory Number', @item.inventory_name) %>
+                <%= item_description('Context', @item.context_id) %>
+                <%= item_description('Classification', @item.classification.name) if @item.classification %>
+              </table> 
+              <%= content_tag :span, tagging_infos_for(@item), class: 'pull-right' %>
+              <%= markdown(@item.description) if @item.description.present? %> 
+            </div>
+          </div>
+          <div class="span6">
+            <%= link_to 'Publication status','', class: 'btn btn-block', style: 'margin-bottom:5px;' %>
+            <%= content_tag :div, class: "item-options well" do %>
+              <%= content_tag :div, class: "" do %>
+                <%= link_to add_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-block btn-success' do %>
+                  <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+                  <%= current_aspect.name %>
+                <% end %>
+              <% end if !current_aspect.items.include?(@item) %>
+              <%= content_tag :div, class: "" do %>
+                <%= link_to destroy_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-block btn-warning' do %>
+                  <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+                  <%= current_aspect.name %>
+                <% end %>
+              <% end if current_aspect.items.include?(@item) %>
+            <% end if aspect? %>
+            <div class="issues-options well well-small">
+              <i class="icon-exclamation-sign"></i>
+              <%= link_to 'Issues', item_issues_path(@item) %> 
+              <%= content_tag :span, @item.issues.count, class: 'badge pull-right' %>
+            </div>
+            <div class="item-options">
+              <ul class="nav nav-pills nav-stacked">
+                <%= content_tag :li do %>
+                  <%= link_to [@item, :documents] do %>
+                    Documents
+                    <span class="badge pull-right"><%= @item.documents.without_document_type.count %></span>
+                  <% end %>
+                <% end %>
+                <%= content_tag :li do %>
+                  <%= link_to [@item, :references] do %>
+                    Bibliography/References
+                    <span class="badge pull-right"><%= @item.references.count %></span>
+                  <% end %>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="accordion" id="item-accordion">
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseOne">
-            Description
-          </a>
+  
+    <div class="row-fluid">
+      <div class="span4">
+        History
+        <div class="accordion-inner">
+          <%= item_description('Accession Date', @item.accession_date) %><br />
+          <% for action in @item.actions do %>
+            <p><%= action.inspect %></p>
+          <% end %>
         </div>
-        <div id="collapseOne" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <%= markdown(@item.description) if @item.description %> 
-          </div>
-        </div>
-      <% end if @item.description.present? %>
 
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseOneB">
-            History
-          </a>
+        Buckets
+        <div class="accordion-inner">
+          <% for bucket in @item.buckets do %>
+            <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
+          <% end if @item.buckets.any? %>
         </div>
-        <div id="collapseOneB" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <%= item_description('Accession Date', @item.accession_date) %><br />
-            <%= @item.actions.inspect %> 
-          </div>
-        </div>
-      <% end %>
+      </div>
 
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseThree">
-            References
-          </a>
+      <div class="span8">
+        Project Workspace Info
+        <div class="accordion-inner">
+          <% for studyassignment in @item.studyassignments do %>
+            <li><%= name_only_or_link_to(studyassignment.creator) %> in <%= link_to "#{studyassignment.project.name}", [studyassignment.project.projectable, studyassignment.project] %></li>
+          <% end if @item.studyassignments.any? %>
         </div>
-        <div id="collapseThree" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <small><%= render "reference_entries", :citations => @item.citations %></small>
-          </div>
-        </div>
-      <% end %>
 
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseFour">
-            Buckets
-          </a>
+        Documents
+        <div class="accordion-inner">
+          <%= render @item.documents %>
         </div>
-        <div id="collapseFour" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <ul class="unstyled">
-              <% for bucket in @item.buckets do %>
-                <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      <% end if @item.buckets.any? %>
 
-      <%= content_tag :div, class: "accordion-group" do %>
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-accordion" href="#collapseFive">
-            Docs
-          </a>
+        References
+        <div class="accordion-inner">
+          <%= render "reference_entries", :citations => @item.citations %>
         </div>
-        <div id="collapseFive" class="accordion-body collapse">
-          <div class="accordion-inner">
-            <%= render "documents/without_document_type", :var => @item %> 
-          </div>
-        </div>
-      <% end if @item.documents.any? %>
-
+      </div>
     </div>
+  </div>
 <% end %>
