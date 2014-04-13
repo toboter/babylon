@@ -79,6 +79,7 @@
         </div>
       <% end if can? :manage, 'settings' %>
     </div>
+    
     <%= content_tag :div, class: 'row-fluid' do %>
 
       <div class="span7">
@@ -132,16 +133,22 @@
         </div>
       
       <h6 class="muted">People in this project</h6>
-      <% for membership in current_aspect.memberships do %>
-      <div class="media">
-        <%= link_to membership.user.person, class: 'pull-left tooltip-right', title: membership.user.available_name do %>
-          <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded media-object', :"data-src" => "holder.js/32x32", style: 'width:40px;') %>
-        <% end %>
-        <div class="media-body">
-          <h5 class="media-heading"><%= name_only_or_link_to(membership.user) %></h5>
-          <p><%= membership.role.humanize %></p>
+      <% current_aspect.memberships.in_groups_of(2, false).each do |row_members| %>
+        <div class="row-fluid">
+          <% for membership in row_members do %>
+            <div class="span6">
+              <div class="media">
+                <%= link_to membership.user.person, class: 'pull-left tooltip-right', title: membership.user.available_name do %>
+                  <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded media-object', :"data-src" => "holder.js/32x32", style: 'width:40px;') %>
+                <% end %>
+                <div class="media-body">
+                  <h5 class="media-heading"><%= name_only_or_link_to(membership.user) %></h5>
+                  <p><%= membership.role.humanize %></p>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
-      </div>
       <% end %>
 
       </div>

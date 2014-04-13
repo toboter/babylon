@@ -32,9 +32,11 @@
     <hr class="controls">
 
     <div class="control-group" id="if_editorial">
-      <%= f.label :editor_ids, "Editors", :class => 'control-label' %>
-      <div class="controls">
-        <%= f.collection_select :editor_ids, PersonName.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+      <%= f.fields_for :editorships do |builder| %>
+        <%= render "editorship_fields", :f => builder %>
+      <% end %>
+      <div class="links controls">
+        <%= link_to_add_association "Add Editor", f, :editorships %>
       </div>
     </div>
 

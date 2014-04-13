@@ -15,6 +15,7 @@ $linkColor: #648564;
     position: static;
 }
 
+
 body { padding-top: 50px; }
 
 .navbar {
@@ -147,6 +148,15 @@ a.no-link {
 
 .well h1, .well .lead {
 	font-size: 135%;
+}
+
+div.field_with_errors { 
+  .control-label {
+	color: red;
+  }
+  select {
+    border: 2px solid red;
+  }
 }
 
 /* Thx to Github for the color schema of this button */

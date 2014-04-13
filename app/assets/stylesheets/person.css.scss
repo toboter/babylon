@@ -1,0 +1,17 @@
+.person-sidebar {
+	.affix-top {
+		
+	}
+	.affix { 
+		@media (min-width: 768px) {
+			position:fixed;
+			top:90px;
+		}
+	}
+}
+
+#scroll-pane {
+	section {
+		padding-bottom:30px;
+	}
+}

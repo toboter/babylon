@@ -5,6 +5,8 @@
       <%= content_tag :h2, yield(:subtitle), class: 'subtitle' if show_title? %>
   	</div>
   </div>
+
+  <%= yield(:top_over) %>
   
   <div class="row">
   	<div class="span10">

@@ -22,6 +22,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :memberships, allow_destroy: true
 
   validates_associated :memberships
+  validates_presence_of :name, :projectable_id, :projectable_type
 
   scope :with_user, lambda{|user| user ? {joins: :members, :conditions => ["user_id = ?", user]} : {}}
 

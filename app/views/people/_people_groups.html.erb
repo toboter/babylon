@@ -5,11 +5,11 @@
         <% for person in row_people do %>
           <div class="span3">
             <div class="media" style="height:80px;">
-              <%= link_to person, class: 'pull-left tooltip-right', title: person.fullname do %>
+              <%= link_to person, class: 'pull-left tooltip-right', title: person.name do %>
               <%= image_tag((person ? (person.profile_picture ? person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded media-object', style: 'width:40px;') %>
               <% end %>
               <div class="media-body">
-                <h5 class="media-heading"><%= link_to person.fullname, person %></h5>
+                <h5 class="media-heading"><%= link_to person.name, person %></h5>
                 <p><%= person.profession %> <%= person.affiliations.where(primary: true).first.institution.name if person.affiliations.where(primary: true).any? %></p>
               </div>
             </div>

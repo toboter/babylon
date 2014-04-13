@@ -6,7 +6,6 @@ class Affiliation < ActiveRecord::Base
 
   stampable
 
-  validates_presence_of :person_id, :institution_id
   validates_uniqueness_of :primary, scope: :person_id, allow_blank: true, message: 'You can only have one primary institution'
   validates_uniqueness_of :institution_id, scope: :person_id
 

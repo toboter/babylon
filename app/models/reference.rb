@@ -1,5 +1,5 @@
 class Reference < ActiveRecord::Base
-  attr_accessible :creator_id, :updater_id, :title, :author_ids, :original_date_text, :alternative_author, :slug,
+  attr_accessible :creator_id, :updater_id, :title, :authorships_attributes, :original_date_text, :alternative_author, :slug,
                   :first_page, :last_page, :book_id, :uri, :tag_ids
 
   stampable
@@ -7,10 +7,11 @@ class Reference < ActiveRecord::Base
   attr_writer :original_date_text
 
   validates_presence_of :title
+
   #validates_presence_of :book_id, unless: :uri? Die Validierung erfolgt in dem Fall über "reject_if" im book model
 
-  has_many :authorships, :dependent => :destroy, :order => 'position'
-  has_many :authors, :class_name => 'PersonName', through: :authorships, :source => :person_name  
+  has_many :authorships, :dependent => :destroy
+  has_many :authors, :class_name => 'PersonName', through: :authorships, :source => :person_name, :order => 'authorships.position'
 
   has_many :documents, as: :documentable, :dependent => :destroy
   has_many :buckets, as: :attachable, :dependent => :destroy
@@ -28,16 +29,14 @@ class Reference < ActiveRecord::Base
   has_many :citations, :dependent => :destroy
   has_many :items, class_name: 'Citation', conditions: "citable_type = 'Item'"
 
+  accepts_nested_attributes_for :authorships, allow_destroy: true
+
   before_save :save_original_date_text
 
   scope :without, lambda { |ref| { :conditions => ['id not in (?)', ref.id] }}
 
   def name
     title
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-    %w( title ) + _ransackers.keys
   end
 
   def entries_for_select
@@ -56,6 +55,7 @@ class Reference < ActiveRecord::Base
       end
     end
   end
+
 
 #  def self.import(file)
 #    spreadsheet = open_spreadsheet(file)

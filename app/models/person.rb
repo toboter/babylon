@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :fullname, use: [:slugged, :history]
+  friendly_id :name, use: [:slugged, :history]
 
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :gender, :grade, 
                   :nickname, :profession, :public_email, :updater_id,
@@ -42,8 +42,8 @@ class Person < ActiveRecord::Base
   def build_profile_picture_bucket
     Bucket.create :attachable_id => self.id, :attachable_type => "Person", :name => "Profile Pictures", :name_fixed => true
   end
-
-  def fullname
+  
+  def name
     if names.where(primary: true).any?
       names.where(primary: true).first.name
     else
@@ -54,10 +54,6 @@ class Person < ActiveRecord::Base
   def profile_picture
     bucket = self.buckets.find_by_name('Profile Pictures')
     profile_picture = bucket.cover
-  end
-
-  def self.ransackable_attributes(auth_object = nil)
-    %w( person_names.first_name person_names.last_name ) + _ransackers.keys
   end
 
   def primary_or_first_institution
@@ -74,6 +70,10 @@ class Person < ActiveRecord::Base
     else
       scoped
     end
+  end
+
+  def name_with_profession
+    profession.present? ? name + " (#{profession})" : name
   end
 
 end

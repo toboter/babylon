@@ -1,4 +1,3 @@
-<p class="text text-info">Showing <%= references.count %><%= content_tag :span, raw(' of ' + (link_to @references_all.count, references_path)) if @references_all %> entries</p>
 <% if references.any? %>
   <% references.each do |reference| %>
     <%= content_tag :div, class: 'list-entry' do -%>

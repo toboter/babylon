@@ -1,13 +1,14 @@
 <fieldset class="nested-fields">
   <legend>Article/Content</legend>
   <div id="authors">
-    <div class="control-group">
-      <%= f.label :author_ids, "Authors", :class => 'control-label' %>
-      <div class="controls">
-        <%= f.collection_select :author_ids, PersonName.order(:last_name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
-      </div>
+    <%= f.fields_for :authorships do |builder| %>
+      <%= render "references/authorship_fields", :f => builder %>
+    <% end %>
+    <div class="links controls">
+      <%= link_to_add_association "Add Author", f, :authorships, partial: "references/authorship_fields" %>
     </div>
   </div>
+
   <div id="alt-author">
     <div class="control-group">
       <%= f.label :alternative_author, "Institutionelle oder andere Autorenschaft", :class => 'control-label' %>

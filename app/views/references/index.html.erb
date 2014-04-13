@@ -1,4 +1,4 @@
-<% title "Bibliography", nil if @search %>
+<% title "Bibliography", nil %>
 <% title "Bibliography", @project.name if @project %>
 
 <% content_for :breadcrumbs_section do %>
@@ -12,67 +12,57 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span9">
-    <% content_tag :h5, class: "muted" do %>
-      Filter &amp; Sort 
-      <small><a href="#" data-toggle="collapse" data-target="#search-sort-well">(toggle)</a></small>
-    <% end if @search %>
-    <%= content_tag :div, class: "", id: 'search-sort-well' do %>
-      <div class="well well-small">
-      <%= search_form_for @search, html: { class: 'form-inline'} do |f| %>
-        <div class="">
-          <%= f.condition_fields do |c| %>
-            Filter:
-            <%= render "condition_fields", f: c %>
-          <% end %>
-        </div>
-        <p><%= link_to_add_fields "Add Conditions", f, :condition %></p>
-        <div class="row-fluid">
-          <div class="span7">
-            Sort:<br />
-            <%= f.sort_fields do |s| %>
-              <%= s.sort_select associations: [:authors, :book] %>
-            <% end %>
-          </div>
-          <div class="span4 pull-right">
-            Results per Page:<br />
-            <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10) %>
-          </div>
-        </div>
-        <div class="other-actions">
-          <%= f.submit "Search", class: 'btn btn-info btn-block' %>
+  <div class="span12">
+    <ul class="nav nav-pills">
+      <%= content_tag :li, link_to("Bibliography", references_path), class: 'active' %>
+      <%= content_tag :li, link_to("Books", books_path)%>
+      <%= content_tag :li, link_to("Journals and serials", serials_path) %>
+      <%= link_to new_reference_path, class: 'btn btn-create pull-right', style: 'margin-left:10px;' do %>
+        <i class="icon-plus icon-white"></i>
+        Reference
+      <% end if aspect? &&  if can? :create, @references %>
+      <%= form_tag ('/bibliography'), method: :get, class: 'form-inline pull-right' do %>
+        <div class="input-append">
+          <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10), id: 'appendInputButton', class: 'span1' %>
+          <%= submit_tag "per Page", class: 'btn' %>
         </div>
       <% end %>
-    </div>
-    <% end if @search %>
-    <%= render "bib_entries", :references => @references %>
-    <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+    </ul>
+    <div class="row-fluid">
+      <div class="span3">
+        <p class="text text-info">Showing <%= @references.count %><%= content_tag :span, raw(' of ' + (link_to @references_all.count, references_path)) if @references_all %> entries</p>
+      </div>
+      <div class="span9">
 
-    <div class="well" style="margin-top:100px;">
-      <h4>GLOSSARY</h4>
-      <ul class="unstyled">
-        <li>Monographs / Monographien — <em>Book with an explicit author</em></li>
-        <li>In Books / Buchbeitrag — <em>An untitled part, section or chapter of a monograph</em></li>
-        <li>Collections / Sammelband — <em>A collection of texts contributed by different authors</em></li>
-        <li>In Collections / Sammelbandbeitrag — <em>Part of a superior work with its own title</em></li>
-        <li>Proceedings / Konferenzband/Tagungsband — <em>A collection of contributions published in the context of a conference or workshop</em></li>
-        <li>In Proceedings / Konferenzbeitrag — <em>Contribution in a conference proceedings</em></li>
-        <li>Journal / Zeitschrift — <em>A periodical published at regular intervals</em></li>
-        <li>Issue / Ausgabe — <em>Issue of a journal</em></li>
-        <li>In Journal / Zeitschriftenartikel — <em>Article in a journal</em></li>
-        <li>Reference / Nachschlagewerk — <em>References including encyclopedia, dictionaries, compendia, bibliographies and online-references</em></li>
-        <li>In Reference / Lexikonartikel — <em>Contribution in a reference</em></li>
-      </ul>
+        <%= render "bib_entries", :references => @references %>
+        <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+        <%= content_tag :p, class: 'pull-right' do %>
+          Download:
+          <%= link_to "CSV", references_path(format: "csv"), class: 'btn btn-mini disabled', id: 'csv-link' %>
+          <%= link_to "Excel", references_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
+        <% end if can? :read, @references %>
+      </div>
     </div>
-  </div>
-
-  <div class="span3">
-    <%= render "shared/bibliographic_cat_navs", :obj => @references %>
-    <%= content_tag :p do %>
-      Download:
-      <%= link_to "CSV", references_path(format: "csv"), class: 'btn btn-mini disabled', id: 'csv-link' %>
-      <%= link_to "Excel", references_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
-    <% end if can? :read, @references %>
+    <div class="row-fluid" style="margin-top:100px;">
+      <div class="span12">
+        <div class="well">
+          <h4>GLOSSARY</h4>
+          <ul class="unstyled">
+            <li>Monographs / Monographien — <em>Book with an explicit author</em></li>
+            <li>In Books / Buchbeitrag — <em>An untitled part, section or chapter of a monograph</em></li>
+            <li>Collections / Sammelband — <em>A collection of texts contributed by different authors</em></li>
+            <li>In Collections / Sammelbandbeitrag — <em>Part of a superior work with its own title</em></li>
+            <li>Proceedings / Konferenzband/Tagungsband — <em>A collection of contributions published in the context of a conference or workshop</em></li>
+            <li>In Proceedings / Konferenzbeitrag — <em>Contribution in a conference proceedings</em></li>
+            <li>Journal / Zeitschrift — <em>A periodical published at regular intervals</em></li>
+            <li>Issue / Ausgabe — <em>Issue of a journal</em></li>
+            <li>In Journal / Zeitschriftenartikel — <em>Article in a journal</em></li>
+            <li>Reference / Nachschlagewerk — <em>References including encyclopedia, dictionaries, compendia, bibliographies and online-references</em></li>
+            <li>In Reference / Lexikonartikel — <em>Contribution in a reference</em></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
 <% end %>

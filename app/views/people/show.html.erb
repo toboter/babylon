@@ -1,10 +1,8 @@
-<% title graded_fullname(@person), nil %>
+<% title graded_fullname(@person), nil, nil %>
 <% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) || (can? :manage, 'personal-informations') %>
-<% publishing_section_for(@person) %>
 
 <% content_for :add_section do %>
-  <li><%= link_to "Document", polymorphic_path([:new, @person, :document]) %></li>
-  <li><%= link_to 'Upload bucket', polymorphic_path([:new, @person, :bucket]) %></li>
+
 <% end if user_signed_in? && (can? :manage, @person) %>
 
 <% content_for :breadcrumbs_section do %>
@@ -13,132 +11,179 @@
   <li class="active"><%= graded_fullname(@person) %></li>
 <% end %>
 
-<% content_for :main_section do %>
-    <%= content_tag :p, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
-    <ul class="nav nav-tabs">
-      <%= content_tag :li, link_to('Intro & docs', "#docs", data: {toggle: 'tab'}), class: 'active' %>
-      <%= content_tag :li, link_to('Public Activity', "#updates", data: {toggle: 'tab'}) if @person.user %>
-      <%= content_tag :li, link_to('Projects', "#memberships", data: {toggle: 'tab'}) if @person.user %>
-      <%= content_tag :li, link_to('Publications', "#pubs", data: {toggle: 'tab'}) %>
-      <%= content_tag :li, link_to('Uploads', "#uploads", data: {toggle: 'tab'}) %>
-    </ul>
-
-    <div class="tab-content">
-      <div class="tab-pane active" id="docs">
-        <%= content_tag :h3, 'General Introduction' if @person.general.present? %>
-        <%= markdown(@person.general) if @person.general %> 
-
-        <%= content_tag :h3, 'Curriculum Vitae' if @person.cv.present? %>
-        <%= markdown(@person.cv) if @person.cv %>
-
-        <% if @person.documents.any? %>
-          <h3>Other documents</h3>
-          <%= render "documents/without_document_type", var: @person %>  
+<% content_for :top_over do %>
+  <div class="row" style="">
+    <div class="<%= 'span3' if @person.profile_picture %>">
+      <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: ""), @person.profile_picture if @person.profile_picture %>
+    </div>
+    <div class="<%= @person.profile_picture ? 'span6' : 'span9' %>">
+      <h1><%= graded_fullname(@person) %></h1>
+      <ul class="unstyled">
+        <%= content_tag :li, @person.profession if @person.profession.present? %>
+        <%= content_tag :li, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
+      </ul>
+      <ul class="unstyled">
+        <%= content_tag :li do %>
+          <%= content_tag :span, graded_fullname(@person), class: "fn" if @person.grade.present? %>
+          <%= content_tag :span, ' (' + @person.nickname + ')' if @person.nickname.present? %>
         <% end %>
+        <%= content_tag :li, 'System Username: '+@person.user.username if @person.user %>
+        <%= content_tag :li, 'Birthday: '+@person.date_of_birth.strftime("%d.%m.%Y") if @person.date_of_birth.present? %>
+        <%= content_tag :li, 'Day of death: '+@person.date_of_death.strftime("%d.%m.%Y") if @person.date_of_death.present? %>
+        <%= content_tag :li, @person.profession if @person.profession.present? %>
+        <%= content_tag :li, @person.gender if @person.gender.present? %>
 
-      </div>
-      <%= content_tag :div, class: 'tab-pane', id: 'updates' do %>
+        <% if @person.affiliations.any? %>
+          <br />
+          <% for affiliation in @person.affiliations.where(primary: true) %>
+            <li>Primary institution: <%= link_to "#{affiliation.institution.name}", affiliation.institution %></li>
+          <% end if @person.affiliations.where(primary: true).any?  %>
+          <%= content_tag :li do %>
+            Institutions: <%= @person.affiliations.where(primary: false).map{ |a| link_to((a.institution.name),a.institution) }.join(", ").html_safe %>
+          <% end if @person.affiliations.where(primary: false).any? %>
+        <% end %>
+      </ul>
+    </div>
+    <div class="span3 vcard">
+      <address>
+        <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
+        <%= content_tag :h5, 'Contact Information', class: 'muted' if @person.public_email.present? || @person.phone.present? || @person.fax.present? || (@person.institutions.any? && @person.show_inst_address == true) || @person.uri.present? %>
+        <ul class="unstyled">
+          <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
+          <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
+          <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
+          <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
+            <%= content_tag :li, prepend('home', '-25px')+(@person.primary_or_first_institution.root.self_and_descendants-@person.primary_or_first_institution.descendants-@person.primary_or_first_institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
+            <%= content_tag :li, @person.primary_or_first_institution.street, class: "street-address" %>
+            <%= content_tag :li, (content_tag :span, @person.primary_or_first_institution.zip, class: "postal-code")+' '+(content_tag :span, @person.primary_or_first_institution.city, class: "locality") %>
+            <%= content_tag :li, @person.primary_or_first_institution.country, class: "country-name" %>
+          <% end if @person.institutions.any? && @person.show_inst_address == true -%>
+          <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
+        </ul>
+      </address>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12"><hr></div>
+  </div>
+<% end %>
+
+<% content_for :main_section do %>
+    <div id="scroll-pane" data-target="#scroll-nav">
+      <%= content_tag :section, id: 'about', class: 'person-section' do %>
+        <%= markdown(@person.general) if @person.general.present? %>
+        <%= content_tag :h3, 'Curriculum Vitae' if @person.cv.present? && @person.general.present? %>
+        <%= markdown(@person.cv) if @person.cv %>       
+      <% end %>
+
+      <%= content_tag :section, id: 'documents' do %>
+        <div class="page-header">
+          <h1>
+            Documents
+            <%= link_to polymorphic_path([:new, @person, :document]), class: 'btn btn-create pull-right' do %>
+              <i class="icon-plus icon-white"></i>
+              Document
+            <% end if user_signed_in? && (can? :manage, @person) %>
+          </h1>
+        </div>
+        <% if @person.documents.any? %>
+          <%= render "documents/without_document_type", var: @person %>
+        <% else %>
+          <p>No documents to show.</p>
+        <% end %>
+      <% end %>
+
+      <%= content_tag :section, id: 'updates' do %>
+        <div class="page-header">
+          <h1>Public Activity</h1>
+        </div>
         Activity feed
       <% end if @person.user %>
-      <%= content_tag :div, class: 'tab-pane', id: 'memberships' do %>
-        <% @person.user.projects.each do |project| %>
-          <div class="project-entry well">
-            <h3><%= link_to "#{project.name}", project %></h3>
-            <% if project.documents.doctype('Introduction').present? %>
-              <%= render "documents/with_document_type", var: project, dtype: "Introduction" if project.documents.doctype('Introduction') %>
-            <% else %>
-              <p>No Introduction available</p>
-            <% end %>
-          </div>
-        <% end %>    
+
+      <%= content_tag :section, id: 'projects' do %>
+        <div class="page-header">
+          <h1>Projects</h1>
+        </div>
+        <%= render @person.user.projects %>  
       <% end if @person.user %>
-      <div class="tab-pane" id="pubs">
-        <div id="publications">
+
+      <%= content_tag :section, id: 'publications' do %>
+        <div class="page-header">
+          <h1>Publications</h1>
+        </div>
           <% if @person.references.present? %>
             <h4 class="muted">Authorship</h4>
-            <%= render "references/bib_entries", :references => @references %>
+            <%= render "references/bib_entries", :references => @person.references %>
           <% end %>
     
           <% if @person.books.present? %>
             <h4 class="muted">Editorship</h4>
             <%= render "books/book_entries", :books => @person.books %>
           <% end %>
-        </div>     
-      </div>
-      <div class="tab-pane" id="uploads">
-        <div id="uploads">
-          <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+    
+      <% end %>
+
+      <%= content_tag :section, id: 'uploads' do %>
+        <div class="page-header">
+          <h1>
+            Pictures
+            <%= link_to polymorphic_path([:new, @person, :bucket]), class: 'btn btn-create pull-right' do %>
+              <i class="icon-plus icon-white"></i>
+              Bucket
+            <% end if user_signed_in? && (can? :manage, @person) %>
+          </h1>
         </div>
-      </div>
+        <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+      <% end %>
     </div>
+
+
+    <hr>
+    <p>Written by <%= name_only_or_link_to(@person.updater) %> <%= '[Updated '+distance_of_time_in_words_to_now(@person.updated_at)+' ago]' if @person.created_at != @person.updated_at %> </p>
+
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <div class="vcard">
-    <address>
-    <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-bottom:20px;"), @person.profile_picture if @person.profile_picture %>
-
-    <h5 class="muted">Personal Information</h5>
-    <ul class="unstyled">
-      <%= content_tag :li, (content_tag :span, graded_fullname(@person), class: "fn") + (content_tag :span, ' (' + @person.nickname + ')' if @person.nickname.present?) %>
-      <%= content_tag :li, 'System Username: '+@person.user.username if @person.user %>
-      <%= content_tag :li, 'Birthday: '+@person.date_of_birth.strftime("%d.%m.%Y") if @person.date_of_birth.present? %>
-      <%= content_tag :li, 'Day of death: '+@person.date_of_death.strftime("%d.%m.%Y") if @person.date_of_death.present? %>
-      <%= content_tag :li, @person.profession if @person.profession.present? %>
-      <%= content_tag :li, @person.gender if @person.gender.present? %>
-    </ul>
-
-    <% if @person.affiliations.any? %>
-      <%= content_tag :div, style: "margin-top:20px;" do %>
-        <h5 class="muted" style="margin-top:20px;">Primary institution</h5>
-        <ul class="unstyled">
-          <% for affiliation in @person.affiliations.where(primary: true) %>
-            <li><%= link_to "#{affiliation.institution.name}", affiliation.institution %></li>
-          <% end %>
-        </ul>
-      <% end if @person.affiliations.where(primary: true).any? %>
-
-      <%= content_tag :div, style: "margin-top:20px;" do %>
-        <h5 class="muted" style="margin-top:20px;">Other institutions</h5>
-        <ul class="unstyled">
-          <% for affiliation in @person.affiliations.where(primary: false) %>
-            <li><%= link_to "#{affiliation.institution.name}", affiliation.institution %></li>
-          <% end %>
-        </ul>
-      <% end if @person.affiliations.where(primary: false).any? %>
+<div class="person-sidebar">
+<div id="scroll-nav" data-spy="affix" data-offset-top="260" class="affix-top">
+  <ul class="nav nav-tabs nav-stacked nav-list">
+    <%= content_tag :li do %>
+      <%= link_to "#about" do %>
+        <i class="icon-chevron-left"></i>
+        About
+      <% end %>
+    <% end if @person.cv.present? || @person.general.present? %>
+    <%= content_tag :li, class: '' do %>
+      <%= link_to "#documents" do %>
+        <i class="icon-chevron-left"></i>
+        Documents
+      <% end %>
     <% end %>
-
-
-    <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
-    <h5 class="muted">Contact Information</h5>
-    <ul class="unstyled">
-      <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
-      <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
-      <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
-      <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
-        <%= content_tag :li, prepend('home', '-25px')+(@person.primary_or_first_institution.root.self_and_descendants-@person.primary_or_first_institution.descendants-@person.primary_or_first_institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
-        <%= content_tag :li, @person.primary_or_first_institution.street, class: "street-address" %>
-        <%= content_tag :li, (content_tag :span, @person.primary_or_first_institution.zip, class: "postal-code")+' '+(content_tag :span, @person.primary_or_first_institution.city, class: "locality") %>
-        <%= content_tag :li, @person.primary_or_first_institution.country, class: "country-name" %>
-      <% end if @person.institutions.any? && @person.show_inst_address == true -%>
-      <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
-    </ul>
-    </address>
-
-    <% if @person.user %>
-      <h5 class="muted" style="margin-top:50px;">Projects</h5>
-      <ul class="unstyled">
-        <% for membership in @person.user.memberships %>
-          <li><%= link_to "#{membership.project.name}", membership.project %></li>
-        <% end %>
-      </ul>
+    <%= content_tag :li, class: '' do %>
+      <%= link_to "#updates" do %>
+        <i class="icon-chevron-left"></i>
+        Activity
+      <% end %>
+    <% end if @person.user %>
+    <%= content_tag :li, class: '' do %>
+      <%= link_to "#projects" do %>
+        <i class="icon-chevron-left"></i>
+        Projects
+      <% end %>
+    <% end if @person.user %>
+    <%= content_tag :li, class: '' do %>
+      <%= link_to "#publications" do %>
+        <i class="icon-chevron-left"></i>
+        Publications
+      <% end %>
     <% end %>
-
-    <h5 class="muted" style="margin-top:75px;">Record</h5>
-    <ul class="unstyled">
-      <li>Created by: <%= @person.creator.available_name %></li>
-      <li>Updated by: <%= @person.updater.available_name %></li>
-    </ul>
-
-  </div>
+    <%= content_tag :li, class: '' do %>
+      <%= link_to "#uploads" do %>
+        <i class="icon-chevron-left"></i>
+        Uploads
+      <% end %>
+    <% end %>
+  </ul>
+</div>
+</div>
 <% end %>

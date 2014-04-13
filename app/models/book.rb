@@ -1,5 +1,5 @@
 class Book < ActiveRecord::Base
-  attr_accessible :editor_ids, :book_identifier, :book_type, :place, :publisher, :serial_id, :title, :volume, 
+  attr_accessible :editorships_attributes, :book_identifier, :book_type, :place, :publisher, :serial_id, :title, :volume, 
                   :unpublished, :year, :uri, :creator_id, :updater_id, :articles_attributes, :edition, :abbreviation
 
   stampable
@@ -8,14 +8,15 @@ class Book < ActiveRecord::Base
 
   has_many :articles, :class_name => 'Reference', :dependent => :destroy, :order => 'first_page'
 
-  has_many :editorships, :dependent => :destroy , :order => 'position'
-  has_many :editors, :class_name => 'PersonName', through: :editorships, :source => :person_name
+  has_many :editorships, :dependent => :destroy
+  has_many :editors, :class_name => 'PersonName', through: :editorships, :source => :person_name, :order => 'editorships.position'
 
   belongs_to :serial
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
-  accepts_nested_attributes_for :articles, :reject_if => lambda { |a| a[:title].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :articles, allow_destroy: true
+  accepts_nested_attributes_for :editorships, allow_destroy: true
 
   validates_presence_of :book_type
   validates_presence_of :year, :unless => "unpublished == true"
@@ -34,11 +35,6 @@ class Book < ActiveRecord::Base
 
   def book_is_serial?
     book_type == 'Issue of a journal' || book_type == "Collection in a serial" || book_type == 'Monograph in a serial'
-  end
-
-
-  def self.ransackable_attributes(auth_object = nil)
-    %w( title year ) + _ransackers.keys
   end
 
 end

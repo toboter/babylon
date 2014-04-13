@@ -7,6 +7,10 @@ class PeopleController < ApplicationController
   def index
     @people = Person.includes(:names).search(params[:search]).order("person_names.last_name ASC")
 
+    if params[:state] == 'in_project'
+      @people = @people.joins(user: :memberships)
+    end
+
     respond_to do |format|
       format.html { render :layout => "index_page" } # index.html.erb
       format.json { render json: @people }
@@ -22,9 +26,7 @@ class PeopleController < ApplicationController
     if request.path != person_path(@person)
       redirect_to @person, status: :moved_permanently
     else
-      @attachable = @person
-      @buckets = @attachable.buckets
-      @references = @person.references #.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
+
   
       respond_to do |format|
         format.html { render :layout => "show_page" } # show.html.erb
@@ -109,7 +111,7 @@ class PeopleController < ApplicationController
       @user = User.find(params[:connect_user_id])
 
       if @person.update_attribute(:user_id, @user.id)
-        redirect_to @person, notice: "#{@person.fullname} is now connected to #{@user.username}."
+        redirect_to @person, notice: "#{@person.name} is now connected to #{@user.username}."
       else
         redirect_to root_url, notice: "Error on update."
       end
@@ -122,7 +124,7 @@ class PeopleController < ApplicationController
     @person = Person.find_by_user_id(params[:user_id])
     @user = User.find_by_id(params[:user_id])
     if @person.update_attribute(:user_id, nil)
-      redirect_to @person, notice: "#{@person.fullname} is no longer connected to #{@user.username}."
+      redirect_to @person, notice: "#{@person.name} is no longer connected to #{@user.username}."
     else
       redirect_to root_url, notice: "Error on update."
     end

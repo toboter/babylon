@@ -1,17 +1,20 @@
 <% if obj.buckets.present? %>
   <% for bucket in obj.buckets do %>
-    <p class="pull-right">
+    <h4 class="muted" style="margin-bottom:20px;">
+      <%= link_to "#{bucket.name}", [bucket.attachable, bucket] %>
       <% if can? :edit, obj %>
         <% if personal == true %>
           <% if (!obj.user_id?) || (obj.user_id == current_user.id) %>
-            <%= link_to "Show or add assets to #{bucket.name}", polymorphic_path([obj, bucket]) %>
+            <%= link_to polymorphic_path([obj, bucket]), class: 'btn btn-create btn-mini pull-right' do %>
+              <i class="icon-plus icon-white"></i>
+              Assets to <%= bucket.name %>
+            <% end %>
           <% end %>
         <% else %>
           <%= link_to "Show or add assets to #{bucket.name}", polymorphic_path([obj, bucket]) %>
         <% end %>
       <% end %>
-    </p>
-    <h4 class="muted"><%= link_to "#{bucket.name}", [bucket.attachable, bucket] %></h4>
+    </h4>
     <ul class="thumbnails">
       <% if bucket.cover %>
         <li class="span4">

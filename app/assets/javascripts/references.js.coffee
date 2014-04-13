@@ -11,3 +11,7 @@ jQuery ->
     event.preventDefault()
 
   $('#csv-link').removeAttr('href')
+
+  $("#per_page_submit_button").hide()
+  $('#per_page_select').change ->
+    $(this).closest('form').trigger('submit')

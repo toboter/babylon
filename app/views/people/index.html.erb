@@ -1,8 +1,6 @@
 <% title "People", nil %>
 
 <% content_for :add_section do %>
-  <li><%= link_to 'Person', new_person_path %></li>
-  <li><%= link_to "Your profile", new_person_path(:user_id => current_user, :alias => current_user.username) unless current_user.person %></li>
 <% end if can? :edit, @people %>
 
 <% content_for :breadcrumbs_section do %>
@@ -12,14 +10,37 @@
 
 <% content_for :main_section do %>
   <%= content_tag :div, class: 'span12' do %>
-    <div class="options" style="">
-      Other filters
-      <%= form_tag people_path, :method => 'get', :id => "people_search", class: 'form-search pull-right' do %>
-        <%= text_field_tag :search, params[:search], class: 'search-query' %>
-        <%= submit_tag "Search", :name => nil, class: 'btn' %>
-      <% end %>
+    <div class="people options row" style=""><div class="span12">
+
+      <ul class="nav nav-pills pull-left">
+        <%= content_tag :li, link_to("Everyone", people_path(search: params[:search])), class: "#{'active' unless params[:state]}" %>
+        <%= content_tag :li, link_to("In a project", people_path(state: 'in_project', search: params[:search])), class: "#{'active' if params[:state]}" %>
+      </ul>
+
+      <div class="pull-right">
+        <%= form_tag people_path, :method => 'get', :id => "people_search", class: 'form-search pull-left' do %>
+          <%= text_field_tag :search, params[:search], class: 'search-query' %>
+          <%= hidden_field_tag :state, params[:state] if params[:state] %>
+          <%= submit_tag "Search", :name => nil, class: 'btn' %>
+        <% end %>
+        <div class="pull-right">
+          <%= link_to new_person_path, class: 'btn btn-create', style: 'margin-left:10px;' do %>
+            <i class="icon-plus icon-white"></i>
+            Person
+          <% end %>
+          <%= link_to new_person_path(:user_id => current_user, :alias => current_user.username), class: 'btn btn-create', style: 'margin-left:10px;' do %>
+            <i class="icon-plus icon-white"></i>
+            Your profile
+          <% end unless current_user.person %>
+        </div>
+      </div>
+    </div></div>
+
+    <div id="people" style="margin-top:50px;" class="row">
+      <div class="span12">
+        <%= render "people_groups", people: @people %>
+      </div>
     </div>
-    <div id="people" style="padding-top:50px;"><%= render "people_groups", people: @people %></div>
     
   <% end %>
 <% end %>

@@ -7,31 +7,11 @@ class ReferencesController < ApplicationController
   def index
     if params[:project_id]
       @project = Project.find(params[:project_id])
-      @references = @project.references.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
-      @references_unpaginated = @project.references
       @references_all = @project.references
+      @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
     else
-      @search = Reference.joins(:projects).where('show_references = ?', true).uniq.search(params[:q])
-      @references = @search.result.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10) # Diese joins Authors funktioniert nicht. Doppelte AUtorenschaft wird doppelt gezählt: find(:all, :joins => :authors, :order => 'people.last_name ASC')
-      @references_unpaginated = @search.result
-      @references_all = Reference.joins(:projects).where('show_references = ?', true).uniq
-      # @collections = @references_all.select { |reference| reference.book.book_type == 'Collection' || reference.book.book_type == 'Collection in a serial' || reference.book.book_type == 'Issue of a journal' if reference.book } 
-      # @monographs = @references_all.select { |reference| reference.book.book_type == 'Monograph in a serial' || reference.book.book_type == 'Monograph' if reference.book } 
-      # @misc = @references_all.select { |reference| reference.book_id == nil }
-  
-      @search.build_sort if @search.sorts.empty?
-      @search.build_condition if @search.conditions.empty?
-
-    end
-
-    if params[:type]
-      if params[:type] == 'in-collection'
-        @references = @collections
-      elsif params[:type] == 'as-monograph'
-        @references = @monographs
-      elsif params[:type] == 'misc'
-        @references = @misc
-      end
+      @references_all = Reference.joins(:projects).where('show_references = ?', true)
+      @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
     end
 
     respond_to do |format|

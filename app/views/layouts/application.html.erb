@@ -309,7 +309,7 @@
           </div>
           <%= form_tag user_connect_path, :class => "custom" do %>
             <div class="modal-body" style="height:300px;">
-              <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "fullname"), :prompt => 'Choose a person', class: "input-block-level", :id => "person-connect-select" %>
+              <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "name_with_profession"), :prompt => 'Choose a person', class: "input-block-level", :id => "person-connect-select" %>
               <%= hidden_field_tag :connect_user_id, current_user.id %>
             </div>
             <div class="modal-footer">

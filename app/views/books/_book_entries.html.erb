@@ -1,4 +1,3 @@
-<p class="text text-info"><%= books.count %><%= content_tag :span, raw(' of ' + (link_to @books_all.count, books_path)) if @books_all %> entries</p>
 <% books.each do |book| %>
   <%= content_tag :div, class: 'list-entry' do -%>
     <div class="row-fluid">

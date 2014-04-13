@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
 
   def available_name
     if person
-      person.fullname
+      person.name
     else
      username
    end

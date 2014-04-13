@@ -5,7 +5,7 @@ class SerialsController < ApplicationController
   # GET /serials
   # GET /serials.json
   def index
-    @serials = Serial.all
+    @serials = Serial.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

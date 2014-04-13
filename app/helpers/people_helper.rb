@@ -3,11 +3,11 @@ module PeopleHelper
   def graded_fullname(person)
   	if person.grade
   	  if person.grade == 'Prof. Dr.' || person.grade == 'Dr.'
-  	  	person.grade + ' ' + person.fullname
+  	  	person.grade + ' ' + person.name
   	  elsif person.grade == 'M.A.'
-  	  	person.fullname + ' (' + person.grade + ')'
+  	  	person.name + ' (' + person.grade + ')'
   	  else
-  	  	person.fullname
+  	  	person.name
   	  end
   	end
   end

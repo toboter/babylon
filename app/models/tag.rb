@@ -23,8 +23,4 @@ class Tag < ActiveRecord::Base
   def self.possible_parents(tag)
     possible_parents = all-tag.self_and_descendants
   end
-
-  def self.ransackable_attributes(auth_object = nil)
-    %w( name ) + _ransackers.keys
-  end
 end

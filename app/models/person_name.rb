@@ -10,9 +10,14 @@ class PersonName < ActiveRecord::Base
   has_many :editorships, :dependent => :destroy
 
   validates_presence_of :first_name, :last_name
+  validates_uniqueness_of :primary, scope: :person_id, :allow_blank => true
 
   def name
   	"#{first_name} #{last_name}"
+  end
+
+  def name_with_profession
+    person.profession.present? ? name + " (#{person.profession})" : name
   end
 
 end
