@@ -1,3 +1,0 @@
-<% for comment in comments.order('created_at ASC') do %>
-  <%= render partial: 'comments/comment', locals: { comment: comment, nested: false } %>
-<% end %>

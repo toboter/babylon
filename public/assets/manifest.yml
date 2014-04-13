@@ -1,10 +1,14 @@
 ---
 FULogo-3.svg: FULogo-3-3085f7ae650d800d02110767b6b536ba.svg
 FULogo-3/index.svg: FULogo-3-3085f7ae650d800d02110767b6b536ba.svg
+ajax-loader.gif: ajax-loader-f63bd02ed8dd66b805c921125ed5b604.gif
+ajax-loader/index.gif: ajax-loader-f63bd02ed8dd66b805c921125ed5b604.gif
 dog-logo.png: dog-logo-64ba087ed125e065dc50ae3a439dcaf2.png
 dog-logo/index.png: dog-logo-64ba087ed125e065dc50ae3a439dcaf2.png
 dummy.svg: dummy-3e7e15ca2119cd4ffb8a89f46f9081f0.svg
 dummy/index.svg: dummy-3e7e15ca2119cd4ffb8a89f46f9081f0.svg
+icons/aspect.svg: icons/aspect-66915f4c0fb302d90c07995d35e35c41.svg
+icons/aspect/index.svg: icons/aspect-66915f4c0fb302d90c07995d35e35c41.svg
 icons/delete7.svg: icons/delete7-66c0511eb6d20a5bc719c32f7fdb85fd.svg
 icons/delete7/index.svg: icons/delete7-66c0511eb6d20a5bc719c32f7fdb85fd.svg
 icons/edit1.svg: icons/edit1-a821b44a6707a6400ffdba3e531ff3c9.svg
@@ -31,10 +35,10 @@ mini_dummy.gif: mini_dummy-9daca4f70984c1ba29c988d69479f987.gif
 mini_dummy/index.gif: mini_dummy-9daca4f70984c1ba29c988d69479f987.gif
 spk-logo.png: spk-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
 spk-logo/index.png: spk-logo-22b0ecca561f7c194b9b6e5d7c35aaef.png
-application.js: application-8193b83ecc40b3f9e00c7b8b9757ec2d.js
-application/index.js: application-8193b83ecc40b3f9e00c7b8b9757ec2d.js
-application.css: application-b3fe1dfed3cafd259d6e10c082f4decd.css
-application/index.css: application-b3fe1dfed3cafd259d6e10c082f4decd.css
+application.js: application-65bf216a18518dcfb6c4378bacb04214.js
+application/index.js: application-65bf216a18518dcfb6c4378bacb04214.js
+application.css: application-bf916ca14cbb3c95c4ec20b4fd278755.css
+application/index.css: application-bf916ca14cbb3c95c4ec20b4fd278755.css
 jquery.min.map: jquery.min-1c0cf7b6a3425fbd9a3bfccab0a99a4e.map
 jquery/index.min.map: jquery.min-1c0cf7b6a3425fbd9a3bfccab0a99a4e.map
 chosen-sprite.png: chosen-sprite-0b638291e3ab1e89592983b5810b9b79.png
