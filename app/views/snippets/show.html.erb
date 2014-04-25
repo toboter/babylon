@@ -1,27 +1,19 @@
-<% title "Snippet", @snippet.name %>
+<% title "Announcement", @snippet.name %>
 <% edit_section_for(@snippet, nil) %>
 <% footer_section(@snippet) %>
 
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <li><%= link_to 'Snippets', snippets_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Announcements', snippets_path %> <span class="divider">/</span></li>
   <li class="active"><%= @snippet.name %></li>
 <% end %>
 
 <% content_for :main_section do %>
-<p>
-  <b>Description:</b>
-  <%= @snippet.description %>
-</p>
+<%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if @snippet.pinned? %>
+<h4 class="muted">Announcement</h4>
+<p><%= @snippet.description %></p>
+<%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
+<%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
 
-<p>
-  <b>Snippet type:</b>
-  <%= @snippet.snippet_type %>
-</p>
-
-<p>
-  <b>Pinned?:</b>
-  <%= @snippet.pinned %>
-</p>
 <% end %>

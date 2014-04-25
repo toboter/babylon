@@ -14,7 +14,9 @@
   <% else %>
     <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
   <% end %>
-  <div class="" id="caption" style="margin-top:20px;"><%= markdown(@asset.caption) %></div>
+  <%= content_tag :div, id: "caption", style: "margin-top:20px;" do %>
+    <%= markdown(@asset.caption) %>
+    <% end if @asset.caption %>
 <% end %>
 
 <% content_for :sidebar_section do %>

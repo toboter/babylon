@@ -1,21 +1,36 @@
 <%= form_for(@snippet) do |f| %>
+  <div class="row">
+    <div class="span6">
+
   <%= f.error_messages %>
   <%= f.hidden_field :snippet_type, value: 'news' if @snippet.new_record? %>
 
-  <div class="field">
-    <%= f.label :name, 'Title' %>
-    <%= f.text_field :name, :readonly => @snippet.snippet_type == 'about' %>
-  </div>
+  <label class="checkbox pull-right">
+    <%= f.check_box :pinned %> Pinned?
+  </label>
+    <div class="control-group">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, :readonly => @snippet.snippet_type == 'about', class: 'span6' %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description %>
+
+    <div class="control-group">
+      <%= f.label :description, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, class: 'span6' %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <% if @snippet.new_record? %>
+        <%= link_to 'Abbrechen', snippets_path, :class => 'btn' %>
+      <% else %>
+        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+      <% end %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :pinned %>
-    <%= f.check_box :pinned %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+</div>
 <% end %>

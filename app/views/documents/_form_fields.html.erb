@@ -1,0 +1,31 @@
+  <%= f.hidden_field :document_type %>
+  <%= f.hidden_field :documentable_type %>
+  <%= f.hidden_field :documentable_id %>
+
+  <div class="control-group">
+    <%= f.label :title, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, class: 'input-block-level', :readonly => @document && @document.title_readonly? %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :abstract, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :abstract, rows: 4, class: 'input-block-level' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="content_field">Content <%= link_to 'Howto use Markdown', "http://markdown.de/syntax/", :target => "_blank", class: 'pull-right' %></label>
+    <div class="controls">
+      <%= f.text_area :content, class: 'input-block-level', id: 'content_field' %>
+    </div>
+  </div>

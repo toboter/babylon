@@ -1,27 +1,37 @@
-<h1>Listing snippets</h1>
+<% title "Announcements", nil, nil %>
 
-<table>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <%= content_tag :li, "Announcements", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <h1>
+      Announcements
+      <div class="pull-right" style="">
+        <%= link_to "Create novelity", new_snippet_path, class: "btn btn-create btn-small" if (can? :create, @snippets) %>
+      </div>
+    </h1>
+
+<table class="table table-bordered table-hover">
   <tr>
     <th>Pinned?</th>
     <th>Description</th>
-    <th>Snippet type</th>
     <th></th>
-    <th></th>
-    <th></th>
+
   </tr>
 
 <% @snippets.each do |snippet| %>
   <tr>
-    <td><%= snippet.pinned %></td>
+    <td><%= link_to (content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0'), edit_snippet_path(snippet) if snippet.pinned? %></td>
     <td><%= snippet.description %></td>
-    <td><%= snippet.snippet_type %></td>
     <td><%= link_to 'Show', snippet %></td>
-    <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
-    <td><%= link_to 'Destroy', snippet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
+</div>
+<% end %>
 
-<%= link_to 'New Snippet', new_snippet_path %>

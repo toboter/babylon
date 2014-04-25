@@ -41,6 +41,9 @@ class TodosController < ApplicationController
     elsif aspect?
       @project = current_aspect
       @todo = current_aspect.todos.new
+    else
+      redirect_to :back, alert: "No project or aspect given."
+      return
     end
 
     respond_to do |format|
@@ -64,6 +67,9 @@ class TodosController < ApplicationController
     elsif aspect?
       @project = current_aspect
       @todo = current_aspect.todos.new(params[:todo])
+    else
+      redirect_to :back, alert: "No project or aspect given."
+      return
     end
 
     respond_to do |format|

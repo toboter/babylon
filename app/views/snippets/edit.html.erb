@@ -1,6 +1,7 @@
-<h1>Editing snippet</h1>
+<% title 'Edit announcement snippet', @snippet.name %>
+<%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
+<%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @snippet %> |
-<%= link_to 'Back', snippets_path %>
+

@@ -1,51 +1,100 @@
 <% title "Explore", nil %>
 
 <% content_for :content do %>
-  <div class="explorer">
-    <%= image_tag(@about_bucket.cover.assetfile.normal.url) if @about_bucket.cover %>
-    <%= link_to polymorphic_path([@about, @about_bucket]), class: 'change-asset' do %>
-      <i class="icon-edit icon-white"></i>
-    <% end if can? :manage, 'publishing' %>
-  </div>
+  <%= content_tag :div, class: "carousel-inner" do %>
+    <div class="visible-phone">
+      <h1>$babylon</h1>
+      <h2 class="subtitle" style="font-size:1.4em;line-height:1.3em;">$Bibliotheken und Archive Babylons: texts in an e-based content</h2>
+    </div>
+    <div class="item active">
+      <div class="explorer">
+        <%= image_tag(@about_bucket.cover.assetfile.normal.url) %>
+        <div class="overlay hidden-phone">
+          <h1>$babylon</h1>
+          <p>$Bibliotheken und Archive Babylons: texts in an e-based content</p>
+        </div>
+      </div>
+      <div class="carousel-caption hidden-phone">
+        <h4>
+          <%= @about_bucket.cover.name %>
+          <small><%= link_to '[Link]', @about_bucket.cover, style: 'color:inherit;' %></small>
+          <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
+            <i class="icon-edit icon-white"></i>
+          <% end if can? :manage, 'publishing' %>
+        </h4>
+        <p>
+          <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license %>
+        </p>
+      </div>
+    </div>
+    <div class="visible-phone">
+      <p>
+        <strong><%= @about_bucket.cover.name %></strong>
+          <small><%= link_to '[Link]', @about_bucket.cover, style: 'text-decoration:none; color:inherit;' %></small>
+        <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
+          <i class="icon-edit icon-white"></i>
+        <% end if can? :manage, 'publishing' %>
+        <br />
+        <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license %>
+      </p>
+    </div>
+  <% end if @about_bucket.cover %>
 
-  <%= content_tag :div, class: 'well', id: 'about-section' do %>
-    <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :manage, 'publishing' %></p>
-  <% end if @about %>
-  
-  <div class="" id="modules-section">
+
+
+  <div class="row" id="modules-section" style="padding-top:3em;">
+    <div class="span8">
     <%= content_tag :h2, 'Modules' if @clusters %>
-    <ul class="thumbnails">
+    <ul class="thumbnails visible-desktop">
       <% for cluster in @clusters do %>
         <%= link_to cluster do %>
-        <li class="span3">
-          <div class="thumbnail" style="padding:10px;">
+        <li class="span2">
+          <div class="thumbnail" style="padding:1em;">
             <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.big_thumb.url) : image_tag("icons/no_picture.svg") %>
-            <h3><%= cluster.name %></h3>
-            <p style="height:100px;"><%= cluster.documents.doctype('Introduction').abstract.present? ? truncate(cluster.documents.doctype('Introduction').abstract, length: 200, seperator: ' ', omission: ' ... ') : "Nothing to show." if cluster.documents.doctype('Introduction') %></p>
+            <h3 style="line-height:20px;margin: 10px 0 5px 0;"><%= cluster.name %></h3>
+            <p style="min-height:5em; font-size:0.87em; line-height:1.3em;"><%= cluster.documents.doctype('Introduction').abstract.present? ? truncate(cluster.documents.doctype('Introduction').abstract, length: 200, seperator: ' ', omission: ' ... ') : "Nothing to show." if cluster.documents.doctype('Introduction') %></p>
           </div>
         </li>
+
         <% end %>
+      <% end %>
+    </ul>
+    <ul class="unstyled hidden-desktop">
+      <% for cluster in @clusters do %>
+        <li style="margin-bottom:2em;">
+          <h3 style="line-height:20px;margin: 10px 0 5px 0;"><%= link_to cluster.name, cluster %></h3>
+          <p><%= cluster.documents.doctype('Introduction').abstract.present? ? truncate(cluster.documents.doctype('Introduction').abstract, length: 200, seperator: ' ', omission: ' ... ') : "Nothing to show." if cluster.documents.doctype('Introduction') %></p>
+        </li>
       <% end %>
     </ul>
     <%= link_to 'View all modules', clusters_path %>
   </div>
 
-  <div class="" id="news-section">
+  <%= content_tag :div, class: 'span4' do %>
+    <div class="about-section">
+      <h2>About</h2>
+      <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :manage, 'publishing' %></p>
+    </div>
+  <% end if @about %>
+  </div>
+
+
+  <div class="" id="news-section" style="padding-top:3em;">
     <%= content_tag :h2 do  %>
-      News
-      <div class="pull-right" style="">
-        <%= link_to "Create novelity", new_cluster_path, class: "btn btn-create btn-small" if can? :manage, 'publishing' %>
-      </div>      
+      Announcements    
     <% end if @news %>
     <div class="row-fluid">
       <div class="span12">
         <% @news.in_groups_of(3, false).each do |row_news| %>
           <div class="row-fluid">
             <% for novelity in row_news do %>
-              <div class="span4 well" style="height:350px;overflow:hidden;">
-                <h3><%= novelity.name %></h3>
+              <div class="span4" style="height:240px; border-top:1px solid #f5f5f5; padding-right:1em;">
+                <h3>
+                  <%= novelity.name %>
+                  <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if novelity.pinned? %>
+                </h3>
                 <p><small><%= novelity.created_at.strftime("%d.%m.%Y") %></small>
-                <p><%= markdown(novelity.description) %> <%= content_tag :small, link_to('(Edit)', edit_snippet_path(novelity)) if can? :publish, @about %></p>
+                <p><%= markdown(truncated_description(novelity, length=200)) %></p>
               </div>
             <% end %>
           </div>

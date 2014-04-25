@@ -1,40 +1,11 @@
 <%= form_for [@documentable, @document] do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :document_type %>
-  <%= f.hidden_field :documentable_type %>
-  <%= f.hidden_field :documentable_id %>
 
   <%= content_tag :p do -%>
     This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
   <% end -%>
 
-  <div class="control-group">
-    <%= f.label :title, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :title, class: 'input-block-level', :readonly => @document.title_readonly? %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :abstract, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_area :abstract, rows: 4, class: 'input-block-level' %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <label class="control-label" for="content_field">Content <%= link_to 'Howto use Markdown', "http://markdown.de/syntax/", :target => "_blank", class: 'pull-right' %></label>
-    <div class="controls">
-      <%= f.text_area :content, class: 'input-block-level', id: 'content_field' %>
-    </div>
-  </div>
+  <%= render 'form_fields', f: f %>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

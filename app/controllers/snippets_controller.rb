@@ -8,7 +8,7 @@ class SnippetsController < ApplicationController
     @snippets = Snippet.where('snippet_type != ?', 'about')
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :layout => "index_page" }# index.html.erb
       format.json { render json: @snippets }
     end
   end
@@ -30,7 +30,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => "form_page" }# new.html.erb
       format.json { render json: @snippet }
     end
   end
@@ -38,6 +38,7 @@ class SnippetsController < ApplicationController
   # GET /snippets/1/edit
   def edit
     @snippet = Snippet.find(params[:id])
+    render :layout => "form_page"
   end
 
   # POST /snippets
