@@ -73,7 +73,7 @@ class ReferencesController < ApplicationController
   # PUT /references/1.json
   def update
     @reference = Reference.find(params[:id])
-    # @reference.projects << current_aspect unless @reference.projects.exists?(current_aspect)
+    #@reference.projects << current_aspect unless @reference.projects.exists?(current_aspect)
 
     respond_to do |format|
       if @reference.update_attributes(params[:reference])

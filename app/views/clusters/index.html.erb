@@ -1,8 +1,4 @@
-<% title "Research Modules", nil %>
-
-<% content_for :add_section do %>
-  <li><%= link_to "Module", new_cluster_path %></li>
-<% end %>
+<% title "Modules", nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -11,6 +7,12 @@
 
 <% content_for :main_section do %>
   <div class="span12">
+    <h1>
+      Modules
+      <div class="pull-right" style="">
+        <%= link_to "Create Module", new_cluster_path, class: "btn btn-create btn-small" if can? :create, @clusters %>
+      </div>
+    </h1>
   	<% @clusters.each do |cluster| %>
       <div class="well">
         <div class="row-fluid cluster-entry">

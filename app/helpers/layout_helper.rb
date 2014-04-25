@@ -9,11 +9,18 @@ module LayoutHelper
     @show_title = show_title
   end
 
-  def edit_section_for(var, polymorphic, polymorphicl2=nil)
-    edit = h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit')
-    delete = h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' })
+  def footer_section(var)
+    content_for(:footer_section) {
+      content_tag :div, class: 'span12', style: 'border-top:1px solid #f5f5f5; margin-top:50px; padding-top:10px;' do
+        content_tag :p, ('Written by '+h(name_only_or_link_to(var.updater))+(var.created_at != var.updated_at ? (' [Updated '+distance_of_time_in_words_to_now(var.updated_at)+' ago]') : (' ['+distance_of_time_in_words_to_now(var.created_at)+' ago]'))).html_safe
+      end
+    }
+  end
+
+  def edit_section_for(var, polymorphic=nil, polymorphicl2=nil)
+    edit = h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit', class: 'tooltip-bottom')
+    delete = h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' }, class: 'tooltip-bottom')
     content_for(:edit_section) { 
-      content_tag :li,
         if (can? :edit, var && (can? :destroy, var)) || (var.creator == current_user)
           edit + delete 
         elsif can? :edit, var || (var.creator == current_user)

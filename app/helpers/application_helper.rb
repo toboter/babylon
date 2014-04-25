@@ -33,7 +33,7 @@ module ApplicationHelper
     unless obj.person
       obj.available_name
     else
-      link_to obj.available_name, obj.person
+      (link_to obj.available_name, obj.person).html_safe
     end
   end
 end

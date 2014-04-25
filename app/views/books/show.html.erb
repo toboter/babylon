@@ -1,9 +1,7 @@
-<% title book_short_title(@book, true), nil %>
+<% title 'Book', book_short_title(@book, true) %>
 <% edit_section_for(@book, nil) %>
+<% footer_section(@book) %>
 
-<% content_for :add_section do %>
-  <%= content_tag :li, link_to('Article', new_reference_path(:book_id => @book)) unless @book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial' %>
-<% end if aspect? && (can? :edit, @book) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -12,7 +10,12 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <h4 class="muted">Content</h4>
+  <h4 class="muted">
+    Content
+    <div class="pull-right" style="margin: 0 0 1em 0; %>">
+      <%= link_to "Add Contents", new_reference_path(book_id: @book.id), class: "btn btn-create btn-small", style: 'font-weight:bold;' if @book && aspect? && !(@book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial') %>
+    </div>
+  </h4>
   <%= render "references/bib_entries", :references => @book.articles.order('first_page ASC') %>
 <% end %>
 
@@ -35,11 +38,5 @@
     <% else %>
       <h5 class="muted">UNPUBLISHED</h5>
     <% end %>
-
-    <h5 class="muted" style="margin-top:50px;">Record Info</h5>
-    <ul class="unstyled">
-      <li>Created by: <%= @book.creator.available_name %></li>
-      <li>Updated by: <%= @book.updater.available_name %></li>
-    </ul>
   </div>
 <% end %>

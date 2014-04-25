@@ -1,5 +1,5 @@
 <% title 'Items for '+'"'+@project.name+'"', nil, nil if @project %>
-<% title 'All Items', nil unless @project %>
+<% title 'All Items', nil, nil unless @project %>
 
 
 <% content_for :breadcrumbs_section do %>
@@ -11,10 +11,12 @@
 
 <% content_for :main_section do %>
   <div class="span12">
-
-    <%= content_tag :h1 do %>
-      Items for "<%= link_to @project.name, @project %>"
-    <% end if @project %>
+    <h1>
+      <%= @project ? ('Items for '+(link_to h(@project.name), @project)).html_safe : 'All Items' %>
+      <div class="pull-right" style="">
+        <%= link_to "Create Item", new_item_path, class: "btn btn-create btn-small" if (can? :create, @items) && !@project %>
+      </div>
+    </h1>
 
     <table class="table table-bordered table-hover">
       <tbody>

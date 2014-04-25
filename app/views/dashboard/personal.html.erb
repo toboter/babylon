@@ -6,9 +6,6 @@
   <%= content_tag :li, 'Dashboard', class: 'active' %>
 <% end %>
 
-<% content_for :add_section do %>
-
-<% end if can? :manage, 'site' %>
 
 <% content_for :main_section do %>
   <div class="span12">

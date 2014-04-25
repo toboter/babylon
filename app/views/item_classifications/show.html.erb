@@ -1,9 +1,5 @@
-<% title @item_classification.name, nil, false %>
+<% title 'Classification', @item_classification.name %>
 <% edit_section_for(@item_classification, nil) %>
-
-<% content_for :add_section do %>
-  <li><%= link_to 'Sub classification', new_item_classification_path(:parent_id => @item_classification) %></li>
-<% end if can? :edit, @item_classification %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

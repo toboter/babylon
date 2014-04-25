@@ -1,13 +1,14 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
+  before_filter :load_cluster, except: [:index, :show]
   load_and_authorize_resource
   
   # GET /groups
   # GET /groups.json
   def index
     if params[:cluster_id]
-      @parent = Cluster.find(params[:cluster_id])
-      @groups = @parent.groups
+      @cluster = Cluster.find(params[:cluster_id])
+      @groups = @cluster.groups
     else
       @groups = Group.all
     end
@@ -34,7 +35,7 @@ class GroupsController < ApplicationController
   # GET /groups/new
   # GET /groups/new.json
   def new
-    @group = Group.new(:cluster_id => params[:cluster_id])
+    @group = @cluster.groups.new
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb
@@ -44,18 +45,18 @@ class GroupsController < ApplicationController
 
   # GET /groups/1/edit
   def edit
-    @group = Group.find(params[:id])
+    @group = @cluster.groups.find(params[:id])
     render :layout => "form_page"
   end
 
   # POST /groups
   # POST /groups.json
   def create
-    @group = Group.new(params[:group])
+    @group = @cluster.groups.new(params[:group])
 
     respond_to do |format|
       if @group.save
-        format.html { redirect_to @group, notice: 'Group was successfully created.' }
+        format.html { redirect_to [@group.cluster, @group], notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
         format.html { render action: "new" }
@@ -67,11 +68,11 @@ class GroupsController < ApplicationController
   # PUT /groups/1
   # PUT /groups/1.json
   def update
-    @group = Group.find(params[:id])
+    @group = @cluster.groups.find(params[:id])
 
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        format.html { redirect_to @group, notice: 'Group was successfully updated.' }
+        format.html { redirect_to [@group.cluster, @group], notice: 'Group was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -83,12 +84,23 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy
-    @group = Group.find(params[:id])
+    @group = @cluster.groups.find(params[:id])
     @group.destroy
 
     respond_to do |format|
-      format.html { redirect_to groups_url }
+      format.html { redirect_to @cluster }
       format.json { head :no_content }
+    end
+  end
+
+
+private
+
+  def load_cluster
+    if params[:cluster_id]
+      @cluster = Cluster.find(params[:cluster_id])
+    else
+      @cluster = nil
     end
   end
 end

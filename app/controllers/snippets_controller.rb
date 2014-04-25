@@ -19,7 +19,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @snippet }
     end
   end

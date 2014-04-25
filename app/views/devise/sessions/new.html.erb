@@ -1,7 +1,7 @@
-<% title "Sign in", nil %>
+<% title "Log in", nil %>
 <div class="row">
-  <div class="span6 offset3">
-  	<h3 style="margin-top:10px;">Sign in</h3>
+  <div class="span6">
+
     <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {class: "form-horizontal"}) do |f| %>
       <div class="control-group">
         <%= f.label :login, 'Username or Email', class: 'control-label' %>

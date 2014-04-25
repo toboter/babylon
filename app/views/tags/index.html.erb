@@ -1,8 +1,5 @@
 <% title "Terms of interest", nil %>
 
-<% content_for :add_section do %>
-  <li><%= link_to 'Term', new_tag_path %></li>
-<% end if can? :edit, @tags %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -11,6 +8,9 @@
 
 <% content_for :main_section do %>
   <div class="span6">
+    <div class="pull-right" style="">
+      <%= link_to "Create term", new_tag_path, class: "btn btn-create btn-small" if can? :create, @tags %>
+    </div>
     <%= render 'full_tag_tree', :tags => @tags, add_links_visible: true, highlight: nil %>
   </div>
 <% end %>

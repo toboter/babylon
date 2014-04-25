@@ -1,9 +1,6 @@
 <% if can? :manage, "roles" %>
   <% title "Users & Roles", nil %>
 
-  <% content_for :add_section do %>
-
-  <% end if can? :manage, 'roles' %>
 
   <% content_for :breadcrumbs_section do %>
     <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

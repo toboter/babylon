@@ -27,11 +27,11 @@
             <%= content_tag :span, '-' if reference.last_page.present? %>
             <%= reference.last_page if reference.last_page.present? %>.
           </p>
-          <%= link_to add_to_project_references_path(reference_id: reference.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
+          <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
             <%= content_tag :i, '', class: 'icon-plus icon-white' %>
             <%= current_aspect.name %>
           <% end if aspect? && !current_aspect.references.include?(reference) %>
-          <%= link_to destroy_project_reference_path(reference_id: reference.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
+          <%= link_to reference_remove_from_aspect_path(reference), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
             <%= content_tag :i, '', class: 'icon-trash icon-white' %>
             <%= current_aspect.name %>
           <% end if aspect? && current_aspect.references.include?(reference) %>

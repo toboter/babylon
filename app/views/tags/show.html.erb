@@ -1,9 +1,6 @@
-<% title "#{@tag.name}", nil %>
+<% title "Term", @tag.name %>
 <% edit_section_for(@tag, nil) %>
 
-<% content_for :add_section do %>
-  <li><%= link_to 'Sub-category', new_tag_path(:parent_id => @tag) %></li>
-<% end if can? :edit, @tag %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

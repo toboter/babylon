@@ -8,7 +8,7 @@ class Item < ActiveRecord::Base
 
   stampable
 
-  after_create :add_description
+  after_create :build_album_bucket
 
   belongs_to :collection
   belongs_to :creator, class_name: "User"
@@ -35,12 +35,18 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
 
+
   def inventory_name
-  	collection.shortcut+' '+inventory_number+inventory_number_index
+    collection.shortcut+' '+inventory_number+inventory_number_index
   end
 
   def name
-  	inventory_name
+    inventory_name
   end
+  
+  def build_album_bucket
+    Bucket.create :attachable_id => self.id, :attachable_type => "Item", :name => "#{self.name+' Album'}", :name_fixed => true
+  end
+
 
 end

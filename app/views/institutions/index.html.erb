@@ -1,8 +1,4 @@
-<% title "Institutions", nil %>
-
-<% content_for :add_section do %>
-  <li><%= link_to "Institution", new_institution_path %></li>
-<% end if can? :edit, @institutions %>
+<% title "Institutions", nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -11,6 +7,15 @@
 
 <% content_for :main_section do %>
   <div class="span12">
+    <h1>
+      Institutions
+      <div class="pull-right">
+        <%= link_to new_institution_path, class: 'btn btn-create btn-small', style: 'margin-left:10px;' do %>
+          <i class="icon-plus icon-white"></i>
+          Institution
+        <% end if can? :create, @institutions %>
+      </div>
+    </h1>
     <% @institutions.each do |institution| %>
       <div class="institution-entry well">
         <h4><%= link_to "#{institution.name}", institution %></h4>

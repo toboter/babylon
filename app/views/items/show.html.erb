@@ -1,11 +1,8 @@
 <% title @item.inventory_name, nil, nil %>
 <% edit_section_for(@item, nil) %>
 <% publishing_section_for(@item) %>
+<% footer_section(@item) %>
 
-<% content_for :add_section do %>
-  <%= content_tag :li, (link_to 'Upload bucket', polymorphic_path([:new, @item, :bucket])) %>
-  <%= content_tag :li, (link_to 'Document', polymorphic_path([:new, @item, :document])) %>
-<% end if can? :edit, @item %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -15,7 +12,10 @@
 
 <% content_for :main_section do %>
   <div class="span12">
-    <%= content_tag :h3, "#{@item.title? ? @item.title : @item.inventory_name}", class: "muted" %>
+    <%= content_tag :h3, class: "muted" do %>
+      <%= @item.title? ? @item.title : @item.inventory_name %>
+      <%= yield(:edit_section) %>
+    <% end %>
     <div class="row-fluid">
       <div class="span4">
         <%= content_tag :div, id: @item.buckets.first.id.to_s+"-album-carousel", class: "carousel slide", :"data-interval" => false do %>
@@ -31,7 +31,7 @@
                 <div class="crop"><%= image_tag asset.assetfile.large.url %></div>
                 <div class="carousel-caption">
                   <h4><%= asset.name %></h4>
-                  <p><%= asset.caption %></p>
+                  <p><%= asset.author.name + ' ' + asset.license %></p>
                 </div>
               </div>
             <% end %>
@@ -88,6 +88,12 @@
                   <%= link_to [@item, :references] do %>
                     Bibliography/References
                     <span class="badge pull-right"><%= @item.references.count %></span>
+                  <% end %>
+                <% end %>
+                <%= content_tag :li do %>
+                  <%= link_to [@item, :buckets] do %>
+                    Buckets
+                    <span class="badge pull-right"><%= @item.buckets.count %></span>
                   <% end %>
                 <% end %>
               </ul>

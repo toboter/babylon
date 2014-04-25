@@ -1,7 +1,5 @@
 <% title "People", nil %>
 
-<% content_for :add_section do %>
-<% end if can? :edit, @people %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>

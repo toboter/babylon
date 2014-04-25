@@ -20,7 +20,8 @@ class Ability
       # can :read, 'info'
       cannot [:destroy, :edit, :create], :all
       can [:edit, :update], Project, :memberships => { :user_id => user.id, :role => 'admin' }
-      can [:edit, :update], Person, :user_id => user.id # User sollen ihr eigenes Personenprofil editieren können
+      can [:create, :edit, :update], Person, :user_id => user.id # User sollen ihr eigenes Personenprofil editieren können
+      can [:edit], ['Profile']
     end
 
     if user.role? :author #kann Informationen hinzufügen, Datensätze anlegen, nichts löschen

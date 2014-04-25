@@ -1,7 +1,7 @@
-<% title "#{@document.title}", nil %>
+<% title 'Document', @document.title %>
 <% edit_section_for(@document, @document.documentable) %>
 <% publishing_section_for(@document) %>
-
+<% footer_section(@document) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -32,27 +32,6 @@
       <%= content_tag :li, link_to(@document.documentable.name, @document.documentable) %>
       <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
     </ul>
-    <h5 class="muted">Creator</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless @document.creator.person %>
-          <%= @document.creator.available_name %>
-        <% else %>
-          <%= link_to "#{@document.creator.available_name}", @document.creator.person %>
-        <% end %>
-      </li>
-      <li>on: <%= @document.created_at %></li>
-    </ul>
-    <h5 class="muted">Last update by</h5>
-    <ul class="unstyled">
-      <li>
-        <% unless @document.updater.person %>
-          <%= @document.updater.available_name %>
-        <% else %>
-          <%= link_to "#{@document.updater.available_name}", @document.updater.person %>
-        <% end %>
-      </li>
-      <li>on: <%= @document.updated_at %></li>
-    </ul>
+    
   </div>
 <% end %>

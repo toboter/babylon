@@ -4,7 +4,7 @@
       <%= content_tag :div, class: 'span3 authors' do -%>
         <ul class="unstyled">
           <%= content_tag :li, book_edited_by(book) %>
-          <li><small><%= book.book_type %></small> <%= book.year.present? ? book.year : '[unpublished]' %></li>
+          <li><%= book.year.present? ? book.year : '[unpublished]' %></li>
         </ul>
       <% end -%>
       <%= content_tag :div, class: 'span8' do -%>

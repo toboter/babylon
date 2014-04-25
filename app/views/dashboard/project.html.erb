@@ -7,9 +7,6 @@
   <%= content_tag :li, 'Dashboard', class: 'active' %>
 <% end %>
 
-<% content_for :add_section do %>
-
-<% end if can? :manage, 'site' %>
 
 <% content_for :main_section do %>
   <div class="span12">
@@ -82,20 +79,22 @@
     
     <%= content_tag :div, class: 'row-fluid' do %>
 
-      <div class="span7">
-    	<table class="table table-bordered table-hover">
-      	  <tbody>
-      		<%= render @current_aspect.items %>
-      	  </tbody>
-    	</table>
-    	<ul class="nav nav-pills">
+      <%= content_tag :div, class: "span7" do %>
+        <%= content_tag :div, class: "" do %>
+    	  <table class="table table-bordered table-hover">
+      	    <tbody>
+      		    <%= render @current_aspect.items %>
+      	    </tbody>
+    	  </table>
+    	  <ul class="nav nav-pills">
           <%= content_tag :li, class: 'pull-right' do %>
             <%= link_to [current_aspect, :items] do %>
               All items for this project
             <% end %>
           <% end %>
         </ul>
-      </div>
+        <% end if @current_aspect.items.any? %>
+      <% end %>
 
       <div class="span5">
 
@@ -115,20 +114,9 @@
 
         <div class="row-fluid">
           <div class="span12 well" style="margin-top:20px;">
-          <div class="span6">
-            <ul class="unstyled">
-              <li><h5></h5></li>
-              <li></li>
-            </ul>
-          </div>
-          <div class="span6">
-            <ul class="unstyled">
-              <li><h5></h5></li>
-              <li></li> 
-            </ul>
-          </div>
-          <%= content_tag :h5, 'Current Aspect' if aspect? %>
-          <%= content_tag :p, link_to(full_qualified_name(current_aspect), project_dashboard_path(current_aspect)) if aspect? %>
+            <%= content_tag :h5, 'Current Aspect' if aspect? %>
+            <%= content_tag :p, link_to(full_qualified_name(current_aspect), project_dashboard_path(current_aspect)) if aspect? %>
+            <%= link_to 'Edit this aspect | Edit Membership', [:edit, current_aspect.projectable, current_aspect] if can? :manage, current_aspect %>
           </div>
         </div>
       

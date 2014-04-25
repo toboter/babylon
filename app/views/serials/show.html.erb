@@ -1,9 +1,7 @@
-<% title @serial.name, nil %>
+<% title @serial.serial_type, @serial.name %>
 <% edit_section_for(@serial, nil) %>
+<% footer_section(@serial) %>
 
-<% content_for :add_section do %>
-  <li><%= link_to 'Volume', new_book_path(:serial_id => @serial) %></li>
-<% end if can? :edit, @serial %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -12,7 +10,13 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <h4 class="muted">Volumes / Issues</h4>
+  <h4 class="muted">
+    Volumes / Issues
+    <%= link_to new_book_path(:serial_id => @serial), class: 'btn btn-create pull-right btn-small', style: 'margin-left:10px;' do %>
+      <i class="icon-plus icon-white"></i>
+      Volume
+    <% end if can? :create, @serial.books %>
+  </h4>
   <%= render "books/book_entries", :books => @serial.books.order("volume ASC") %>
 <% end %>
 
@@ -23,9 +27,5 @@
     <li><%= link_to "#{@serial.uri}", "#{@serial.uri}", :target => '_blank' %></li>
     <%= content_tag :li, 'ISSN'+@serial.serial_identifier if @serial.serial_identifier.present? %>
   </ul>
-  <h5 class="muted" style="margin-top:50px;">Record Info</h5>
-  <ul class="unstyled">
-    <li>Created by: <%= @serial.creator.available_name %></li>
-    <li>Updated by: <%= @serial.updater.available_name %></li>
-  </ul>
+
 <% end %>

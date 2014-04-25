@@ -6,7 +6,7 @@ class ProjectReferencesController < ApplicationController
   # POST /project_references.json
   def create
     @project_reference = ProjectReference.new
-    @project_reference.project_id = params[:project_id]
+    @project_reference.project_id = current_aspect.id
     @project_reference.reference_id = params[:reference_id]
 
     respond_to do |format|
@@ -24,12 +24,11 @@ class ProjectReferencesController < ApplicationController
   # DELETE /project_references/1
   # DELETE /project_references/1.json
   def destroy
-    @project = Project.find(params[:project_id])
-    @project_reference = @project.project_references.find_by_reference_id(params[:reference_id])
+    @project_reference = current_aspect.project_references.find_by_reference_id(params[:reference_id])
     @project_reference.destroy
 
     respond_to do |format|
-      format.html { redirect_to :back }
+      format.html { redirect_to :back, notice: "Removed reference from #{current_aspect.name}." }
       format.json { head :no_content }
     end
   end

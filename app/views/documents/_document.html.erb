@@ -1,7 +1,7 @@
 <tr class="document-entries" id="document-<%= document.id %>">
   <td width="100%">
       <span class="title">
-        <%= document.title ? link_to(document.title, document) : link_to(document.document_type, document) %>
+        <%= document.title ? link_to(document.title, [document.documentable, document]) : link_to(document.document_type, [document.documentable, document]) %>
       </span>
     <p>
       Created by <%= name_only_or_link_to(document.creator) %> 

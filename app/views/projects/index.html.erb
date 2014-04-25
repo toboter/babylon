@@ -44,7 +44,7 @@
         <%= link_to "#{@projectable.projects.count} Module projects", polymorphic_url([@projectable, :projects], state: 'module', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='module'}" %>
       <% end if @projectable.class.to_s == 'Cluster' %>
       <div class="pull-right" style="<%= 'margin: 1em 0;' if @projectable.class.to_s == 'Group' %>">
-        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-create" if @projectable %>
+        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-create btn-small", style: 'font-weight:bold;' if @projectable %>
       </div>
     <% end if @projectable %>
     <div class="projects-list row-fluid">

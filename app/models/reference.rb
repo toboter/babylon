@@ -29,7 +29,7 @@ class Reference < ActiveRecord::Base
   has_many :citations, :dependent => :destroy
   has_many :items, class_name: 'Citation', conditions: "citable_type = 'Item'"
 
-  accepts_nested_attributes_for :authorships, allow_destroy: true
+  accepts_nested_attributes_for :authorships, :project_references, allow_destroy: true
 
   before_save :save_original_date_text
 

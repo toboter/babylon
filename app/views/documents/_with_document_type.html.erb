@@ -1,4 +1,4 @@
-<% if var.documents.doctype(dtype).present? %>
+<% if var.documents.doctype(dtype).abstract.present? || var.documents.doctype(dtype).content.present? %>
   <%= render "documents/document", :document => var.documents.doctype(dtype) %>
 <% else %>
   <p>No <%= dtype %> available</p>

@@ -1,14 +1,6 @@
 <% title @cluster.name, nil, false %>
 <% edit_section_for(@cluster, nil) if @cluster.cluster_admin == current_user || @cluster.creator == current_user || current_user.superuser? %>
 
-<% content_for :add_section do %>
-  <li><%= link_to 'Ungrouped project', new_cluster_project_path(@cluster) %></li>
-  <li><%= link_to 'Group', new_group_path(:cluster_id => @cluster) %></li>
-  <li class="divider"></li>
-  <li><%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') %></li>
-  <li><%= link_to 'Document', polymorphic_path([:new, @cluster, :document]) %></li>
-<% end if can? :edit, @cluster %>
-
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag :li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider') %>
@@ -22,7 +14,10 @@
       <%= link_to (image_tag @cluster_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@cluster, @cluster_bucket]) if @cluster_bucket %>
     <% end if @cluster_bucket.cover %>
     <%= content_tag :div, class: (@cluster_bucket.cover ? 'span9' : 'span12') do %>
-      <h1><%= @cluster.name %></h1>
+      <h1>
+        <%= @cluster.name %>
+        <%= yield(:edit_section) %>
+      </h1>
       <p><%= @cluster.documents.doctype('Introduction').abstract.present? ? markdown(@cluster.documents.doctype('Introduction').abstract) : "No abstract to show." if @cluster.documents.doctype('Introduction') %></p>
       <% if can? :edit, @cluster %>
         <small>
@@ -119,5 +114,6 @@
     </ul>
     <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if @cluster.contact %>
     <p><%= markdown(@cluster.contact) if @cluster.contact %></p>
+    <%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') && (can? :create, @cluster.documents) %>
   </div>
 <% end %>

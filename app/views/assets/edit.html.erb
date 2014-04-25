@@ -24,6 +24,20 @@
     </div>
   </div>
 
+  <div class="control-group">
+    <%= f.label :license, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :license, class: 'span6' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :file_author, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :file_author, Person.all, :id, :name, prompt: "Who took it?" %>
+    </div>
+  </div>
+
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

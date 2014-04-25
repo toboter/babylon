@@ -1,13 +1,12 @@
 class BucketsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_attachable, except: [:index]
+  before_filter :load_attachable
   load_and_authorize_resource
   
   # GET /buckets
   # GET /buckets.json
   def index
-    if params[:bucket_id]
-      load_attachable
+    if @attachable
       @buckets = @attachable.buckets
     else
       @buckets = Bucket.all
@@ -118,7 +117,7 @@ private
     elsif resource == 'modules'
       resource = 'clusters'
     end
-    @attachable = resource.singularize.classify.constantize.find(id)
+    @attachable = resource.singularize.classify.constantize.find(id) if id
   end
 
 end

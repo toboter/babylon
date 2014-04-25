@@ -1,13 +1,7 @@
-<% title "Research Project", @project.name, nil %>
+<% title "Project", @project.name, nil %>
 <% edit_section_for(@project, @project.projectable) if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
+<% footer_section(@project) %>
 
-<% content_for :add_section do %>
-  <li><%= link_to "People", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %></li>
-  <li class="divider"></li>
-  <li><%= link_to 'Documents', polymorphic_path([:new, @project, :document]) %></li>
-  <li><%= link_to "Introduction document", polymorphic_path([:new, @project, :document], :document_type => "Introduction") unless @project.documents.doctype('Introduction') %></li>
-  <li><%= link_to 'Todo', "#add_todo", :'data-toggle' => 'modal' %></li>  
-<% end if can? :edit, @project %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -25,8 +19,11 @@
 <%= content_for :top_over do %>
   <div class="row-fluid" id='about' style="padding-bottom:1em;">
     <%= content_tag :div, class: 'span6' do %>
-      <%= content_tag :h1, 'Research Project', class: 'pagetop' %>
-      <%= content_tag :h2, @project.name, class: 'subtitle' %>
+      <%= content_tag :h1, 'Project', class: 'pagetop' %>
+      <%= content_tag :h2, class: 'subtitle' do %>
+        <%= @project.name %>
+        <%= yield(:edit_section) %>
+      <% end %>
     <% end %>
     <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
       <p>
@@ -109,82 +106,10 @@
       <% else %>
         <li>Module: <%= link_to(@project.projectable.name, @project.projectable) %></li>
       <% end %>
-      <small>
-        <li style="margin-top:20px;">Creator: <%= name_only_or_link_to(@project.creator) %></li>
-        <li>Created on: <%= @project.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
-      </small>
     </ul>
     <%= content_tag :p, 'Bibliography is available as root bibliography', class: 'text-info' if @project.show_references == true %>
+
+    <%= link_to "Manage Memberships", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %> 
+    <%= link_to "Add introduction document", polymorphic_path([:new, @project, :document], :document_type => "Introduction") unless @project.documents.doctype('Introduction') %>
   </div>
-
-
-
-
-
-<!-- Modals beginn -->
-
-    <div id="add_todo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Add a task to <%= @project.name %></h3>
-      </div>
-  
-      <%= form_for [@project, @project.todos.new], :html => { :class => 'form-horizontal' } do |f| %>
-        <div class="modal-body">
-          <%= f.error_messages %>
-          <%= f.hidden_field :project_id %>
-          <%= f.hidden_field :completed, value: 'f' %>
-          <div class="control-group">
-            <%= f.label :name, 'Task', class: 'control-label' %>
-            <div class="controls">
-              <%= f.text_field :name, placeholder: 'Name' %>
-            </div>
-          </div>
-      
-          <div class="control-group">
-            <%= f.label :assigned_id, class: 'control-label' %>
-            <div class="controls">
-              <%= f.collection_select :assigned_id, @project.members, :id, :available_name, prompt: "Who's assigned?" %>
-            </div>
-          </div>
-      
-          <div class="control-group">
-            <%= f.label :due_to_text, 'Due to', class: 'control-label' %>
-            <div class="controls">
-              <div class="input-append date">
-                <%= f.text_field :due_to_text, placeholder: 'Due to', :'data-behaviour' => 'datepicker' %>
-                <span class="add-on"><i class="icon-th"></i></span>
-              </div>
-            </div>
-          </div>
-
-          <small><a href="#" data-toggle="collapse" data-target="#todo-options">More options</a></small>
-          <div class="collapse" id="todo-options">
-            <div class="control-group">
-              <%= f.label :starts_at, 'Start', class: 'control-label' %>
-              <div class="controls">
-                <div class="input-append date">
-                  <%= f.text_field :starts_at_text, placeholder: 'Starts at', :'data-behaviour' => 'datepicker' %>
-                  <span class="add-on"><i class="icon-th"></i></span>
-                </div> 
-              </div>
-            </div>
-            <%= f.fields_for :todo_dependencies do |builder| %>
-              <%= render "todos/todo_dependency_fields", :f => builder %>
-            <% end %>
-            <p class="links controls">
-              <%= link_to_add_association "Add Dependency", f, :todo_dependencies, :partial => 'todos/todo_dependency_fields' %>
-            </p>
-          </div>
-        
-        </div>
-  
-        <div class="modal-footer">
-          <%= f.submit 'Save', class: 'btn btn-primary pull-left' %>
-          <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
-        </div>
-      <% end %>
-    </div>
-
-
 <% end %>

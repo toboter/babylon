@@ -2,7 +2,7 @@ class Asset < ActiveRecord::Base
   require 'will_paginate/array'
   attr_accessible :assetfile, :content_type, :file_name, :file_size, :name, :parent_id, :file_author, 
     :creator_id, :updater_id, :caption, :date_taken, :latitude, :longitude, :width, :height, :camera,
-    :camera_make, :flash, :focal_length, :exposure, :f_number, :iso
+    :camera_make, :flash, :focal_length, :exposure, :f_number, :iso, :license
 
   stampable
   mount_uploader :assetfile, AssetfileUploader
@@ -13,6 +13,8 @@ class Asset < ActiveRecord::Base
   has_many :buckets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
   has_many :issues, as: :issuable, :dependent => :destroy
+
+  belongs_to :author, class_name: 'Person', foreign_key: 'file_author'
 
   validates_presence_of :name, :content_type
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload already exists. Just add it to your desired bucket."

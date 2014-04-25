@@ -1,9 +1,7 @@
 <% title graded_fullname(@person), nil, nil %>
 <% edit_section_for(@person, nil) if user_signed_in? && ((!@person.user_id?) || (@person == current_user.person)) || (can? :manage, 'personal-informations') %>
+<% footer_section(@person) %>
 
-<% content_for :add_section do %>
-
-<% end if user_signed_in? && (can? :manage, @person) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -17,7 +15,10 @@
       <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: ""), @person.profile_picture if @person.profile_picture %>
     </div>
     <div class="<%= @person.profile_picture ? 'span6' : 'span9' %>">
-      <h1><%= graded_fullname(@person) %></h1>
+      <h1>
+        <%= graded_fullname(@person) %>
+        <%= yield(:edit_section) %>
+      </h1>
       <ul class="unstyled">
         <%= content_tag :li, @person.profession if @person.profession.present? %>
         <%= content_tag :li, (@person.primary_or_first_institution.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @person.institutions.any? %>
@@ -136,10 +137,6 @@
         <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
       <% end %>
     </div>
-
-
-    <hr>
-    <p>Written by <%= name_only_or_link_to(@person.updater) %> <%= '[Updated '+distance_of_time_in_words_to_now(@person.updated_at)+' ago]' if @person.created_at != @person.updated_at %> </p>
 
 <% end %>
 

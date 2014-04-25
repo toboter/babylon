@@ -1,4 +1,4 @@
-<% title "Journals and serials", nil %>
+<% title "Journals and series", nil %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -13,7 +13,7 @@
       <%= content_tag :li, link_to("Journals and serials", serials_path), class: 'active' %>
       <%= link_to new_serial_path, class: 'btn btn-create pull-right', style: 'margin-left:10px;' do %>
         <i class="icon-plus icon-white"></i>
-        Journal or serie
+        Journal or serial
       <% end if can? :create, @serials %>
       <%= form_tag ('/serials'), method: :get, class: 'form-inline pull-right' do %>
         <div class="input-append">

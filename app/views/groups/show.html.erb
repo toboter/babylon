@@ -1,5 +1,5 @@
 <% title "Research Group", @group.name, nil %>
-<% edit_section_for(@group, nil) if @group.group_admin == current_user || @group.creator == current_user || current_user.superuser? %>
+<% edit_section_for(@group, @group.cluster) if @group.group_admin == current_user || @group.creator == current_user || current_user.superuser? %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Project', new_group_project_path(@group) %></li>
@@ -19,8 +19,13 @@
 <%= content_for :top_over do %>
   <div class="row-fluid" id='about' style=";">
     <%= content_tag :div, class: 'span6' do %>
-      <%= content_tag :h1, 'Research Group', class: 'pagetop' %>
-      <%= content_tag :h2, @group.name, class: 'subtitle' %>
+      <%= content_tag :h1, class: 'pagetop' do %>
+        Group
+      <% end %>
+      <%= content_tag :h2, class: 'subtitle' do %>
+        <%= @group.name %>
+        <%= yield(:edit_section) %>
+      <% end %>
     <% end %>
     <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
       <p>

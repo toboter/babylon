@@ -1,10 +1,13 @@
-<% title "#{@bucket.name}", nil %>
+<% title "Bucket", @bucket.name %>
 <% edit_section_for(@bucket, @bucket.attachable) unless @bucket.name_fixed %>
+<% footer_section(@bucket) %>
+
 
 <% content_for :breadcrumbs_section do %>
   <% unless @bucket.attachable_type == 'Page' %>
     <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@bucket.attachable.name}", @bucket.attachable) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Buckets", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, @bucket.name.present? ? (@bucket.name) : 'Nothing', class: 'active') %>
   <% end %>
 <% end %>
@@ -29,13 +32,7 @@
         </ul>
       <% end %>
     <% end %>
-    <h4 class="muted">Info</h4>
-    <ul class="unstyled">
-      <%= content_tag :li, @bucket.name if @bucket.name.present? %>
-      <%= content_tag :li, 'Created by: '+@bucket.creator.available_name if @bucket.creator.present? %>
-      <%= content_tag :li, 'Updated by: '+@bucket.creator.available_name if @bucket.updater.present? %>
-    </ul>
-  
+ 
 
 <!-- Modals beginn -->
 

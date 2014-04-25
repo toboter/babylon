@@ -59,8 +59,8 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(params[:book])
 
-    for reference in @book.articles
-      reference.projects << current_aspect
+    for article in @book.articles
+      current_aspect.references << article
     end
 
     respond_to do |format|
@@ -78,10 +78,6 @@ class BooksController < ApplicationController
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
-
-    # for reference in @book.articles
-    #   reference.projects << current_aspect unless reference.projects.exists?(current_aspect)
-    # end
 
     respond_to do |format|
       if @book.update_attributes(params[:book])

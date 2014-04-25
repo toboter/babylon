@@ -32,13 +32,13 @@ Babylon::Application.routes.draw do
   end
 
   resources :clusters, :path => 'modules' do
-    resources :groups, only: [:index]
+    resources :groups
     resources :projects
     resources :documents
     resources :buckets
   end
 
-  resources :groups do
+  resources :groups, only: [:index, :show] do
     resources :projects
     resources :documents
   end
@@ -58,14 +58,14 @@ Babylon::Application.routes.draw do
 
 
   # Bibliography Management
-  delete 'destroy_project_reference' => 'project_references#destroy', :as => :destroy_project_reference
-  post 'add_to_project_references' => 'project_references#create', :as => :add_to_project_references
   resources :serials
   resources :books
   resources :references, :path => 'bibliography' do
     resources :documents
     resources :buckets
     resources :issues
+    post 'add_to_aspect' => 'project_references#create', :as => :add_to_aspect
+    delete 'remove_from_aspect' => 'project_references#destroy', :as => :remove_from_aspect
   end
 
   # Documents & Assets
