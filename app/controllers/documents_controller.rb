@@ -124,6 +124,8 @@ private
       resource = 'clusters'
     elsif resource == 'bibliography'
       resource = 'references'
+    elsif resource == 'announcements'
+      resource = 'snippets'
     end
     if id == nil
       @documentable = nil

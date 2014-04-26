@@ -23,7 +23,7 @@
           <% end if can? :manage, 'publishing' %>
         </h4>
         <p>
-          <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license %>
+          <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license if @about_bucket.cover.author %>
         </p>
       </div>
     </div>
@@ -35,7 +35,7 @@
           <i class="icon-edit icon-white"></i>
         <% end if can? :manage, 'publishing' %>
         <br />
-        <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license %>
+        <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license if @about_bucket.cover.author %>
       </p>
     </div>
   <% end if @about_bucket.cover %>

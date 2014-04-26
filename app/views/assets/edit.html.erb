@@ -27,7 +27,7 @@
   <div class="control-group">
     <%= f.label :license, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :license, class: 'span6' %>
+      <%= f.select :license, Asset::LICENSES, class: 'span6' %>
     </div>
   </div>
 

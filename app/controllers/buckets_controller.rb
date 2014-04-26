@@ -116,6 +116,8 @@ private
       resource = 'references'
     elsif resource == 'modules'
       resource = 'clusters'
+    elsif resource == 'announcements'
+      resource = 'snippets'
     end
     @attachable = resource.singularize.classify.constantize.find(id) if id
   end

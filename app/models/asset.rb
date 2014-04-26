@@ -16,8 +16,10 @@ class Asset < ActiveRecord::Base
 
   belongs_to :author, class_name: 'Person', foreign_key: 'file_author'
 
-  validates_presence_of :name, :content_type
+  validates_presence_of :name, :content_type, :file_author, :license
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload already exists. Just add it to your desired bucket."
+
+  LICENSES = %w[by-nc-sa by-sa] 
 
   def asset_name
     File.basename(assetfile.path || assetfile.filename) if assetfile
