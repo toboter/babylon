@@ -1,0 +1,11 @@
+<div class="mega-icon" style='background-image: url("/assets/activity/<%= activity.action %>.svg")'></div>
+<abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
+<div class="title">
+  <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
+  <%= name_only_or_link_to(activity.user) %> 
+  <%= activity.action.sub(/e?$/, "ed") %> person 
+  <%= link_to person.name, person if person %>
+</div>
+<div class="details">
+
+</div>

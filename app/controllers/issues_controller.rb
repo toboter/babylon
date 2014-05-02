@@ -77,6 +77,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
+        track_activity @issue
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully created.' }
         format.json { render json: @issue, status: :created, location: @issue }
       else
@@ -93,6 +94,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.update_attributes(params[:issue])
+        track_activity @issue
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
       else
@@ -107,6 +109,7 @@ class IssuesController < ApplicationController
   def destroy
     @issue = @issuable.issues.find(params[:id])
     @issue.destroy
+    track_activity @issue
 
     respond_to do |format|
       format.html { redirect_to [@issuable, :issues] }
@@ -121,6 +124,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        track_activity @comment
         format.html { redirect_to [@issue.issuable, @issue], notice: 'Comment was successfully created.' }
         format.json { render json: @comment, status: :created, location: @comment }
       else

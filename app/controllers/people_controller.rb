@@ -66,6 +66,7 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.save
+        track_activity @person
         format.html { redirect_to @person, notice: 'Person was successfully created.' }
         format.json { render json: @person, status: :created, location: @person }
       else
@@ -82,6 +83,7 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.update_attributes(params[:person])
+        track_activity @person
         format.html { redirect_to @person, notice: 'Person was successfully updated.' }
         format.json { head :no_content }
       else
@@ -96,6 +98,7 @@ class PeopleController < ApplicationController
   def destroy
     @person = Person.find(params[:id])
     @person.destroy
+    track_activity @person
 
     respond_to do |format|
       format.html { redirect_to people_url }

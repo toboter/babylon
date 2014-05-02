@@ -29,3 +29,15 @@
       <%= f.text_area :content, class: 'input-block-level', id: 'content_field' %>
     </div>
   </div>
+
+  <div class="control-group">
+    <div class="controls form-inline well">
+      <p>
+        <%= f.label :documentfile, "Upload a attachment to this document" %><br />
+        <%= f.file_field :documentfile %>
+        <%= f.label :remote_documentfile_url, "or document URL" %>
+        <%= f.text_field :remote_documentfile_url %>
+      </p>
+      <p class="text-warning">Be sure if you paste something in here while editing. <%= "Current attached file is   #{@document.documentfile_name}" if @document.documentfile.present? %></p>
+    </div>
+  </div>

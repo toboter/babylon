@@ -3,10 +3,12 @@ class Item < ActiveRecord::Base
   friendly_id :inventory_name, use: [:slugged, :history]
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
-            :context_id, :accession_date, :creator_id, :updater_id, :title, :tag_ids, 
+            :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, 
             :citations_attributes, :actions_attributes, :description, :slug
 
   stampable
+
+  attr_writer :accession_date_text
 
   after_create :build_album_bucket
 
@@ -31,10 +33,12 @@ class Item < ActiveRecord::Base
 
   validates_presence_of :collection_id, :inventory_number
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
+  validate :check_accession_date_text
 
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
 
+  before_save :save_accession_date_text
 
   def inventory_name
     collection.shortcut+' '+inventory_number+inventory_number_index
@@ -48,5 +52,20 @@ class Item < ActiveRecord::Base
     Bucket.create :attachable_id => self.id, :attachable_type => "Item", :name => "#{self.name+' Album'}", :name_fixed => true
   end
 
+  def accession_date_text
+    @accession_date_text || accession_date.try(:strftime, "%Y-%m-%d %H:%M:%S")
+  end
+
+  def save_accession_date_text
+    self.accession_date = Time.zone.parse(@accession_date_text) if @accession_date_text.present?
+  end
+
+  def check_accession_date_text
+    if @accession_date_text.present? && Time.zone.parse(@accession_date_text).nil?
+      errors.add :accession_date_text, "cannot be parsed"
+    end
+  rescue ArgumentError
+    errors.add :accession_date_text, "is out of range"
+  end
 
 end

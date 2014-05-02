@@ -3,6 +3,8 @@ class Citation < ActiveRecord::Base
 
   stampable
 
+  validates :predicate, presence: true
+
   belongs_to :reference
   belongs_to :citable, :polymorphic => true
   belongs_to :creator, class_name: "User"

@@ -7,12 +7,15 @@ class ReferencesController < ApplicationController
   def index
     if params[:project_id]
       @project = Project.find(params[:project_id])
-      @references_all = @project.references
-      @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
+      @references_all = @project.references 
+    elsif params[:item_id]
+      @item = Item.find(params[:item_id])
+      @references_all = @item.references
     else
       @references_all = Reference.joins(:projects).where('show_references = ?', true)
-      @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
     end
+
+    @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb

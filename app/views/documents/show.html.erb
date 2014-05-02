@@ -27,11 +27,28 @@
   </div>
   <%= tagging_infos_for(@document) %>
   <div class="info-box">
-    <h5 class="muted">Cross reference</h5>
+    <h4 class="">
+      Cross reference
+      <%= content_tag :i, '', class: 'icon-file pull-right' %>
+    </h4>
     <ul class="unstyled">
       <%= content_tag :li, link_to(@document.documentable.name, @document.documentable) %>
       <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
     </ul>
+
+    <%= content_tag :div, class: 'attachements' do %>
+      <h4 class="">
+        Attached file
+        <%= content_tag :i, '', class: 'icon-download-alt pull-right' %>
+      </h4>
+      <%= content_tag :p do %>
+        <strong><%= @document.documentfile_name %></strong><br />
+        Uploaded <%= distance_of_time_in_words_to_now(@document.documentfile_upload_date) %> ago. 
+        Size <%= number_to_human_size(@document.documentfile_size) %>. 
+        [<%= link_to 'Download', download_document_path(@document) %>]
+        <small><%= @document.documentfile_md5hash %></small>
+      <% end %>
+    <% end if @document.documentfile.present? %>
     
   </div>
 <% end %>

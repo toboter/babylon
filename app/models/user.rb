@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_many :projects, through: :memberships
   has_many :todos, foreign_key: "assigned_id"
   has_many :issues, foreign_key: "assigned_id"
+  has_many :activities
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'

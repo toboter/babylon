@@ -1,5 +1,7 @@
 Babylon::Application.routes.draw do
 
+  resources :activities
+
   resources :snippets, :path => 'announcements' do
     resources :buckets
     resources :documents
@@ -96,6 +98,12 @@ Babylon::Application.routes.draw do
     end
     collection do
       delete :destroy_multiple
+    end
+  end
+
+  resources :documents, only: [] do
+    member do
+      get :download, to: 'documents#download'
     end
   end
 

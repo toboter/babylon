@@ -18,28 +18,10 @@
     <% end %>
     <div class="row-fluid">
       <div class="span4">
-        <%= content_tag :div, id: @item.buckets.first.id.to_s+"-album-carousel", class: "carousel slide", :"data-interval" => false do %>
-          <ol class="carousel-indicators">
-            <% for asset in @item.buckets.first.assets do %>
-              <li data-target="#<%= @item.buckets.first.id %>-album-carousel" data-slide-to="<%= asset.id %>" class="<%= 'active' if asset == @item.buckets.first.cover %>"></li>
-            <% end %>
-          </ol>
-          <!-- Carousel items -->
-          <div class="carousel-inner">
-            <% for asset in @item.buckets.first.assets do %>
-              <div class="item <%= 'active' if asset == @item.buckets.first.cover %>">
-                <div class="crop"><%= image_tag asset.assetfile.large.url %></div>
-                <div class="carousel-caption">
-                  <h4><%= asset.name %></h4>
-                  <p><%= asset.author.name + ' ' + asset.license %></p>
-                </div>
-              </div>
-            <% end %>
-          </div>
-          <!-- Carousel nav -->
-          <a class="carousel-control left" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="prev">&lsaquo;</a>
-          <a class="carousel-control right" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="next">&rsaquo;</a>
-        <% end if @item.buckets.first && @item.buckets.first.assets.any? %>
+        <a data-toggle="modal" id="image-modal" href="#image-slider">
+          <%= @item.buckets.first.cover ? (image_tag @item.buckets.first.cover.assetfile.large.url) : (image_tag 'icons/no_picture.svg') if @item.buckets.any? %>
+        </a><br />
+        <small>click on the picture to see the full album.</small>
       </div>
   
       <div class="span8">
@@ -57,6 +39,7 @@
           </div>
           <div class="span6">
             <%= link_to 'Publication status','', class: 'btn btn-block', style: 'margin-bottom:5px;' %>
+            
             <%= content_tag :div, class: "item-options well" do %>
               <%= content_tag :div, class: "" do %>
                 <%= link_to add_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-block btn-success' do %>
@@ -131,7 +114,11 @@
 
         Documents
         <div class="accordion-inner">
-          <%= render @item.documents %>
+          <table class="table table-bordered table-hover">
+            <tbody>
+            <%= render @item.documents %>
+            </tbody>
+          </table>
         </div>
 
         References
@@ -141,4 +128,46 @@
       </div>
     </div>
   </div>
+
+
+  <!-- Modals beginn -->
+  <div id="image-slider" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Assets</h3>
+    </div>
+
+
+    <div class="modal-body">
+        <%= content_tag :div, id: @item.buckets.first.id.to_s+"-album-carousel", class: "carousel slide", :"data-interval" => false do %>
+          <ol class="carousel-indicators">
+            <% for asset in @item.buckets.first.assets do %>
+              <li data-target="#<%= @item.buckets.first.id %>-album-carousel" data-slide-to="<%= asset.id %>" class="<%= 'active' if asset == @item.buckets.first.cover %>"></li>
+            <% end %>
+          </ol>
+          <!-- Carousel items -->
+          <div class="carousel-inner">
+            <% for asset in @item.buckets.first.assets do %>
+              <div class="item <%= 'active' if asset == @item.buckets.first.cover %>">
+                <div class="crop"><%= image_tag asset.assetfile.xlarge.url %></div>
+                <div class="caption">
+                  <h4><%= asset.name %></h4>
+                  <p><%= asset.author.name + ' ' + asset.license %></p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Carousel nav -->
+          <a class="carousel-control left" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="next">&rsaquo;</a>
+        <% end if @item.buckets.first && @item.buckets.first.assets.any? %>
+
+    </div>
+    <div class="modal-footer">
+
+    </div>
+
+  </div>
+
+
 <% end %>

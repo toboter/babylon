@@ -99,6 +99,9 @@ gem 'roo'
 # https://github.com/djreimer/sequenced
 gem 'sequenced'
 
+# https://github.com/pokonski/public_activity
+# gem 'public_activity' from scratch see http://railscasts.com/episodes/407-activity-feed-from-scratch
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

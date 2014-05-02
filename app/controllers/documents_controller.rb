@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_documentable, except: [:show]
+  before_filter :load_documentable, except: [:show, :download]
   load_and_authorize_resource
   
   # GET /documents
@@ -79,6 +79,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.save
+        track_activity @document
         format.html { redirect_to [@documentable, @document], notice: 'Document was successfully created.' }
         format.json { render json: @document, status: :created, location: @document }
       else
@@ -95,6 +96,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.update_attributes(params[:document])
+        track_activity @document
         format.html { redirect_to [@documentable, @document], notice: 'Document was successfully updated.' }
         format.json { head :no_content }
       else
@@ -109,11 +111,17 @@ class DocumentsController < ApplicationController
   def destroy
     @document = @documentable.documents.find(params[:id])
     @document.destroy
+    track_activity @document
 
     respond_to do |format|
       format.html { redirect_to @documentable }
       format.json { head :no_content }
     end
+  end
+
+  def download
+    @document = Document.find(params[:id])
+    send_data @document.documentfile.read, type: @document.documentfile_content_type, filename: @document.documentfile_name, :disposition => 'attachment'
   end
 
 private

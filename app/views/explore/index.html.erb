@@ -1,7 +1,7 @@
 <% title "Explore", nil %>
 
 <% content_for :content do %>
-  <%= content_tag :div, class: "carousel-inner" do %>
+  <%= content_tag :div, class: "carousel-inner billboard" do %>
     <div class="visible-phone">
       <h1>$babylon</h1>
       <h2 class="subtitle" style="font-size:1.4em;line-height:1.3em;">$Bibliotheken und Archive Babylons: texts in an e-based content</h2>
@@ -17,25 +17,29 @@
       <div class="carousel-caption hidden-phone">
         <h4>
           <%= @about_bucket.cover.name %>
-          <small><%= link_to '[Link]', @about_bucket.cover, style: 'color:inherit;' %></small>
+          <small><%= link_to '[Link]', @about_bucket.cover %></small>
           <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
             <i class="icon-edit icon-white"></i>
           <% end if can? :manage, 'publishing' %>
         </h4>
         <p>
-          <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license if @about_bucket.cover.author %>
+          <%= link_to @about_bucket.cover.author.name, @about_bucket.cover.author if @about_bucket.cover.author %>
+          <%= ', ' if @about_bucket.cover.author && @about_bucket.cover.license %>
+          <%= link_to @about_bucket.cover.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
         </p>
       </div>
     </div>
     <div class="visible-phone">
       <p>
         <strong><%= @about_bucket.cover.name %></strong>
-          <small><%= link_to '[Link]', @about_bucket.cover, style: 'text-decoration:none; color:inherit;' %></small>
+          <small><%= link_to '[Link]', @about_bucket.cover, style: 'text-decoration:none;' %></small>
         <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
           <i class="icon-edit icon-white"></i>
         <% end if can? :manage, 'publishing' %>
         <br />
-        <%= @about_bucket.cover.author.name + ', ' + @about_bucket.cover.license if @about_bucket.cover.author %>
+        <%= link_to @about_bucket.cover.author.name, @about_bucket.cover.author if @about_bucket.cover.author %>
+        <%= ', ' if @about_bucket.cover.author && @about_bucket.cover.license %>
+        <%= link_to @about_bucket.cover.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
       </p>
     </div>
   <% end if @about_bucket.cover %>
@@ -80,15 +84,16 @@
 
 
   <div class="" id="news-section" style="padding-top:3em;">
+
+    <div class="row-fluid">
+      <div class="span6">
     <%= content_tag :h2 do  %>
       Announcements    
     <% end if @news %>
-    <div class="row-fluid">
-      <div class="span12">
-        <% @news.in_groups_of(3, false).each do |row_news| %>
+        <% @news.in_groups_of(2, false).each do |row_news| %>
           <div class="row-fluid">
             <% for novelity in row_news do %>
-              <div class="span4" style="height:240px; border-top:1px solid #f5f5f5; padding-right:1em;">
+              <div class="span6" style="height:230px; border-top:1px solid #f5f5f5; padding-right:1em;">
                 <h3>
                   <%= novelity.name %>
                   <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if novelity.pinned? %>
@@ -99,11 +104,21 @@
             <% end %>
           </div>
         <% end %>
+          <p>
+      <%= link_to 'View all announcements', snippets_path %>
+    </p>
+      </div>
+
+      <div class="span5 offset1">
+<% @activities.each do |activity| %>
+  <%= ActivityPresenter.new(activity, self).render_activity %>
+<% end %>
+          <p>
+      <%= link_to 'View all activities', activities_path %>
+    </p>
       </div>
     </div>
-    <p>
-      <%= link_to 'View all', snippets_path %>
-    </p>
+
   </div>
 
 <% end %>

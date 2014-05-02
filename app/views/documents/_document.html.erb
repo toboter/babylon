@@ -1,8 +1,9 @@
 <tr class="document-entries" id="document-<%= document.id %>">
   <td width="100%">
       <span class="title">
-        <%= document.title ? link_to(document.title, [document.documentable, document]) : link_to(document.document_type, [document.documentable, document]) %>
+        <strong><%= document.title ? link_to(document.title, [document.documentable, document]) : link_to(document.document_type, [document.documentable, document]) %></strong>
       </span>
+      <%= content_tag :i, '', class: 'icon-download-alt pull-right' if document.documentfile.present? %>
     <p>
       Created by <%= name_only_or_link_to(document.creator) %> 
       <%= distance_of_time_in_words_to_now(document.created_at) %> ago 

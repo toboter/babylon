@@ -1,8 +1,12 @@
 class Document < ActiveRecord::Base
   attr_accessible :content, :document_type, :documentable_id, :documentable_type, :title, 
-  				  :creator_id, :updater_id, :abstract, :tag_ids
+  				  :creator_id, :updater_id, :abstract, :tag_ids, :documentfile, :remote_documentfile_url,
+            :documentfile_content_type, :documentfile_name, :documentfile_upload_date, :documentfile_size, :documentfile_md5hash
 
   stampable
+  mount_uploader :documentfile, DocumentfileUploader
+
+  before_validation :update_documentfile_attributes
 
   belongs_to :documentable, :polymorphic => true
   belongs_to :creator, class_name: "User"
@@ -14,7 +18,7 @@ class Document < ActiveRecord::Base
   DOKUMENTTYPES = %w[Introduction]
 
   validates_presence_of :title, :unless => :document_type?
-  validates_presence_of :content, :unless => :document_type?
+  validates_presence_of :abstract, :unless => :content?
   validates_uniqueness_of :document_type, :allow_blank => true, :scope => [:documentable_id, :documentable_type]
   validates_uniqueness_of :title, :scope => [:documentable_id, :documentable_type]
 
@@ -33,4 +37,15 @@ class Document < ActiveRecord::Base
     (document_type == 'Introduction')
   end
 
+private
+
+  def update_documentfile_attributes
+    if documentfile.present? && documentfile_changed?
+      self.documentfile_md5hash = Digest::MD5.hexdigest(self.documentfile.read)
+      self.documentfile_content_type = documentfile.file.content_type
+      self.documentfile_size = documentfile.file.size
+      self.documentfile_name = File.basename(documentfile.path || documentfile.filename)
+      self.documentfile_upload_date = Time.now if documentfile_changed? #FEHLER Form ist offenbar immer dirty. Wird daher immer geupdated. nach md5hash vorzugehen ist scheinbar zu grob.
+    end
+  end 
 end

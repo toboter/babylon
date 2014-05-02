@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140404111240) do
+ActiveRecord::Schema.define(:version => 20140502101149) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -27,6 +27,18 @@ ActiveRecord::Schema.define(:version => 20140404111240) do
 
   add_index "actions", ["person_id"], :name => "index_actions_on_person_id"
   add_index "actions", ["predicate_id"], :name => "index_actions_on_predicate_id"
+
+  create_table "activities", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "action"
+    t.integer  "trackable_id"
+    t.string   "trackable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "activities", ["trackable_id"], :name => "index_activities_on_trackable_id"
+  add_index "activities", ["user_id"], :name => "index_activities_on_user_id"
 
   create_table "affiliations", :force => true do |t|
     t.integer  "person_id"
@@ -176,11 +188,17 @@ ActiveRecord::Schema.define(:version => 20140404111240) do
     t.integer  "documentable_id"
     t.string   "document_type"
     t.text     "content"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.text     "abstract"
+    t.string   "documentfile"
+    t.string   "documentfile_content_type"
+    t.string   "documentfile_name"
+    t.datetime "documentfile_upload_date"
+    t.string   "documentfile_size"
+    t.string   "documentfile_md5hash"
   end
 
   add_index "documents", ["documentable_id", "documentable_type"], :name => "index_documents_on_documentable_id_and_documentable_type"
