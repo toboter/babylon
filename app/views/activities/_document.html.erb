@@ -3,9 +3,15 @@
 <div class="title">
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
-  <%= activity.action.sub(/e?$/, "ed") %> a 
-  <%= link_to 'document', [document.documentable, document] if document && document.documentable %> on 
-  <%= link_to document.documentable.name, document.documentable if document && document.documentable %>
+  <%= activity.action.sub(/e?$/, "ed") %>
+  <% if document.document_type == 'Introduction' %>
+  	the <%= link_to 'Introduction', [document.documentable, document] if document && document.documentable %> for 
+  	<%= link_to document.documentable.name, document.documentable if document && document.documentable %>
+  <% else %>
+    a
+  	<%= link_to 'document', [document.documentable, document] if document && document.documentable %> on 
+  	<%= link_to document.documentable.name, document.documentable if document && document.documentable %>
+  <% end %>
 </div>
 <div class="details">
 

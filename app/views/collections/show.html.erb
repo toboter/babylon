@@ -1,0 +1,46 @@
+<% title "Collections", @collection.name%>
+<% edit_section_for(@collection, @collection.institution) %>
+<% footer_section(@collection) %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @collection.institution.class.name.pluralize, [@collection.institution.class]) + content_tag(:span, '/', class: 'divider')) if @collection.institution %>
+  <%= content_tag(:li, (link_to @collection.institution.name, @collection.institution) + content_tag(:span, '/', class: 'divider')) if @collection.institution %>
+  <%= content_tag(:li, link_to("Collections", institution_collections_path(@collection.institution)) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag :li, @collection.name, class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <p>
+  	  <b>Name: </b>
+  	  <%= @collection.name %>
+	</p>
+	  
+	<p>
+  	  <b>Shortcut: </b>
+  	  <%= @collection.shortcut %>
+	</p>
+
+  <p>
+    <b>Properties: </b>
+    [Inventory name, Description, Classification], <%= @collection.fields.map{ |f| f.name }.join(', ').html_safe %>
+
+
+  <h4>
+    Objects
+    <%= link_to new_item_path(:collection_id => @collection.id), class: 'btn btn-create btn-small pull-right', style: 'margin-left:0;' do %>
+        <i class="icon-plus icon-white"></i>
+        Item
+    <% end if can? :create, @items %>
+  </h4>
+              <ul class="unstyled">
+              <% for item in @collection.items do %>
+                <li><%= link_to item.name, item %> </li>
+              <% end %>
+            </ul>
+
+<% end %>
+
+<% content_for :sidebar_section do %>
+
+<% end %>

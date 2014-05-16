@@ -76,8 +76,10 @@
 
   <%= content_tag :div, class: 'span4' do %>
     <div class="about-section">
-      <h2>About</h2>
-      <p><%= @about.description %> <%= content_tag :span, link_to('(Edit)', edit_snippet_path(@about)) if can? :manage, 'publishing' %></p>
+      <h2>
+        <%= @about.name %>
+      </h2>
+      <p><%= markdown(truncated_description(@about, length=800)) %></p>
     </div>
   <% end if @about %>
   </div>
@@ -87,9 +89,9 @@
 
     <div class="row-fluid">
       <div class="span6">
-    <%= content_tag :h2 do  %>
-      Announcements    
-    <% end if @news %>
+        <%= content_tag :h2 do  %>
+          Announcements    
+        <% end if @news %>
         <% @news.in_groups_of(2, false).each do |row_news| %>
           <div class="row-fluid">
             <% for novelity in row_news do %>
@@ -104,18 +106,18 @@
             <% end %>
           </div>
         <% end %>
-          <p>
-      <%= link_to 'View all announcements', snippets_path %>
-    </p>
+        <p>
+          <%= link_to 'View all announcements', snippets_path %>
+        </p>
       </div>
 
       <div class="span5 offset1">
-<% @activities.each do |activity| %>
-  <%= ActivityPresenter.new(activity, self).render_activity %>
-<% end %>
-          <p>
-      <%= link_to 'View all activities', activities_path %>
-    </p>
+        <% @activities.each do |activity| %>
+          <%= ActivityPresenter.new(activity, self).render_activity %>
+        <% end %>
+        <p>
+          <%= link_to 'View all activities', activities_path %>
+        </p>
       </div>
     </div>
 

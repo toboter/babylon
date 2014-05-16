@@ -11,6 +11,7 @@ class ProjectReferencesController < ApplicationController
 
     respond_to do |format|
       if @project_reference.save
+        track_activity @project_reference
         format.html { redirect_to :back, notice: 'Project reference was successfully created.' }
         format.json { render json: @project_reference, status: :created, location: @project_reference }
       else
@@ -26,6 +27,7 @@ class ProjectReferencesController < ApplicationController
   def destroy
     @project_reference = current_aspect.project_references.find_by_reference_id(params[:reference_id])
     @project_reference.destroy
+    track_activity @project_reference
 
     respond_to do |format|
       format.html { redirect_to :back, notice: "Removed reference from #{current_aspect.name}." }

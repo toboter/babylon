@@ -26,6 +26,14 @@ $(document).ready(function(){
     $('.tooltip-right').tooltip({
         placement: 'right'
     });
+    $('.popover-top').popover({
+        placement: 'top',
+        trigger: 'hover'
+    });
+    $('.popover-right').popover({
+        placement: 'right',
+        trigger: 'hover'
+    });
 
     $('.chosen-select').chosen({
     	search_contains: true

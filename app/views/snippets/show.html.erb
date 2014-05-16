@@ -1,4 +1,4 @@
-<% title "Announcement", @snippet.name %>
+<% title "Announcement #{'- about' if @snippet.snippet_type == 'about'}", @snippet.name %>
 <% edit_section_for(@snippet, nil) %>
 <% footer_section(@snippet) %>
 

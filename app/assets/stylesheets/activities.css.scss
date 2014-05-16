@@ -48,3 +48,15 @@ abbr.timeago{
     }
   }
 }
+
+.activity-align {
+  @media (min-width: 1200px) { 
+    padding-left:2em;
+    }
+  @media (min-width: 769px) and (max-width: 1199px) { 
+    padding-left:1em;
+    }
+  @media (max-width: 768px) { 
+    margin-left:-5px;
+    }
+}

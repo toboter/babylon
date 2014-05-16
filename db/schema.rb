@@ -11,18 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140502101149) do
+ActiveRecord::Schema.define(:version => 20140515133000) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
     t.integer  "predicate_id"
-    t.date     "actable_date"
     t.string   "actable_type"
     t.integer  "actable_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.string   "actable_date_text"
   end
 
   add_index "actions", ["person_id"], :name => "index_actions_on_person_id"
@@ -151,6 +151,30 @@ ActiveRecord::Schema.define(:version => 20140502101149) do
     t.text     "description"
     t.text     "contact"
   end
+
+  create_table "collection_field_values", :force => true do |t|
+    t.string   "field_value"
+    t.integer  "collection_field_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "collection_field_values", ["collection_field_id"], :name => "index_collection_field_values_on_collection_field_id"
+
+  create_table "collection_fields", :force => true do |t|
+    t.string   "field_type"
+    t.boolean  "required"
+    t.integer  "collection_id"
+    t.string   "name"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "collection_fields", ["collection_id"], :name => "index_collection_fields_on_collection_id"
 
   create_table "collections", :force => true do |t|
     t.integer  "institution_id"
@@ -315,6 +339,7 @@ ActiveRecord::Schema.define(:version => 20140502101149) do
     t.integer  "classification_id"
     t.text     "description"
     t.string   "slug"
+    t.text     "properties"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"

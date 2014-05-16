@@ -60,12 +60,6 @@
       </div>
     </div>
 
-    <%= f.fields_for :collections do |builder| %>
-      <%= render "collection_fields", :f => builder %>
-    <% end %>
-    <div class="links">
-      <%= link_to_add_association "Add Collection", f, :collections, class: 'controls' %>
-    </div>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

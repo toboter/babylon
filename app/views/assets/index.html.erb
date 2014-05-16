@@ -1,4 +1,4 @@
-<% title "Assets#{' of ' + @bucket.name if @bucket}", nil %>
+<% title "Assets#{' in ' + @bucket.name if @bucket}", nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -11,7 +11,7 @@
     Total: <%= @assets.count %>
     <%= form_tag destroy_multiple_assets_path, method: :delete do %>
       <ul class="thumbnails">
-          <%= render @assets, :size_a => 'span2', :size_b => 'span4' %>
+          <%= render @assets %>
       </ul>
       <%= content_tag :div, class: 'form-actions' do %>
         <%= submit_tag 'Delete Checked', data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>

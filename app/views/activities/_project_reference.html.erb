@@ -1,0 +1,15 @@
+<div class="mega-icon" style='background-image: url("/assets/activity/<%= activity.action %>.svg")'></div>
+<abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
+<div class="title">
+  <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
+  <%= name_only_or_link_to(activity.user) %> 
+  <% if activity.action == 'create' && project_reference %>
+    added <%= link_to project_reference.reference.name, project_reference.reference, title: project_reference.reference.entries_for_select, class: 'tooltip-bottom' %> to
+    <%= link_to project_reference.project.name, project_reference.project %>
+  <% else %>
+    removed a reference from a project
+  <% end %>
+</div>
+<div class="details">
+
+</div>

@@ -4,7 +4,7 @@
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
   <% if issue %>
-    updated an <%= link_to 'issue', [issue.issuable, issue] %> on <%= link_to issue.issuable.name, issue.issuable %>
+    updated an <%= link_to 'issue', [issue.issuable, issue], title: issue.name, class: 'tooltip-bottom' %> on <%= link_to issue.issuable.name, issue.issuable %>
   <% else %>
     updated a issue which has since been removed
   <% end %>

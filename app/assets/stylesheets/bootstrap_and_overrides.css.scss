@@ -24,6 +24,16 @@ body { padding-top: 50px; }
 	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.nav-pills-big {
+  li a {
+    font-size: 1.2em;
+    padding: 20px;
+    .badge {
+      margin-top:-3px;
+    }
+  }
+}
+
 .navbar .brand {
 	font-weight: bold;
 }
@@ -153,6 +163,7 @@ a.no-link {
 }
 
 div.field_with_errors { 
+  display: inline;
   .control-label {
 	color: red;
   }

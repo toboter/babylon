@@ -32,12 +32,7 @@
       <ul class="unstyled">
         <% for collection in @institution.collections do %>
           <li>
-            <%= link_to collection.name+' ('+collection.shortcut+')', items_path(collection: collection.shortcut) %>
-            <ul class="unstyled">
-              <% for item in collection.items do %>
-                <li><%= link_to item.name, item %> </li>
-              <% end %>
-            </ul>
+            <%= link_to collection.name+' ('+collection.shortcut+')', [collection.institution, collection] %>
           </li>
         <% end %>
       </ul>
@@ -69,6 +64,10 @@
         <i class="icon-plus icon-white"></i>
         Sub-Institution
       <% end if can? :create, @institutions %>
+      <%= link_to new_institution_collection_path(@institution), class: 'btn btn-create btn-small', style: 'margin-left:0;' do %>
+        <i class="icon-plus icon-white"></i>
+        Collection
+      <% end if can? :create, @institution.collections %>
     </div>
   </div>
   

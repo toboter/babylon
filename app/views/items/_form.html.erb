@@ -1,26 +1,17 @@
 <%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field :collection_id %>
   <div class="row">
-    <div class="span2">
-      <ul class="nav nav-tabs nav-stacked">
-
-      </ul>
-    </div>
     <div class="span10">
-  <%= content_tag :h4, 'Meta Information' %>
-  <div class="control-group">
-    <%= f.label :collection_id, class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut %>
-    </div>
-  </div>
 
+  <div id="metainfo">
   <div class="control-group">
-    <%= f.label :inventory_number, class: 'control-label' %>
+    <span class="control-label">
+      <%= content_tag :abbr, @item.collection.shortcut, title: @item.collection.name+' im '+@item.collection.institution.name, class: 'tooltip-bottom' %>
+    </span>
     <div class="controls form-inline">
-      <%= f.text_field :inventory_number %>
-      <%= f.label :inventory_number_index, 'Index', style: 'margin-left:10px;' %>
-      <%= f.text_field :inventory_number_index %>
+      <%= f.text_field :inventory_number, placeholder: 'Inventory number' %>
+      <%= f.text_field :inventory_number_index, placeholder: 'Index (optional)', style: 'margin-left:10px;' %>
     </div>
   </div>
 
@@ -30,32 +21,41 @@
     <%= f.label :accession_date, class: 'control-label' %>
     <div class="controls">
       <div class="input-append date">
-        <%= f.text_field :accession_date_text, placeholder: 'Accession date', :'data-behaviour' => 'datepicker' %>
+        <%= f.text_field :accession_date_text, placeholder: 'Accession date' %>
         <span class="add-on"><i class="icon-th"></i></span>
       </div>
+    </div>
+  </div>
+
+
+  <div class="control-group">
+    <%= f.label :title, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :title, placeholder: 'descrptive title', class: 'span6' %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :classification_id, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select(:classification_id, ItemClassification.all, :id, :name, :include_blank => true) %>
+      <%= f.collection_select(:classification_id, ItemClassification.all, :id, :name) %>
     </div>
   </div>
 
-  <div class="control-group">
-    <%= f.label :title, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :title, class: 'span6' %>
-    </div>
   </div>
 
+
+
+<!--
   <div class="control-group">
     <%= f.label :context_id, class: 'control-label' %>
     <div class="controls">
       <%= f.number_field :context_id %>
     </div>
   </div>
+-->
+
+
 
   <%= content_tag :h4, 'Tags' %>
   <div class="control-group">
@@ -95,6 +95,16 @@
     </div>
   </div>
 
+
+
+  <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
+    <% @item.collection.fields.each do |field| %>
+      <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
+    <% end %>
+  <% end %>
+
+
+
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @item.new_record? %>
@@ -105,5 +115,10 @@
   </div>
 
 </div>
+    <div class="span2">
+      <ul class="nav nav-tabs nav-stacked">
+
+      </ul>
+    </div>
 </div>
 <% end %>

@@ -1,0 +1,14 @@
+<div class="mega-icon" style='background-image: url("/assets/activity/closed.svg")'></div>
+<abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
+<div class="title">
+  <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
+  <%= name_only_or_link_to(activity.user) %> 
+  <% if issue %>
+    closed an <%= link_to 'issue', [issue.issuable, issue], title: issue.name, class: 'tooltip-bottom' %> on <%= link_to issue.issuable.name, issue.issuable %>
+  <% else %>
+    closed an issue which has since been removed
+  <% end %>
+</div>
+<div class="details">
+
+</div>

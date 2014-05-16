@@ -8,12 +8,12 @@ Babylon::Application.routes.draw do
   end
 
   # Settings
-  scope '/settings' do
-    resources :predicates
-    resources :item_classifications
-  end
+  resources :predicates
+  resources :item_classifications
   resources :tags
-  resources :institutions
+  resources :institutions do
+    resources :collections
+  end
 
 
   # Resource parts
@@ -90,7 +90,6 @@ Babylon::Application.routes.draw do
   end
 
   resources :assets, except: [:new, :create] do
-    # resources :comments, except: [:index, :show]
     resources :issues
     member do
       get :download, to: 'assets#show'

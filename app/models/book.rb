@@ -22,7 +22,7 @@ class Book < ActiveRecord::Base
   validates_presence_of :year, :unless => "unpublished == true"
   validates_presence_of :title, unless: :book_title_not_needed?
   validates_presence_of :volume, if: :book_is_serial?
-  validates_uniqueness_of :book_identifier, :allow_blank => true, :message => "The Identifier is already taken"
+  validates_uniqueness_of :book_identifier, :allow_blank => true, :message => "The Identifier has already been taken"
   #validates_associated Die Validierung des genesteten Artikels erfolgt über reject_if
 
   BOOKTYPES = %w[Monograph Collection Monograph\ in\ a\ serial Collection\ in\ a\ serial Issue\ of\ a\ journal]

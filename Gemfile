@@ -76,12 +76,12 @@ gem 'friendly_id'
 # gem "rmagick"
 gem 'mini_magick', '~> 3.5.0'
 gem 'carrierwave'
-gem 'fog'
-gem 'carrierwave_direct'
-gem 'sidekiq'
+# gem 'fog'
+# gem 'carrierwave_direct'
+# gem 'sidekiq'
 
 # https://github.com/ernie/ransack/
-gem 'ransack'
+# gem 'ransack'
 
 # https://github.com/galetahub/ckeditor
 # gem 'ckeditor'

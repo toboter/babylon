@@ -91,10 +91,12 @@ class IssuesController < ApplicationController
   # PUT /issues/1.json
   def update
     @issue = @issuable.issues.find(params[:id])
+    @changed = @issue.closed != params[:closed]
 
     respond_to do |format|
       if @issue.update_attributes(params[:issue])
-        track_activity @issue
+        (@changed == true && @issue.closed == true) ? (track_activity @issue, 'closed') : (track_activity @issue)
+
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
       else

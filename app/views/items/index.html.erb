@@ -14,7 +14,10 @@
     <h1>
       <%= @project ? ('Items for '+(link_to h(@project.name), @project)).html_safe : 'All Items' %>
       <div class="pull-right" style="">
-        <%= link_to "Create Item", new_item_path, class: "btn btn-create btn-small" if (can? :create, @items) && !@project %>
+        <%= form_tag new_item_path, method: :get, class: 'form-inline' do %>
+          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut), class: 'span2' %>
+          <%= submit_tag 'New Item', name: nil, class: "btn btn-create" %>
+        <% end if (can? :create, @items) && !@project %>
       </div>
     </h1>
 

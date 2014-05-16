@@ -13,7 +13,7 @@
 <% content_for :sidebar_section do %>
   <h4 class="muted">Items for <%= @item_classification.name %></h4>
   <ul class="unstyled">
-    <% for item in @item_classification.items do %>
+    <% for item in @items do %>
       <li><%= link_to item.inventory_name, item %></li>
     <% end %>
   </ul>

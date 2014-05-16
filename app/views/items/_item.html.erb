@@ -10,7 +10,7 @@
     <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, a.name, class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
     <p>
       <%= item.title.present? ? item.title : item.inventory_name %><br />
-      Accession <%= item.accession_date.strftime("%d.%m.%Y") %>
+      <%content_tag :span do %>Accession <%= item.accession_date.strftime("%d.%m.%Y") %><% end if item.accession_date %>
       <%= content_tag :span do %>
         <i class="icon-warning-sign"></i> <%= link_to pluralize(item.issues.count, 'issue'), [item, :issues] %>
         <%= content_tag :i, '',class: 'icon-ok' if !item.issues.where(closed: false).any? %>

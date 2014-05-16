@@ -17,6 +17,8 @@ class ItemClassificationsController < ApplicationController
   # GET /item_classifications/1.json
   def show
     @item_classification = ItemClassification.find(params[:id])
+    @classifications = @item_classification.self_and_descendants
+    @items =  Item.find_all_by_classification_id(@classifications)
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

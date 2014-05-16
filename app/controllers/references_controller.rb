@@ -63,6 +63,7 @@ class ReferencesController < ApplicationController
 
     respond_to do |format|
       if @reference.save
+        track_activity @reference
         format.html { redirect_to @reference, notice: 'Reference was successfully created.' }
         format.json { render json: @reference, status: :created, location: @reference }
       else
@@ -80,6 +81,7 @@ class ReferencesController < ApplicationController
 
     respond_to do |format|
       if @reference.update_attributes(params[:reference])
+        track_activity @reference
         format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
         format.json { head :no_content }
       else
@@ -95,6 +97,7 @@ class ReferencesController < ApplicationController
     @reference = Reference.find(params[:id])
     @book = @reference.book
     @reference.destroy
+    track_activity @reference
 
     if @book && (@book.book_type == "Monograph" || @book.book_type == "Monograph in a serial")
       @book.destroy

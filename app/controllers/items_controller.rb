@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new
+    @item = Item.new(:collection_id => params[:collection_id])
 
     respond_to do |format|
       format.html { render :layout => "form_page" }# new.html.erb
@@ -55,6 +55,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
+        track_activity @item
         format.html { redirect_to @item, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
@@ -71,6 +72,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
+        track_activity @item
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { head :no_content }
       else
@@ -85,6 +87,7 @@ class ItemsController < ApplicationController
   def destroy
     @item = Item.find(params[:id])
     @item.destroy
+    track_activity @item
 
     respond_to do |format|
       format.html { redirect_to items_url }

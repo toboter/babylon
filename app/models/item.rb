@@ -4,13 +4,13 @@ class Item < ActiveRecord::Base
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
             :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, 
-            :citations_attributes, :actions_attributes, :description, :slug
+            :citations_attributes, :actions_attributes, :description, :slug, :properties
 
   stampable
-
   attr_writer :accession_date_text
-
+  serialize :properties, Hash
   after_create :build_album_bucket
+  default_scope order('inventory_number ASC, inventory_number_index ASC')
 
   belongs_to :collection
   belongs_to :creator, class_name: "User"
@@ -31,9 +31,13 @@ class Item < ActiveRecord::Base
   has_many :studyassignments, :dependent => :destroy
   has_many :projects, through: :studyassignments
 
-  validates_presence_of :collection_id, :inventory_number
+
+  validates :collection_id, :inventory_number, presence: true
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
+  validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
   validate :check_accession_date_text
+  validate :validate_properties
+
 
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
@@ -66,6 +70,14 @@ class Item < ActiveRecord::Base
     end
   rescue ArgumentError
     errors.add :accession_date_text, "is out of range"
+  end
+
+  def validate_properties
+    collection.fields.each do |field|
+      if field.required? && properties[field.name].blank?
+        errors.add field.name, "must not be blank"
+      end
+    end
   end
 
 end

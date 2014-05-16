@@ -26,7 +26,7 @@ class Asset < ActiveRecord::Base
   end
 
   def set_content_type
-    self.content_type = assetfile.file.content_type if assetfile
+    self.content_type = assetfile.file.content_type if assetfile && assetfile_changed?
   end
 
   def is_cover
@@ -37,8 +37,10 @@ class Asset < ActiveRecord::Base
     end
   end
 
+private
+
   def compute_hash
-    self.md5hash = Digest::MD5.hexdigest(self.assetfile.read) if assetfile
+    self.md5hash = Digest::MD5.hexdigest(self.assetfile.read) if assetfile && assetfile_changed?
   end
   
   def update_asset_attributes

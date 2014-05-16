@@ -26,8 +26,11 @@ class User < ActiveRecord::Base
 
   model_stamper
 
-  validates_presence_of :username
-  validates_uniqueness_of :username
+  validates :username, 
+    length: { :minimum => 3, :maximum => 10 }, 
+    presence: true,
+    uniqueness: true,
+    format: { :with => /\A[a-zA-Z]+\z/, message: "only letters allowed" }
 
   ABILITYROLES = %w[guest fellow author editor admin superuser]
   ROLES = %w[guest fellow author editor admin]

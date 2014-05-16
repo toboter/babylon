@@ -1,6 +1,5 @@
 <% title @item.inventory_name, nil, nil %>
 <% edit_section_for(@item, nil) %>
-<% publishing_section_for(@item) %>
 <% footer_section(@item) %>
 
 
@@ -29,17 +28,20 @@
           <div class="span6">
             <div class="info_section">
               <table class="table table-bordered table-hover">
+                <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) %>
                 <%= item_description('Inventory Number', @item.inventory_name) %>
                 <%= item_description('Context', @item.context_id) %>
-                <%= item_description('Classification', @item.classification.name) if @item.classification %>
+                <%= item_description('Object type', link_to(@item.classification.root.name, @item.classification.root)) if @item.classification %>
+                <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
+                <% @item.properties.each do |name, value| %>
+                  <%= value.is_a?(Array) ? item_description(name.humanize, (value.compact.reject{|r| r.empty?}.each {|v| v }.join(', '))) : item_description(name.humanize, value)  %>
+                <% end %>
               </table> 
               <%= content_tag :span, tagging_infos_for(@item), class: 'pull-right' %>
               <%= markdown(@item.description) if @item.description.present? %> 
             </div>
           </div>
-          <div class="span6">
-            <%= link_to 'Publication status','', class: 'btn btn-block', style: 'margin-bottom:5px;' %>
-            
+          <div class="span6">            
             <%= content_tag :div, class: "item-options well" do %>
               <%= content_tag :div, class: "" do %>
                 <%= link_to add_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-block btn-success' do %>
@@ -54,13 +56,16 @@
                 <% end %>
               <% end if current_aspect.items.include?(@item) %>
             <% end if aspect? %>
-            <div class="issues-options well well-small">
-              <i class="icon-exclamation-sign"></i>
-              <%= link_to 'Issues', item_issues_path(@item) %> 
-              <%= content_tag :span, @item.issues.count, class: 'badge pull-right' %>
-            </div>
-            <div class="item-options">
-              <ul class="nav nav-pills nav-stacked">
+
+            <div class="item-pills">
+              <ul class="nav nav-pills nav-stacked nav-pills-big">
+                <%= content_tag :li do %>
+                  <%= link_to item_issues_path(@item) do %>
+                    <i class="icon-exclamation-sign"></i>
+                    Issues
+                    <%= content_tag :span, @item.issues.count, class: "badge pull-right #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+                  <% end %>
+                <% end %>
                 <%= content_tag :li do %>
                   <%= link_to [@item, :documents] do %>
                     Documents
@@ -88,43 +93,55 @@
   
     <div class="row-fluid">
       <div class="span4">
-        History
-        <div class="accordion-inner">
-          <%= item_description('Accession Date', @item.accession_date) %><br />
-          <% for action in @item.actions do %>
-            <p><%= action.inspect %></p>
-          <% end %>
+        <div class="item-section" id='history'>
+          <%= content_tag :h4, 'History', class: 'muted' %>
+          <ul class="unstyled">
+            <% for action in @item.actions.order('created_at DESC') do %>
+              <li>
+                <strong><%= action.predicate.name.humanize %>: </strong>
+                <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } %>
+                <%= '[' + action.actable_date_text + ']' if action.actable_date_text %>
+              </li>
+            <% end %>
+            <%= content_tag :li do %>
+              <strong>Accession Date: </strong><%= content_tag :span, @item.accession_date.strftime('%d.%m.%Y') %>
+            <% end if @item.accession_date %>
+          </ul>
         </div>
 
-        Buckets
-        <div class="accordion-inner">
-          <% for bucket in @item.buckets do %>
-            <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
-          <% end if @item.buckets.any? %>
+        <div class="item-section" id='buckets'>
+          <%= content_tag :h4, 'Buckets', class: 'muted' %>
+          <ul class="unstyled">
+            <% for bucket in @item.buckets do %>
+              <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
+            <% end if @item.buckets.any? %>
+          </ul>
         </div>
       </div>
 
-      <div class="span8">
-        Project Workspace Info
-        <div class="accordion-inner">
+      <div class="span8">  
+        <%= content_tag :div, class: "item-section", id: 'workspaces' do %>
+          <%= content_tag :h4, 'Project Workspace Info', class: 'muted' %>
           <% for studyassignment in @item.studyassignments do %>
             <li><%= name_only_or_link_to(studyassignment.creator) %> in <%= link_to "#{studyassignment.project.name}", [studyassignment.project.projectable, studyassignment.project] %></li>
-          <% end if @item.studyassignments.any? %>
-        </div>
+          <% end %>
+        <% end if @item.studyassignments.any? %>
 
-        Documents
-        <div class="accordion-inner">
+        
+        <%= content_tag :div, class: "item-section", id: "documents" do %>
+          <%= content_tag :h4, 'Documents', class: 'muted' %>
           <table class="table table-bordered table-hover">
             <tbody>
             <%= render @item.documents %>
             </tbody>
           </table>
-        </div>
+        <% end if @item.documents.any? %>
 
-        References
-        <div class="accordion-inner">
+        
+        <%= content_tag :div, class: "item-section", id: "references" do %>
+          <%= content_tag :h4, 'References', class: 'muted' %>
           <%= render "reference_entries", :citations => @item.citations %>
-        </div>
+        <% end if @item.citations.any? %>
       </div>
     </div>
   </div>
@@ -147,12 +164,12 @@
           </ol>
           <!-- Carousel items -->
           <div class="carousel-inner">
-            <% for asset in @item.buckets.first.assets do %>
-              <div class="item <%= 'active' if asset == @item.buckets.first.cover %>">
-                <div class="crop"><%= image_tag asset.assetfile.xlarge.url %></div>
+            <% for image in @images do %>
+              <div class="item <%= 'active' if image == @item.buckets.first.cover %>">
+                <div class="crop"><%= image_tag image.assetfile.xlarge.url %></div>
                 <div class="caption">
-                  <h4><%= asset.name %></h4>
-                  <p><%= asset.author.name + ' ' + asset.license %></p>
+                  <h4><%= image.name %></h4>
+                  <p><%= image.author.name + ' ' + image.license %></p>
                 </div>
               </div>
             <% end %>
@@ -160,7 +177,7 @@
           <!-- Carousel nav -->
           <a class="carousel-control left" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="prev">&lsaquo;</a>
           <a class="carousel-control right" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="next">&rsaquo;</a>
-        <% end if @item.buckets.first && @item.buckets.first.assets.any? %>
+        <% end if @images.any? %>
 
     </div>
     <div class="modal-footer">

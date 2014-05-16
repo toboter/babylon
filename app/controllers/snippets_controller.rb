@@ -77,7 +77,7 @@ class SnippetsController < ApplicationController
   # DELETE /snippets/1.json
   def destroy
     @snippet = Snippet.find(params[:id])
-    @snippet.destroy
+    @snippet.destroy unless @snippet.snippet_type == 'about'
 
     respond_to do |format|
       format.html { redirect_to snippets_url }

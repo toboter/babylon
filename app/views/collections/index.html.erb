@@ -1,0 +1,36 @@
+<% title "Collections", nil, nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @institution.class.name.pluralize, [@institution.class]) + content_tag(:span, '/', class: 'divider')) if @institution %>
+  <%= content_tag(:li, (link_to @institution.name, @institution) + content_tag(:span, '/', class: 'divider')) if @institution %>
+  <%= content_tag :li, "Collections", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <h1>
+      Collections <small><%= @institution.name %></small>
+      <div class="pull-right" style="">
+        <%= link_to "Create Collection", new_institution_collection_path(@institution), class: "btn btn-create btn-small" if can? :create, @collections %>
+      </div>
+    </h1>
+
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <% @collections.each do |collection| %>
+          <tr>
+            <td><%= link_to collection.name, [collection.institution, collection] %></td>
+            <td><%= collection.shortcut %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

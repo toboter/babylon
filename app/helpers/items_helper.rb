@@ -6,4 +6,5 @@ module ItemsHelper
       html
     end if value.present?
   end
+
 end

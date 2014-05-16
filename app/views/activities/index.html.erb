@@ -1,3 +1,15 @@
-<% @activities.each do |activity| %>
-  <%= ActivityPresenter.new(activity, self).render_activity %>
+<% title "Activities", nil %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, 'Activities', class: 'active') %>
+
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="activity-align">
+    <% @activities.each do |activity| %>
+      <%= ActivityPresenter.new(activity, self).render_activity %>
+    <% end %>
+  </div>
 <% end %>
