@@ -33,9 +33,15 @@
                 <%= item_description('Context', @item.context_id) %>
                 <%= item_description('Object type', link_to(@item.classification.root.name, @item.classification.root)) if @item.classification %>
                 <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
+
                 <% @item.properties.each do |name, value| %>
-                  <%= value.is_a?(Array) ? item_description(name.humanize, (value.compact.reject{|r| r.empty?}.each {|v| v }.join(', '))) : item_description(name.humanize, value)  %>
+                  <% if value.is_a?(Array) %>
+                    <%= item_description(name.humanize, CollectionFieldValue.find(value.compact.reject{|r| r.empty? }).map{ |cfv| link_to cfv.field_value, '', class: 'popover-right', data: { 'original-title' => cfv.field_value, 'content' => cfv.description } }.join(', ').html_safe) %>
+                  <% else %>
+                    <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(CollectionField.find_by_name(name).field_type) ? link_to(CollectionFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => CollectionFieldValue.find(value).field_value, 'content' => CollectionFieldValue.find(value).description }) : value ) %>
+                  <% end %>
                 <% end %>
+
               </table> 
               <%= content_tag :span, tagging_infos_for(@item), class: 'pull-right' %>
               <%= markdown(@item.description) if @item.description.present? %> 
@@ -74,7 +80,7 @@
                 <% end %>
                 <%= content_tag :li do %>
                   <%= link_to [@item, :references] do %>
-                    Bibliography/References
+                    References
                     <span class="badge pull-right"><%= @item.references.count %></span>
                   <% end %>
                 <% end %>

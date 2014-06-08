@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
   attr_accessor :login
-  after_create :add_base_role
+  after_create :add_base_role, :track_create_activity
   before_destroy :check_admin_status
 
   model_stamper
@@ -48,6 +48,10 @@ class User < ActiveRecord::Base
 
   def add_base_role
     Role.create :role => "guest", :user_id => self.id unless self.username == 'toboter'
+  end
+
+  def track_create_activity
+    Activity.create :user_id => self.id, :action => 'create', :trackable => self
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)

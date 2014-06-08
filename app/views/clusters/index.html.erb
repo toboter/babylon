@@ -22,7 +22,7 @@
             <% end %>
             <%= content_tag :div, class: 'span7' do %>
               <h1><%= link_to cluster.name, cluster %></h1>
-              <p><%= cluster.documents.doctype('Introduction').abstract.present? ? markdown(cluster.documents.doctype('Introduction').abstract) : "No abstract to show." if cluster.documents.doctype('Introduction') %></p>
+              <p><%= cluster.description.present? ? markdown(cluster.description) : "No abstract to show." %></p>
             <% end %>
           <% end %>
           <%= content_tag :div, class: 'span3' do %>

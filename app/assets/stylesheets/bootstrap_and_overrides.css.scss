@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600);
+
 $navbarHeight: 50px;
 $navbarBackground: #787878;
 $navbarBackgroundHighlight: #787878;
@@ -7,7 +9,7 @@ $navbarLinkColor: #e5e5e5;
 $navbarLinkColorHover: #6B6B6B;
 $linkColor: #648564;
 $baseFontSize: 12px;
-
+$baseFontFamily: 'Open Sans';
 
 
 @import "bootstrap";
@@ -18,10 +20,14 @@ $baseFontSize: 12px;
 }
 
 
-body { padding-top: 50px; }
+body { 
+	padding-top: 50px; 
+	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #555d64;
+}
 
 .navbar {
-	font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .nav-pills-big {
@@ -117,27 +123,27 @@ footer {
 .bucket-asset-thumbs { @media (min-width: 768px) { margin-left: 25px !important; } }
 
 h1 {
-	font-size: 2.2em;
+	font-size: 2.3em;
 	
 }
 h1.pagetop {
-	font-size: 2.5em;
+	font-size: 2.6em;
 	color: black;
 	margin-top: 0.5em;
 }
 h2 {
-	font-size: 1.9em;
+	font-size: 2em;
 	
 }
 h2.subtitle {
-	font-size: 1.8em;
+	font-size: 1.9em;
 	color: #6f6f6f;
 	font-weight: 300;
 	margin-top: -0.5em;
 	margin-bottom: 1em;
 }
 h3 {
-	font-size: 1.65em;
+	font-size: 1.7em;
 }
 
 a.no-link {

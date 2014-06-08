@@ -10,6 +10,7 @@ abbr.timeago{
   margin-bottom: 1em;
   padding-left: 45px;
   position: relative;
+  min-height: 65px;
 
   .mega-icon {
     position: absolute;
@@ -26,16 +27,20 @@ abbr.timeago{
 
   .body {
     overflow: hidden;
-    padding: 0 0 1em 0;
+    padding: 0 0 0 0;
+
 
     .title {
       padding: 0 0 .25em 0;
       font-weight: bold;
       font-size: 12px;
+      padding-left: 45px;
 
       img {
       	width:35px;
       	padding:2px;
+        position: absolute;
+        left:45px;
       }
     }  
 
@@ -43,7 +48,7 @@ abbr.timeago{
       .message {
         display: inline;
         color: #666;
-        font-size: 13px;
+        font-size: 11px;
       }
     }
   }

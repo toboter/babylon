@@ -17,20 +17,23 @@
 <% end %>
 
 <%= content_for :top_over do %>
-  <div class="row-fluid" id='about' style="padding-bottom:1em;">
-    <%= content_tag :div, class: 'span6' do %>
+  <div class="row" id='about' style="">
+    <%= content_tag :div, class: 'span12' do %>
       <%= content_tag :h1, 'Project', class: 'pagetop' %>
       <%= content_tag :h2, class: 'subtitle' do %>
         <%= @project.name %>
         <%= yield(:edit_section) %>
       <% end %>
     <% end %>
-    <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
-      <p>
-        <%= @project.documents.doctype('Introduction').abstract.present? ? @project.documents.doctype('Introduction').abstract : "No abstract to show." %>
-      </p>
-      <%= link_to 'Edit document', polymorphic_path([:edit, @project, @project.documents.doctype('Introduction')]), class: 'change-asset' if can? :edit, @project %>
-    <% end if @project.documents.doctype('Introduction') %>
+  </div>
+  <div class="row">
+    <%= content_tag :div, class: 'span2', style: '' do %>
+      <%= link_to (image_tag @project.project_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@project, @project.project_bucket]) %>
+      (<%= link_to 'Edit picture', polymorphic_path([@project, @project.project_bucket]), class: 'change-asset' %>)
+    <% end if @project.project_bucket %>
+    <%= content_tag :div, class: 'span10 lead', style: '' do %>
+      <%= @project.description.present? ? markdown(@project.description) : "No abstract to show." %>
+    <% end %>
   </div>
   <hr>
 <% end %>
@@ -39,7 +42,7 @@
   <div class="member-view" id="members">
     <ul class="unstyled">
       <% for membership in @project.memberships do %>
-        <%= link_to membership.user.person, title: membership.user.available_name do %>
+        <%= link_to membership.user.person, title: membership.user.available_name, class: 'tooltip-bottom', style: 'padding-bottom:8px;' do %>
           <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone') %>
         <% end %>
       <% end %>
@@ -56,20 +59,23 @@
   <% end if @project.documents.without_document_type.any? %> 
 
   <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %> 
-    <%= content_tag :h4, 'Bibliography', class: 'muted' %>
+    <%= content_tag :h4, 'References', class: 'muted' %>
     <%= render "references/bib_entries", :references => @project.references.order('first_page ASC').limit(5) %>
   <% end if @project.references.any? %>  
 
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <p>
-    <%= markdown(truncated_content(@project.documents.doctype('Introduction'), length=300)) if @project.documents.doctype('Introduction').content if @project.documents.doctype('Introduction') %>
-  </p>
-
 
   <div class="project-options">
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked nav-pills-big">
+      <%= content_tag :li do %>
+        <%= link_to project_issues_path(@project) do %>
+          <i class="icon-exclamation-sign"></i>
+          Issues
+          <%= content_tag :span, @project.issues.count, class: "badge pull-right #{@project.issues.where(closed: false).count > @project.issues.where(closed: true).count+1 ? @project.issues.where(closed: false).count > @project.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+        <% end %>
+      <% end %>
       <%= content_tag :li do %>
         <%= link_to [@project, :items] do %>
           Items
@@ -84,7 +90,7 @@
       <% end %>
       <%= content_tag :li do %>
         <%= link_to [@project, :references] do %>
-          Bibliography
+          References
           <span class="badge pull-right"><%= @project.references.count %></span>
         <% end %>
       <% end %>
@@ -107,9 +113,8 @@
         <li>Module: <%= link_to(@project.projectable.name, @project.projectable) %></li>
       <% end %>
     </ul>
-    <%= content_tag :p, 'Bibliography is available as root bibliography', class: 'text-info' if @project.show_references == true %>
+    <%= content_tag :p, 'References are available as main bibliography', class: 'text-info' if @project.show_references == true %>
 
     <%= link_to "Manage Memberships", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %> 
-    <%= link_to "Add introduction document", polymorphic_path([:new, @project, :document], :document_type => "Introduction") unless @project.documents.doctype('Introduction') %>
   </div>
 <% end %>

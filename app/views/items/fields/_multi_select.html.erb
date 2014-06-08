@@ -1,6 +1,6 @@
   <div class="control-group">
     <%= f.label field.name, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select field.name, field.select_values, :field_value, :field_value, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+      <%= f.collection_select(field.name, field.select_values, :id, :field_value, {:include_blank => false}, {multiple: true, class: 'form-control chosen-select input-block-level'}) %>
     </div>
   </div>

@@ -1,7 +1,8 @@
 class IssuesController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_issuable, except: [:add_comment]
+  before_filter :load_issuable, except: [:close]
   load_and_authorize_resource
+  skip_authorize_resource :only => :close
 
   # GET /issues
   # GET /issues.json
@@ -106,6 +107,22 @@ class IssuesController < ApplicationController
     end
   end
 
+  def close
+    @issue = Issue.find(params[:id])
+
+    respond_to do |format|
+      if @issue.update_attribute(:closed, true)
+        track_activity @issue, 'closed'
+
+        format.html { redirect_to [@issue.issuable, @issue], notice: 'Issue was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+      end
+    end
+  end   
+
   # DELETE /issues/1
   # DELETE /issues/1.json
   def destroy
@@ -140,9 +157,7 @@ private
 
   def load_issuable
     resource, id = request.path.split('/')[1, 2]
-    if resource == 'bibliography'
-      resource = 'references'
-    elsif resource == 'modules'
+    if resource == 'modules'
       resource = 'clusters'
     end
     if id == nil || resource == 'issues'

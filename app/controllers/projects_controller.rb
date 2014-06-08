@@ -75,6 +75,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
+        track_activity @project
         format.html { redirect_to [@projectable, @project], notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
@@ -91,6 +92,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
+        track_activity @project
         format.html { redirect_to @project == current_aspect ? [@project, 'dashboard'] : [@projectable, @project], notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
@@ -105,6 +107,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project = @projectable.projects.find(params[:id])
     @project.destroy
+    track_activity @project
 
     respond_to do |format|
       format.html { redirect_to projects_url }

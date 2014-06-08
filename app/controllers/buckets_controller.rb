@@ -112,9 +112,7 @@ private
 
   def load_attachable
     resource, id = request.path.split('/')[1, 2]
-    if resource == 'bibliography'
-      resource = 'references'
-    elsif resource == 'modules'
+    if resource == 'modules'
       resource = 'clusters'
     elsif resource == 'announcements'
       resource = 'snippets'

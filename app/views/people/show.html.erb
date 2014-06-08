@@ -98,7 +98,14 @@
         <div class="page-header">
           <h1>Public Activity</h1>
         </div>
-        Activity feed
+        <%= content_tag :div, id: "activity-section", style: '' do %>
+          <% @person.user.activities.order('created_at DESC').limit(10).each do |activity| %>
+            <%= ActivityPresenter.new(activity, self).render_activity %>
+          <% end %>
+          <p>
+            <%= link_to "View all activities for #{@person.name}", person_activities_path(@person) %>
+          </p>
+        <% end %>
       <% end if @person.user %>
 
       <%= content_tag :section, id: 'projects' do %>

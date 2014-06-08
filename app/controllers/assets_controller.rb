@@ -106,6 +106,7 @@ class AssetsController < ApplicationController
 
     respond_to do |format|
       if @asset.update_attributes(params[:asset])
+        # if fotograf do track_activity @issue, 'took a foto'
         format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
         format.json { head :no_content }
       else

@@ -5,7 +5,7 @@
         <%= content_tag :div, class: 'span3 authors' do -%>
           <ul class="unstyled">
             <li><%= authors_of_article(reference) %></li>
-            <%= content_tag :li, reference.book.present? ? reference.book.year : reference.original_date %>
+            <%= content_tag :li, reference.book.present? ? reference.book.year : (reference.original_date ? reference.original_date.strftime('%d.%m.%Y') : 'unknown') %>
           </ul>
         <% end -%>
         <%= content_tag :div, class: 'span9', style: 'padding-bottom:10px;' do -%>

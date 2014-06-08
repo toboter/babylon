@@ -32,6 +32,7 @@ Babylon::Application.routes.draw do
     resources :buckets
     resources :documents
     resources :issues
+    resources :activities
   end
 
   resources :clusters, :path => 'modules' do
@@ -39,19 +40,23 @@ Babylon::Application.routes.draw do
     resources :projects
     resources :documents
     resources :buckets
+    resources :issues
   end
 
   resources :groups, only: [:index, :show] do
     resources :projects
     resources :documents
+    resources :issues
   end
 
-  resources :projects, only: :show do
+  resources :projects, only: [:index, :show] do
     get 'dashboard', to: 'dashboard#project'
     resources :documents
     resources :todos
-    resources :references, :path => 'bibliography'
+    resources :references
     resources :items
+    resources :issues
+    resources :buckets
   end
 
   resources :todos, only: [:index, :show, :new] do
@@ -63,7 +68,7 @@ Babylon::Application.routes.draw do
   # Bibliography Management
   resources :serials
   resources :books
-  resources :references, :path => 'bibliography' do
+  resources :references do
     resources :documents
     resources :buckets
     resources :issues
@@ -109,6 +114,7 @@ Babylon::Application.routes.draw do
   resources :issues, only: [:index] do
     member do
       post :new_comment, to: 'issues#new_comment'
+      put :close, to: 'issues#close'
     end
   end
 

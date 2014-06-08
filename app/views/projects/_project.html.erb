@@ -12,25 +12,27 @@
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span3">
+    <%= content_tag :div, class: 'span2' do %>
+      <%= image_tag(project.project_bucket.cover ? project.project_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", class: 'img-polaroid hidden-tablet hidden-phone') if project.project_bucket %>
+    <% end %>
+
+    <div class="span8">
+      <% if project.description.present? %>
+        <%= markdown(project.description) %>
+      <% else %>
+        <p>No abstract to show. <%= link_to 'Edit it!', [:edit, project.projectable, project] %></p>
+      <% end %>
+    </div>
+    <div class="span2">
       <div class="member-view" id="members-project-<%= project.id %>">
         <ul class="unstyled">
           <% for membership in project.memberships do %>
-            <%= link_to membership.user.person, title: membership.user.available_name do %>
+            <%= link_to membership.user.person, title: membership.user.available_name, class: 'tooltip-bottom pull-right' do %>
               <%= image_tag((membership.user.person ? (membership.user.person.profile_picture ? membership.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone mini') %>
             <% end %>
           <% end %>
         </ul>
       </div>
-    </div>
-    <div class="span9">
-      <% if project.documents.doctype('Introduction') %>
-        <p>
-          <%= project.documents.doctype('Introduction').abstract ? project.documents.doctype('Introduction').abstract : (markdown(truncated_content(project.documents.doctype('Introduction'), length=300)) if project.documents.doctype('Introduction').content) %>
-        </p>
-      <% else %>
-        <p>No Introduction to show. <%= link_to 'Create one!', [:edit, project.documents.doctype('Introduction')] if project.documents.doctype('Introduction') %></p>
-      <% end %>
     </div>
   </div>
 </div>

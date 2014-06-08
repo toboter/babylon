@@ -11,20 +11,22 @@
 <div class="hero-unit">
   <div class="row-fluid" id='about' style="padding-bottom:30px;">
     <%= content_tag :div, class: 'span3' do %>
-      <%= link_to (image_tag @cluster_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@cluster, @cluster_bucket]) if @cluster_bucket %>
-    <% end if @cluster_bucket.cover %>
-    <%= content_tag :div, class: (@cluster_bucket.cover ? 'span9' : 'span12') do %>
+      <% content_tag :div, class: 'hidden-phone' do %>
+        <%= link_to image_tag(@cluster.cluster_bucket.cover ? @cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", style: 'margin-top:0.7em;', class: 'img-polaroid'), polymorphic_path([@cluster, @cluster.cluster_bucket]) %>
+        <% if can? :edit, @cluster %>
+          <small>
+            (<%= link_to 'Edit picture', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' %>)
+          </small>
+        <% end %>
+      <% end %>
+    <% end if @cluster.cluster_bucket %>
+    <%= content_tag :div, class: (@cluster.cluster_bucket ? 'span9' : 'span12') do %>
       <h1>
         <%= @cluster.name %>
         <%= yield(:edit_section) %>
       </h1>
-      <p><%= @cluster.documents.doctype('Introduction').abstract.present? ? markdown(@cluster.documents.doctype('Introduction').abstract) : "No abstract to show." if @cluster.documents.doctype('Introduction') %></p>
-      <% if can? :edit, @cluster %>
-        <small>
-          (<%= link_to 'Edit picture', polymorphic_path([@cluster, @cluster_bucket]), class: 'change-asset' %> | 
-          <%= link_to 'Edit document', polymorphic_path([:edit, @cluster, @cluster.documents.doctype('Introduction')]), class: 'change-asset' %>)
-        </small>
-      <% end %>
+      <p><%= @cluster.description.present? ? markdown(@cluster.description) : "No abstract to show." %></p>
+
     <% end %>
   </div>
 </div>
@@ -34,7 +36,7 @@
   <div class="member-view" id="members">
     <ul class="unstyled">
       <% for member in @members do %>
-        <%= link_to member.person, title: member.available_name do %>
+        <%= link_to member.person, title: member.available_name, class: 'tooltip-bottom', style: 'padding-bottom:8px;' do %>
           <%= image_tag((member.person ? (member.person.profile_picture ? member.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone') %>
         <% end %>
       <% end %>
@@ -51,21 +53,23 @@
   <% end if @cluster.documents.without_document_type.any? %> 
 
   <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
-    <%= content_tag :h4, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" %>
+    <%= content_tag :h3, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" %>
     <% @cluster.groups.limit(3).each do |group| %>
       <div class="group-entry well">
-      <h3><%= link_to "#{group.name}", group %></h3>
-      <% if group.documents.doctype('Introduction').present? %>
-          <%= render "documents/with_document_type", var: group, dtype: "Introduction" if group.documents.doctype('Introduction') %>
+        <h3><%= link_to "#{group.name}", group %></h3>
+        <% if group.description.present? %>
+          <%= markdown(group.description) %>
         <% else %>
-        <p>No Introduction available</p>
+          <p>No abstract available</p>
         <% end %>
+        <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
+        <%= render group.projects.limit(3) %>
       </div>
     <% end %>
   <% end if @cluster.groups.any? %>
 
   <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
-    <%= content_tag :h4, link_to("Projects", [@cluster, 'projects']), class: "muted" %>
+    <%= content_tag :h3, link_to("Projects", [@cluster, 'projects']), class: "muted" %>
     <%= render @projects.limit(5).order('created_at DESC') %>
 
   <% end if @cluster.projects.any? %>
@@ -74,14 +78,15 @@
 
 <% content_for :sidebar_section do %>
 
-  <%= content_tag :div, class: "" do %>
-    <p>
-      <%= markdown(truncated_content(@cluster.documents.doctype('Introduction'), length=300)) if @cluster.documents.doctype('Introduction').content %>
-    </p>
-  <% end if @cluster.documents.doctype('Introduction') %>
-
   <div class="project-options">
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked nav-pills-big">
+      <%= content_tag :li do %>
+        <%= link_to cluster_issues_path(@cluster) do %>
+          <i class="icon-exclamation-sign"></i>
+          Issues
+          <%= content_tag :span, @cluster.issues.count, class: "badge pull-right #{@cluster.issues.where(closed: false).count > @cluster.issues.where(closed: true).count+1 ? @cluster.issues.where(closed: false).count > @cluster.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+        <% end %>
+      <% end %>
       <%= content_tag :li do %>
         <%= link_to [@cluster, :groups] do %>
           Groups

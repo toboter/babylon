@@ -28,14 +28,10 @@
             </li>
           <% end %>
           </ul>
-          <ul class="nav nav-pills">
           	<%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-create btn-small", style: 'margin-top:4px;' if aspect? %>
-            <%= content_tag :li, class: 'pull-right' do %>
-              <%= link_to [current_aspect, :todos] do %>
-                All Tasks for this project
-              <% end %>
+            <%= link_to [current_aspect, :todos], class: 'pull-right' do %>
+                All todos for this project
             <% end %>
-          </ul>
         </div>
       <% end %>
       <%= content_tag :div, class: 'span4' do %>
@@ -61,13 +57,13 @@
             <% end %>
             <%= content_tag :li do %>
               <%= link_to [current_aspect, :references] do %>
-                Bibliography
+                References
                 <span class="badge pull-right"><%= current_aspect.references.count %></span>
               <% end %>
             <% end %>
             <%= content_tag :li do %>
               <%= link_to [current_aspect, :todos] do %>
-                Todo's
+                Todos
                 <span class="badge badge-important pull-right" style="margin-left:2px;"><%= current_aspect.todos.where(:completed => false).count %></span>
                 <span class="badge badge-success pull-right"><%= current_aspect.todos.where(:completed => true).count %></span>
               <% end %>
@@ -98,16 +94,15 @@
 
       <div class="span5">
 
-      <div id="recent-references">
+      <div class="row-fluid" id="recent-references">
+        <div class="span12">
       	<h6 class="muted">Recently added references</h6>
   		<%= render 'references/bib_entries', :references => @current_aspect.references.order('project_references.created_at DESC').limit(3) %>
-        <ul class="nav nav-pills">
-          <%= content_tag :li, class: 'pull-right' do %>
-            <%= link_to [current_aspect, :references] do %>
+
+            <%= link_to [current_aspect, :references], class: 'pull-right' do %>
               All references for this project
             <% end %>
-          <% end %>
-        </ul>
+          </div>
       </div>
 
       <%= render 'shared/calendar' %>

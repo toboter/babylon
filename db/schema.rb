@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140515133000) do
+ActiveRecord::Schema.define(:version => 20140605130310) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(:version => 20140515133000) do
     t.datetime "updated_at",          :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.text     "description"
   end
 
   add_index "collection_field_values", ["collection_field_id"], :name => "index_collection_field_values_on_collection_field_id"
@@ -434,6 +435,8 @@ ActiveRecord::Schema.define(:version => 20140515133000) do
     t.integer  "projectable_id"
     t.string   "projectable_type"
     t.boolean  "show_references"
+    t.boolean  "featured"
+    t.text     "description"
   end
 
   create_table "references", :force => true do |t|

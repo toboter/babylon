@@ -3,7 +3,7 @@
     <div class="controls">
       <% field.select_values.each do |r| %>
         <label class="radio">
-      	  <%= f.radio_button field.name, r.field_value  %>
+      	  <%= f.radio_button field.name, r.id  %>
       	  <%= r.field_value %>
       	</label>
       <% end %>

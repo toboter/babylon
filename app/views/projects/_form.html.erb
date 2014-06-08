@@ -16,6 +16,18 @@
         <%= f.check_box :show_references %>
       </div>
     </div>
+    <div class="control-group">
+      <%= f.label :featured, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :featured %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :description, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, class: 'span6' %>
+      </div>
+    </div>
 
     <%= f.fields_for :memberships do |builder| %>
       <%= render "membership_fields", :f => builder %>

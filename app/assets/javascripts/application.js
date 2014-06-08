@@ -34,6 +34,10 @@ $(document).ready(function(){
         placement: 'right',
         trigger: 'hover'
     });
+    $('.popover-left').popover({
+        placement: 'left',
+        trigger: 'hover'
+    });
 
     $('.chosen-select').chosen({
     	search_contains: true

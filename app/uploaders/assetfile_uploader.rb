@@ -68,14 +68,21 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   #   %w(jpg jpeg gif png)
   # end
 
+  #  def default_url
+  #    "#{model.class.to_s.underscore.downcase}/#{mounted_as}/missing/" + [version_name, 'missing.png'].compact.join('_')
+  #  end
+
+
+  def is_image? file
+    file.content_type.include? 'image'
+  end
+
+
+
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # def filename
   #   "something.jpg" if original_filename
   # end
-
-  def is_image? file
-    file.content_type.include? 'image'
-  end
 
 end

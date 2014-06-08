@@ -1,7 +1,7 @@
 class Cluster < ActiveRecord::Base
   attr_accessible :name, :creator_id, :updater_id, :speaker_id, :cluster_admin_id, :description, :contact
 
-  after_create :build_cluster_picture_bucket, :build_cluster_introduction_document
+  after_create :build_cluster_picture_bucket
 
   has_many :groups, dependent: :destroy
   
@@ -11,6 +11,7 @@ class Cluster < ActiveRecord::Base
   has_many :documents, as: :documentable, dependent: :destroy
   has_many :buckets, as: :attachable, :dependent => :destroy
   has_many :assets, through: :buckets
+  has_many :issues, as: :issuable, :dependent => :destroy
 
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
@@ -22,10 +23,6 @@ class Cluster < ActiveRecord::Base
   
   def build_cluster_picture_bucket
     Bucket.create :attachable_id => self.id, :attachable_type => "Cluster", :name => "Cover Pictures", :name_fixed => true
-  end
-  
-  def build_cluster_introduction_document
-    Document.create :documentable_id => self.id, :documentable_type => "Cluster", :document_type => "Introduction", :title => "Introduction"
   end
 
   def cluster_bucket

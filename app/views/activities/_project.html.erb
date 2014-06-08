@@ -2,12 +2,9 @@
 <abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
 <div class="title">
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
-
   <%= name_only_or_link_to(activity.user) %> 
-  <%= activity.action.sub(/e?$/, "ed") %> a
-  <%= link_to 'document', [document.documentable, document], class: 'popover-left', data: { 'original-title' => document.name, 'content' => document.inspect } if document && document.documentable %> on 
-  <%= link_to document.documentable.name, document.documentable if document && document.documentable %>
-
+  <%= activity.action.sub(/e?$/, "ed") %> project entry 
+  <%= link_to project.name, [project.projectable, project], title: project.name, class: 'tooltip-bottom' if project %>
 </div>
 <div class="details">
 

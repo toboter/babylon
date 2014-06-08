@@ -13,14 +13,20 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <ul class="thumbnails">
-    <%= render partial: 'asset', collection: @bucket.assets.order('content_type DESC', 'name ASC') %>
-  </ul>
-  <% if @bucket.attachable_type == 'Person' %>
-    <%= render 'upload_asset' if (!@bucket.attachable.user_id?) || (@bucket.attachable.user.id == current_user.id) %>
+  <% if @bucket.assets.any? %>
+    <ul class="thumbnails">
+      <%= render partial: 'asset', collection: @bucket.assets.order('content_type DESC', 'name ASC') %>
+    </ul>
   <% else %>
-    <%= render 'upload_asset' %>
+    <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px; margin-bottom:20px;">
+      <p class="text-center">That bucket is empty. Start adding some files to it.</p>
+    </div>
   <% end %>
+    <% if @bucket.attachable_type == 'Person' %>
+      <%= render 'upload_asset' if (!@bucket.attachable.user_id?) || (@bucket.attachable.user.id == current_user.id) %>
+    <% else %>
+      <%= render 'upload_asset' %>
+    <% end %>
 <% end %>
 
 <% content_for :sidebar_section do %>

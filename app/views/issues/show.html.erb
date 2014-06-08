@@ -23,7 +23,7 @@
       <%= name_only_or_link_to(@issue.creator) %> opend this issue
       <%= distance_of_time_in_words_to_now(@issue.created_at) %> ago 
       <%= content_tag :span do %>
-        <i class="icon-comment"></i> <%= pluralize(@issue.comments.count, 'comment') %> <%= content_tag :span, "later it was closed" if @issue.closed? %>
+        <i class="icon-comment"></i> <%= pluralize(@issue.comments.count, 'comment') %> <%= @issue.closed? ? content_tag(:span, "later it was closed") : (link_to('- close this issue', close_issue_path(@issue), method: :put, class: '') if (@issue.assigned == current_user)) %>
       <% end if @issue.comments.any? %>
     </div>
 

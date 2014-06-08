@@ -17,8 +17,8 @@
 <% end %>
 
 <%= content_for :top_over do %>
-  <div class="row-fluid" id='about' style=";">
-    <%= content_tag :div, class: 'span6' do %>
+  <div class="row" id='about' style="">
+    <%= content_tag :div, class: 'span12' do %>
       <%= content_tag :h1, class: 'pagetop' do %>
         Group
       <% end %>
@@ -27,12 +27,13 @@
         <%= yield(:edit_section) %>
       <% end %>
     <% end %>
-    <%= content_tag :div, class: 'span6', style: 'padding-top:1em;' do %>
-      <p>
-        <%= @group.documents.doctype('Introduction').abstract.present? ? @group.documents.doctype('Introduction').abstract : "No abstract to show." %>
+  </div>
+  <div class="row">
+    <%= content_tag :div, class: 'span12 lead', style: '' do %>
+      <p class="">
+        <%= @group.description.present? ? markdown(@group.description) : "No abstract to show." %>
       </p>
-      <%= link_to 'Edit document', polymorphic_path([:edit, @group, @group.documents.doctype('Introduction')]), class: 'change-asset' if can? :edit, @group %>
-    <% end if @group.documents.doctype('Introduction') %>
+    <% end %>
   </div>
   <hr>
 <% end %>
@@ -61,12 +62,16 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <p>
-    <%= markdown(truncated_content(@group.documents.doctype('Introduction'), length=300)) if @group.documents.doctype('Introduction').content if @group.documents.doctype('Introduction') %>
-  </p>
 
   <div class="project-options">
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked nav-pills-big">
+      <%= content_tag :li do %>
+        <%= link_to group_issues_path(@group) do %>
+          <i class="icon-exclamation-sign"></i>
+          Issues
+          <%= content_tag :span, @group.issues.count, class: "badge pull-right #{@group.issues.where(closed: false).count > @group.issues.where(closed: true).count+1 ? @group.issues.where(closed: false).count > @group.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+        <% end %>
+      <% end %>
       <%= content_tag :li do %>
         <%= link_to [@group, :projects] do %>
           Projects

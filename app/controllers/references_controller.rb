@@ -6,11 +6,13 @@ class ReferencesController < ApplicationController
   # GET /references.json
   def index
     if params[:project_id]
-      @project = Project.find(params[:project_id])
-      @references_all = @project.references 
+      @parent = Project.find(params[:project_id])
+      @references_all = @parent.references 
     elsif params[:item_id]
-      @item = Item.find(params[:item_id])
-      @references_all = @item.references
+      @parent = Item.find(params[:item_id])
+      @references_all = @parent.references
+    elsif params[:show] == 'all'
+      @references_all = Reference.all
     else
       @references_all = Reference.joins(:projects).where('show_references = ?', true)
     end

@@ -25,8 +25,6 @@ class ClustersController < ApplicationController
 
     @projects = Project.where(id: (@cluster.project_ids+@cluster.group_project_ids))
 
-    @cluster_bucket = @cluster.buckets.find_by_name('Cover Pictures')
-
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb
       format.json { render json: @cluster }

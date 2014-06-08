@@ -12,7 +12,10 @@ class ExploreController < ApplicationController
 	@news = @snippets.limit(4).select { |snip| snip.snippet_type == 'news' }
 	@about_bucket = @about.buckets.find_by_name('Explorer Pictures')
 	@clusters = Cluster.limit(4)
-	@activities = Activity.order('created_at DESC').limit(6)
+	@activities = Activity.order('created_at DESC').limit(11)
+
+	@featured = Project.where(featured: true)
+	# @featured.concat(Document.where(document_type: 'Introduction').limit(2))
   end
 
 end
