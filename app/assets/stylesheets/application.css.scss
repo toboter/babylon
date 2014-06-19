@@ -20,6 +20,19 @@
 	border: 1px solid red;
 }
 
+.tiles {
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.tiles img {
+	margin-bottom:10px;
+}
+
+
 .abstract_area {
 	height: 100px;
 }

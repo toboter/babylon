@@ -7,6 +7,7 @@ class Item < ActiveRecord::Base
             :citations_attributes, :actions_attributes, :description, :slug, :properties
 
   stampable
+  
   attr_writer :accession_date_text
   serialize :properties, Hash
   after_create :build_album_bucket
@@ -25,12 +26,11 @@ class Item < ActiveRecord::Base
   # has_many :measurements, as: measureable
   has_many :actions, as: :actable
   # has_many :connections, as: :connectable
-  has_many :documents, as: :documentable
+  has_many :documents, as: :documentable, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
-
-  has_many :studyassignments, :dependent => :destroy
-  has_many :projects, through: :studyassignments
-
+  has_many :studies, as: :studyable
+  has_many :lists, through: :studies
+  has_many :projects, through: :lists
 
   validates :collection_id, :inventory_number, presence: true
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}

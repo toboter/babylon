@@ -12,7 +12,7 @@
 <% content_for :top_over do %>
   <div class="row" style="">
     <div class="<%= 'span3' if @person.profile_picture %>">
-      <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: ""), @person.profile_picture if @person.profile_picture %>
+      <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-top:20px;"), @person.profile_picture if @person.profile_picture %>
     </div>
     <div class="<%= @person.profile_picture ? 'span6' : 'span9' %>">
       <h1>
@@ -45,7 +45,7 @@
         <% end %>
       </ul>
     </div>
-    <div class="span3 vcard">
+    <div class="span3 vcard" style="margin-top:10px;">
       <address>
         <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
         <%= content_tag :h5, 'Contact Information', class: 'muted' if @person.public_email.present? || @person.phone.present? || @person.fax.present? || (@person.institutions.any? && @person.show_inst_address == true) || @person.uri.present? %>
@@ -70,22 +70,24 @@
 <% end %>
 
 <% content_for :main_section do %>
-    <div id="scroll-pane" data-target="#scroll-nav">
+<div class="span12">
+  <div class="row-fluid">
+    <div class="span9" id="scroll-pane" data-target="#scroll-nav">
       <%= content_tag :section, id: 'about', class: 'person-section' do %>
         <%= markdown(@person.general) if @person.general.present? %>
-        <%= content_tag :h3, 'Curriculum Vitae' if @person.cv.present? && @person.general.present? %>
+        <%= content_tag :h2, 'Curriculum Vitae' if @person.cv.present? && @person.general.present? %>
         <%= markdown(@person.cv) if @person.cv %>       
       <% end %>
 
       <%= content_tag :section, id: 'documents' do %>
         <div class="page-header">
-          <h1>
+          <h2>
             Documents
             <%= link_to polymorphic_path([:new, @person, :document]), class: 'btn btn-create pull-right' do %>
               <i class="icon-plus icon-white"></i>
               Document
             <% end if user_signed_in? && (can? :manage, @person) %>
-          </h1>
+          </h2>
         </div>
         <% if @person.documents.any? %>
           <%= render "documents/without_document_type", var: @person %>
@@ -96,7 +98,7 @@
 
       <%= content_tag :section, id: 'updates' do %>
         <div class="page-header">
-          <h1>Public Activity</h1>
+          <h2>Public Activity</h2>
         </div>
         <%= content_tag :div, id: "activity-section", style: '' do %>
           <% @person.user.activities.order('created_at DESC').limit(10).each do |activity| %>
@@ -110,14 +112,14 @@
 
       <%= content_tag :section, id: 'projects' do %>
         <div class="page-header">
-          <h1>Projects</h1>
+          <h2>Projects</h2>
         </div>
         <%= render @person.user.projects %>  
       <% end if @person.user %>
 
       <%= content_tag :section, id: 'publications' do %>
         <div class="page-header">
-          <h1>Publications</h1>
+          <h2>Publications</h2>
         </div>
           <% if @person.references.present? %>
             <h4 class="muted">Authorship</h4>
@@ -133,61 +135,61 @@
 
       <%= content_tag :section, id: 'uploads' do %>
         <div class="page-header">
-          <h1>
+          <h2>
             Pictures
             <%= link_to polymorphic_path([:new, @person, :bucket]), class: 'btn btn-create pull-right' do %>
               <i class="icon-plus icon-white"></i>
               Bucket
             <% end if user_signed_in? && (can? :manage, @person) %>
-          </h1>
+          </h2>
         </div>
-        <%= render "shared/buckets_assets", :obj => @person, :personal => true %>
+        <%= render @person.buckets, :personal => true %>
       <% end %>
     </div>
 
-<% end %>
 
-<% content_for :sidebar_section do %>
-<div class="person-sidebar">
-<div id="scroll-nav" data-spy="affix" data-offset-top="260" class="affix-top">
-  <ul class="nav nav-tabs nav-stacked nav-list">
-    <%= content_tag :li do %>
-      <%= link_to "#about" do %>
-        <i class="icon-chevron-left"></i>
-        About
+  <div class="span3 person-sidebar">
+  <div id="scroll-nav" data-spy="affix" data-offset-top="260" class="affix-top">
+    <ul class="nav nav-tabs nav-stacked nav-list">
+      <%= content_tag :li do %>
+        <%= link_to "#about" do %>
+          <i class="icon-chevron-left"></i>
+          About
+        <% end %>
+      <% end if @person.cv.present? || @person.general.present? %>
+      <%= content_tag :li, class: '' do %>
+        <%= link_to "#documents" do %>
+          <i class="icon-chevron-left"></i>
+          Documents
+        <% end %>
       <% end %>
-    <% end if @person.cv.present? || @person.general.present? %>
-    <%= content_tag :li, class: '' do %>
-      <%= link_to "#documents" do %>
-        <i class="icon-chevron-left"></i>
-        Documents
+      <%= content_tag :li, class: '' do %>
+        <%= link_to "#updates" do %>
+          <i class="icon-chevron-left"></i>
+          Activity
+        <% end %>
+      <% end if @person.user %>
+      <%= content_tag :li, class: '' do %>
+        <%= link_to "#projects" do %>
+          <i class="icon-chevron-left"></i>
+          Projects
+        <% end %>
+      <% end if @person.user %>
+      <%= content_tag :li, class: '' do %>
+        <%= link_to "#publications" do %>
+          <i class="icon-chevron-left"></i>
+          Publications
+        <% end %>
       <% end %>
-    <% end %>
-    <%= content_tag :li, class: '' do %>
-      <%= link_to "#updates" do %>
-        <i class="icon-chevron-left"></i>
-        Activity
+      <%= content_tag :li, class: '' do %>
+        <%= link_to "#uploads" do %>
+          <i class="icon-chevron-left"></i>
+          Uploads
+        <% end %>
       <% end %>
-    <% end if @person.user %>
-    <%= content_tag :li, class: '' do %>
-      <%= link_to "#projects" do %>
-        <i class="icon-chevron-left"></i>
-        Projects
-      <% end %>
-    <% end if @person.user %>
-    <%= content_tag :li, class: '' do %>
-      <%= link_to "#publications" do %>
-        <i class="icon-chevron-left"></i>
-        Publications
-      <% end %>
-    <% end %>
-    <%= content_tag :li, class: '' do %>
-      <%= link_to "#uploads" do %>
-        <i class="icon-chevron-left"></i>
-        Uploads
-      <% end %>
-    <% end %>
-  </ul>
+    </ul>
+  </div>
+  </div>
 </div>
 </div>
 <% end %>

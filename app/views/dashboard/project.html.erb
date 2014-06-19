@@ -44,9 +44,9 @@
         <div class="dashboard-options">
           <ul class="nav nav-pills nav-stacked">
             <%= content_tag :li do %>
-              <%= link_to [current_aspect, :items] do %>
-                Items
-                <span class="badge pull-right"><%= current_aspect.items.count %></span>
+              <%= link_to [current_aspect, :lists] do %>
+                Lists
+                <span class="badge pull-right"><%= current_aspect.lists.count %></span>
               <% end %>
             <% end %>
             <%= content_tag :li do %>
@@ -77,19 +77,10 @@
 
       <%= content_tag :div, class: "span7" do %>
         <%= content_tag :div, class: "" do %>
-    	  <table class="table table-bordered table-hover">
-      	    <tbody>
-      		    <%= render @current_aspect.items %>
-      	    </tbody>
-    	  </table>
-    	  <ul class="nav nav-pills">
-          <%= content_tag :li, class: 'pull-right' do %>
-            <%= link_to [current_aspect, :items] do %>
-              All items for this project
-            <% end %>
-          <% end %>
-        </ul>
-        <% end if @current_aspect.items.any? %>
+          <%= content_tag :h3, 'Lists' %>
+      		<%= render @current_aspect.lists %>
+          <%= link_to 'All lists for this project', [current_aspect, :lists] %>
+        <% end if @current_aspect.lists.any? %>
       <% end %>
 
       <div class="span5">

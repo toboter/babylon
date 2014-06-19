@@ -27,8 +27,8 @@
     <% end %>
   </div>
   <div class="row">
-    <%= content_tag :div, class: 'span2', style: '' do %>
-      <%= link_to (image_tag @project.project_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@project, @project.project_bucket]) %>
+    <%= content_tag :div, class: 'span2 visible-desktop', style: '' do %>
+      <%= link_to (image_tag @project.project_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@project, @project.project_bucket]) if @project.project_bucket.cover %>
       (<%= link_to 'Edit picture', polymorphic_path([@project, @project.project_bucket]), class: 'change-asset' %>)
     <% end if @project.project_bucket %>
     <%= content_tag :div, class: 'span10 lead', style: '' do %>
@@ -49,8 +49,14 @@
     </ul>
   </div>
 
+  <%= content_tag :div, class: 'lists-view', id: 'bib' do %> 
+    <%= content_tag :h4, 'Lists', class: '' %>
+    <%= render @project.lists.limit(5) %>
+    <%= link_to 'View all lists', [@project, :lists] %>
+  <% end if @project.lists.any? %> 
+
   <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
-    <%= content_tag :h4, 'Documents', class: 'muted' %>  
+    <%= content_tag :h4, 'Documents', class: '' %>  
       <table class="table table-bordered">
         <tbody>
           <%= render "documents/without_document_type", :var => @project %>
@@ -58,9 +64,13 @@
       </table>
   <% end if @project.documents.without_document_type.any? %> 
 
-  <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %> 
-    <%= content_tag :h4, 'References', class: 'muted' %>
-    <%= render "references/bib_entries", :references => @project.references.order('first_page ASC').limit(5) %>
+  <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %>
+  <%= content_tag :h4, 'References', class: '' %>
+    <%= content_tag :h5, 'References used in your project', class: '' %>
+    <%= render "references/bib_entries", :references => @project.studies.map{|r| r.references }.flatten.take(3) %>
+    <%= content_tag :h5, 'References added by your project', class: '' %>
+    <%= render "references/bib_entries", :references => @project.references.limit(3) %>
+    <%= link_to "View all references for #{full_qualified_name(@project)}", [@project, :references] %>
   <% end if @project.references.any? %>  
 
 <% end %>
@@ -77,9 +87,9 @@
         <% end %>
       <% end %>
       <%= content_tag :li do %>
-        <%= link_to [@project, :items] do %>
-          Items
-          <span class="badge pull-right"><%= @project.items.count %></span>
+        <%= link_to [@project, :lists] do %>
+          Lists
+          <span class="badge pull-right"><%= @project.lists.count %></span>
         <% end %>
       <% end %>
       <%= content_tag :li do %>

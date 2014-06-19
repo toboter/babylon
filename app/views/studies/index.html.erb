@@ -1,0 +1,23 @@
+<% title @parent.name+' studies', nil if @parent %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <% if @parent.class.to_s == 'List' %>
+    <%= content_tag(:li, (link_to @parent.project.name, [@parent.project.projectable, @parent.project]) + content_tag(:span, '/', class: 'divider')) %>
+    <li><%= link_to 'Lists', project_lists_path(@parent.project) %> <span class="divider">/</span></li>
+    <%= content_tag(:li, (link_to @parent.name, [@parent.project, @parent]) + content_tag(:span, '/', class: 'divider')) %>
+  <% elsif @parent.class.to_s == 'Item' %>
+    <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
+    <%= content_tag(:li, (link_to @parent.name, @parent) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
+
+  <%= content_tag :li, "Studies", class: 'active' %>
+
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="span12">
+    <%= render @studies %>
+  </div>
+
+<% end %>

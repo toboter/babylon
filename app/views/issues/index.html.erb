@@ -14,7 +14,9 @@
     <%= content_tag :h1 do %>
       Issues for "<%= link_to @issuable.name, @issuable %>" <small>[<%= @issuable.class %>]</small>
     <% end if @issuable %>
-  </div>
+  
+
+  <div class="row-fluid">
   <div class="span3">
     <div class="issues-options">
       <ul class="nav nav-pills nav-stacked">
@@ -42,11 +44,7 @@
     </div>
     <div class="issues-list">
       <% if @issues.any? %>
-        <table class="table table-bordered table-hover">
-          <tbody>
-            <%= render @issues %>
-          </tbody>
-        </table>
+        <%= render @issues %>
       <% else %>
         <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;">
           <p class="text-center">No issues to show. <%= link_to 'Create a new issue.', polymorphic_path([:new, @issuable, :issue]) if @issuable %></p>
@@ -54,4 +52,6 @@
       <% end %>
     </div>
   </div>
+</div>
+</div>
 <% end %>

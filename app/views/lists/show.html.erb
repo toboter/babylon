@@ -1,0 +1,63 @@
+<% title "#{@list.project ? @list.project.name : 'List'}", @list.name %>
+<% edit_section_for(@list, @list.project) if @list.project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
+<% footer_section(@list.project) %>
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Modules", clusters_path) + content_tag(:span, '/', class: 'divider')) %>
+  <% if @list.project && @list.project.projectable.class.to_s == 'Group' %>
+    <%= content_tag(:li, link_to("#{@list.project.projectable.cluster.name}", cluster_path(@list.project.projectable.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("Groups", cluster_groups_path(@list.project.projectable.cluster)) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
+
+  <%= content_tag(:li, (link_to "#{@list.project.projectable.name}", (@list.project.projectable.class.to_s == 'Group' ? [@list.project.projectable.cluster, @list.project.projectable] : @list.project.projectable )) + content_tag(:span, '/', class: 'divider')) if @list.project %>
+
+  <%= content_tag(:li, (link_to "Projects", [@list.project.projectable, :projects]) + content_tag(:span, '/', class: 'divider')) if @list.project %>
+  <%= content_tag(:li, (link_to "#{@project.name}", [@list.project.projectable, @project]) + content_tag(:span, '/', class: 'divider')) if @list.project %>
+  <%= content_tag(:li, (link_to "Lists", [@list.project, :lists]) + content_tag(:span, '/', class: 'divider')) if @list.project %>
+  <%= content_tag :li, @list.name, class: 'active' %>
+<% end %>
+
+
+<% content_for :main_section do %>
+<p>
+  <b>Name:</b>
+  <%= @list.name %>
+</p>
+
+<p>
+  <b>Forkable:</b>
+  <%= @list.forkable %>
+</p>
+
+<p>
+  <b>Duplicates:</b>
+  <%= @list.accept_duplicates %>
+</p>
+
+<p>
+  <b>Forked from:</b>
+  <%= @list.forked_from_id %>
+</p>
+
+<p>
+  <b>Featured:</b>
+  <%= @list.featured %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @list.description %>
+</p>
+
+<p>
+  <b>Project:</b>
+  <%= full_qualified_name(@list.project) %><br />
+  <%= name_only_or_link_to(@list.creator) %>
+</p>
+  <%= content_tag :div, class: 'tiles', id: 'study-tiles' do %>
+    <%= content_tag :h3, 'Studied objects' %>
+    <%= render "studies/study_tiles", studies: @list.studies.limit(8)  %>
+    <%= link_to "View all studies in #{@list.name}", [@list, :studies] %>
+  <% end if @list.studies.any? %>
+<% end %>

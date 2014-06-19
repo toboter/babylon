@@ -7,9 +7,14 @@ class ReferencesController < ApplicationController
   def index
     if params[:project_id]
       @parent = Project.find(params[:project_id])
-      @references_all = @parent.references 
+      @direct_references = @parent.references
+      @indirect_references = @parent.studies.map{|r| r.references }.flatten
+      @references_all = @direct_references+@indirect_references 
     elsif params[:item_id]
       @parent = Item.find(params[:item_id])
+      @references_all = @parent.references
+    elsif params[:study_id]
+      @parent = Study.find(params[:study_id])
       @references_all = @parent.references
     elsif params[:show] == 'all'
       @references_all = Reference.all
@@ -21,7 +26,7 @@ class ReferencesController < ApplicationController
 
     respond_to do |format|
       format.html { render :layout => "index_page" }# index.html.erb
-      format.csv { send_data @references_unpaginated.to_csv }
+      format.csv { send_data @references_all.to_csv }
       format.xls # { send_data @references.to_csv(col_sep: "\t") }
       format.json { render json: @reference }
     end

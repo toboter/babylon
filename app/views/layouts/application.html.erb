@@ -16,6 +16,7 @@
   </head>
 
   <body>
+    <header>
     <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
       <div class="navbar-inner">
         <%= link_to "$babylon", root_url, class: "brand", style: 'margin-left:0' %>
@@ -147,8 +148,9 @@
 
       </div>
     <% end if user_signed_in? %>
-
-
+    
+    <%= yield(:billboard) if user_signed_in? %>
+    </header>
 
     <!-- Main Section -->
     <div class="container">

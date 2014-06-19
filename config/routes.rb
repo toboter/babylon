@@ -24,8 +24,15 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :issues
     resources :references
+    resources :studies
   end
 
+  resources :studies, only: [:index, :show] do
+    resources :documents
+    resources :references
+    resources :issues
+    resources :buckets 
+  end
 
   # Research Group Management
   resources :people do
@@ -57,6 +64,11 @@ Babylon::Application.routes.draw do
     resources :items
     resources :issues
     resources :buckets
+    resources :lists
+  end
+
+  resources :lists, only: [] do
+    resources :studies
   end
 
   resources :todos, only: [:index, :show, :new] do

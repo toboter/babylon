@@ -9,6 +9,7 @@
 //
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
+// -> Fluidbox: https://github.com/terrymun/Fluidbox
 //
 //= require jquery
 //= require jquery_ujs
@@ -17,6 +18,7 @@
 //= require jquery-fileupload
 //= require chosen-jquery
 //= require cocoon
+//= require jquery.fluidbox.min.js
 //= require_tree .
 
 $(document).ready(function(){
@@ -25,6 +27,9 @@ $(document).ready(function(){
     });
     $('.tooltip-right').tooltip({
         placement: 'right'
+    });
+    $('.tooltip-left').tooltip({
+        placement: 'left'
     });
     $('.popover-top').popover({
         placement: 'top',
@@ -52,5 +57,8 @@ $(document).ready(function(){
         format: "dd.mm.yyyy",
         todayHighlight: true,
         forceParse: false
+    });
+    $('.img-fluid').fluidbox({
+        viewportFill: 0.8
     });
 });

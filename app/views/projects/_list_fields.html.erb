@@ -1,0 +1,44 @@
+<fieldset class="nested-fields" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
+  <div class="list-field">
+    <div class="control-group">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, class: 'span6' %>
+        <span class="pull-right"><%= link_to_remove_association "remove", f %></span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :description, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, class: 'span6', rows: 6 %>
+      </div>
+    </div>
+
+    <div class="control-group" style="margin-bottom: 0;">
+      <%= f.label :forkable, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :forkable %>
+      </div>
+    </div>
+    <div class="control-group" style="margin-bottom: 0;">
+      <%= f.label :accept_duplicates, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :accept_duplicates %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :featured, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :featured %>
+      </div>
+    </div>
+
+  <div class="controls">
+    <%= f.label :forked_from_id %>
+    <%= f.number_field :forked_from_id %>
+  </div>
+
+    </div>  
+
+</fieldset>

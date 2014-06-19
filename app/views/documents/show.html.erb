@@ -14,7 +14,7 @@
   <%= content_tag :div, class: "lead" do %>
     <%= markdown(@document.abstract) %>
   <% end if @document.abstract? %>
-  <%= content_tag :div, class: "content_section" do %>
+  <%= content_tag :div, class: "content_section document-content" do %>
     <%= markdown(@document.content) %>
   <% end if @document.content? %>
 <% end %>

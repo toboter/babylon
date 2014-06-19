@@ -16,20 +16,7 @@
         <%= content_tag :i, '',class: 'icon-ok' if !item.issues.where(closed: false).any? %>
       <% end if item.issues.any? %>
     </p>
-            <%= content_tag :div, class: "" do %>
-              <%= content_tag :div, class: "" do %>
-                <%= link_to add_studyassignment_path(item_id: item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-mini btn-success' do %>
-                  <%= content_tag :i, '', class: 'icon-plus icon-white' %>
-                  <%= current_aspect.name %>
-                <% end %>
-              <% end if !current_aspect.items.include?(item) %>
-              <%= content_tag :div, class: "" do %>
-                <%= link_to destroy_studyassignment_path(item_id: item.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-mini btn-warning' do %>
-                  <%= content_tag :i, '', class: 'icon-trash icon-white' %>
-                  <%= current_aspect.name %>
-                <% end %>
-              <% end if current_aspect.items.include?(item) %>
-            <% end if aspect? && (can? :manage, 'curation') %>
+
   </td>
   <%= content_tag :td, width: "20%", class: "" do %>
     <%= item.context_id %>

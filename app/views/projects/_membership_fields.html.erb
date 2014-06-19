@@ -1,11 +1,11 @@
-<fieldset class="nested-fields">
+<fieldset class="nested-fields" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
   <div class="member-field">
     <div class="control-group">
       <%= f.label :user_id, 'Member', class: 'control-label' %>
       <div class="form-inline controls">
         <%= f.collection_select :user_id, @users, :id, :available_name %>
         <%= f.select :role, Membership::ROLES %>
-        <small><%= link_to_remove_association "remove", f %></small>
+        <span class="pull-right"><%= link_to_remove_association "remove", f %></span>
       </div>
     </div>  
   </div>

@@ -1,0 +1,11 @@
+<h4 class="" style="margin-bottom:10px; margin-top:10px;">
+  <%= link_to "#{bucket.name}", [bucket.attachable, bucket] %>
+</h4>
+<div class="tiles">
+  <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').order('created_at desc') do %>
+    <%= link_to (image_tag asset == bucket.cover ? asset.assetfile.normal.url : asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid" %>
+    <%= asset.assetfile.normal.url if local_assigns.has_key? :with_link %> 
+  <% end %>
+</div>
+<p style="margin-bottom: 30px;"><%= link_to "View all assets in #{bucket.name}", [bucket.attachable, bucket] %></p>
+

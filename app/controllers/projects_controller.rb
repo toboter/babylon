@@ -93,7 +93,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.update_attributes(params[:project])
         track_activity @project
-        format.html { redirect_to @project == current_aspect ? [@project, 'dashboard'] : [@projectable, @project], notice: 'Project was successfully updated.' }
+        format.html { redirect_to [@projectable, @project], notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -110,7 +110,7 @@ class ProjectsController < ApplicationController
     track_activity @project
 
     respond_to do |format|
-      format.html { redirect_to projects_url }
+      format.html { redirect_to [@projectable, :projects] }
       format.json { head :no_content }
     end
   end

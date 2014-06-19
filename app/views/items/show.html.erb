@@ -11,21 +11,19 @@
 
 <% content_for :main_section do %>
   <div class="span12">
-    <%= content_tag :h3, class: "muted" do %>
+    <%= content_tag :h2, class: "" do %>
       <%= @item.title? ? @item.title : @item.inventory_name %>
       <%= yield(:edit_section) %>
     <% end %>
     <div class="row-fluid">
       <div class="span4">
-        <a data-toggle="modal" id="image-modal" href="#image-slider">
-          <%= @item.buckets.first.cover ? (image_tag @item.buckets.first.cover.assetfile.large.url) : (image_tag 'icons/no_picture.svg') if @item.buckets.any? %>
-        </a><br />
-        <small>click on the picture to see the full album.</small>
+        <a href="" class="img-fluid">
+          <%= @item.buckets.first.cover ? (image_tag @item.buckets.first.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @item.buckets.any? %>
+        </a>
       </div>
   
       <div class="span8">
-        <div class="row-fluid">
-          <div class="span6">
+
             <div class="info_section">
               <table class="table table-bordered table-hover">
                 <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) %>
@@ -43,64 +41,24 @@
                 <% end %>
 
               </table> 
-              <%= content_tag :span, tagging_infos_for(@item), class: 'pull-right' %>
-              <%= markdown(@item.description) if @item.description.present? %> 
-            </div>
-          </div>
-          <div class="span6">            
-            <%= content_tag :div, class: "item-options well" do %>
-              <%= content_tag :div, class: "" do %>
-                <%= link_to add_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :post, class: 'btn btn-block btn-success' do %>
-                  <%= content_tag :i, '', class: 'icon-plus icon-white' %>
-                  <%= current_aspect.name %>
-                <% end %>
-              <% end if !current_aspect.items.include?(@item) %>
-              <%= content_tag :div, class: "" do %>
-                <%= link_to destroy_studyassignment_path(item_id: @item.id, project_id: current_aspect.id), :method => :delete, class: 'btn btn-block btn-warning' do %>
-                  <%= content_tag :i, '', class: 'icon-trash icon-white' %>
-                  <%= current_aspect.name %>
-                <% end %>
-              <% end if current_aspect.items.include?(@item) %>
-            <% end if aspect? %>
 
-            <div class="item-pills">
-              <ul class="nav nav-pills nav-stacked nav-pills-big">
-                <%= content_tag :li do %>
-                  <%= link_to item_issues_path(@item) do %>
-                    <i class="icon-exclamation-sign"></i>
-                    Issues
-                    <%= content_tag :span, @item.issues.count, class: "badge pull-right #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
-                  <% end %>
-                <% end %>
-                <%= content_tag :li do %>
-                  <%= link_to [@item, :documents] do %>
-                    Documents
-                    <span class="badge pull-right"><%= @item.documents.without_document_type.count %></span>
-                  <% end %>
-                <% end %>
-                <%= content_tag :li do %>
-                  <%= link_to [@item, :references] do %>
-                    References
-                    <span class="badge pull-right"><%= @item.references.count %></span>
-                  <% end %>
-                <% end %>
-                <%= content_tag :li do %>
-                  <%= link_to [@item, :buckets] do %>
-                    Buckets
-                    <span class="badge pull-right"><%= @item.buckets.count %></span>
-                  <% end %>
-                <% end %>
-              </ul>
             </div>
-          </div>
-        </div>
+
       </div>
     </div>
   
-    <div class="row-fluid">
-      <div class="span4">
+    <div class="row-fluid" style="margin-top:20px;">
+      <div class="span3">
+        <div class="issue-section" id='issue'>
+          <%= content_tag :h3 do %>
+            Issues <%= content_tag :span, @item.issues.count, class: "badge #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+          <% end %>
+          <%= render @item.issues.order('created_at DESC').limit(3) %>
+          <%= @item.issues.any? ? link_to('View all issues', item_issues_path(@item)) : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
+        </div>
+
         <div class="item-section" id='history'>
-          <%= content_tag :h4, 'History', class: 'muted' %>
+          <%= content_tag :h3, 'History', class: '' %>
           <ul class="unstyled">
             <% for action in @item.actions.order('created_at DESC') do %>
               <li>
@@ -115,82 +73,68 @@
           </ul>
         </div>
 
-        <div class="item-section" id='buckets'>
-          <%= content_tag :h4, 'Buckets', class: 'muted' %>
-          <ul class="unstyled">
-            <% for bucket in @item.buckets do %>
-              <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
-            <% end if @item.buckets.any? %>
-          </ul>
-        </div>
       </div>
 
-      <div class="span8">  
-        <%= content_tag :div, class: "item-section", id: 'workspaces' do %>
-          <%= content_tag :h4, 'Project Workspace Info', class: 'muted' %>
-          <% for studyassignment in @item.studyassignments do %>
-            <li><%= name_only_or_link_to(studyassignment.creator) %> in <%= link_to "#{studyassignment.project.name}", [studyassignment.project.projectable, studyassignment.project] %></li>
+      <div class="span9">
+        <%= content_tag :div, class: "item-section", id: 'description' do %>
+          <%= content_tag :h3, class: '' do %>
+            Description
+            <%= content_tag :span, tagging_infos_for(@item), class: 'pull-right' %>
           <% end %>
-        <% end if @item.studyassignments.any? %>
+          <%= @item.description.present? ? markdown(@item.description) : 'No description available.' %>
+          <%= content_tag :hr %>
+        <% end if @item.description.present? || @item.tags.any? %>
+
+        <%= content_tag :div, class: "item-section", id: 'workspaces' do %>
+          <%= content_tag :h3, class: '', style: 'margin-bottom:10px;' do %>
+            Studies on this item
+            <span class="badge"><%= @item.studies.count %></span>
+            <div class="pull-right">
+              <%= link_to new_item_study_path(@item), class: 'btn btn-create', style: 'margin-left:10px;' do %>
+              <i class="icon-plus icon-white"></i>
+                Study
+              <% end if aspect? %>
+            </div>
+          <% end %>
+          <%= render "studies/study_tiles", studies: @item.studies.limit(6) if @item.studies.any? %>
+          <%= link_to "View all studies on #{@item.name}", [@item, :studies] %>
+        <% end %>
 
         
         <%= content_tag :div, class: "item-section", id: "documents" do %>
-          <%= content_tag :h4, 'Documents', class: 'muted' %>
+          <%= content_tag :h3, class: '' do %>
+            Documents
+            <span class="badge"><%= @item.documents.without_document_type.count %></span>
+          <% end %>
           <table class="table table-bordered table-hover">
             <tbody>
             <%= render @item.documents %>
             </tbody>
           </table>
+          <%= link_to 'View all docs', [@item, :documents] %>
         <% end if @item.documents.any? %>
 
         
         <%= content_tag :div, class: "item-section", id: "references" do %>
-          <%= content_tag :h4, 'References', class: 'muted' %>
+          <%= content_tag :h3, class: '' do %>
+            References
+            <span class="badge"><%= @item.references.count %></span>
+          <% end %>
           <%= render "reference_entries", :citations => @item.citations %>
+          <%= link_to 'View all refs', [@item, :references] %>
         <% end if @item.citations.any? %>
+
+
+        <div class="item-section" id='buckets'>
+          <%= content_tag :h3, class: '' do %>
+            Buckets
+            <span class="badge"><%= @item.buckets.count %></span>
+          <% end %>
+          <%= render @item.buckets, :personal => false %>
+          <%= link_to 'View all buckets', [@item, :buckets] %>
+        </div>
       </div>
     </div>
   </div>
-
-
-  <!-- Modals beginn -->
-  <div id="image-slider" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3>Assets</h3>
-    </div>
-
-
-    <div class="modal-body">
-        <%= content_tag :div, id: @item.buckets.first.id.to_s+"-album-carousel", class: "carousel slide", :"data-interval" => false do %>
-          <ol class="carousel-indicators">
-            <% for asset in @item.buckets.first.assets do %>
-              <li data-target="#<%= @item.buckets.first.id %>-album-carousel" data-slide-to="<%= asset.id %>" class="<%= 'active' if asset == @item.buckets.first.cover %>"></li>
-            <% end %>
-          </ol>
-          <!-- Carousel items -->
-          <div class="carousel-inner">
-            <% for image in @images do %>
-              <div class="item <%= 'active' if image == @item.buckets.first.cover %>">
-                <div class="crop"><%= image_tag image.assetfile.xlarge.url %></div>
-                <div class="caption">
-                  <h4><%= image.name %></h4>
-                  <p><%= image.author.name + ' ' + image.license %></p>
-                </div>
-              </div>
-            <% end %>
-          </div>
-          <!-- Carousel nav -->
-          <a class="carousel-control left" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="prev">&lsaquo;</a>
-          <a class="carousel-control right" href="#<%= @item.buckets.first.id %>-album-carousel" data-slide="next">&rsaquo;</a>
-        <% end if @images.any? %>
-
-    </div>
-    <div class="modal-footer">
-
-    </div>
-
-  </div>
-
 
 <% end %>

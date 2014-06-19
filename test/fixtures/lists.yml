@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  forkable: false
+  forked_from_id: 1
+  featured: false
+  description: MyText
+  project: 
+
+two:
+  name: MyString
+  forkable: false
+  forked_from_id: 1
+  featured: false
+  description: MyText
+  project: 

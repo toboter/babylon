@@ -1,8 +1,10 @@
-<tr>
-  <td width="5%"><%= content_tag :i, '', class: issue.closed ? 'icon-ok' : 'icon-warning-sign' %></td>
-  <td width="85%">
-    <span style="font-size:1.5em;font-weight:bold;"><%= link_to issue.name, [issue.issuable, issue] %></span><%= ' ['+issue.issuable.class.to_s+': '+issue.issuable.name+']' if !@issuable %>
-    <%= link_to issue.assigned.person, title: 'Assignee '+issue.assigned.available_name, class: 'pull-right' do %>
+<div class="issue-obj">
+<div class="row-fluid">
+  <div class="inner-issue">
+  <div class="span1 pull-left"><%= content_tag :i, '', class: issue.closed ? 'icon-ok' : 'icon-warning-sign' %></div>
+  <div class="span10">
+    <span class="issue-name"><%= link_to issue.name, [issue.issuable, issue] %></span><span class="object-issue-name"><%= ' ['+issue.issuable.class.to_s+': '+issue.issuable.name+']' if !@issuable %></span>
+    <%= link_to issue.assigned.person, title: 'Assignee '+issue.assigned.available_name, class: 'pull-right tooltip-left assignee' do %>
       <%= image_tag((issue.assigned.person ? (issue.assigned.person.profile_picture ? issue.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:20px;') %>
     <% end if issue.assigned %>
     <p>
@@ -12,8 +14,10 @@
         <i class="icon-comment"></i> <%= link_to pluralize(issue.comments.count, 'comment'), [issue.issuable, issue] %>
       <% end if issue.comments.any? %>
     </p>
-  </td>
-  <%= content_tag :td, width: "10%", class: "sequential-id" do %>
+  </div>
+  <%= content_tag :div, class: "span1 sequential-id pull-right" do %>
     #<%= issue.sequential_id %>
-  <% end if @issuable %>
-</tr>
+  <% end %>
+</div>
+</div>
+</div>

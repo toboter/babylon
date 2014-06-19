@@ -1,0 +1,61 @@
+<%= form_for [@list.project, @list], :html => { class: "form-horizontal" } do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :project_id %>
+
+
+  <div class="row">
+    <div class="span12">
+
+    <div class="control-group">
+      <%= f.label :name, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, class: 'span6' %>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :description, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, class: 'span6', rows: 6 %>
+      </div>
+    </div>
+
+    <div class="control-group" style="margin-bottom: 0;">
+      <%= f.label :forkable, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :forkable %>
+      </div>
+    </div>
+    <div class="control-group" style="margin-bottom: 0;">
+      <%= f.label :accept_duplicates, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :accept_duplicates %>
+      </div>
+    </div>
+    <div class="control-group">
+      <%= f.label :featured, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :featured %>
+      </div>
+    </div>
+
+  <div class="controls">
+    <%= f.label :forked_from_id %>
+    <%= f.number_field :forked_from_id %>
+  </div>
+
+    <div class="form-actions">
+      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+      <% if @list.new_record? %>
+        <% if @list.project %>
+          <%= link_to 'Abbrechen', @list.project, :class => 'btn' %>
+        <% else %>
+          <%= link_to 'Abbrechen', project_lists_path(@list.project), :class => 'btn' %>
+        <% end %>
+      <% else %>
+        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+      <% end %>
+    </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,42 @@
+<%= form_for [@study.studyable, @study], :html => { class: "form-horizontal" } do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :studyable_type %>
+  <%= f.hidden_field :studyable_id %>
+
+  <div class="control-group">
+    <%= f.label :list_id, 'List', title: "out of your lists in #{full_qualified_name(current_aspect)}", class: 'control-label tooltip-right' %>
+    <div class="controls">
+      <%= f.collection_select :list_id, current_aspect.lists, :id, :name %>
+      in <%= full_qualified_name(current_aspect) %>
+    </div>
+  </div>
+  
+
+  <%= f.fields_for :properties, OpenStruct.new(@study.properties) do |builder| %>
+    <% current_aspect.studyfields.order('name ASC').each do |field| %>
+      <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
+    <% end %>
+  <% end %>
+
+
+
+  <div id="citations">
+  <%= content_tag :h4, 'Citations' %>
+  <%= f.fields_for :citations do |builder| %>
+    <%= render "citation_fields", :f => builder %>
+  <% end %>
+  <div class="links controls">
+    <%= link_to_add_association "Add Citation", f, :citations %>
+  </div>
+  </div>
+
+  
+  <div class="form-actions">
+    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <% if @study.new_record? %>
+        <%= link_to 'Abbrechen', @study.studyable, :class => 'btn' %>
+    <% else %>
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    <% end %>
+  </div>
+<% end %>

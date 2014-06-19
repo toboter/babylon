@@ -1,0 +1,25 @@
+<div class="row-fluid">
+  <div class="span12">
+    <% studies.in_groups_of(3, false).each do |row_studies| %>
+      <div class="row-fluid">
+        <% for study in row_studies do %>
+          <div class="span4" style="">
+            <div class="well" style="height:110px;">
+              <%= content_tag :p do %>
+                <%= content_tag :small, 'List in your current project!', class: 'pull-right', style: 'margin:-15px;' %>
+              <% end if study.list.project == current_aspect %>
+           	  <ul class="unstyled">
+           	  	<li><b>study of</b> <%= link_to study.studyable.name, study.studyable %></li>
+  				      <li><b>by</b> <%= name_only_or_link_to(study.creator) %></li>
+              	<li>
+              	  <b>on list</b> <%= link_to study.list.name, [study.list.project, study.list] %> <b>in</b> <%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project] %>
+              	</li>
+              </ul>
+              <%= link_to 'read more!', [study.studyable, study], style: '' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

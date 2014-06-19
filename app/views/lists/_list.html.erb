@@ -1,0 +1,28 @@
+<div class="well">
+<div class="row-fluid">
+  <!-- <div class="span2 visible-desktop">
+    <%= link_to full_qualified_name(list.project), title: 'Project '+full_qualified_name(list.project), class: 'tooltip-right pull-left', style: 'width:85%;' do %>
+      <%= image_tag(list.project.project_bucket.cover ? list.project.project_bucket.cover.assetfile.thumb.url : 'icons/super.svg', class: 'img-polaroid hidden-tablet hidden-phone', style: '') %>
+    <% end if list.project %>
+  </div> -->
+  <div class="span11">
+    <span style="font-size:1.5em;font-weight:bold;"><%= link_to list.name, [list.project, list] %></span>
+
+    <p>
+      Created by <%= name_only_or_link_to(list.creator) %> 
+      <%= distance_of_time_in_words_to_now(list.created_at) %> ago <br />
+      found in <%= link_to full_qualified_name(list.project), [list.project.projectable, list.project] %><br />
+      <%= ('copied from ' + link_to(full_qualified_name(list.forked_from), [list.forked_from.projectable, list.forked_from])).html_safe if list.forked_from %>
+    </p>
+    <p>
+      <%= list.description %>
+    </p>
+  </div>
+  <%= content_tag :div, class: 'span1' do %>
+    <p class="pull-right">
+      <%= list.forkable ? (content_tag :i, '', class: "icon-retweet tooltip-left", title: 'public list') : nil %>
+      <%= list.featured ? (content_tag :i, '', class: "icon-fire tooltip-left" , title: 'featured') : nil %>
+    </p>
+  <% end if list.forkable || list.featured %>
+</div>
+</div>

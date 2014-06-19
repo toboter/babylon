@@ -8,7 +8,7 @@
             <%= content_tag :li, reference.book.present? ? reference.book.year : (reference.original_date ? reference.original_date.strftime('%d.%m.%Y') : 'unknown') %>
           </ul>
         <% end -%>
-        <%= content_tag :div, class: 'span9', style: 'padding-bottom:10px;' do -%>
+        <%= content_tag :div, class: 'span9', style: 'padding-bottom:10px;' do %>
           <p>
             <%= authors_of_article(reference)+', ' %>
             <%= link_to "#{reference.title}", reference %>
@@ -27,6 +27,7 @@
             <%= content_tag :span, '-' if reference.last_page.present? %>
             <%= reference.last_page if reference.last_page.present? %>.
           </p>
+          <% if aspect? && current_aspect.show_references == true %>
           <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
             <%= content_tag :i, '', class: 'icon-plus icon-white' %>
             <%= current_aspect.name %>
@@ -35,7 +36,8 @@
             <%= content_tag :i, '', class: 'icon-trash icon-white' %>
             <%= current_aspect.name %>
           <% end if aspect? && current_aspect.references.include?(reference) %>
-        <% end -%>
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   <% end %>

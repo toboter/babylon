@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  field_type: MyString
+  required: MyString
+  project: 
+  name: MyString
+
+two:
+  field_type: MyString
+  required: MyString
+  project: 
+  name: MyString

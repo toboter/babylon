@@ -29,7 +29,7 @@ class PeopleController < ApplicationController
 
   
       respond_to do |format|
-        format.html { render :layout => "show_page" } # show.html.erb
+        format.html { render :layout => "index_page" } # show.html.erb
         format.json { render json: @person }
       end
     end

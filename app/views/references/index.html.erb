@@ -39,8 +39,17 @@
         <p class="text text-info">Showing <%= @references.count %><%= content_tag :span, raw(' of ' + (link_to @references_all.count, references_path)) if @references_all %> entries</p>
       </div>
       <div class="span9">
-        <%= render "bib_entries", :references => @references %>
-        <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+        <% if @indirect_references || @direct_references %>
+          <%= content_tag :h4, 'References used in your project' if @indirect_references %>
+          <div style="color:#bbb;">
+            <%= render "bib_entries", :references => @indirect_references %>
+          </div>
+          <%= content_tag :h4, 'References added by your project' if @direct_references %>
+          <%= render "bib_entries", :references => @direct_references %>
+        <% else %>
+          <%= render "bib_entries", :references => @references %>        
+          <%= will_paginate(@references, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+        <% end %>
         <%= content_tag :p, class: 'pull-right' do %>
           Download:
           <%= link_to "CSV", references_path(format: "csv"), class: 'btn btn-mini disabled', id: 'csv-link' %>

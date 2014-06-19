@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   attr_accessible :name, :projectable_id, :projectable_type, :memberships_attributes, :creator_id, :updater_id, 
-                  :show_references, :description, :featured
+                  :show_references, :description, :featured, :studyfields_attributes, :lists_attributes
 
   stampable
 
@@ -8,22 +8,27 @@ class Project < ActiveRecord::Base
 
   has_many :memberships, :dependent => :destroy
   has_many :members, :class_name => 'User', through: :memberships, :source => :user
+  accepts_nested_attributes_for :memberships, allow_destroy: true
+
   has_many :documents, as: :documentable, dependent: :destroy
   has_many :issues, as: :issuable, :dependent => :destroy
   has_many :buckets, as: :attachable, :dependent => :destroy
   has_many :assets, through: :buckets
+
+  has_many :lists, dependent: :destroy
+  accepts_nested_attributes_for :lists, allow_destroy: true
+  has_many :studies, through: :lists
+
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
   belongs_to :projectable, :polymorphic => true
   has_many :todos, dependent: :destroy
 
-  has_many :studyassignments, :dependent => :destroy
-  has_many :items, through: :studyassignments
+  has_many :studyfields, class_name: 'ProjectStudyField'
+  accepts_nested_attributes_for :studyfields, allow_destroy: true
 
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references
-
-  accepts_nested_attributes_for :memberships, allow_destroy: true
 
   validates_associated :memberships
   validates_presence_of :name, :projectable_id, :projectable_type

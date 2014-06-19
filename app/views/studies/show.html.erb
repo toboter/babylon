@@ -1,0 +1,108 @@
+<% title "Study on #{@study.studyable.name}", nil, nil %>
+<% edit_section_for(@study, @study.studyable) if aspect? && current_aspect == @study.list.project && (@study.list.project.memberships.where(:user_id => current_user) || (can? :manage, 'Memberships')) %>
+<% footer_section(@study) %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
+  <li><%= link_to @study.studyable.name, @study.studyable %> <span class="divider">/</span></li>
+  <li><%= link_to "Studies", [@study.studyable, :studies] %> <span class="divider">/</span></li>
+
+  <li class="active"><%= "Study on #{@study.studyable.name}" %></li>
+<% end %>
+
+<% content_for :main_section do %>
+
+  <div class="span12">
+    <%= content_tag :h2, class: "" do %>
+      Study on <%= @study.studyable.title? ? link_to(@study.studyable.title, @study.studyable) : link_to(@study.studyable.name, @study.studyable) %>
+      <%= yield(:edit_section) %>
+    <% end %>
+    <div class="row-fluid">
+
+  
+      <div class="span4">
+        <div class="info_section">
+          <table class="table table-bordered table-hover">
+            <%= item_description('List', link_to(@study.list.name, [@study.list.project, @study.list], class: 'popover-right', data: { 'original-title' => @study.list.name, 'content' => @study.list.inspect })) %>
+            <%= item_description('Project', link_to(full_qualified_name(@study.list.project), [@study.list.project.projectable, @study.list.project], class: 'popover-right', data: { 'original-title' => @study.list.project.name, 'content' => @study.list.project.inspect })) %>
+            <%= item_description('Object', link_to(@study.studyable.name, @study.studyable, class: 'popover-right', data: { 'original-title' => @study.studyable.name, 'content' => @study.studyable.inspect })) %>
+          </table>
+        </div>
+      </div>
+      <div class="span6">
+        <div class="info_section">
+          <table class="table table-bordered table-hover">
+          	<thead>
+          	  <th>Attribute</th>
+          	  <th>Value</th>
+          	</thead>
+			<% @study.properties.each do |name, value| %>
+  			  <%= item_description(name, value) %>
+			<% end %>
+		  </table>
+        </div>
+
+      </div>
+
+
+      <div class="span2">
+        <a href="<%= @study.studyable.buckets.first.cover.assetfile.large.url %>" class="img-fluid">
+          <%= @study.studyable.buckets.first.cover ? (image_tag @study.studyable.buckets.first.cover.assetfile.thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @study.studyable.buckets.any? %>
+        </a>
+      </div>
+  	</div>
+
+
+    <div class="row-fluid" style="margin-top:20px;">
+
+      <div class="span9">
+       
+        <%= content_tag :div, class: "study-section", id: "documents" do %>
+          <%= content_tag :h3, class: '' do %>
+            Documents
+            <span class="badge"><%= @study.documents.without_document_type.count %></span>
+          <% end %>
+          <table class="table table-bordered table-hover">
+            <tbody>
+            <%= render @study.documents %>
+            </tbody>
+          </table>
+          <%= link_to 'View all docs', [@study, :documents] %>
+        <% end if @study.documents.any? %>
+
+        
+        <%= content_tag :div, class: "study-section", id: "references" do %>
+          <%= content_tag :h3, class: '' do %>
+            References
+            <span class="badge"><%= @study.references.count %></span>
+          <% end %>
+          <%= render "items/reference_entries", :citations => @study.citations %>
+          <%= link_to 'View all refs', [@study, :references] %>
+        <% end if @study.citations.any? %>
+
+
+        <div class="study-section" id='buckets'>
+          <%= content_tag :h3, class: '' do %>
+            Buckets
+            <span class="badge"><%= @study.buckets.count %></span>
+          <% end %>
+          <%= render @study.buckets, :personal => false %>
+          <%= link_to 'View all buckets', [@study, :buckets] %>
+        </div>
+      </div>
+
+      <div class="span3">
+        <div class="issue-section" id='issue'>
+          <%= content_tag :h3 do %>
+            Issues <%= content_tag :span, @study.issues.count, class: "badge #{@study.issues.where(closed: false).count > @study.issues.where(closed: true).count+1 ? @study.issues.where(closed: false).count > @study.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+          <% end %>
+          <%= render @study.issues.order('created_at DESC').limit(3) %>
+          <%= @study.issues.any? ? link_to('View all issues', study_issues_path(@study)) : ('Nothing to show! '+link_to('Create Issue', new_study_issue_path(@study))).html_safe %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<% end %>

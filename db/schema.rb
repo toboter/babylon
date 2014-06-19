@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140605130310) do
+ActiveRecord::Schema.define(:version => 20140618130525) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -346,6 +346,22 @@ ActiveRecord::Schema.define(:version => 20140605130310) do
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
   add_index "items", ["slug"], :name => "index_items_on_slug", :unique => true
 
+  create_table "lists", :force => true do |t|
+    t.string   "name"
+    t.boolean  "forkable"
+    t.integer  "forked_from_id"
+    t.boolean  "featured"
+    t.text     "description"
+    t.integer  "project_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.boolean  "accept_duplicates"
+  end
+
+  add_index "lists", ["project_id"], :name => "index_lists_on_project_id"
+
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "project_id"
@@ -426,6 +442,19 @@ ActiveRecord::Schema.define(:version => 20140605130310) do
     t.integer  "updater_id"
   end
 
+  create_table "project_study_fields", :force => true do |t|
+    t.string   "field_type"
+    t.boolean  "required"
+    t.integer  "project_id"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "project_study_fields", ["project_id"], :name => "index_project_study_fields_on_project_id"
+
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.datetime "created_at",       :null => false
@@ -489,14 +518,18 @@ ActiveRecord::Schema.define(:version => 20140605130310) do
     t.integer  "updater_id"
   end
 
-  create_table "studyassignments", :force => true do |t|
-    t.integer  "item_id"
-    t.integer  "project_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+  create_table "studies", :force => true do |t|
+    t.integer  "list_id"
+    t.text     "properties"
+    t.string   "studyable_type"
+    t.integer  "studyable_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
   end
+
+  add_index "studies", ["list_id"], :name => "index_studies_on_list_id"
 
   create_table "tag_hierarchies", :id => false, :force => true do |t|
     t.integer "ancestor_id",   :null => false

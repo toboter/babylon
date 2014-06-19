@@ -15,7 +15,7 @@ class ExploreController < ApplicationController
 	@activities = Activity.order('created_at DESC').limit(11)
 
 	@featured = Project.where(featured: true)
-	# @featured.concat(Document.where(document_type: 'Introduction').limit(2))
+	@featured.concat(List.where(featured: true).limit(2))
   end
 
 end

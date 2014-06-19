@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  list: 
+  properties: MyText
+  studyable_type: MyString
+  studyable_id: 1
+
+two:
+  list: 
+  properties: MyText
+  studyable_type: MyString
+  studyable_id: 1

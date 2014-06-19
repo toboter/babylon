@@ -1,9 +1,11 @@
+  <div class="row">
+
+    <div class="span12">
 <%= form_for [@projectable, @project], :html => { class: "form-horizontal" } do |f| %>
   <%= f.error_messages %>
 
-
-  <div class="row">
-    <div class="span12">
+  <%= content_tag :h3, 'General project stuff', id: 'project' %>
+    <fieldset style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
     <div class="control-group">
       <%= f.label :name, class: 'control-label' %>
       <div class="controls">
@@ -28,15 +30,38 @@
         <%= f.text_area :description, class: 'span6' %>
       </div>
     </div>
+  </fieldset>
 
+    <%= content_tag :h3, 'Manage members', id: 'members' %>
     <%= f.fields_for :memberships do |builder| %>
       <%= render "membership_fields", :f => builder %>
     <% end %>
-    <div class="links controls">
+    <div class="links control-group">
       <%= link_to_add_association "Add Member", f, :memberships %>
     </div>
 
+    <%= content_tag :h3, id: 'lists' do %>
+      Add lists <small>they will arrange your studies</small>
+    <% end %>
+    <%= f.fields_for :lists do |builder| %>
+      <%= render "list_fields", :f => builder %>
+    <% end %>
+    <div class="links control-group">
+      <%= link_to_add_association "Add new list", f, :lists %>
+    </div>
+
+    <%= content_tag :h3, id: 'studyfields' do %>
+      Attributes for items on lists
+    <% end %>
+    <%= f.fields_for :studyfields do |builder| %>
+      <%= render "studyfield_fields", :f => builder %>
+    <% end %>
+    <div class="links control-group">
+      <%= link_to_add_association "Add study attribute", f, :studyfields %>
+    </div>
+
     <% if can? :manage, 'project-assignments' %>
+    <%= content_tag :h3, 'Incorrect group or module? change it here' %>
       <div class="control-group">
         <%= f.label :projectable_type, 'Move somewhere else', class: 'control-label' %>
         <div class="controls">
@@ -61,6 +86,7 @@
         <%= link_to 'Abbrechen', :back, :class => 'btn' %>
       <% end %>
     </div>
+
+<% end %>
     </div>
   </div>
-<% end %>

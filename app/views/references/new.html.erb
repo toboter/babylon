@@ -6,5 +6,6 @@
 	</div>
   </div>
 <% end %>
+<p>This entry will be added through <b><%= full_qualified_name(current_aspect) %></b> and will <b><%= current_aspect.show_references ? 'appear' : 'not appear' %></b> in the overall bibliography.
 
 <%= render 'form' %>

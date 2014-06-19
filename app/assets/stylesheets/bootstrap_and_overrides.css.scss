@@ -19,11 +19,30 @@ $baseFontFamily: 'Open Sans';
     position: static;
 }
 
+/* wells rounded zu eckig */
+
+.nav, .well, .dropdown-menu, pre, .nav-tabs.nav-stacked > li:first-child > a, .nav-tabs.nav-stacked > li:last-child > a, .btn, .nav-pills > li > a {
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	border-radius: 0px !important;
+}
+img.img-rounded {
+ border-radius: 100px;
+ -webkit-border-radius: 100px;
+ -moz-border-radius: 100px;
+}
+
 
 body { 
 	padding-top: 50px; 
 	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #555d64;
+}
+
+header {
+	.navbar {
+		margin-bottom: 0;
+	}
 }
 
 .navbar {
@@ -187,5 +206,14 @@ color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#60b044;backgr
 textarea { resize:both; }
 textarea.vert { resize:vertical; }
 textarea.noResize { resize:none }
+
+.issue-section {
+	.issue-obj {
+	  @extend .well;
+	  @extend .well-small;
+	  margin-bottom:7px;
+	  background-color: #fdfdfd;
+	}
+}
 
 @import "bootstrap-responsive";
