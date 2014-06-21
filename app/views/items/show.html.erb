@@ -90,9 +90,16 @@
             Studies on this item
             <span class="badge"><%= @item.studies.count %></span>
             <div class="pull-right">
-              <%= link_to new_item_study_path(@item), class: 'btn btn-create', style: 'margin-left:10px;' do %>
-              <i class="icon-plus icon-white"></i>
-                Study
+              <% if current_aspect.lists.any? %>
+                <%= link_to new_item_study_path(@item), class: 'btn btn-create', style: 'margin-left:10px;' do %>
+                  <i class="icon-plus icon-white"></i>
+                  Study
+                <% end %>
+              <% else %>
+                <%= link_to [:edit, current_aspect.projectable, current_aspect], class: 'btn btn-create', style: 'margin-left:10px;' do %>
+                  <i class="icon-plus icon-white"></i>
+                  Edit your current project
+                <% end %>
               <% end if aspect? %>
             </div>
           <% end %>

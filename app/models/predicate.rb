@@ -9,5 +9,5 @@ class Predicate < ActiveRecord::Base
   validates_uniqueness_of :name, scope: :scope_type
   validates_uniqueness_of :inverse_name, scope: :scope_type
 
-  SCOPE_TYPES = %w{Action Citation}
+  SCOPE_TYPES = %w{Action Citation Attribute\ type}
 end

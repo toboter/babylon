@@ -45,6 +45,9 @@ class PredicatesController < ApplicationController
   # POST /predicates.json
   def create
     @predicate = Predicate.new(params[:predicate])
+    if @predicate.scope_type == 'Attribute type' && aspect?
+      @predicate.project_id = current_aspect.id
+    end
 
     respond_to do |format|
       if @predicate.save
@@ -61,6 +64,9 @@ class PredicatesController < ApplicationController
   # PUT /predicates/1.json
   def update
     @predicate = Predicate.find(params[:id])
+    if @predicate.scope_type == 'Attribute type' && aspect?
+      @predicate.project_id = current_aspect.id
+    end
 
     respond_to do |format|
       if @predicate.update_attributes(params[:predicate])

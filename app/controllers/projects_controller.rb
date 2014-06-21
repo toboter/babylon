@@ -41,6 +41,7 @@ class ProjectsController < ApplicationController
     @todos = @project.todos
     @todos_by_date = @todos.group_by(&:due_to)
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

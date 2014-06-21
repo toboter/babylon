@@ -1,6 +1,7 @@
 <fieldset class="nested-fields form-inline" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
-  <%= f.select :field_type, %w[text_field text_area select multi_select check_box radio_buttons] %>
+  <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Attribute type'), :id, :name %>
   <%= f.text_field :name, placeholder: "field_name" %>
+  <%= f.select :field_type, %w[text_field text_area select multi_select check_box radio_buttons] %>
   <label class="checkbox"><%= f.check_box :required %>Required</label>
   <span class="pull-right"><%= link_to_remove_association "remove", f, data: { confirm: 'Are you sure?' } %></span>
 

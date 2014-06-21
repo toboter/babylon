@@ -26,6 +26,7 @@ class Project < ActiveRecord::Base
 
   has_many :studyfields, class_name: 'ProjectStudyField'
   accepts_nested_attributes_for :studyfields, allow_destroy: true
+  has_many :predicates
 
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references

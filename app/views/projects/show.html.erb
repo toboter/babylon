@@ -66,9 +66,9 @@
 
   <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %>
   <%= content_tag :h4, 'References', class: '' %>
-    <%= content_tag :h5, 'References used in your project', class: '' %>
+    <%= content_tag :h5, 'References used in the project', class: '' %>
     <%= render "references/bib_entries", :references => @project.studies.map{|r| r.references }.flatten.take(3) %>
-    <%= content_tag :h5, 'References added by your project', class: '' %>
+    <%= content_tag :h5, 'References added to the project', class: '' %>
     <%= render "references/bib_entries", :references => @project.references.limit(3) %>
     <%= link_to "View all references for #{full_qualified_name(@project)}", [@project, :references] %>
   <% end if @project.references.any? %>  

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140618130525) do
+ActiveRecord::Schema.define(:version => 20140621171923) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(:version => 20140618130525) do
     t.datetime "updated_at",    :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "predicate_id"
   end
 
   add_index "collection_fields", ["collection_id"], :name => "index_collection_fields_on_collection_id"
@@ -431,6 +432,7 @@ ActiveRecord::Schema.define(:version => 20140618130525) do
     t.datetime "updated_at",   :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "project_id"
   end
 
   create_table "project_references", :force => true do |t|
@@ -442,15 +444,28 @@ ActiveRecord::Schema.define(:version => 20140618130525) do
     t.integer  "updater_id"
   end
 
+  create_table "project_study_field_values", :force => true do |t|
+    t.string   "field_value"
+    t.text     "description"
+    t.integer  "project_study_field_id"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "project_study_field_values", ["project_study_field_id"], :name => "index_project_study_field_values_on_project_study_field_id"
+
   create_table "project_study_fields", :force => true do |t|
     t.string   "field_type"
     t.boolean  "required"
     t.integer  "project_id"
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "predicate_id"
   end
 
   add_index "project_study_fields", ["project_id"], :name => "index_project_study_fields_on_project_id"

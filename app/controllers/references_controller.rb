@@ -22,6 +22,7 @@ class ReferencesController < ApplicationController
       @references_all = Reference.joins(:projects).where('show_references = ?', true)
     end
 
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
     @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
 
     respond_to do |format|
@@ -36,6 +37,7 @@ class ReferencesController < ApplicationController
   # GET /references/1.json
   def show
     @reference = Reference.find(params[:id])
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb
@@ -46,12 +48,16 @@ class ReferencesController < ApplicationController
   # GET /references/new
   # GET /references/new.json
   def new
-    @reference = Reference.new(:book_id => params[:book_id])
-    @reference.authorships.build
+    if aspect?
+      @reference = Reference.new(:book_id => params[:book_id])
+      @reference.authorships.build
 
-    respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
-      format.json { render json: @reference }
+      respond_to do |format|
+        format.html { render :layout => "form_page" }# new.html.erb
+        format.json { render json: @reference }
+      end
+    else
+      redirect_to references_path, notice: 'Choose an aspect!'
     end
   end
 

@@ -2,6 +2,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <%= content_tag(:li, (link_to @documentable.class.name.pluralize, [@documentable.class]) + content_tag(:span, '/', class: 'divider')) if @documentable %>
   <%= content_tag(:li, link_to(@documentable.name, @documentable) + content_tag(:span, '/', class: 'divider')) if @documentable %>
   <li class="active">Documents</li>
 <% end %>

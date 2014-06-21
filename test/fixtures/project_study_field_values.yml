@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  field_value: MyString
+  description: MyText
+  project_study_field: 
+
+two:
+  field_value: MyString
+  description: MyText
+  project_study_field: 

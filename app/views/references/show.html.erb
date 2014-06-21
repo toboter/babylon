@@ -29,10 +29,12 @@
         <% end if @reference.items.any? %>    
 
         <%= content_tag :div, class: 'projects-bib-entry' do %>
-          <h3>Projects which use this entry</h3>
+          <h3>Who added this entry?</h3>
           <ul class="unstyled">
             <% for project in @reference.projects do %>
-              <li><%= link_to "#{project.name}", [project.projectable, project] %></li>
+              <%= content_tag :li, style: "#{'font-weight:bold;' if project.show_references == true}" do %>
+                <%= link_to "#{project.name}", [project.projectable, project] %>
+                <% end %>
             <% end %>
           </ul>
         <% end if @reference.projects.any? %> 
@@ -56,19 +58,19 @@
 <% end %>
 
 <% content_for :sidebar_section do %>
-  <%= content_tag :div, class: "reference-options well" do %>
+  <%= content_tag :div, class: "reference-options" do %>
     <%= content_tag :div, class: "" do %>
-      <%= link_to reference_add_to_aspect_path(@reference), :method => :post, class: 'btn btn-block btn-success' do %>
+      <%= link_to reference_add_to_aspect_path(@reference), :method => :post, class: 'btn btn-small btn-success' do %>
         <%= content_tag :i, '', class: 'icon-plus icon-white' %>
         <%= current_aspect.name %>
       <% end %>
-    <% end if !current_aspect.references.include?(@reference) %>
+    <% end if aspect? && !(current_aspect.references.include?(@reference) || @shown_references.include?(@reference)) %>
     <%= content_tag :div, class: "" do %>
-      <%= link_to reference_remove_from_aspect_path(@reference), :method => :delete, class: 'btn btn-block btn-warning' do %>
+      <%= link_to reference_remove_from_aspect_path(@reference), :method => :delete, class: 'btn btn-small btn-warning' do %>
         <%= content_tag :i, '', class: 'icon-trash icon-white' %>
         <%= current_aspect.name %>
       <% end %>
-    <% end if current_aspect.references.include?(@reference) %>
+    <% end if aspect? && current_aspect.references.include?(@reference) %>
   <% end if aspect? %>
   <%= link_to reference_issues_path(@reference), style: "text-decoration:none;" do %>
     <div class="issues-options well well-small">

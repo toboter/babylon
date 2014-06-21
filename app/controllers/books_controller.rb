@@ -26,6 +26,7 @@ class BooksController < ApplicationController
   # GET /books/1.json
   def show
     @book = Book.find(params[:id])
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
       format.html { render :layout => "show_page" }# show.html.erb

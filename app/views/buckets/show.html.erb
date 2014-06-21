@@ -6,6 +6,7 @@
 <% content_for :breadcrumbs_section do %>
   <% unless @bucket.attachable_type == 'Page' %>
     <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, (link_to @bucket.attachable.class.name.pluralize, [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
     <%= content_tag(:li, link_to("#{@bucket.attachable.name}", @bucket.attachable) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("Buckets", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, @bucket.name.present? ? (@bucket.name) : 'Nothing', class: 'active') %>

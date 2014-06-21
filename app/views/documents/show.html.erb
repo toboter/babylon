@@ -5,6 +5,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <%= content_tag(:li, (link_to @document.documentable.class.name.pluralize, [@document.documentable.class]) + content_tag(:span, '/', class: 'divider')) if @document.documentable %>
   <li><%= link_to @document.documentable.name, @document.documentable %> <span class="divider">/</span></li>
   <li><%= link_to 'Documents', [@document.documentable, :documents] %> <span class="divider">/</span></li>
   <li class="active"><%= @document.title.present? ? @document.title : @document.document_type %></li>

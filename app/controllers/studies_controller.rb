@@ -37,6 +37,8 @@ class StudiesController < ApplicationController
   def new
     if aspect?
       @study = @parent.studies.new
+      @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
+      @usable_references = (@shown_references.concat(current_aspect.references)).uniq
 
       respond_to do |format|
         format.html { render :layout => "form_page" }# new.html.erb
@@ -54,6 +56,8 @@ class StudiesController < ApplicationController
       if @study.list.project != current_aspect
         redirect_to [@parent, @study], alert: 'Please use the correct aspect.'
       else
+        @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
+        @usable_references = (@shown_references.concat(current_aspect.references)).uniq
         render :layout => "form_page"
       end
     else
@@ -65,6 +69,9 @@ class StudiesController < ApplicationController
   # POST /studies.json
   def create
     @study = @parent.studies.new(params[:study])
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
+    @usable_references = (@shown_references.concat(current_aspect.references)).uniq
+    
     if @study.list.project != current_aspect
       redirect_to [@parent, @study], alert: 'Please use the correct aspect.'
     else

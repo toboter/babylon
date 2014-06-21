@@ -14,6 +14,6 @@ class ProjectsSessionController < ApplicationController
 
   def destroy
     session[:project_id] = nil
-    redirect_to dashboard_url, :notice => "Exited project aspect."
+    redirect_to :back, :notice => "Exited project aspect."
   end
 end

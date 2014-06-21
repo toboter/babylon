@@ -36,11 +36,15 @@
           	<thead>
           	  <th>Attribute</th>
           	  <th>Value</th>
-          	</thead>
-			<% @study.properties.each do |name, value| %>
-  			  <%= item_description(name, value) %>
-			<% end %>
-		  </table>
+          	    </thead>
+			            <% @study.properties.each do |name, value| %>
+                    <% if value.is_a?(Array) %>
+                      <%= item_description(name.humanize, ProjectStudyFieldValue.find(value.compact.reject{|r| r.empty? }).map{ |psfv| link_to psfv.field_value, '', class: 'popover-right', data: { 'original-title' => psfv.field_value, 'content' => psfv.description } }.join(', ').html_safe) %>
+                    <% else %>
+                      <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(ProjectStudyField.find_by_name(name).field_type) ? link_to(ProjectStudyFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => ProjectStudyFieldValue.find(value).field_value, 'content' => ProjectStudyFieldValue.find(value).description }) : value ) %>
+                    <% end %>
+			            <% end %>
+		             </table>
         </div>
 
       </div>
@@ -63,13 +67,13 @@
             Documents
             <span class="badge"><%= @study.documents.without_document_type.count %></span>
           <% end %>
-          <table class="table table-bordered table-hover">
+          <%= content_tag :table, class: "table table-bordered table-hover" do %>
             <tbody>
             <%= render @study.documents %>
             </tbody>
-          </table>
+          <% end if @study.documents.any? %>
           <%= link_to 'View all docs', [@study, :documents] %>
-        <% end if @study.documents.any? %>
+        <% end %>
 
         
         <%= content_tag :div, class: "study-section", id: "references" do %>

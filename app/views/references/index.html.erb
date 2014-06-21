@@ -40,11 +40,11 @@
       </div>
       <div class="span9">
         <% if @indirect_references || @direct_references %>
-          <%= content_tag :h4, 'References used in your project' if @indirect_references %>
+          <%= content_tag :h4, 'References used in the project' if @indirect_references %>
           <div style="color:#bbb;">
             <%= render "bib_entries", :references => @indirect_references %>
           </div>
-          <%= content_tag :h4, 'References added by your project' if @direct_references %>
+          <%= content_tag :h4, 'References added to the project' if @direct_references %>
           <%= render "bib_entries", :references => @direct_references %>
         <% else %>
           <%= render "bib_entries", :references => @references %>        

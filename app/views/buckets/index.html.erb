@@ -2,6 +2,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @attachable.class.name.pluralize, [@attachable.class]) + content_tag(:span, '/', class: 'divider')) if @attachable %>
   <%= content_tag(:li, link_to(@attachable.name, @attachable) + content_tag(:span, '/', class: 'divider')) if @attachable %>
   <%= content_tag(:li, 'Buckets', class: 'active') %>
 
