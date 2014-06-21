@@ -56,10 +56,10 @@ production:
   username: ENV["HEROKUUSERNAME"]
   password: ENV["HEROKUPASSWORD"]
 
-#production:
-#  adapter: postgresql
-#  encoding: unicode
-#  database: babylon_production
-#  pool: 5
-#  username: postgres
-#  password: rails
+# production:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: babylon_production
+#   pool: 5
+#   username: postgres
+#   password: rails

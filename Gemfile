@@ -75,7 +75,7 @@ gem 'friendly_id'
 # vorher das Systemgem installieren gem install rmagick v '2.13.2'
 # gem "rmagick"
 gem 'mini_magick', '~> 3.5.0'
-gem 'carrierwave'
+gem 'carrierwave', '0.8.0'
 # gem 'fog'
 # gem 'carrierwave_direct'
 # gem 'sidekiq'

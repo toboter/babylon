@@ -47,6 +47,7 @@
 <% content_for :content do %>
   <div class="row hidden-phone">
     <div class="span12">
+      <%= link_to 'Edit images', polymorphic_path([@about, @about_bucket]) unless @about_bucket.assets.any? %>
       <div class="explorer-nav" style="padding-top:2em;margin-top:-1em;">
         <ul class="nav nav-pills nav-pills-big" style="font-weight:bold;background-color:#f6f6f6;padding:0 2px;">
           <%= content_tag :li, link_to("Bibliography", references_path) if can? :read, 'Bibliography' %>

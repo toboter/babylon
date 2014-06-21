@@ -103,7 +103,7 @@
 
     <%= content_tag :div, class: 'row-fluid' do %>
       <div class="span7">
-        <%= render current_user.projects %>
+        <%= render current_user.projects if current_user.projects.any? %>
       </div>
       <div class="span5">
         <%= render 'shared/calendar' %>
