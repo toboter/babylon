@@ -186,7 +186,7 @@ DEPENDENCIES
   bootstrap-datepicker-rails (= 1.1.1.8)
   bootstrap-sass (= 2.3.2.2)
   cancan
-  carrierwave
+  carrierwave (= 0.8.0)
   chosen-rails
   closure_tree
   cocoon

@@ -22,6 +22,7 @@ class PeopleController < ApplicationController
   # GET /people/1.json
   def show
     @person = Person.find(params[:id])
+    @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten if aspect?
 
     if request.path != person_path(@person)
       redirect_to @person, status: :moved_permanently
