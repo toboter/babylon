@@ -16,13 +16,13 @@
   	<% @clusters.each do |cluster| %>
       <div class="well">
         <div class="row-fluid cluster-entry">
-          <%= link_to cluster do %>
+          <%= link_to cluster, class: 'hidden-phone' do %>
             <%= content_tag :div, class: 'span2' do %>
-              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg") %>
+              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", class: 'img-polaroid') %>
             <% end %>
             <%= content_tag :div, class: 'span7' do %>
-              <h1><%= link_to cluster.name, cluster %></h1>
-              <p><%= cluster.description.present? ? markdown(cluster.description) : "No abstract to show." %></p>
+              <h1 style="font-size: 2em; margin-bottom:0px;"><%= link_to cluster.name, cluster %></h1>
+              <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
             <% end %>
           <% end %>
           <%= content_tag :div, class: 'span3' do %>

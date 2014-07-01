@@ -5,8 +5,9 @@
     <%= f.fields_for :authorships do |builder| %>
       <%= render "references/authorship_fields", :f => builder %>
     <% end %>
-    <div class="links controls">
-      <%= link_to_add_association "Add Author", f, :authorships, partial: "references/authorship_fields" %>
+    <div class="controls add_ref_link">
+      <%= link_to_add_association "Add Author", f, :authorships, partial: "references/authorship_fields" %> | 
+      <%= link_to "Add person", new_person_path %>
     </div>
   </div>
 
@@ -31,7 +32,7 @@
       <div class="control-group">
         <%= f.label :book_id, 'Select Book', :class => 'control-label' %>
         <div class="controls">
-          <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monograph', 'Monograph in a serial']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: 'input-xxlarge') %>
+          <%= f.select(:book_id, Book.where('book_type NOT IN (?)', ['Monograph', 'Monograph in a serial']).collect { |b| [entries_for_select(b), b.id] }, { :include_blank => true }, class: 'form-control chosen-select input-xxlarge') %>
         </div>
       </div>
     <% else %>

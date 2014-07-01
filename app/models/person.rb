@@ -51,6 +51,14 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def name_reverse
+    if names.where(primary: true).any?
+      names.where(primary: true).first.last_name+', '+names.where(primary: true).first.first_name
+    else
+      "#{names.first.last_name}, #{names.first.first_name}"
+    end
+  end
+
   def profile_picture
     bucket = self.buckets.find_by_name('Profile Pictures')
     profile_picture = bucket.cover

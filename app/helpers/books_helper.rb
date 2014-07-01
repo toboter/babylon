@@ -63,16 +63,16 @@ module BooksHelper
   	  if book.book_type == "Monograph" && book.articles.any?
   	    book.articles.first.title
   	  else
-  	   book.title
+  	    book.title
   	  end
   	elsif book.title && book.serial
 	  if book.book_type == "Monograph in a serial" && book.articles.any?
-	  	  book.articles.first.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
+	  	  book.articles.first.title+', '+ (abbr == false ? "#{book.serial.name} #{book.serial.shortcut}" : book.serial.shortcut) +" #{book.volume}"
 	  else
 	  	if book.book_type == "Collection in a serial" # || book.book_type == "Band einer Reihe"
-	  	  book.title+', '+ (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
+	  	  book.title+', '+ (abbr == false ? "#{book.serial.name} #{book.serial.shortcut}" : book.serial.shortcut) +" #{book.volume}"
 	  	else
-	  	  (abbr == false ? book.serial.name : book.serial.shortcut) +' ('+book.volume+')'
+	  	  (abbr == false ? "#{book.serial.name} #{book.serial.shortcut}" : book.serial.shortcut) +" #{book.volume}"
 	  	end
 	  end
 	end

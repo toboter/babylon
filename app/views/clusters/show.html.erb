@@ -21,11 +21,11 @@
       <% end %>
     <% end if @cluster.cluster_bucket %>
     <%= content_tag :div, class: (@cluster.cluster_bucket ? 'span9' : 'span12') do %>
-      <h1>
+      <h1 style="margin-bottom:10px;">
         <%= @cluster.name %>
         <%= yield(:edit_section) %>
       </h1>
-      <p><%= @cluster.description.present? ? markdown(@cluster.description) : "No abstract to show." %></p>
+      <%= @cluster.description.present? ? markdown(@cluster.description) : content_tag(:p, "No abstract to show.") %>
 
     <% end %>
   </div>

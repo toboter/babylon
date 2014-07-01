@@ -1,10 +1,10 @@
 <fieldset class="nested-fields">
   <div class="author-field">
     <div class="control-group">
-      <%= f.label :person_name_id, 'Author', class: 'control-label' %>
+      <%= f.label :person_name_name, 'Author', class: 'control-label' %>
       <div class="form-inline controls">
-        <%= f.collection_select :person_name_id, PersonName.order(:last_name), :id, :name_with_profession, {}, {multiple: false, class: 'form-control'} %>
-        <small><%= link_to_remove_association "remove", f %></small>
+        <%= f.text_field :person_name_name, data: {autocomplete_source: PersonName.order(:last_name).map(&:name)} %>
+        <small><%= link_to_remove_association "remove", f, style: 'margin-left:3em;' %></small>
       </div>
     </div>  
   </div>

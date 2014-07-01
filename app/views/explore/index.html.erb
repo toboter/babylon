@@ -73,8 +73,8 @@
               <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.thumb.url, class: 'media-object img-polaroid', style:'width:128px;') : image_tag("icons/no_picture.svg", class: 'media-object img-polaroid', style:'width:128px;') %>
             <% end %>
             <div class="media-body">
-              <h3 class="media-heading"><%= link_to cluster.name, cluster %></h3>
-              <p><%= cluster.documents.doctype('Introduction').abstract.present? ? truncate(cluster.documents.doctype('Introduction').abstract, length: 200, seperator: ' ', omission: ' ... ') : "Nothing to show." if cluster.documents.doctype('Introduction') %></p>
+              <h3 class="media-heading" style="margin-bottom:0px;"><%= link_to cluster.name, cluster %></h3>
+              <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
             </div>
           </div>
         <% end %>
