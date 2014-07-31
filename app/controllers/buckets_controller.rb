@@ -13,7 +13,7 @@ class BucketsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @buckets }
     end
   end
@@ -27,7 +27,7 @@ class BucketsController < ApplicationController
     @assets_available = @assets_pre.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 12)
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @bucket }
     end
   end
@@ -38,7 +38,7 @@ class BucketsController < ApplicationController
     @bucket = @attachable.buckets.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @bucket }
     end
   end
@@ -46,7 +46,7 @@ class BucketsController < ApplicationController
   # GET /buckets/1/edit
   def edit
     @bucket = @attachable.buckets.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /buckets
@@ -59,7 +59,7 @@ class BucketsController < ApplicationController
         format.html { redirect_to [@attachable, @bucket], notice: 'Bucket was successfully created.' }
         format.json { render json: @bucket, status: :created, location: @bucket }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @bucket.errors, status: :unprocessable_entity }
       end
     end
@@ -75,7 +75,7 @@ class BucketsController < ApplicationController
         format.html { redirect_to [@attachable, @bucket], notice: 'Bucket was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @bucket.errors, status: :unprocessable_entity }
       end
     end

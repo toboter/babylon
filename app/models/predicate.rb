@@ -1,5 +1,5 @@
 class Predicate < ActiveRecord::Base
-  attr_accessible :description, :inverse_name, :name, :scope_type, :creator_id, :updater_id
+  attr_accessible :description, :inverse_name, :name, :scope_type, :creator_id, :updater_id, :project_id
 
   stampable
 

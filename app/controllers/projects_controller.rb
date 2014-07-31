@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @projects }
     end
   end
@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @project }
     end
   end
@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
     # @project.memberships.build
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @project }
     end
   end
@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
   def edit
     @project = @projectable.projects.find(params[:id])
     @users = User.all
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /projects
@@ -80,7 +80,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to [@projectable, @project], notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -97,7 +97,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to [@projectable, @project], notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end

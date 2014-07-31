@@ -8,7 +8,7 @@ class PredicatesController < ApplicationController
     @predicates = Predicate.order("scope_type ASC", "name ASC")
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @predicates }
     end
   end
@@ -19,7 +19,7 @@ class PredicatesController < ApplicationController
     @predicate = Predicate.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @predicate }
     end
   end
@@ -30,7 +30,7 @@ class PredicatesController < ApplicationController
     @predicate = Predicate.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @predicate }
     end
   end
@@ -38,7 +38,7 @@ class PredicatesController < ApplicationController
   # GET /predicates/1/edit
   def edit
     @predicate = Predicate.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /predicates
@@ -54,7 +54,7 @@ class PredicatesController < ApplicationController
         format.html { redirect_to @predicate, notice: 'Predicate was successfully created.' }
         format.json { render json: @predicate, status: :created, location: @predicate }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @predicate.errors, status: :unprocessable_entity }
       end
     end
@@ -73,7 +73,7 @@ class PredicatesController < ApplicationController
         format.html { redirect_to @predicate, notice: 'Predicate was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @predicate.errors, status: :unprocessable_entity }
       end
     end

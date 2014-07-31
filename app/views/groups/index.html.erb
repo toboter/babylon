@@ -8,16 +8,7 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span12">
-
-    <% @groups.each do |group| %>
-
-    <% end %>
-
-  </div>
-<% end %>
-
-<% content_for :main_section do %>
+<div class="row-fluid">
   <%= content_tag :div, class: "span12" do %>
     <h1>
       <% if @cluster %>
@@ -27,7 +18,8 @@
       <% end %>
     </h1>
   <% end %>
-
+</div>
+<div class="row-fluid">
   <div class="span3">
     <%= content_tag :div, class: "documents-options" do %>
       <ul class="nav nav-pills nav-stacked">
@@ -64,4 +56,5 @@
       <% end %>
     </div>
   </div>
+</div>
 <% end %>

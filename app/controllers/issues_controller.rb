@@ -37,7 +37,7 @@ class IssuesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @issues }
     end
   end
@@ -48,7 +48,7 @@ class IssuesController < ApplicationController
     @issue = @issuable.issues.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @issue }
     end
   end
@@ -60,7 +60,7 @@ class IssuesController < ApplicationController
     @issue.comments.build
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @issue }
     end
   end
@@ -68,7 +68,7 @@ class IssuesController < ApplicationController
   # GET /issues/1/edit
   def edit
     @issue = @issuable.issues.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /issues
@@ -82,7 +82,7 @@ class IssuesController < ApplicationController
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully created.' }
         format.json { render json: @issue, status: :created, location: @issue }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @issue.errors, status: :unprocessable_entity }
       end
     end
@@ -101,7 +101,7 @@ class IssuesController < ApplicationController
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @issue.errors, status: :unprocessable_entity }
       end
     end

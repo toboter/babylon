@@ -5,7 +5,7 @@ class RolesController < ApplicationController
     @roles = Role.all
     authorize! :manage, 'roles'
 
-    render :layout => "index_page"
+    render layout: 'fluid'
   end
 
   def update_multiple

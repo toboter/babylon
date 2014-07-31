@@ -1,5 +1,6 @@
 <% title "Predicate", @predicate.name%>
 <% edit_section_for(@predicate, nil) %>
+<% footer_section(@predicate) %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,35 +9,28 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <p>
-  	  <b>Name:</b>
-  	  <%= @predicate.name %>
-	</p>
-	  
-	<p>
-  	  <b>Inverse name:</b>
-  	  <%= @predicate.inverse_name %>
-	</p>
-	  
-	<p>
-  	  <b>Description:</b>
-  	  <%= @predicate.description %>
-	</p>
-	  
-	<p>
-  	  <b>Scope type:</b>
-  	  <%= @predicate.scope_type %>
-	</p>
-  <p>
-      <b>Project if attribute type:</b>
-      <%= @predicate.project_id %>
-  </p>
-<% end %>
-
-<% content_for :sidebar_section do %>
-  <h4 class="muted">Record Info</h4>
-  <ul class="unstyled">
-    <li>Created by: <%= @predicate.creator.available_name %></li>
-    <li>Updated by: <%= @predicate.updater.available_name %></li>
-  </ul>
+  <div class="row-fluid">
+    <div class="span12">
+      <p>
+    	  <b>Name:</b>
+    	  <%= @predicate.name %>
+  	  </p>
+  	  <p>
+    	  <b>Inverse name:</b>
+    	  <%= @predicate.inverse_name %>
+  	  </p>
+  	  <p>
+    	  <b>Description:</b>
+    	  <%= @predicate.description %>
+  	  </p>
+  	  <p>
+    	  <b>Scope type:</b>
+    	  <%= @predicate.scope_type %>
+  	  </p>
+      <p>
+        <b>Project if attribute type:</b>
+        <%= @predicate.project_id %>
+      </p>
+    </div>
+  </div>
 <% end %>

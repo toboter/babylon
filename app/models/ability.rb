@@ -8,6 +8,7 @@ class Ability
 
     if user.role? :guest #kann 'published' db Informationen lesen, Bilder herunterladen
       can :read, :all# , :published => true
+      cannot :read, 'Aspects'
       # can :read, 'downloads'
       # can :read, 'info'
       cannot [:destroy, :edit, :create], :all

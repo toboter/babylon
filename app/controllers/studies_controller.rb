@@ -12,7 +12,7 @@ class StudiesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @studies }
     end
   end
@@ -27,7 +27,7 @@ class StudiesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @study }
     end
   end
@@ -41,7 +41,7 @@ class StudiesController < ApplicationController
       @usable_references = (@shown_references.concat(current_aspect.references)).uniq
 
       respond_to do |format|
-        format.html { render :layout => "form_page" }# new.html.erb
+        format.html { render layout: 'form' }# new.html.erb
         format.json { render json: @study }
       end
     else
@@ -58,7 +58,7 @@ class StudiesController < ApplicationController
       else
         @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
         @usable_references = (@shown_references.concat(current_aspect.references)).uniq
-        render :layout => "form_page"
+        render layout: 'form'
       end
     else
       redirect_to @parent, notice: 'Please choose an project aspect first'
@@ -80,7 +80,7 @@ class StudiesController < ApplicationController
           format.html { redirect_to [@study.studyable, @study], notice: 'Study was successfully added.' }
           format.json { render json: @study, status: :created, location: @study }
         else
-          format.html { render action: "new" }
+          format.html { render layout: 'form', action: "new" }
           format.json { render json: @study.errors, status: :unprocessable_entity }
         end
       end
@@ -97,7 +97,7 @@ class StudiesController < ApplicationController
         format.html { redirect_to [@study.studyable, @study], notice: 'Study was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @study.errors, status: :unprocessable_entity }
       end
     end

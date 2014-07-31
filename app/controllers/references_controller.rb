@@ -16,17 +16,21 @@ class ReferencesController < ApplicationController
     elsif params[:study_id]
       @parent = Study.find(params[:study_id])
       @references_all = @parent.references
+    elsif params[:show] == 'bibliographic'
+      @references_all = Reference.joins(:projects).where(projects: {project_type: 'bibliographic', show_references: true})
+    elsif params[:show] == 'archival'
+      @references_all = Reference.joins(:projects).where(projects: {project_type: 'archival', show_references: true})
     elsif params[:show] == 'all'
       @references_all = Reference.all
     else
-      @references_all = Reference.joins(:projects).where('show_references = ?', true)
+      @references_all = Reference.joins(:projects).where(projects: {show_references: true})
     end
 
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
     @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.csv { send_data @references_all.to_csv }
       format.xls # { send_data @references.to_csv(col_sep: "\t") }
       format.json { render json: @reference }
@@ -40,7 +44,7 @@ class ReferencesController < ApplicationController
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @reference }
     end
   end
@@ -53,7 +57,7 @@ class ReferencesController < ApplicationController
       @reference.authorships.build
 
       respond_to do |format|
-        format.html { render :layout => "form_page" }# new.html.erb
+        format.html { render layout: 'form' }# new.html.erb
         format.json { render json: @reference }
       end
     else
@@ -65,7 +69,7 @@ class ReferencesController < ApplicationController
   def edit
     @reference = Reference.find(params[:id])
 
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /references
@@ -80,7 +84,7 @@ class ReferencesController < ApplicationController
         format.html { redirect_to @reference, notice: 'Reference was successfully created.' }
         format.json { render json: @reference, status: :created, location: @reference }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @reference.errors, status: :unprocessable_entity }
       end
     end
@@ -98,7 +102,7 @@ class ReferencesController < ApplicationController
         format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @reference.errors, status: :unprocessable_entity }
       end
     end

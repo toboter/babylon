@@ -28,15 +28,15 @@
             <%= reference.last_page if reference.last_page.present? %>.
           </p>
           <% if aspect? %>
-          <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
-            <%= content_tag :i, '', class: 'icon-plus icon-white' %>
-            <%= current_aspect.name %>
-          <% end if aspect? && !(current_aspect.references.include?(reference) || @shown_references.include?(reference)) %>
-          <%= link_to reference_remove_from_aspect_path(reference), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
-            <%= content_tag :i, '', class: 'icon-trash icon-white' %>
-            <%= current_aspect.name %>
-          <% end if aspect? && current_aspect.references.include?(reference) %>
-          <% end %>
+            <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
+              <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+              <%= current_aspect.name %>
+            <% end if !current_aspect.references.include?(reference) %>
+            <%= link_to reference_remove_from_aspect_path(reference), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
+              <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+              <%= current_aspect.name %>
+            <% end if current_aspect.references.include?(reference) %>
+          <% end  %>
         <% end %>
       </div>
     <% end %>

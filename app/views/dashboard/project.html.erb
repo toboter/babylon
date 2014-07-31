@@ -9,9 +9,7 @@
 
 
 <% content_for :main_section do %>
-  <div class="span12">
     <div class="row-fluid">
-
       <%= content_tag :div, class: 'span4' do %>
         <div class="well">
           <h6 class="muted">Upcoming tasks <span class="badge badge-warning pull-right"><%= current_aspect.todos.where(completed: false).count %></span></h6>
@@ -127,6 +125,5 @@
 
       </div>
     <% end %>
-  </div>
 
 <% end %>

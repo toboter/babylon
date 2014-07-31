@@ -8,7 +8,7 @@ class SnippetsController < ApplicationController
     @snippets = Snippet.where('snippet_type != ?', 'about')
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: "blog" }# index.html.erb
       format.json { render json: @snippets }
     end
   end
@@ -19,7 +19,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: "blog" }# show.html.erb
       format.json { render json: @snippet }
     end
   end
@@ -30,7 +30,7 @@ class SnippetsController < ApplicationController
     @snippet = Snippet.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @snippet }
     end
   end
@@ -38,7 +38,7 @@ class SnippetsController < ApplicationController
   # GET /snippets/1/edit
   def edit
     @snippet = Snippet.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /snippets
@@ -51,7 +51,7 @@ class SnippetsController < ApplicationController
         format.html { redirect_to @snippet, notice: 'Snippet was successfully created.' }
         format.json { render json: @snippet, status: :created, location: @snippet }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
     end
@@ -67,7 +67,7 @@ class SnippetsController < ApplicationController
         format.html { redirect_to @snippet, notice: 'Snippet was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @snippet.errors, status: :unprocessable_entity }
       end
     end

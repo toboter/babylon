@@ -10,6 +10,7 @@
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     <div id="details" class="" style="border-bottom:1px solid #eee;margin-bottom:2.5em;padding-bottom:1.5em;">
       <%= content_tag :h1, @issue.name, class: 'pagetop' %>
@@ -74,4 +75,5 @@
       </div>
     </div>
   </div>
+</div>
 <% end %>

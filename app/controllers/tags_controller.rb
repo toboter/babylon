@@ -8,7 +8,7 @@ class TagsController < ApplicationController
     @tags = Tag.order(:name)
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @tags }
     end
   end
@@ -19,7 +19,7 @@ class TagsController < ApplicationController
     @tag = Tag.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @tag }
     end
   end
@@ -30,7 +30,7 @@ class TagsController < ApplicationController
     @tag = Tag.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @tag }
     end
   end
@@ -38,7 +38,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
     @tag = Tag.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /tags
@@ -51,7 +51,7 @@ class TagsController < ApplicationController
         format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
         format.json { render json: @tag, status: :created, location: @tag }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end
@@ -67,7 +67,7 @@ class TagsController < ApplicationController
         format.html { redirect_to @tag, notice: 'Tag was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end

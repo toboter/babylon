@@ -1,50 +1,58 @@
-<% title "Explore", nil %>
+<% title "Explore", nil, nil %>
 
-<% content_for :billboard do %>
-<div id="explCarousel" class="carousel slide billboard">
-  <ol class="carousel-indicators">
-    <% @about_bucket.assets.each_with_index do |asset, index| %>
-      <li data-target="#explCarousel" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
-    <% end %>
-  </ol>
+<header>
 
-  <!-- Carousel items -->
-  <%= content_tag :div, class: "carousel-inner" do %>
-    <% @about_bucket.assets.each_with_index do |asset, index| %>
-
-    <div class="item <%= 'active' if index == 0 %>">
-      <div class="explorer">
-        <%= image_tag(asset.assetfile.normal.url) %>
-        <div class="overlay hidden-phone">
-          <h1>$babylon</h1>
-          <!-- <p>$Bibliotheken und Archive Babylons: texts in an e-based content</p> -->
-        </div>
-      </div>
-      <div class="carousel-caption">
-        <h4>
-          <%= asset.name %>
-          <small><%= link_to '[Link]', asset %></small>
-          <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
-            <i class="icon-edit icon-white"></i>
-          <% end if can? :manage, 'publishing' %>
-        </h4>
-        <p>
-          <%= link_to asset.author.name, asset.author if asset.author %>
-          <%= ', ' if asset.author && asset.license %>
-          <%= link_to asset.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
-        </p>
-      </div>      
-    </div>
-    <% end %>
+  <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
+    <%= render 'shared/navbar' %>
   <% end %>
-    
-  <!-- Carousel nav -->
-  <a class="carousel-control left" href="#explCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="carousel-control right" href="#explCarousel" data-slide="next">&rsaquo;</a>
-<% end if @about_bucket.assets.any? %>
 
 
-<% content_for :content do %>
+  <%= content_tag :div, id: "explCarousel", class: "carousel slide billboard" do %>
+    <ol class="carousel-indicators">
+      <% @about_bucket.assets.each_with_index do |asset, index| %>
+        <li data-target="#explCarousel" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
+      <% end %>
+    </ol>
+    <!-- Carousel items -->
+    <%= content_tag :div, class: "carousel-inner" do %>
+      <% @about_bucket.assets.each_with_index do |asset, index| %>
+        <div class="item <%= 'active' if index == 0 %>">
+          <div class="explorer">
+            <%= image_tag(asset.assetfile.normal.url) %>
+            <div class="overlay hidden-phone">
+              <h1>$babylon</h1>
+              <!-- <p>$Bibliotheken und Archive Babylons: texts in an e-based content</p> -->
+            </div>
+          </div>
+          <div class="carousel-caption">
+            <h4>
+              <%= asset.name %>
+              <small><%= link_to '[Link]', asset %></small>
+              <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
+                <i class="icon-edit icon-white"></i>
+              <% end if can? :manage, 'publishing' %>
+            </h4>
+            <p>
+              <%= link_to asset.author.name, asset.author if asset.author %>
+              <%= ', ' if asset.author && asset.license %>
+              <%= link_to asset.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
+            </p>
+          </div>      
+        </div>
+      <% end %>
+    <% end %>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#explCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#explCarousel" data-slide="next">&rsaquo;</a>
+  <% end if @about_bucket.assets.any? %>
+</header>
+
+<div class="container">
+
+  <%= render "shared/debug" %>    
+  <%= render "shared/breadcrumbs" %>
+  <%= render "shared/flash" %>
+
   <div class="row hidden-phone">
     <div class="span12">
       <%= link_to 'Edit images', polymorphic_path([@about, @about_bucket]) unless @about_bucket.assets.any? %>
@@ -122,7 +130,8 @@
         </p>
       <% end %>
     <% end %>
-
   </div>
 
-<% end %>
+</div>
+
+<%= render "shared/site_footer" %>

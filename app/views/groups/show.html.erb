@@ -17,7 +17,8 @@
 <% end %>
 
 <%= content_for :top_over do %>
-  <div class="row" id='about' style="">
+<div id="about">
+  <div class="row-fluid" style="">
     <%= content_tag :div, class: 'span12' do %>
       <%= content_tag :h1, class: 'pagetop' do %>
         Group
@@ -28,26 +29,20 @@
       <% end %>
     <% end %>
   </div>
-  <div class="row">
+  <div class="row-fluid description">
     <%= content_tag :div, class: 'span12 lead', style: '' do %>
       <p class="">
         <%= @group.description.present? ? markdown(@group.description) : "No abstract to show." %>
       </p>
+      <%= render partial: "shared/member", collection: @members %>
     <% end %>
   </div>
   <hr>
+</div>
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="member-view" id="members">
-    <ul class="unstyled">
-      <% for member in @members do %>
-        <%= link_to member.person, title: member.available_name do %>
-          <%= image_tag((member.person ? (member.person.profile_picture ? member.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone') %>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
+<div class="row-fluid">
 
   <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
   <%= render @group.projects.limit(3) %>
@@ -58,7 +53,8 @@
           <%= render "documents/without_document_type", :var => @group %>
         </tbody>
       </table>
-  <% end if @group.documents.without_document_type.any? %> 
+  <% end if @group.documents.without_document_type.any? %>
+</div>
 <% end %>
 
 <% content_for :sidebar_section do %>

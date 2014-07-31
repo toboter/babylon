@@ -13,7 +13,7 @@ class AssetsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: "fluid" }# index.html.erb
       format.json { render json: @assets }
     end
   end
@@ -44,7 +44,7 @@ class AssetsController < ApplicationController
     else
 
       respond_to do |format|
-        format.html { render :layout => "show_page" }# show.html.erb
+        format.html { render layout: "fluid" }# show.html.erb
         format.json { render json: @asset }
       end
     end
@@ -61,7 +61,7 @@ class AssetsController < ApplicationController
     @assets_available = @assets_pre.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 12)
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: "form" }# new.html.erb
       format.json { render json: @bucket.assets.new }
     end
   end
@@ -70,7 +70,7 @@ class AssetsController < ApplicationController
   def edit
     @asset = Asset.find(params[:id])
 
-    render :layout => "form_page"
+    render :layout => "form"
   end
 
   # POST /assets
@@ -86,7 +86,7 @@ class AssetsController < ApplicationController
         format.json { render json: @asset, status: :created, location: @asset }
         format.js
       else
-        format.html { render action: "new" }
+        format.html { render layout: "form", action: "new" }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
         format.js
       end
@@ -110,7 +110,7 @@ class AssetsController < ApplicationController
         format.html { redirect_to @asset, notice: 'Asset was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: "form", action: "edit" }
         format.json { render json: @asset.errors, status: :unprocessable_entity }
       end
     end

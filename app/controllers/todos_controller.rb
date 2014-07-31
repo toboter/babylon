@@ -19,7 +19,7 @@ class TodosController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @todos }
     end
   end
@@ -28,7 +28,7 @@ class TodosController < ApplicationController
     @todo = Todo.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @todo }
     end
   end
@@ -47,7 +47,7 @@ class TodosController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @todo }
     end
   end
@@ -56,7 +56,7 @@ class TodosController < ApplicationController
   def edit
     @todo = @project.todos.find(params[:id])
     session[:redirection] = @todo.id
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /todos
@@ -78,7 +78,7 @@ class TodosController < ApplicationController
         format.json { render json: @todo, status: :created, location: @todo }
         format.js
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
       end
     end
@@ -95,7 +95,7 @@ class TodosController < ApplicationController
         format.json { head :no_content }
         format.js
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
       end
     end

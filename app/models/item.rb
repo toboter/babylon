@@ -1,14 +1,15 @@
 class Item < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :inventory_name, use: [:slugged, :history]
+  # extend FriendlyId
+  # friendly_id :inventory_name, use: [:slugged, :history]
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
-            :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, 
-            :citations_attributes, :actions_attributes, :description, :slug, :properties
+            :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
+            :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id
 
   stampable
   
   attr_writer :accession_date_text
+
   serialize :properties, Hash
   after_create :build_album_bucket
   default_scope order('inventory_number ASC, inventory_number_index ASC')
@@ -32,11 +33,15 @@ class Item < ActiveRecord::Base
   has_many :lists, through: :studies
   has_many :projects, through: :lists
 
-  validates :collection_id, :inventory_number, presence: true
+  validates :inventory_number, presence: { message: "/ if there is a collection, there should also be a inventory number" }, if: :collection_id?
+  validates :collection_id, presence: { message: "/ if there is a inventory number, there should also be a collection" }, if: :inventory_number?
+  validates :excavation_id, presence: true, unless: :collection_id?
+  validates :inventory_number, :collection_id, presence: true, unless: :excavation_id?
+  validates :mds_id, :dissov_id, allow_blank: true, uniqueness: true
   validates :inventory_number, :uniqueness => {:scope => :inventory_number_index}
   validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
   validate :check_accession_date_text
-  validate :validate_properties
+  # validate :validate_properties
 
 
   accepts_nested_attributes_for :citations, allow_destroy: true
@@ -45,7 +50,13 @@ class Item < ActiveRecord::Base
   before_save :save_accession_date_text
 
   def inventory_name
-    collection.shortcut+' '+inventory_number+inventory_number_index
+    if collection
+      collection.shortcut+' '+inventory_number+inventory_number_index
+    elsif excavation_id.present?
+      excavation_id
+    else
+      id
+    end
   end
 
   def name

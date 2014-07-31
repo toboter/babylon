@@ -10,10 +10,10 @@
 <% end %>
 
 <% content_for :top_over do %>
-  <div class="row" style="">
-    <div class="<%= 'span3' if @person.profile_picture %>">
+  <div class="row-fluid" style="">
+    <%= content_tag :div, class: 'span3' do %>">
       <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-top:20px;"), @person.profile_picture if @person.profile_picture %>
-    </div>
+    <% end if @person.profile_picture %>
     <div class="<%= @person.profile_picture ? 'span6' : 'span9' %>">
       <h1>
         <%= graded_fullname(@person) %>
@@ -70,7 +70,6 @@
 <% end %>
 
 <% content_for :main_section do %>
-<div class="span12">
   <div class="row-fluid">
     <div class="span9" id="scroll-pane" data-target="#scroll-nav">
       <%= content_tag :section, id: 'about', class: 'person-section' do %>
@@ -191,5 +190,5 @@
   </div>
   </div>
 </div>
-</div>
+
 <% end %>

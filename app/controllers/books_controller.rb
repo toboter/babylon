@@ -17,7 +17,7 @@ class BooksController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @books }
     end
   end
@@ -29,7 +29,7 @@ class BooksController < ApplicationController
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @book }
     end
   end
@@ -43,7 +43,7 @@ class BooksController < ApplicationController
     book = @book.editorships.build
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @book }
     end
   end
@@ -52,7 +52,7 @@ class BooksController < ApplicationController
   def edit
     @book = Book.find(params[:id])
 
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /books
@@ -69,7 +69,7 @@ class BooksController < ApplicationController
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render json: @book, status: :created, location: @book }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
@@ -85,7 +85,7 @@ class BooksController < ApplicationController
         format.html { redirect_to @book, notice: 'Book was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end

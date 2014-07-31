@@ -1,14 +1,13 @@
 <% title "New Asset", "to: #{@bucket.name}" %>
 
+<% content_for :main_section do %>
 <%= form_for [@bucket, @asset], :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_messages %>
-
-  <%= @asset.inspect %>
 
   <div class="control-group">
     <%= f.label :name, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :name, value: @asset.asset_name, class: 'span6' %>
+      <%= f.text_field :name, class: 'span6' %>
     </div>
   </div>
 
@@ -38,4 +37,6 @@
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <%= link_to 'Abbrechen', :back, :class => 'btn' %>
   </div>
+<% end %>
+
 <% end %>

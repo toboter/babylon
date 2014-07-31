@@ -3,8 +3,8 @@ class Person < ActiveRecord::Base
   friendly_id :name, use: [:slugged, :history]
 
   attr_accessible :user_id, :creator_id, :date_of_birth, :date_of_death, :gender, :grade, 
-                  :nickname, :profession, :public_email, :updater_id,
-                  :phone, :fax, :uri, :institution_id, :show_inst_address, :affiliations_attributes,
+                  :nickname, :profession, :public_email, :updater_id, :phone, :fax, :uri, :institution_id, 
+                  :show_inst_address, :affiliations_attributes, 
                   :names_attributes, :cv, :general
   
   stampable

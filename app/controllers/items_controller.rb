@@ -13,7 +13,7 @@ class ItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @items }
     end
   end
@@ -25,7 +25,7 @@ class ItemsController < ApplicationController
     @images = @item.assets.where('content_type LIKE ?', '%image%')
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @item }
     end
   end
@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
     @item = Item.new(:collection_id => params[:collection_id])
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @item }
     end
   end
@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
   def edit
     @item = Item.find(params[:id])
 
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /items
@@ -59,7 +59,7 @@ class ItemsController < ApplicationController
         format.html { redirect_to @item, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
     end
@@ -76,7 +76,7 @@ class ItemsController < ApplicationController
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
     end
@@ -105,4 +105,6 @@ private
       @project = nil
     end
   end
+
+
 end

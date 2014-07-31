@@ -1,37 +1,27 @@
 <% title "Announcements", nil, nil %>
 
-
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <%= content_tag :li, "Announcements", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     <h1>
       Announcements
       <div class="pull-right" style="">
-        <%= link_to "Create novelity", new_snippet_path, class: "btn btn-create btn-small" if (can? :create, @snippets) %>
+        <%= link_to "Add announcement", new_snippet_path, class: "btn btn-create" if (can? :create, @snippets) %>
       </div>
     </h1>
 
-<table class="table table-bordered table-hover">
-  <tr>
-    <th>Pinned?</th>
-    <th>Description</th>
-    <th></th>
-
-  </tr>
-
-<% @snippets.each do |snippet| %>
-  <tr>
-    <td><%= link_to (content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0'), edit_snippet_path(snippet) if snippet.pinned? %></td>
-    <td><%= snippet.description %></td>
-    <td><%= link_to 'Show', snippet %></td>
-  </tr>
-<% end %>
-</table>
-
+    <% @snippets.each do |snippet| %>
+      <%= content_tag :h2, snippet.name %>
+      <%= content_tag :p, snippet.description, class: 'lead' %>
+      <%= link_to 'Show', snippet %> | <%= link_to 'Edit', edit_snippet_path(snippet) %>
+      <hr>
+    <% end %>
+  </div>
 </div>
 <% end %>
 

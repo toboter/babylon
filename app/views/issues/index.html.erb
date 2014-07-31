@@ -10,6 +10,7 @@
 
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     <%= content_tag :h1 do %>
       Issues for "<%= link_to @issuable.name, @issuable %>" <small>[<%= @issuable.class %>]</small>
@@ -52,6 +53,7 @@
       <% end %>
     </div>
   </div>
+</div>
 </div>
 </div>
 <% end %>

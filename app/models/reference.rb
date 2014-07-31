@@ -35,13 +35,6 @@ class Reference < ActiveRecord::Base
 
   scope :without, lambda { |ref| { :conditions => ['id not in (?)', ref.id] }}
 
-  def person_name_name
-    person_name.try(:name)
-  end
-
-  def category_name=(name)
-    self.category = Category.find_or_create_by_name(name) if name.present?
-  end
 
   def name
     title

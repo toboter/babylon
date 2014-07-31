@@ -18,12 +18,13 @@
 
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     <%= content_tag :h1 do %>
       Lists for <%= link_to @project.name, @project.projectable %>
     <% end if @project %>
 
-  <div class="row">
+  <div class="row-fluid">
     <div class="span3">
       <div class="issues-options">
         <ul class="nav nav-pills nav-stacked">
@@ -52,4 +53,5 @@
     </div>
   </div>
   </div>
+</div>
 <% end %>

@@ -2,7 +2,7 @@
     <% tag.children.each do |leave| %>
       <%= content_tag :li do -%>
         <%= link_to "#{leave.name}", leave, class: (leave == highlight ? 'name highlight' : 'name') %> 
-        <%= link_to image_tag("icons/plus24.svg", style: 'width:.7em;padding-bottom:.1em;')+' sub-category', new_tag_path(:parent_id => leave), style: 'font-size:100%;margin-left:10px;' if add_links_visible || leave == highlight %>
+        <%= link_to 'add sub-category', new_tag_path(:parent_id => leave), style: 'font-size:100%;margin-left:10px;' if add_links_visible || leave == highlight %>
         <%= render 'tag_tree', :tag => leave, :indent => (indent+10), :add_links_visible => add_links_visible, :highlight => highlight %>
       <% end %>
     <% end %>

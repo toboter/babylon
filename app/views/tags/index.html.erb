@@ -1,4 +1,4 @@
-<% title "Terms of interest", nil %>
+<% title "Terms of interest", nil, nil %>
 
 
 <% content_for :breadcrumbs_section do %>
@@ -7,10 +7,15 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <div class="span6">
-    <div class="pull-right" style="">
-      <%= link_to "Create term", new_tag_path, class: "btn btn-create btn-small" if can? :create, @tags %>
-    </div>
+<div class="row-fluid">
+  <div class="span12">
+  	<h1>
+      Terms of interest
+      <div class="pull-right" style="">
+        <%= link_to "Create term", new_tag_path, class: "btn btn-create" if can? :create, @tags %>
+      </div>
+    </h1>
     <%= render 'full_tag_tree', :tags => @tags, add_links_visible: true, highlight: nil %>
   </div>
+</div>
 <% end %>

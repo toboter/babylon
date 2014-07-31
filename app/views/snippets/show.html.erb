@@ -10,10 +10,14 @@
 <% end %>
 
 <% content_for :main_section do %>
-<%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if @snippet.pinned? %>
-<h4 class="muted">Announcement</h4>
-<p><%= @snippet.description %></p>
-<%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
-<%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
+  <div class="row-fluid">
+  	<div class="span12">
+	  <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if @snippet.pinned? %>
+	  <h4 class="muted">Announcement</h4>
+	  <p><%= @snippet.description %></p>
+	  <%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
+	  <%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
+	</div>
+  </div>
 
 <% end %>

@@ -1,0 +1,9 @@
+      <% if can? :manage, 'development' %>
+        <div class="row">
+          <div class="span12" style="font-size:12px;">
+            <div class="collapse" id="params-well">
+              <p><%= debug(params) %></p>
+            </div>
+          </div>
+        </div>
+      <% end %> 

@@ -7,6 +7,7 @@
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     Total: <%= @assets.count %>
     <%= form_tag destroy_multiple_assets_path, method: :delete do %>
@@ -19,4 +20,5 @@
       <% end if can? :destroy, Asset %>
     <% end %>
   </div>
+</div>
 <% end %>

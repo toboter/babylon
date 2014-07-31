@@ -1,3 +1,5 @@
 <% title ('New Issue'), ('on '+@issuable.name) %>
 
-<%= render 'form' %>
+<% content_for :main_section do %>
+  <%= render 'form' %>
+<% end %>

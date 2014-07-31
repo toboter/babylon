@@ -20,6 +20,8 @@
 
 
 <% content_for :main_section do %>
+<div class="row-fluid">
+  <div class="span12">
 <p>
   <b>Name:</b>
   <%= @list.name %>
@@ -60,4 +62,6 @@
     <%= render "studies/study_tiles", studies: @list.studies.limit(8)  %>
     <%= link_to "View all studies in #{@list.name}", [@list, :studies] %>
   <% end if @list.studies.any? %>
+</div>
+</div>
 <% end %>

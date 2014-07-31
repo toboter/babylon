@@ -9,17 +9,18 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <% if @asset.content_type.include? 'image' %>
-    <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
-  <% else %>
-    <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
-  <% end %>
-  <%= content_tag :div, id: "caption", style: "margin-top:20px;" do %>
-    <%= markdown(@asset.caption) %>
+<div class="row-fluid">
+  <div class="span8">
+    <% if @asset.content_type.include? 'image' %>
+      <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
+    <% else %>
+      <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
+    <% end %>
+    <%= content_tag :div, id: "caption", style: "margin-top:20px;" do %>
+      <%= markdown(@asset.caption) %>
     <% end if @asset.caption %>
-<% end %>
-
-<% content_for :sidebar_section do %>
+  </div>
+  <div class="span4">
     <% if can? :read, @asset %>
       <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -80,6 +81,9 @@
             </ul>
       <% end if @buckets.any? %>
     </div>
+
+  </div>
+</div>
 <% end %>
 
 

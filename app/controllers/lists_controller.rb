@@ -13,7 +13,7 @@ class ListsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @lists }
     end
   end
@@ -24,7 +24,7 @@ class ListsController < ApplicationController
     @list = @project.lists.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @list }
     end
   end
@@ -35,7 +35,7 @@ class ListsController < ApplicationController
     @list = @project.lists.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @list }
     end
   end
@@ -43,7 +43,7 @@ class ListsController < ApplicationController
   # GET /lists/1/edit
   def edit
     @list = @project.lists.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /lists
@@ -56,7 +56,7 @@ class ListsController < ApplicationController
         format.html { redirect_to [@project, @list], notice: 'List was successfully created.' }
         format.json { render json: @list, status: :created, location: @list }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @list.errors, status: :unprocessable_entity }
       end
     end
@@ -72,7 +72,7 @@ class ListsController < ApplicationController
         format.html { redirect_to [@project, @list], notice: 'List was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @list.errors, status: :unprocessable_entity }
       end
     end

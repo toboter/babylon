@@ -216,4 +216,58 @@ textarea.noResize { resize:none }
 	}
 }
 
+.hero-unit {
+	#about {
+		padding-bottom:30px;
+		div.cover {
+			img {
+				@extend .img-polaroid;
+				margin-top:0.7em;
+			}
+			a.change-asset {
+				font-size: 60%;
+			}
+		}
+		div.description {
+			h1 {margin-bottom:10px;}
+			.text {padding-bottom:10px;}
+			a.member {
+				padding-bottom:8px;
+				text-decoration: none;
+				img {
+					@extend .img-rounded;
+					width: 40px;
+					margin: 0 5px 5px 0;
+				}
+			}
+		}
+	}
+}
+
+	#about {
+		div.cover {
+			img {
+				@extend .img-polaroid;
+				margin-top:0.7em;
+			}
+			a.change-asset {
+				font-size: 80%;
+			}
+		}
+		div.description {
+			h1 {margin-bottom:10px;}
+			.text {padding-bottom:10px;}
+			a.member {
+				padding-bottom:8px;
+				text-decoration: none;
+				img {
+					@extend .img-rounded;
+					width: 40px;
+					margin: 0 5px 5px 0;
+				}
+			}
+		}
+	}
+
+
 @import "bootstrap-responsive";

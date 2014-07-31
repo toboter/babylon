@@ -1,0 +1,7 @@
+<%= content_tag :div, class: "row-fluid" do %>
+  <%= content_tag :div, class: 'span12' do %>
+    <ul class="breadcrumb">
+      <%= yield(:breadcrumbs_section) %>
+    </ul>
+  <% end %>
+<% end if content_for?(:breadcrumbs_section) && can?(:read, :all) %>

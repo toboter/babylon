@@ -1,0 +1,3 @@
+<%= link_to member.person, title: member.available_name, class: 'member tooltip-bottom' do %>
+  <%= image_tag((member.person ? (member.person.profile_picture ? member.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'hidden-tablet hidden-phone' ) %>
+<% end %>

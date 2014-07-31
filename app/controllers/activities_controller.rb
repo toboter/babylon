@@ -9,7 +9,7 @@ class ActivitiesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render :layout => "fluid" }# index.html.erb
       format.json { render json: @activities }
     end
   end

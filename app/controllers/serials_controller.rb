@@ -8,7 +8,7 @@ class SerialsController < ApplicationController
     @serials = Serial.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @serials }
     end
   end
@@ -19,7 +19,7 @@ class SerialsController < ApplicationController
     @serial = Serial.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @serial }
     end
   end
@@ -30,7 +30,7 @@ class SerialsController < ApplicationController
     @serial = Serial.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @serial }
     end
   end
@@ -38,7 +38,7 @@ class SerialsController < ApplicationController
   # GET /serials/1/edit
   def edit
     @serial = Serial.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /serials
@@ -51,7 +51,7 @@ class SerialsController < ApplicationController
         format.html { redirect_to @serial, notice: 'Serial was successfully created.' }
         format.json { render json: @serial, status: :created, location: @serial }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @serial.errors, status: :unprocessable_entity }
       end
     end
@@ -67,7 +67,7 @@ class SerialsController < ApplicationController
         format.html { redirect_to @serial, notice: 'Serial was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @serial.errors, status: :unprocessable_entity }
       end
     end

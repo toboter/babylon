@@ -8,7 +8,7 @@ class ItemClassificationsController < ApplicationController
     @item_classifications = ItemClassification.order(:name)
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @item_classifications }
     end
   end
@@ -21,7 +21,7 @@ class ItemClassificationsController < ApplicationController
     @items =  Item.find_all_by_classification_id(@classifications)
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render :layout => "fluid" }# show.html.erb
       format.json { render json: @item_classification }
     end
   end
@@ -32,7 +32,7 @@ class ItemClassificationsController < ApplicationController
     @item_classification = ItemClassification.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @item_classification }
     end
   end
@@ -40,7 +40,7 @@ class ItemClassificationsController < ApplicationController
   # GET /item_classifications/1/edit
   def edit
     @item_classification = ItemClassification.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /item_classifications
@@ -53,7 +53,7 @@ class ItemClassificationsController < ApplicationController
         format.html { redirect_to @item_classification, notice: 'Item classification was successfully created.' }
         format.json { render json: @item_classification, status: :created, location: @item_classification }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @item_classification.errors, status: :unprocessable_entity }
       end
     end
@@ -69,7 +69,7 @@ class ItemClassificationsController < ApplicationController
         format.html { redirect_to @item_classification, notice: 'Item classification was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @item_classification.errors, status: :unprocessable_entity }
       end
     end

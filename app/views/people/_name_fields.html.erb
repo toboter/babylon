@@ -10,10 +10,12 @@
       <%= f.label :last_name, class: 'control-label' %>
       <div class="form-inline controls">
         <%= f.text_field :last_name, class: 'input-large' %>
-        <%= f.label :primary, class: 'checkbox' do %>
-          <%= f.check_box :primary %>
-          Primary?
-        <% end %>
+        
+          <%= f.label :primary, class: 'checkbox' do %>
+            <%= f.check_box :primary %>
+            Primary?
+
+          <% end %>
         <small><%= link_to_remove_association "remove", f %></small>
       </div>
     </div>

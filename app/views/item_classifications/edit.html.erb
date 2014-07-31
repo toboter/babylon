@@ -1,3 +1,5 @@
 <% title "Edit: #{@item_classification.name}", nil %>
 
-<%= render 'form' %>
+<% content_for :main_section do %>
+  <%= render 'form' %>
+<% end %>

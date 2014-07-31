@@ -1,0 +1,12 @@
+<% content_for :content do %>
+  <div class="container-fluid">
+
+	  <%= render "shared/debug" %>    
+
+    
+    <%= yield %>
+
+
+<% end %>
+
+<%= render :template => 'layouts/application' %>

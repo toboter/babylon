@@ -1,4 +1,4 @@
-<% title "Bibliography", nil unless @parent %>
+<% title "References", nil unless @parent %>
 <% title "References for ", @parent.name if @parent %>
 
 <% content_for :breadcrumbs_section do %>
@@ -8,32 +8,36 @@
     <%= content_tag(:li, link_to("Projects", [@parent.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@parent.name}", [@parent.projectable, @parent]) + content_tag(:span, '/', class: 'divider')) %>
   <% end %>
-  <li class="active"><%= @parent ? 'References' : 'Bibliography' %></li>
+  <li class="active">References</li>
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
-    <ul class="nav nav-pills">
-      <%= content_tag :li, link_to("Bibliography", references_path), class: 'active' unless @parent %>
-      <%= content_tag :li, link_to("Books", books_path) unless @parent %>
-      <%= content_tag :li, link_to("Journals and serials", serials_path) unless @parent %>
-
-      <%= content_tag :div, class: "btn-group" do %>
-        <%= link_to 'show all', references_path(show: 'all'), class: "btn btn-small #{'active' if params[:show]=='all'}" %>
-        <%= link_to 'show main bibliography', references_path, class: "btn btn-small #{'active' if params[:show]!='all'}" %>
+    <div class="row-fluid">
+      <%= content_tag :div, class: 'span9' do %>
+        <%= content_tag :ul, class: "nav nav-pills" do %>
+          <%= content_tag :li, link_to("Public References", references_path), class: 'active' %>
+          <%= content_tag :li, link_to('show all references', references_path(show: 'all'), class: "#{'active' if params[:show]=='all'}") %>
+          <%= content_tag :li, link_to('show babylon references', references_path(show: 'bibliographic'), class: "#{'active' if params[:show]=='bibliographic'}") %>
+          <%= content_tag :li, link_to('show archival references', references_path(show: 'archival'), class: "#{'active' if params[:show]=='archival'}") %>
+          <%= content_tag :li, link_to("Books", books_path), style: 'margin-left:20px;' %>
+          <%= content_tag :li, link_to("Journals and serials", serials_path) %>
+        <% end %>
       <% end unless @parent %>
-
-      <%= link_to new_reference_path, class: 'btn btn-create pull-right', style: 'margin-left:10px;' do %>
-        <i class="icon-plus icon-white"></i>
-        Reference
-      <% end if aspect? && (can? :create, @references) %>
-      <%= form_tag ('/reference'), method: :get, class: 'form-inline pull-right' do %>
-        <div class="input-append">
-          <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10), id: 'appendInputButton', class: 'span1' %>
-          <%= submit_tag "per Page", class: 'btn' %>
-        </div>
+      <%= content_tag :div, class: 'span3' do %>
+        <%= link_to new_reference_path, class: 'btn btn-create pull-right', style: 'margin-left:10px;' do %>
+          <i class="icon-plus icon-white"></i>
+          Reference
+        <% end if aspect? && (can? :create, @references) %>
+        <%= form_tag ('/references'), method: :get, class: 'form-inline' do %>
+          <div class="input-append">
+            <%= select_tag :per_page, options_for_select([5, 10, 20, 30, 50, 100], params[:per_page] ? params[:per_page] : 10), id: 'appendInputButton', class: 'span6' %>
+            <%= submit_tag "per Page", class: 'btn' %>
+          </div>
+        <% end %>
       <% end %>
-    </ul>
+    </div>
     <div class="row-fluid">
       <div class="span3">
         <p class="text text-info">Showing <%= @references.count %><%= content_tag :span, raw(' of ' + (link_to @references_all.count, references_path)) if @references_all %> entries</p>
@@ -78,5 +82,5 @@
       </div>
     </div>
   </div>
-
+</div>
 <% end %>

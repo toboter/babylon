@@ -1,5 +1,6 @@
 <% title "Edit Asset", nil %>
 
+<% content_for :main_section do %>
 <%= form_for @asset, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
   <%= f.error_messages %>
 
@@ -43,4 +44,5 @@
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <%= link_to 'Abbrechen', :back, :class => 'btn' %>
   </div>
+<% end %>
 <% end %>

@@ -11,6 +11,8 @@
 
 
 <% content_for :main_section do %>
+<div class="row-fluid">
+  <div class="span8">
     <ul class="nav nav-tabs">
       <%= content_tag :li, link_to('Connections', "#connections", data: {toggle: 'tab'}), class: 'active' %>
       <%= content_tag :li, link_to('Documents', "#docs", data: {toggle: 'tab'}) %>
@@ -53,11 +55,9 @@
       <div class="tab-pane" id="uploads">
         <%= render @reference.buckets, :personal => false %>
       </div>
-
     </div>
-<% end %>
-
-<% content_for :sidebar_section do %>
+  </div>
+  <div class="span4">
   <%= content_tag :div, class: "reference-options" do %>
     <%= content_tag :div, class: "" do %>
       <%= link_to reference_add_to_aspect_path(@reference), :method => :post, class: 'btn btn-small btn-success' do %>
@@ -109,5 +109,7 @@
         <h5 class="muted">UNPUBLISHED</h5>
       <% end %>
     <% end %>
+  </div>
+</div>
 <% end %>
 

@@ -12,7 +12,7 @@
     <div class="control-group">
       <%= f.label :reference_id, 'Bibliographic Entry', class: 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :reference_id, @usable_references, :id, :entries_for_select, {}, {multiple: false, class: 'form-control chosen-select input-block-level'} %>
+        <%= f.collection_select :reference_id, @usable_references, :id, :entries_for_select, {}, {multiple: false, class: 'form-control chosen-select span8'} %>
       </div>
     </div>
 

@@ -1,20 +1,19 @@
-<%= form_for(@tag) do |f| %>
+<%= form_for @tag, html: { class: ' form-horizontal' } do |f| %>
   <%= f.error_messages %>
-  <div class="row">
-    <div class="control-group span4">
+
+    <div class="control-group">
       <%= f.label :name, class: 'control-label' %>
       <div class="controls">
-        <%= f.text_field :name, class: 'input-block-level' %>
+        <%= f.text_field :name, class: 'span6' %>
       </div>
     </div>
   
-    <div class="control-group span4">
+    <div class="control-group">
       <%= f.label :parent_id, 'sub-category-of', class: 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :parent_id, Tag.possible_parents(@tag), :id, :name, { include_blank: true }, class: 'input-block-level' %>
+        <%= f.collection_select :parent_id, Tag.possible_parents(@tag), :id, :name, { include_blank: true }, class: 'span6' %>
       </div>
     </div>
-  </div>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

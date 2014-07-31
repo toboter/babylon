@@ -15,7 +15,8 @@
 
 
 <% content_for :main_section do %>
-  <div class="span12">
+<div class="row-fluid">
+  <div class="span9">
     <% if @todo.dependencies.any? %>
       <div style="padding-bottom:30px;">
       <h4 class="muted">"<%= @todo.name %>" depends on</h4>
@@ -65,12 +66,13 @@
       </table>
     <% end %>
   </div>
-<% end %>
-
-<% content_for :sidebar_section do %>
-  <div class="issues-options well well-small">
-    <i class="icon-exclamation-sign"></i>
-    <%= link_to 'Issues', todo_issues_path(@todo) %> 
-    <%= content_tag :span, @todo.issues.count, class: 'badge pull-right' %>
+  <div class="span3">
+    <div class="issues-options well well-small">
+      <i class="icon-exclamation-sign"></i>
+      <%= link_to 'Issues', todo_issues_path(@todo) %> 
+      <%= content_tag :span, @todo.issues.count, class: 'badge pull-right' %>
+    </div>
   </div>
+
+</div>
 <% end %>

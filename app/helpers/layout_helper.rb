@@ -9,10 +9,16 @@ module LayoutHelper
     @show_title = show_title
   end
 
+  def error(msg)
+    content_for(:error) { h(msg.to_s) }
+  end
+
   def footer_section(var)
     content_for(:footer_section) {
-      content_tag :div, class: 'span12', style: 'border-top:1px solid #f5f5f5; margin-top:50px; padding-top:10px;' do
-        content_tag :p, ('Written by '+h(name_only_or_link_to(var.updater))+(var.created_at != var.updated_at ? (' [Updated '+distance_of_time_in_words_to_now(var.updated_at)+' ago]') : (' ['+distance_of_time_in_words_to_now(var.created_at)+' ago]'))).html_safe
+      content_tag :div, class: 'row-fluid' do
+        content_tag :div, class: 'span12', style: 'border-top:1px solid #f5f5f5; margin-top:50px; padding-top:10px;' do
+          content_tag :p, ('Updated by '+h(name_only_or_link_to(var.updater))+(var.created_at != var.updated_at ? (' [last update '+distance_of_time_in_words_to_now(var.updated_at)+' ago]') : (' ['+distance_of_time_in_words_to_now(var.created_at)+' ago]'))).html_safe
+        end
       end
     }
   end

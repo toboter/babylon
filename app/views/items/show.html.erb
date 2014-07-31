@@ -10,6 +10,7 @@
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span12">
     <%= content_tag :h2, class: "" do %>
       <%= @item.title? ? @item.title : @item.inventory_name %>
@@ -26,8 +27,11 @@
 
             <div class="info_section">
               <table class="table table-bordered table-hover">
-                <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) %>
+                <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) if @item.collection %>
                 <%= item_description('Inventory Number', @item.inventory_name) %>
+                <%= item_description('Excavation Number', @item.excavation_id) %>
+                <%= item_description('Dissov Id', @item.dissov_id) %>
+                <%= item_description('MDS Id', @item.mds_id) %>
                 <%= item_description('Context', @item.context_id) %>
                 <%= item_description('Object type', link_to(@item.classification.root.name, @item.classification.root)) if @item.classification %>
                 <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
@@ -143,5 +147,5 @@
       </div>
     </div>
   </div>
-
+</div>
 <% end %>

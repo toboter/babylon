@@ -1,0 +1,37 @@
+<% content_for :content do %>
+  <header>
+    <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
+      <%= render 'shared/navbar' %>
+    <% end %>
+  </header>
+
+  <div class="container-fluid">
+
+	  <%= render "shared/debug" %>    
+	  <%= render "shared/flash" %>
+
+
+    <div class="row-fluid">
+      <div class="span12">
+        <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
+        <%= content_tag :h2, yield(:subtitle), class: 'subtitle' if show_title? %>
+        <%= yield(:error) %>
+  	  </div>
+    </div>
+  
+    <div class="row-fluid">
+      <%= content_tag :div, class: 'span2' do %>
+      	<%= yield(:nav) %>
+      <% end if content_for?(:nav) %>
+
+      <%= content_tag :div, class: content_for?(:nav) ? 'span10' : 'span12' do %>
+      	<%= yield(:main_section) %>
+      <% end %>
+  	</div>
+    
+  </div>
+  <%= render "shared/site_footer" %>
+
+<% end %>
+
+<%= render :template => 'layouts/application' %>

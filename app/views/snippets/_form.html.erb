@@ -1,13 +1,13 @@
-<%= form_for(@snippet) do |f| %>
-  <div class="row">
-    <div class="span6">
+<%= form_for @snippet, html: { class: 'form-horizontal' } do |f| %>
 
   <%= f.error_messages %>
   <%= f.hidden_field :snippet_type, value: 'news' if @snippet.new_record? %>
 
-  <label class="checkbox pull-right">
-    <%= f.check_box :pinned %> Pinned?
-  </label>
+  <div class="controls">
+    <label class="checkbox">
+      <%= f.check_box :pinned %> Pinned?
+    </label>
+  </div>
     <div class="control-group">
       <%= f.label :name, class: 'control-label' %>
       <div class="controls">
@@ -31,6 +31,4 @@
         <%= link_to 'Abbrechen', :back, :class => 'btn' %>
       <% end %>
     </div>
-  </div>
-</div>
 <% end %>

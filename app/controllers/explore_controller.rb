@@ -16,6 +16,7 @@ class ExploreController < ApplicationController
 
 	@featured = Project.where(featured: true)
 	@featured.concat(List.where(featured: true).limit(2))
+
   end
 
 end

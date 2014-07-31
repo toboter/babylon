@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140621171923) do
+ActiveRecord::Schema.define(:version => 20140731131037) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -45,11 +45,11 @@ ActiveRecord::Schema.define(:version => 20140621171923) do
     t.integer  "institution_id"
     t.datetime "from"
     t.datetime "to"
-    t.boolean  "primary"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.boolean  "primary"
   end
 
   add_index "affiliations", ["institution_id"], :name => "index_affiliations_on_institution_id"
@@ -325,6 +325,7 @@ ActiveRecord::Schema.define(:version => 20140621171923) do
     t.datetime "updated_at",  :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.integer  "sort_order"
   end
 
   create_table "items", :force => true do |t|
@@ -342,6 +343,9 @@ ActiveRecord::Schema.define(:version => 20140621171923) do
     t.text     "description"
     t.string   "slug"
     t.text     "properties"
+    t.string   "excavation_id"
+    t.string   "dissov_id"
+    t.string   "mds_id"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
@@ -416,11 +420,11 @@ ActiveRecord::Schema.define(:version => 20140621171923) do
     t.integer  "person_id"
     t.string   "first_name"
     t.string   "last_name"
-    t.boolean  "primary"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.boolean  "primary"
   end
 
   create_table "predicates", :force => true do |t|
@@ -481,6 +485,7 @@ ActiveRecord::Schema.define(:version => 20140621171923) do
     t.boolean  "show_references"
     t.boolean  "featured"
     t.text     "description"
+    t.string   "project_type"
   end
 
   create_table "references", :force => true do |t|

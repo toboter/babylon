@@ -8,7 +8,7 @@ class InstitutionsController < ApplicationController
     @institutions = Institution.roots
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @institutions }
     end
   end
@@ -19,7 +19,7 @@ class InstitutionsController < ApplicationController
     @institution = Institution.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @institution }
     end
   end
@@ -30,7 +30,7 @@ class InstitutionsController < ApplicationController
     @institution = Institution.new(:parent_id => params[:parent_id])
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @institution }
     end
   end
@@ -39,7 +39,7 @@ class InstitutionsController < ApplicationController
   def edit
     @institution = Institution.find(params[:id])
 
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /institutions
@@ -52,7 +52,7 @@ class InstitutionsController < ApplicationController
         format.html { redirect_to @institution, notice: 'Institution was successfully created.' }
         format.json { render json: @institution, status: :created, location: @institution }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @institution.errors, status: :unprocessable_entity }
       end
     end
@@ -68,7 +68,7 @@ class InstitutionsController < ApplicationController
         format.html { redirect_to @institution, notice: 'Institution was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @institution.errors, status: :unprocessable_entity }
       end
     end

@@ -12,7 +12,7 @@
 <% end %>
 
 <% content_for :main_section do %>
-
+<div class="row-fluid">
   <div class="span12">
     <%= content_tag :h2, class: "" do %>
       Study on <%= @study.studyable.title? ? link_to(@study.studyable.title, @study.studyable) : link_to(@study.studyable.name, @study.studyable) %>
@@ -108,5 +108,5 @@
       </div>
     </div>
   </div>
-
+</div>
 <% end %>

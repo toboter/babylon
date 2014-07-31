@@ -1,6 +1,8 @@
 <% title "New bibliographical resource entry", nil %>
+
+<% content_for :main_section do %>
 <% if @reference.book %>
-  <div class="row">
+  <div class="row-fluid">
   	<div class="span6">
       <p>Add an article to <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong></p>
 	</div>
@@ -9,3 +11,5 @@
 <p>This entry will be added through <b><%= full_qualified_name(current_aspect) %></b> and will <b><%= current_aspect.show_references ? 'appear' : 'not appear' %></b> in the overall bibliography.
 
 <%= render 'form' %>
+
+<% end %>

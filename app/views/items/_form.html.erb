@@ -1,23 +1,41 @@
 <%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :collection_id %>
-  <div class="row">
+
+  <div class="row-fluid">
     <div class="span10">
 
-  <div id="metainfo">
+<div id="metainfo">
   <div class="control-group">
-    <span class="control-label">
-      <%= content_tag :abbr, @item.collection.shortcut, title: @item.collection.name+' im '+@item.collection.institution.name, class: 'tooltip-bottom' %>
-    </span>
+    <%= f.label :collection_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, include_blank: true, class: '' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :inventory_number, class: 'control-label' %>
     <div class="controls form-inline">
       <%= f.text_field :inventory_number, placeholder: 'Inventory number' %>
       <%= f.text_field :inventory_number_index, placeholder: 'Index (optional)', style: 'margin-left:10px;' %>
     </div>
   </div>
 
-
+  <div class="control-group">
+    <%= f.label :excavation_id, 'Excavation number', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :excavation_id, placeholder: 'excavation number', class: 'span6' %>
+    </div>
+  </div>
 
   <div class="control-group">
+    <%= f.label '', 'other Ids', class: 'control-label' %>
+    <div class="controls form-inline">
+      <%= f.text_field :dissov_id, placeholder: 'Dissov Id' %>
+      <%= f.text_field :mds_id, placeholder: 'MDS Id', style: 'margin-left:10px;' %>
+    </div>
+  </div>
+
+  <div class="control-group" style="margin-top:50px;">
     <%= f.label :accession_date, class: 'control-label' %>
     <div class="controls">
       <div class="input-append date">
@@ -27,45 +45,33 @@
     </div>
   </div>
 
-
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
       <%= f.text_field :title, placeholder: 'descrptive title', class: 'span6' %>
     </div>
   </div>
+</div>
 
+<div id="classification">
+  <%= content_tag :h4, 'Classification' %>
   <div class="control-group">
     <%= f.label :classification_id, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select(:classification_id, ItemClassification.all, :id, :name) %>
+      <%= f.collection_select(:classification_id, ItemClassification.arrange_as_tree({:order => 'name'}), :id, :name_for_selects, {}, {class: 'form-control chosen-select'}) %>
+      <p class="help-block">Edit classifications <%= link_to 'here', item_classifications_path, target: 'blank' %></p>
     </div>
   </div>
 
-  </div>
-
-
-
-<!--
-  <div class="control-group">
-    <%= f.label :context_id, class: 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :context_id %>
-    </div>
-  </div>
--->
-
-
-
-  <%= content_tag :h4, 'Tags' %>
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
       <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
     </div>
   </div>
+</div>
 
-  <div id="citations">
+<div id="citations">
   <%= content_tag :h4, 'Citations' %>
   <%= f.fields_for :citations do |builder| %>
     <%= render "citation_fields", :f => builder %>
@@ -73,9 +79,9 @@
   <div class="links controls">
     <%= link_to_add_association "Add Citation", f, :citations %>
   </div>
-  </div>
+</div>
   
-  <div id='actions'>
+<div id='actions'>
   <%= content_tag :h4, 'Actions' %>
   <%= f.fields_for :actions do |builder| %>
     <%= render "action_fields", :f => builder %>
@@ -83,7 +89,7 @@
   <div class="links controls">
     <%= link_to_add_association "Add Action", f, :actions %>
   </div>
-  </div>
+</div>
 
   <div id="description">
     <%= content_tag :h4, 'Description' %>
@@ -93,15 +99,18 @@
         <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
       </div>
     </div>
+
+
   </div>
 
 
-
-  <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
-    <% @item.collection.fields.order('name ASC').each do |field| %>
-      <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
-    <% end %>
-  <% end %>
+  <div id="props">
+    <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
+      <% @item.collection.fields.order('name ASC').each do |field| %>
+        <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
+      <% end %>
+    <% end if params[:collection_id].present? %>
+  </div>
 
 
 
@@ -115,10 +124,5 @@
   </div>
 
 </div>
-    <div class="span2">
-      <ul class="nav nav-tabs nav-stacked">
-
-      </ul>
-    </div>
 </div>
 <% end %>

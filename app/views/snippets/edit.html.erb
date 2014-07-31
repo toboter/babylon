@@ -1,7 +1,7 @@
-<% title 'Edit announcement snippet', @snippet.name %>
-<%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
-<%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
+<% title 'Edit announcement', @snippet.name %>
 
-<%= render 'form' %>
-
-
+<% content_for :main_section do %>
+  <%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
+  <%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
+  <%= render 'form' %>
+<% end %>

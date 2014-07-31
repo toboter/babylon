@@ -10,7 +10,7 @@ class DocumentsController < ApplicationController
       @documents = @documentable.documents
       @all_documents = @documents
       @current_user_documents = @documents.created_by(current_user)
-      @need_review_documents = @documents.joins(:issues).where(issues: {assigned_id: current_user.id})
+      @need_review_documents = @documents.joins(:issues).where(issues: {assigned_id: current_user.id, closed: false})
 
       if params[:ufilter] == 'created_by'
         @documents = @current_user_documents
@@ -35,7 +35,7 @@ class DocumentsController < ApplicationController
 
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @documents }
     end
   end
@@ -46,7 +46,7 @@ class DocumentsController < ApplicationController
     @document = Document.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @document }
     end
   end
@@ -61,7 +61,7 @@ class DocumentsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @document }
     end
   end
@@ -69,7 +69,7 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document = @documentable.documents.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /documents
@@ -83,7 +83,7 @@ class DocumentsController < ApplicationController
         format.html { redirect_to [@documentable, @document], notice: 'Document was successfully created.' }
         format.json { render json: @document, status: :created, location: @document }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end
     end
@@ -100,7 +100,7 @@ class DocumentsController < ApplicationController
         format.html { redirect_to [@documentable, @document], notice: 'Document was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end
     end

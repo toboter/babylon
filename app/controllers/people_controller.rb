@@ -12,7 +12,7 @@ class PeopleController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :layout => "index_page" } # index.html.erb
+      format.html { render layout: 'fluid' } # index.html.erb
       format.json { render json: @people }
     end
     
@@ -30,7 +30,7 @@ class PeopleController < ApplicationController
 
   
       respond_to do |format|
-        format.html { render :layout => "index_page" } # show.html.erb
+        format.html { render layout: 'fluid' } # show.html.erb
         format.json { render json: @person }
       end
     end
@@ -48,7 +48,7 @@ class PeopleController < ApplicationController
     @person.names.build
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @person }
     end
   end
@@ -57,7 +57,7 @@ class PeopleController < ApplicationController
   def edit
     @person = Person.find(params[:id])
 
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /people
@@ -71,7 +71,7 @@ class PeopleController < ApplicationController
         format.html { redirect_to @person, notice: 'Person was successfully created.' }
         format.json { render json: @person, status: :created, location: @person }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @person.errors, status: :unprocessable_entity }
       end
     end
@@ -88,7 +88,7 @@ class PeopleController < ApplicationController
         format.html { redirect_to @person, notice: 'Person was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @person.errors, status: :unprocessable_entity }
       end
     end

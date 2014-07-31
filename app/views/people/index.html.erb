@@ -7,8 +7,9 @@
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
   <%= content_tag :div, class: 'span12' do %>
-    <div class="people options row" style=""><div class="span12">
+    <div class="people options row-fluid" style=""><div class="span12">
 
       <ul class="nav nav-pills pull-left">
         <%= content_tag :li, link_to("Everyone", people_path(search: params[:search])), class: "#{'active' unless params[:state]}" %>
@@ -34,11 +35,12 @@
       </div>
     </div></div>
 
-    <div id="people" style="margin-top:50px;" class="row">
+    <div id="people" style="margin-top:50px;" class="row-fluid">
       <div class="span12">
         <%= render "people_groups", people: @people %>
       </div>
     </div>
     
   <% end %>
+</div>
 <% end %>

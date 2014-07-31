@@ -1,3 +1,5 @@
 <% title "Edit #{@collection.name+' ('+@collection.shortcut+')'}", @collection.institution.name %>
 
-<%= render 'form' %>
+<% content_for :main_section do %>
+  <%= render 'form' %>
+<% end %>

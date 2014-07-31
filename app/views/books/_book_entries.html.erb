@@ -1,13 +1,13 @@
 <% books.each do |book| %>
-  <%= content_tag :div, class: 'list-entry' do -%>
+  <%= content_tag :div, class: 'list-entry' do %>
     <div class="row-fluid">
-      <%= content_tag :div, class: 'span3 authors' do -%>
+      <%= content_tag :div, class: 'span3 authors' do %>
         <ul class="unstyled">
           <%= content_tag :li, book_edited_by(book) %>
           <li><%= book.year.present? ? book.year : '[unpublished]' %></li>
         </ul>
-      <% end -%>
-      <%= content_tag :div, class: 'span8' do -%>
+      <% end %>
+      <%= content_tag :div, class: 'span8' do %>
         <p>
           <%= content_tag :span, book_edited_by(book)+', ' %>
           <%= content_tag :span, book_title(book) %>
@@ -15,7 +15,7 @@
           <%= content_tag :span, ', '+book.place if book.place.present? %>
           <%= content_tag :span,  book.year.present? ? "(#{book.year})" : '[unpublished]' %>.
         </p>
-      <% end -%>
+      <% end %>
     </div>
-  <% end -%>
+  <% end %>
 <% end %>

@@ -8,7 +8,7 @@ class ClustersController < ApplicationController
     @clusters = Cluster.all
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: "fluid" }# index.html.erb
       format.json { render json: @clusters }
     end
   end
@@ -26,7 +26,7 @@ class ClustersController < ApplicationController
     @projects = Project.where(id: (@cluster.project_ids+@cluster.group_project_ids))
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: "fluid" }# show.html.erb
       format.json { render json: @cluster }
     end
   end
@@ -37,7 +37,7 @@ class ClustersController < ApplicationController
     @cluster = Cluster.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: "form" }# new.html.erb
       format.json { render json: @cluster }
     end
   end
@@ -45,7 +45,7 @@ class ClustersController < ApplicationController
   # GET /clusters/1/edit
   def edit
     @cluster = Cluster.find(params[:id])
-    render :layout => "form_page"
+    render layout: "form"
   end
 
   # POST /clusters
@@ -58,7 +58,7 @@ class ClustersController < ApplicationController
         format.html { redirect_to @cluster, notice: 'Module was successfully created.' }
         format.json { render json: @cluster, status: :created, location: @cluster }
       else
-        format.html { render action: "new" }
+        format.html { render layout: "form", action: "new" }
         format.json { render json: @cluster.errors, status: :unprocessable_entity }
       end
     end
@@ -74,7 +74,7 @@ class ClustersController < ApplicationController
         format.html { redirect_to @cluster, notice: 'Module was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: "form", action: "edit" }
         format.json { render json: @cluster.errors, status: :unprocessable_entity }
       end
     end

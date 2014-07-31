@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   attr_accessible :name, :projectable_id, :projectable_type, :memberships_attributes, :creator_id, :updater_id, 
-                  :show_references, :description, :featured, :studyfields_attributes, :lists_attributes
+                  :show_references, :description, :featured, :studyfields_attributes, :lists_attributes, :project_type
 
   stampable
 
@@ -47,5 +47,7 @@ class Project < ActiveRecord::Base
   def project_bucket
     self.buckets.find_by_name('Cover Pictures')
   end
+
+  PROJECT_TYPES = %w[archival bibliographic research]
 
 end

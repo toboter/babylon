@@ -1,0 +1,138 @@
+<div class="navbar-inner">
+  <%= link_to "$babylon", root_url, class: "brand", style: 'margin-left:0' %>
+  <% if user_signed_in? %>
+    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+    <%= content_tag :div, class: 'nav-collapse collapse' do %>
+      <ul class="nav pull-left">
+        <%= content_tag :li, link_to('Modules', clusters_path) %>
+        <li class="divider-vertical"></li>
+        <%= content_tag :li, link_to("People", people_path) if can? :read, 'People' %>
+        <%= content_tag :li, link_to("Institutions", institutions_path) if can? :read, 'Institutions' %>
+        <%= content_tag :li, '', class: "divider-vertical" %>
+        <%= content_tag :li, class: "dropdown" do %>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <strong>Resources</strong>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <%= content_tag :li, link_to("References", references_path) if can? :read, Reference %>
+            <%= content_tag :li, link_to("Items", items_path) if can? :read, 'Items' %>
+            <%= content_tag :li, '',class: 'divider' %>
+            <%= content_tag :li, link_to("Uploaded files", assets_path) if can? :read, 'Assets' %>
+            <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
+          </ul>
+        <% end %>
+        <%= content_tag :li, '', class: "divider-vertical", style: 'margin-right:20px;' %>
+        <!--
+        <%= content_tag :li do %>
+          <% form_tag '/search', class: "navbar-search" do %>
+            <%= search_field_tag :q, params[:q], placeholder: 'search or type a command', class: 'search-query' %>
+          <% end %>
+        <% end %>-->
+      </ul>
+    <% end if can? :read, 'Navbar' %>
+
+    <div class="nav-collapse collapse">
+      <%= content_tag :ul, class: 'nav pull-right' do %>
+        <%= content_tag :li, class: 'dropdown' do %>
+          <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Your personal menu" id="personal-menu">
+            <% if current_user.person && current_user.person.profile_picture %>
+              <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
+              <% else %>
+              <%= image_tag('icons/super.svg', class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
+            <% end %>
+            <%= content_tag :span, class: 'hidden-desktop' do %>
+              <%= current_user.available_name %> (You)
+              <b class="caret"></b>
+            <% end %>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+            <li><%= link_to "Your Dashboard", dashboard_path %></li>
+            <%= content_tag :li, (link_to "Your Profile", current_user.person) if current_user.person %>
+            <li class="divider"></li>
+            <%= content_tag :li, (link_to 'Edit your profile', edit_person_path(current_user.person)) if current_user.person && can?(:edit, current_user.person) %>
+            <%= content_tag :li, (link_to 'Account Settings', edit_user_registration_path) if current_user %>
+            <%= content_tag :li do %>
+              <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
+            <% end if !current_user.person && can?(:edit, 'Profile') %>
+          </ul>
+        <% end if can? :read, 'Navbar' %>
+
+        <%= content_tag :li, class: 'dropdown' do %>
+          <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
+            <%= image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+            <%= content_tag :span, class: 'hidden-desktop' do %>
+              Change Aspect        
+              <b class="caret"></b>
+            <% end %>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+            <%= content_tag :li, link_to('Current project dashboard', project_dashboard_path(current_aspect)) if aspect? %>
+            <%= content_tag :li, '', class: 'divider' if aspect? %>   
+            <% current_user.projects.order("projectable_type ASC").each do |project| %>
+              <li>       
+                <%= link_to change_aspect_path(:project_id => project.id) do %>
+                  <%= project.projectable.name if project.projectable_type == "Cluster" %>
+                  <% if project.projectable_type == "Group" %>
+                    <%= project.projectable.cluster.name %> /
+                    <%= project.projectable.name %>
+                  <% end %>
+                  /
+                  <strong><%= project.name %></strong>
+                <% end %>
+              </li>
+            <% end %>
+            <%= content_tag :li, '', class: 'divider' if aspect? %>
+            <%= content_tag :li do %>
+              <%= link_to exit_aspect_path do %>
+                Exit <strong><%= current_aspect.name %></strong>
+              <% end %>
+            <% end if aspect? %>
+          </ul>
+        <% end if can?(:read, 'Aspects') && current_user.projects.any? %>
+
+        <li class="divider-vertical"></li>
+        <li class="visible-desktop">
+          <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', class: 'tooltip-bottom', id: 'sign-out-link' %>
+        </li>
+        <li class="hidden-desktop">
+          <%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
+        </li>
+      <% end if can? :read, 'Navbar' %>
+
+      <%= content_tag :ul, class: 'nav pull-right visible-desktop' do %>
+        <% if can? :manage, 'development' %>
+          <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
+          <li class="divider-vertical"></li>
+        <% end %>
+      <% end if user_signed_in? %>
+    </div>
+  <% end %>
+</div>
+
+
+<% content_for :navbar_modal_inject do %>
+  <% if !current_user.person && (can? :edit, 'Profile') %>
+    <div id="connect_profile_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Connect your account to an existing profile</h3>
+      </div>
+      <%= form_tag user_connect_path, :class => "custom" do %>
+        <div class="modal-body" style="height:300px;">
+          <%= select_tag :person_id, options_from_collection_for_select(Person.unconnected, "id", "name_with_profession"), :prompt => 'Choose a person', class: "input-block-level", :id => "person-connect-select" %>
+          <%= hidden_field_tag :connect_user_id, current_user.id %>
+        </div>
+        <div class="modal-footer">
+          <%= submit_tag "Connect", class: "btn btn-primary pull-left" %>
+          <a href="#" class="btn pull-left" data-dismiss="modal">Close</a>
+          <span class="pull-left" style="padding:5px 0 0 10px;">Not on the list? <%= link_to "Create a new profile", new_person_path(:user_id => current_user, :alias => current_user.username) %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end if user_signed_in? %>

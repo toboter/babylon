@@ -8,13 +8,17 @@
 <% end %>
 
 <% content_for :main_section do %>
-  <%= render 'full_classification_tree', :item_classifications => @item_classification.root.self_and_descendants, add_links_visible: false, highlight: @item_classification %>
-<% end %>
-<% content_for :sidebar_section do %>
-  <h4 class="muted">Items for <%= @item_classification.name %></h4>
-  <ul class="unstyled">
-    <% for item in @items do %>
-      <li><%= link_to item.inventory_name, item %></li>
-    <% end %>
-  </ul>
+<div class="row-fluid">
+  <div class="span8">
+    <%= render 'full_classification_tree', :item_classifications => @item_classification.root.self_and_descendants, add_links_visible: false, highlight: @item_classification %>
+  </div>
+  <div class="span4">
+    <h4 class="muted">Items for <%= @item_classification.name %></h4>
+    <ul class="unstyled">
+      <% for item in @items do %>
+        <li><%= link_to item.inventory_name, item %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
 <% end %>

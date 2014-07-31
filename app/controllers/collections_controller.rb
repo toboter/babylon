@@ -9,7 +9,7 @@ class CollectionsController < ApplicationController
     @collections = @institution.collections.order(:name)
 
     respond_to do |format|
-      format.html { render :layout => "index_page" }# index.html.erb
+      format.html { render layout: 'fluid' }# index.html.erb
       format.json { render json: @collections }
     end
   end
@@ -20,7 +20,7 @@ class CollectionsController < ApplicationController
     @collection =  @institution.collections.find(params[:id])
 
     respond_to do |format|
-      format.html { render :layout => "show_page" }# show.html.erb
+      format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @collection }
     end
   end
@@ -31,7 +31,7 @@ class CollectionsController < ApplicationController
     @collection =  @institution.collections.new
 
     respond_to do |format|
-      format.html { render :layout => "form_page" }# new.html.erb
+      format.html { render layout: 'form' }# new.html.erb
       format.json { render json: @collection }
     end
   end
@@ -39,7 +39,7 @@ class CollectionsController < ApplicationController
   # GET /collections/1/edit
   def edit
     @collection =  @institution.collections.find(params[:id])
-    render :layout => "form_page"
+    render layout: 'form'
   end
 
   # POST /collections
@@ -52,7 +52,7 @@ class CollectionsController < ApplicationController
         format.html { redirect_to [@collection.institution, @collection], notice: 'Collection was successfully created.' }
         format.json { render json: @collection, status: :created, location: @collection }
       else
-        format.html { render action: "new" }
+        format.html { render layout: 'form', action: "new" }
         format.json { render json: @collection.errors, status: :unprocessable_entity }
       end
     end
@@ -68,7 +68,7 @@ class CollectionsController < ApplicationController
         format.html { redirect_to [@collection.institution, @collection], notice: 'Collection was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render layout: 'form', action: "edit" }
         format.json { render json: @collection.errors, status: :unprocessable_entity }
       end
     end

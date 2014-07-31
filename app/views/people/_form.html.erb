@@ -3,7 +3,7 @@
 <%= f.hidden_field :user_id %>
 
   <% if user_signed_in? && @person.user_id == current_user.id %>
-    <div class="row">
+    <div class="row-fluid">
       <div class="span12">
         <% unless @person.new_record? %>
           <p><%= link_to "Edit your account", edit_user_registration_path %> | 
@@ -13,7 +13,7 @@
     </div>
   <% end %>
 
-  <div class="row">
+  <div class="row-fluid">
     <div class="span12">
       <h4 class="muted">Personal</h4>
     </div>
