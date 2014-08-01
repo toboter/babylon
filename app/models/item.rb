@@ -4,7 +4,8 @@ class Item < ActiveRecord::Base
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
             :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
-            :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id
+            :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id,
+            :connections_attributes
 
   stampable
   
@@ -24,14 +25,14 @@ class Item < ActiveRecord::Base
   has_many :assets, through: :buckets
   has_many :citations, as: :citable
   has_many :references, through: :citations
-  # has_many :measurements, as: measureable
   has_many :actions, as: :actable
-  # has_many :connections, as: :connectable
   has_many :documents, as: :documentable, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
   has_many :studies, as: :studyable
   has_many :lists, through: :studies
   has_many :projects, through: :lists
+  has_many :connections, class_name: 'ItemConnection'
+  has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id"
 
   validates :inventory_number, presence: { message: "/ if there is a collection, there should also be a inventory number" }, if: :collection_id?
   validates :collection_id, presence: { message: "/ if there is a inventory number, there should also be a collection" }, if: :inventory_number?
@@ -46,6 +47,7 @@ class Item < ActiveRecord::Base
 
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
+  accepts_nested_attributes_for :connections, allow_destroy: true
 
   before_save :save_accession_date_text
 
@@ -91,4 +93,13 @@ class Item < ActiveRecord::Base
     end
   end
 
+
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      #csv << column_names
+      all.each do |item|
+        csv << item.attributes #.values_at(*column_names)
+      end
+    end
+  end
 end

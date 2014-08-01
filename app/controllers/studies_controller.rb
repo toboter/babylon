@@ -7,6 +7,12 @@ class StudiesController < ApplicationController
   def index
     if @parent
       @studies = @parent.studies.all
+      if @parent.class.to_s == 'Item'
+        @connected_studies = @parent.connections.map {|c| c.inverse_item.studies.map { |s| s }}.flatten
+        @connected_studies.concat(@parent.inverse_connections.map {|c| c.item.studies.map { |s| s }}.flatten)
+        @studies.concat(@connected_studies) if @connected_studies
+      end
+
     else
       @studies = Study.all
     end

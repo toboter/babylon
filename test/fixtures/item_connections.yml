@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  item: 
+  reverse_item_id: 1
+  predicate: 
+
+two:
+  item: 
+  reverse_item_id: 1
+  predicate: 

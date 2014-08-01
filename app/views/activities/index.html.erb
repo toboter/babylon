@@ -13,6 +13,7 @@
       	  <%= ActivityPresenter.new(activity, self).render_activity %>
     	<% end %>
   	  </div>
+      <%= will_paginate(@activities, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
   	</div>
   </div>
 <% end %>

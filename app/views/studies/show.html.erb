@@ -51,8 +51,8 @@
 
 
       <div class="span2">
-        <a href="<%= @study.studyable.buckets.first.cover.assetfile.large.url %>" class="img-fluid">
-          <%= @study.studyable.buckets.first.cover ? (image_tag @study.studyable.buckets.first.cover.assetfile.thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @study.studyable.buckets.any? %>
+        <a href="" class="img-fluid">
+          <%= @study.studyable.buckets.first.cover ? (image_tag @study.studyable.buckets.first.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @study.studyable.buckets.any? %>
         </a>
       </div>
   	</div>

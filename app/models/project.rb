@@ -31,8 +31,8 @@ class Project < ActiveRecord::Base
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references
 
-  validates_associated :memberships
-  validates_presence_of :name, :projectable_id, :projectable_type
+  validates :name, :projectable_id, :projectable_type, presence: true
+  # validates :project_type, presence: {message: 'You have to choose a project type!'}
 
   scope :with_user, lambda{|user| user ? {joins: :members, :conditions => ["user_id = ?", user]} : {}}
 

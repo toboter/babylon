@@ -14,6 +14,8 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# index.html.erb
+      format.csv { send_data @items.to_csv }
+      format.xls
       format.json { render json: @items }
     end
   end
@@ -95,6 +97,10 @@ class ItemsController < ApplicationController
     end
   end
 
+  def import
+    Item.import(params[:file])
+    redirect_to items_url, notice: "Items imported."
+  end
 
 private
 

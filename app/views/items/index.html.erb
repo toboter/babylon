@@ -28,6 +28,12 @@
         <%= render @items %>
       </tbody>
     </table>
+    <%= content_tag :p, class: 'pull-right' do %>
+      Download:
+      <%= link_to "CSV", items_path(format: "csv"), class: 'btn btn-mini', id: 'csv-link' %>
+      <%= link_to "Excel", items_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
+    <% end if can? :read, @items %>
   </div>
 </div>
+
 <% end %>

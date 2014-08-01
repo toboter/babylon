@@ -4,10 +4,10 @@
   </td>
   <td width="20%">
     <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.inventory_name, item %></span>
-    <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| c.name }.join(" / ") if item.classification %>
+    <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| link_to(c.name, c) }.join(" / ").html_safe if item.classification %>
   </td>
   <td width="50%">
-    <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, a.name, class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
+    <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, link_to(a.name, a, style: 'color:white;'), class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
     <p>
       <%= item.title.present? ? item.title : item.inventory_name %><br />
       <%content_tag :span do %>Accession <%= item.accession_date.strftime("%d.%m.%Y") %><% end if item.accession_date %>

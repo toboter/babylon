@@ -66,7 +66,8 @@
   <div class="control-group">
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.order(:name)-Tag.roots, :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+      <%= f.collection_select :tag_ids, Tag.arrange_as_tree({:order => 'name'}), :id, :name_for_selects, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+      <p class="help-block">Edit tags <%= link_to 'here', tags_path, target: 'blank' %></p>
     </div>
   </div>
 </div>
@@ -88,6 +89,16 @@
   <% end %>
   <div class="links controls">
     <%= link_to_add_association "Add Action", f, :actions %>
+  </div>
+</div>
+
+<div id='connections'>
+  <%= content_tag :h4, 'Connections' %>
+  <%= f.fields_for :connections do |builder| %>
+    <%= render "connection_fields", :f => builder %>
+  <% end %>
+  <div class="links controls">
+    <%= link_to_add_association "Add Connection", f, :connections %>
   </div>
 </div>
 

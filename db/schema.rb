@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140731131037) do
+ActiveRecord::Schema.define(:version => 20140801120100) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -325,8 +325,21 @@ ActiveRecord::Schema.define(:version => 20140731131037) do
     t.datetime "updated_at",  :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.integer  "sort_order"
   end
+
+  create_table "item_connections", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "inverse_item_id"
+    t.integer  "predicate_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "item_connections", ["inverse_item_id"], :name => "index_item_connections_on_inverse_item_id"
+  add_index "item_connections", ["item_id"], :name => "index_item_connections_on_item_id"
+  add_index "item_connections", ["predicate_id"], :name => "index_item_connections_on_predicate_id"
 
   create_table "items", :force => true do |t|
     t.integer  "collection_id"

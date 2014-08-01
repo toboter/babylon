@@ -21,7 +21,7 @@
     <%= content_tag :div, class: 'span12' do %>
       <%= content_tag :h1, 'Project', class: 'pagetop' %>
       <%= content_tag :h2, class: 'subtitle' do %>
-        <%= @project.name %> <small>[<%= @project.project_type.humanize %>]</small>
+        <%= @project.name %> <%= content_tag :small do %>[<%= @project.project_type.humanize %>]<% end if @project.project_type.present? %>
         <%= yield(:edit_section) %>
       <% end %>
     <% end %>
@@ -32,7 +32,7 @@
       (<%= link_to 'Edit picture', polymorphic_path([@project, @project.project_bucket]), class: 'change-asset' %>)
     <% end if @project.project_bucket %>
     <%= content_tag :div, class: 'span10 lead description', style: '' do %>
-      <%= @project.description.present? ? markdown(@project.description) : "No abstract to show." %>
+      <%= @project.description.present? ? markdown(@project.description) : content_tag(:p, "No abstract to show.") %>
       <%= render partial: "shared/member", collection: @project.members %>
     <% end %>
   </div>

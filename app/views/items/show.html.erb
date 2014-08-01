@@ -76,7 +76,23 @@
             <% end if @item.accession_date %>
           </ul>
         </div>
-
+        <%= content_tag :div, class: "item-section", id: 'connections' do %>
+          <%= content_tag :h3, 'Connections', class: '' %>
+          <ul class="unstyled">
+            <% for connection in @item.connections do %>
+              <li>
+                <strong><%= connection.predicate.name.humanize %>: </strong>
+                <%= link_to connection.inverse_item.name, connection.inverse_item, class: 'popover-right', data: { 'original-title' => connection.inverse_item.name, 'content' => connection.inverse_item.inspect } %>
+              </li>
+            <% end %>
+            <% for inverse_connection in @item.inverse_connections do %>
+              <li>
+                <strong><%= inverse_connection.predicate.inverse_name.humanize %>: </strong>
+                <%= link_to inverse_connection.item.name, inverse_connection.item, class: 'popover-right', data: { 'original-title' => inverse_connection.item.name, 'content' => inverse_connection.item.inspect } %>
+              </li>
+            <% end %>
+          </ul>
+        <% end if @item.inverse_connections.any? || @item.connections.any? %>
       </div>
 
       <div class="span9">
@@ -100,15 +116,15 @@
                   Study
                 <% end %>
               <% else %>
-                <%= link_to [:edit, current_aspect.projectable, current_aspect], class: 'btn btn-create', style: 'margin-left:10px;' do %>
+                <%= link_to [:edit, current_aspect.projectable, current_aspect], class: 'btn btn-create btn-small', style: 'margin-left:10px;' do %>
                   <i class="icon-plus icon-white"></i>
-                  Edit your current project
+                  No lists found. Edit your current project
                 <% end %>
               <% end if aspect? %>
             </div>
           <% end %>
           <%= render "studies/study_tiles", studies: @item.studies.limit(6) if @item.studies.any? %>
-          <%= link_to "View all studies on #{@item.name}", [@item, :studies] %>
+          <%= link_to "View all studies on #{@item.name} and connected items", [@item, :studies] %>
         <% end %>
 
         

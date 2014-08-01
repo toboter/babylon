@@ -12,7 +12,7 @@
            	  	<li><b>study of</b> <%= link_to study.studyable.name, study.studyable %></li>
   				      <li><b>by</b> <%= name_only_or_link_to(study.creator) %></li>
               	<li>
-              	  <b>on list</b> <%= link_to study.list.name, [study.list.project, study.list] %> <b>in</b> <%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project] %>
+              	  <b>List: </b> <%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project] %> : : <%= study.list ? link_to(study.list.name, [study.list.project, study.list]) : content_tag(:span, 'no list', class: 'text-warning') %>
               	</li>
               </ul>
               <%= link_to 'read more!', [study.studyable, study], class: 'popover-right', data: { 'original-title' => 'Study of '+study.studyable.name, 'content' => study.inspect } %>
