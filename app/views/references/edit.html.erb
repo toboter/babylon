@@ -4,7 +4,7 @@
 <% if @reference.book %>
   <div class="row-fluid">
   	<div class="span6">
-      <p>This article is published in <strong><%= link_to "#{entries_for_select(@reference.book)}", @reference.book %></strong></p>
+      <p>This article is published in <strong><%= link_to "#{book_entries_for_select(@reference.book)}", @reference.book %></strong></p>
     </div>
   </div>
 <% end %>

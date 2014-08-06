@@ -90,7 +90,7 @@ module BooksHelper
     end  	
   end
 
-  def entries_for_select(book)
+  def book_entries_for_select(book)
   	book_short_edited_by(book) + book.year + ', ' + book_short_title(book)
   end
 

@@ -20,6 +20,7 @@ Babylon::Application.routes.draw do
   delete 'destroy_studyassignment' => 'studyassignments#destroy', :as => :destroy_studyassignment
   post 'add_studyassignment' => 'studyassignments#create', :as => :add_studyassignment
   resources :items do
+    collection { post :import }
     resources :buckets
     resources :documents
     resources :issues

@@ -1,0 +1,8 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "References") do |sheet|
+  sheet.add_row ['babylon_id', 'Authors', 'Title', 'First page', 'Last page', 'Editors', 'Book title', 'Year', 'Publisher', 'Place']
+  @references.each do |reference|
+    reference.book ? (sheet.add_row [reference.id, reference.authors_of_article, reference.title, reference.first_page, reference.last_page,
+            book_short_edited_by(reference.book), book_short_title(reference.book), reference.book.year, reference.book.publisher, reference.book.place]) : (sheet.add_row [reference.id, reference.authors_of_article, reference.title, reference.first_page, reference.last_page])
+  end
+end

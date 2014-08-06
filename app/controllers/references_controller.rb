@@ -21,19 +21,26 @@ class ReferencesController < ApplicationController
     elsif params[:show] == 'archival'
       @references_all = Reference.joins(:projects).where(projects: {project_type: 'archival', show_references: true})
     elsif params[:show] == 'all'
-      @references_all = Reference.all
+      @references_all = Reference.scoped
     else
       @references_all = Reference.joins(:projects).where(projects: {show_references: true})
     end
 
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
-    @references = @references_all.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 10)
+
+    if @parent
+      @references = @references_all
+    else
+      @q = @references_all.search(params[:q])
+      @references = @q.result(distinct: true).includes(:authors, :book)
+    end
+    
+    @references_paginated = @references.paginate(page: params[:page], per_page: 30)
 
     respond_to do |format|
-      format.html { render layout: 'fluid' }# index.html.erb
-      format.csv { send_data @references_all.to_csv }
-      format.xls # { send_data @references.to_csv(col_sep: "\t") }
-      format.json { render json: @reference }
+      format.html { render layout: 'fluid' }
+      format.xlsx
+      format.json { render json: @references }
     end
   end
 

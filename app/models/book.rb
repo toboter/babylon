@@ -37,4 +37,9 @@ class Book < ActiveRecord::Base
     book_type == 'Issue of a journal' || book_type == "Collection in a serial" || book_type == 'Monograph in a serial'
   end
 
+  ransacker :full_entry do |parent|
+    Arel::Nodes::InfixOperation.new('||',
+      parent.table[:title], parent.table[:year])
+  end
+
 end

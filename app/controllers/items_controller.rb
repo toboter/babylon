@@ -9,13 +9,19 @@ class ItemsController < ApplicationController
     if @project
       @items = @project.items
     else
-      @items = Item.all
+      @items = Item.scoped
     end
+
+    @q = @items.search(params[:q])
+    @items = @q.result(distinct: true).includes(:collection) #.includes(:authors, :book)
+    @q.build_condition if @q.conditions.empty?
+    @q.build_sort if @q.sorts.empty?
+
+    @items_paginated = @items.paginate(page: params[:page], per_page: 30)
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# index.html.erb
-      format.csv { send_data @items.to_csv }
-      format.xls
+      format.xlsx
       format.json { render json: @items }
     end
   end

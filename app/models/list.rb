@@ -8,4 +8,10 @@ class List < ActiveRecord::Base
   has_many :studies
 
   validates :project_id, presence: true
+
+
+  # Ransack attribute, convert & concatenat definitions
+  def self.ransackable_attributes auth_object = nil
+    %w(name description) + _ransackers.keys
+  end
 end

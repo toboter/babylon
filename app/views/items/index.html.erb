@@ -22,16 +22,43 @@
         <% end if (can? :create, @items) && !@project %>
       </div>
     </h1>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span3">
+    <%= content_tag :div, class: "filter well" do %>
+      <h4 style="margin-top:0px;">Filters</h4>
 
+      <%= search_form_for @q do |f| %>
+        <%= f.condition_fields do |c| %>
+          <%= render "condition_fields", f: c %>
+        <% end %>
+        <p style="padding-top:10px;"><%= link_to_add_fields "Add Conditions", f, :condition %></p>
+        <div class="field">
+          Sort:<br>
+          <%= f.sort_fields do |s| %>
+            <%= s.sort_select %>
+          <% end %>
+        </div>
+        <%= f.submit 'Filter', class: 'btn' %><%= link_to 'Reset', items_path(q: nil), class: 'btn', style: 'margin-left:7px;' %>
+
+      <% end %>
+      <p class="text text-info"><%= @items.count %> entries in set</p>
+    <% end %>
+    <%= form_tag import_items_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import", class: 'btn' %>
+    <% end %>
+  </div>
+  <div class="span9">
     <table class="table table-bordered table-hover">
       <tbody>
-        <%= render @items %>
+        <%= render @items_paginated %>
       </tbody>
     </table>
+    <%= will_paginate(@items_paginated, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
     <%= content_tag :p, class: 'pull-right' do %>
-      Download:
-      <%= link_to "CSV", items_path(format: "csv"), class: 'btn btn-mini', id: 'csv-link' %>
-      <%= link_to "Excel", items_path(format: "xls"), class: 'btn btn-mini', id: 'excel-link' %>
+      <%= link_to "Download set", items_path(format: "xlsx", q: params[:q]), class: 'btn', id: '' %>
     <% end if can? :read, @items %>
   </div>
 </div>

@@ -20,4 +20,9 @@ class PersonName < ActiveRecord::Base
     person.profession.present? ? name + " (#{person.profession})" : name
   end
 
+  ransacker :full_name do |parent|
+    Arel::Nodes::InfixOperation.new('||',
+      parent.table[:first_name], parent.table[:last_name])
+  end
+
 end

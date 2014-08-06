@@ -81,7 +81,7 @@ gem 'carrierwave', '0.8.0'
 # gem 'sidekiq'
 
 # https://github.com/ernie/ransack/
-# gem 'ransack'
+gem 'ransack'
 
 # https://github.com/galetahub/ckeditor
 # gem 'ckeditor'
@@ -98,6 +98,12 @@ gem 'roo'
 
 # https://github.com/djreimer/sequenced
 gem 'sequenced'
+
+# Import/Export
+# https://github.com/straydogstudio/axlsx_rails
+gem 'axlsx', '~> 2.0.1'
+gem 'axlsx_rails'
+gem 'roo'
 
 # https://github.com/pokonski/public_activity
 # gem 'public_activity' from scratch see http://railscasts.com/episodes/407-activity-feed-from-scratch

@@ -11,4 +11,8 @@ class Collection < ActiveRecord::Base
   validates_uniqueness_of :name, :shortcut
   
   accepts_nested_attributes_for :fields, allow_destroy: true
+
+  def self.ransackable_attributes auth_object = nil
+    %w(name shortcut) + _ransackers.keys
+  end
 end

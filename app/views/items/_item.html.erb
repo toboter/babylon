@@ -1,13 +1,18 @@
 <tr>
-  <td width="10%">
+  <td width="7%">
   	<%= image_tag item.assets.where('content_type LIKE ?', '%image%').first.assetfile.mini_thumb.url if item.assets.where('content_type LIKE ?', '%image%').first %>
   </td>
-  <td width="20%">
+  <td width="30%">
     <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.inventory_name, item %></span>
-    <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| link_to(c.name, c) }.join(" / ").html_safe if item.classification %>
-  </td>
-  <td width="50%">
+    <ul class="unstyled">
+      <%= content_tag :li, "Excavation: #{item.excavation_id}" if item.excavation_id.present? %>
+      <%= content_tag :li, "Dissov: #{item.dissov_id}" if item.dissov_id.present? %>
+      <%= content_tag :li, "MDS: #{item.mds_id}" if item.mds_id.present? %>
+    </ul>
+  </td> 
+  <td>
     <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, link_to(a.name, a, style: 'color:white;'), class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
+    <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| link_to(c.name, c) }.join(" / ").html_safe if item.classification %>
     <p>
       <%= item.title.present? ? item.title : item.inventory_name %><br />
       <%content_tag :span do %>Accession <%= item.accession_date.strftime("%d.%m.%Y") %><% end if item.accession_date %>
@@ -18,7 +23,7 @@
     </p>
 
   </td>
-  <%= content_tag :td, width: "20%", class: "" do %>
+  <%= content_tag :td, width: "5%", class: "" do %>
     <%= item.context_id %>
   <% end %>
 </tr>

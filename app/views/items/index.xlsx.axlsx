@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Items") do |sheet|
+  sheet.add_row ['babylon_id', 'inventory_name', 'title', 'classification.name', 'dissov_id', 'mds_id', 'properties', 'citations']
+  @items.each do |item|
+    sheet.add_row [item.id, item.inventory_name, item.title, 
+      item.classification.descendants.first ? item.classification.descendants.first.name : item.classification.root.name,
+      item.dissov_id, item.mds_id, item.properties, 
+      item.citations.any? ? item.citations.map{ |c| full_reference(c.reference) }.join('; ') : 'none' ]
+  end
+end

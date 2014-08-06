@@ -39,4 +39,9 @@ class Tag < ActiveRecord::Base
     arr
   end
 
+  # Ransack attribute, convert & concatenat definitions
+  def self.ransackable_attributes auth_object = nil
+    %w(name) + _ransackers.keys
+  end
+
 end

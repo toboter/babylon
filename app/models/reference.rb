@@ -45,7 +45,7 @@ class Reference < ActiveRecord::Base
   end
 
   def authors_of_article
-    authors.present? ? authors.map{ |a| a.name }.join(", ") : 'N.N.'
+    authors.any? ? authors.map{ |a| a.name }.join(", ") : 'N.N.'
   end
 
   def self.to_csv(options = {})
@@ -64,5 +64,10 @@ class Reference < ActiveRecord::Base
   def save_original_date_text
     self.original_date = Time.zone.parse(@original_date_text) if @original_date_text.present?
   end
+
+  # Ransack attribute, convert & concatenat definitions
+  # def self.ransackable_attributes auth_object = nil
+  #   %w(title) + _ransackers.keys
+  # end
 
 end

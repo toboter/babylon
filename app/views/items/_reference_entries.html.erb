@@ -5,13 +5,13 @@
       <%= content_tag :div, class: 'span3 authors' do -%>
         <ul class="unstyled">
           <%= content_tag :li, citation.predicate.name if citation.predicate %>
-          <%= content_tag :li, authors_of_article(citation.reference) %>
+          <%= content_tag :li, link_to_authors_of_article(citation.reference) %>
           <%= content_tag :li, citation.reference.book ? citation.reference.book.year : citation.reference.original_date %>
         </ul>
       <% end -%>
       <%= content_tag :div, class: 'span9' do -%>
         <p>
-          <%= authors_of_article(citation.reference)+', ' %>
+          <%= link_to_authors_of_article(citation.reference)+', ' %>
           <%= link_to "#{citation.reference.title}", citation.reference %>
           <% if citation.reference.book.present? %>
             <%= raw(', in: '+editors(citation.reference)) unless citation.reference.book.book_type == 'Monograph' || citation.reference.book.book_type == 'Monograph in a serial' %>

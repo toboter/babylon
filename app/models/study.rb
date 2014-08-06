@@ -38,4 +38,9 @@ class Study < ActiveRecord::Base
   	'Study of '+studyable.name
   end
 
+  # Ransack attribute, convert & concatenat definitions
+  def self.ransackable_attributes auth_object = nil
+    %w(properties) + _ransackers.keys
+  end
+
 end
