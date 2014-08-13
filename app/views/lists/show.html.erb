@@ -53,6 +53,11 @@
 </p>
 
 <p>
+  <b>Coords:</b>
+  <%= @list.latitude %>; <%= @list.longitude %>
+</p>
+
+<p>
   <b>Project:</b>
   <%= full_qualified_name(@list.project) %><br />
   <%= name_only_or_link_to(@list.creator) %>

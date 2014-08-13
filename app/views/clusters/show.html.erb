@@ -1,5 +1,5 @@
 <% title @cluster.name, nil, false %>
-<% edit_section_for(@cluster, nil) if @cluster.cluster_admin == current_user || @cluster.creator == current_user || current_user.superuser? %>
+<% edit_section_for(@cluster, nil) %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>

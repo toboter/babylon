@@ -71,7 +71,7 @@
             <% end %>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-            <%= content_tag :li, link_to('Current project dashboard', project_dashboard_path(current_aspect)) if aspect? %>
+            <%= content_tag :li, link_to('Current project', [current_aspect.projectable, current_aspect]) if aspect? %>
             <%= content_tag :li, '', class: 'divider' if aspect? %>   
             <% current_user.projects.order("projectable_type ASC").each do |project| %>
               <li>       
@@ -106,7 +106,7 @@
 
       <%= content_tag :ul, class: 'nav pull-right visible-desktop' do %>
         <% if can? :manage, 'development' %>
-          <li><a href="#" data-toggle="collapse" data-target="#params-well">Params</a></li>
+          <li><a href="#" data-toggle="collapse" data-target="#params-section">Params</a></li>
           <li class="divider-vertical"></li>
         <% end %>
       <% end if user_signed_in? %>

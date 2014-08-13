@@ -6,11 +6,10 @@
   </header>
 
   <div class="container-fluid">
+    <%= render "shared/breadcrumbs" %>
+	  <%= render "shared/debug" %>
 
-	<%= render "shared/debug" %>    
-	<%= render "shared/breadcrumbs" %>
-	<%= render "shared/flash" %>
-
+	  <%= render "shared/flash", flash: flash %>
 
     <div class="row">
       <div class="span12">

@@ -2,7 +2,7 @@ class ProjectsSessionController < ApplicationController
   def create
     if user_signed_in?
       project = Project.find(params[:project_id])
-      if project && project.members.exists?(current_user)
+      if project && project.members.include?(current_user)
         session[:project_id] = project.id
         redirect_to :back, :notice => "Changed aspect to #{current_aspect.name}."
       else

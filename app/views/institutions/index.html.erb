@@ -14,7 +14,7 @@
         <%= link_to new_institution_path, class: 'btn btn-create btn-small', style: 'margin-left:10px;' do %>
           <i class="icon-plus icon-white"></i>
           Institution
-        <% end if can? :create, @institutions %>
+        <% end if can?(:create, Institution) %>
       </div>
     </h1>
     <% @institutions.each do |institution| %>

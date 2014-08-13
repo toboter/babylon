@@ -7,9 +7,17 @@ class ListsController < ApplicationController
   # GET /lists.json
   def index
     if @project
-      @lists = @project.lists
+      @lists = @project.lists.order('name ASC')
+      @geo_lists = @project.lists.where("lists.latitude IS NOT NULL").order('name ASC')
     else
-      @lists = Studylist.all
+      @lists = Studylist.order('name ASC')
+    end
+    @hash = Gmaps4rails.build_markers(@geo_lists) do |list, marker|
+      marker.lat list.latitude
+      marker.lng list.longitude
+      marker.infowindow "#{list.name}: #{list.description}. 
+      <a href='#{url_for([list.project, list])}'>...more</a>"
+      marker.json({ title: list.name })
     end
 
     respond_to do |format|

@@ -1,5 +1,6 @@
 class List < ActiveRecord::Base
-  attr_accessible :description, :featured, :forkable, :forked_from_id, :name, :project_id, :accept_duplicates
+  attr_accessible :description, :featured, :forkable, :forked_from_id, :name, :project_id, 
+                  :accept_duplicates, :gmaps, :longitude, :latitude
 
   stampable
 

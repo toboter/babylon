@@ -1,5 +1,5 @@
 <% title "Research Group", @group.name, nil %>
-<% edit_section_for(@group, @group.cluster) if @group.group_admin == current_user || @group.creator == current_user || current_user.superuser? %>
+<% edit_section_for(@group, @group.cluster) %>
 
 <% content_for :add_section do %>
   <li><%= link_to 'Project', new_group_project_path(@group) %></li>

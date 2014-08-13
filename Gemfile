@@ -105,6 +105,10 @@ gem 'axlsx', '~> 2.0.1'
 gem 'axlsx_rails'
 gem 'roo'
 
+
+# Maps: https://github.com/apneadiving/Google-Maps-for-Rails
+gem 'gmaps4rails'
+
 # https://github.com/pokonski/public_activity
 # gem 'public_activity' from scratch see http://railscasts.com/episodes/407-activity-feed-from-scratch
 

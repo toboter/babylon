@@ -93,6 +93,18 @@
             <% end %>
           </ul>
         <% end if @item.inverse_connections.any? || @item.connections.any? %>
+
+        <%= content_tag :div, class: "activity-section", id: 'activity' do %>
+          <%= content_tag :h3, 'Activity', class: '' %>
+          <% @item.activities.order('created_at DESC').limit(6).each do |activity| %>
+            <%= ActivityPresenter.new(activity, self).render_activity('popover-right') %>
+          <% end %>
+          <p>
+            <%= link_to "View all activities for #{@item.name}", item_activities_path(@item) %>
+          </p>
+
+        <% end if @item.activities.any? %>
+
       </div>
 
       <div class="span9">

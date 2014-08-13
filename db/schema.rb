@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140801120100) do
+ActiveRecord::Schema.define(:version => 20140808165212) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -376,6 +376,9 @@ ActiveRecord::Schema.define(:version => 20140801120100) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.boolean  "accept_duplicates"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.boolean  "gmaps"
   end
 
   add_index "lists", ["project_id"], :name => "index_lists_on_project_id"

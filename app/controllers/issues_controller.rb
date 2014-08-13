@@ -8,7 +8,12 @@ class IssuesController < ApplicationController
   # GET /issues.json
   def index
     if @issuable
-      @pre_issues = @issuable.issues.order('sequential_id DESC')
+      if @issuable.class.to_s == 'Project'
+        @pre_issues = @issuable.issues
+        @pre_issues.concat(@issuable.lists.map{|l| l.studies.map{|s| s.issues }}.flatten)
+      else
+        @pre_issues = @issuable.issues.order('sequential_id DESC')
+      end
     else
       @pre_issues = Issue
     end

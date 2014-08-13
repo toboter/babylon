@@ -63,12 +63,13 @@
       <%= link_to new_institution_path(:parent_id => @institution.id), class: 'btn btn-create btn-small', style: 'margin-left:0;' do %>
         <i class="icon-plus icon-white"></i>
         Sub-Institution
-      <% end if can? :create, @institutions %>
+      <% end if can? :create, Institution %>
       <%= link_to new_institution_collection_path(@institution), class: 'btn btn-create btn-small', style: 'margin-left:0;' do %>
         <i class="icon-plus icon-white"></i>
         Collection
-      <% end if can? :create, @institution.collections %>
+      <% end if can? :create, Collection %>
     </div>
   </div>
+</div>
   
 <% end %>

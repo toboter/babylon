@@ -12,6 +12,7 @@
   	<%= stylesheet_link_tag    "application" %>
   	<%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <%= yield(:head) if content_for?(:head) %>
 
   </head>
 
@@ -20,6 +21,7 @@
         <%= content_for?(:content) ? yield(:content) : yield %>
         <%= yield(:navbar_modal_inject) if content_for?(:navbar_modal_inject) %>
         <%= yield(:modal_inject) if content_for?(:modal_inject) %>
+        <%= yield(:scripts) if content_for?(:scripts) %>
       <% else %>
         <div class="container">
           <div class="row">

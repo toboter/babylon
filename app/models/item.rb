@@ -33,6 +33,7 @@ class Item < ActiveRecord::Base
   has_many :projects, through: :lists
   has_many :connections, class_name: 'ItemConnection'
   has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id"
+  has_many :activities, as: :trackable
 
   validates :inventory_number, presence: { message: "/ if there is a collection, there should also be a inventory number" }, if: :collection_id?
   validates :collection_id, presence: { message: "/ if there is a inventory number, there should also be a collection" }, if: :inventory_number?
@@ -103,12 +104,14 @@ class Item < ActiveRecord::Base
 
   # Import xls, xlsx
   def self.import(file)
+    allowed_attributes = ["collection_id", "inventory_number", "inventory_number_index", "accession_date_text", "title", "classification_id", "description", "excavation_id", 
+      "dissov_id", "mds_id"]
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice(*accessible_attributes)
+      item.attributes = row.to_hash.select { |k,v| allowed_attributes.include? k }
       item.save!
     end
   end

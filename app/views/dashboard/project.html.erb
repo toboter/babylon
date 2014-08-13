@@ -10,33 +10,7 @@
 
 <% content_for :main_section do %>
     <div class="row-fluid">
-      <%= content_tag :div, class: 'span4' do %>
-        <div class="well">
-          <h6 class="muted">Upcoming tasks <span class="badge badge-warning pull-right"><%= current_aspect.todos.where(completed: false).count %></span></h6>
-          <ul class="unstyled">
-          <% for todo in current_aspect.todos.where(completed: false).order('due_to DESC').limit(3) do %>
-            <li style="padding-top:1em;">
-              <%= link_to todo.name, [todo.project, todo] %><br />
-              <small>
-                <%= link_to distance_of_time_in_words_to_now(todo.due_to)+due_to_state(todo.due_to), '', class: 'no-link tooltip-right', title: todo.due_to.strftime("%d.%m.%Y") %> 
-                <%= content_tag :span do %>
-                  <i class="icon-tasks"></i> <%= pluralize(todo.todo_dependencies.count, 'pending dependency') %>
-                <% end if todo.todo_dependencies.any? %>
-              </small>
-            </li>
-          <% end %>
-          </ul>
-          	<%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-create btn-small", style: 'margin-top:4px;' if aspect? %>
-            <%= link_to [current_aspect, :todos], class: 'pull-right' do %>
-                All todos for this project
-            <% end %>
-        </div>
-      <% end %>
-      <%= content_tag :div, class: 'span4' do %>
-        <div class="well">
 
-        </div>
-      <% end %>
 
       <%= content_tag :div, class: 'span4' do %>
         <div class="dashboard-options">

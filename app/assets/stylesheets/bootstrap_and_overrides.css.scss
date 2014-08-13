@@ -269,5 +269,7 @@ textarea.noResize { resize:none }
 		}
 	}
 
+#map label { width: auto; display:inline; }
+#map img { max-width: none; }
 
 @import "bootstrap-responsive";

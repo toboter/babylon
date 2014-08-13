@@ -21,6 +21,7 @@ Babylon::Application.routes.draw do
   post 'add_studyassignment' => 'studyassignments#create', :as => :add_studyassignment
   resources :items do
     collection { post :import }
+    resources :activities
     resources :buckets
     resources :documents
     resources :issues
@@ -58,7 +59,6 @@ Babylon::Application.routes.draw do
   end
 
   resources :projects, only: [:index, :show] do
-    get 'dashboard', to: 'dashboard#project'
     resources :documents
     resources :todos
     resources :references

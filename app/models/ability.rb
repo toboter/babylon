@@ -27,6 +27,9 @@ class Ability
 
     if user.role? :author #kann Informationen hinzufügen, Datensätze anlegen, nichts löschen
       can :manage, :all
+      cannot [:create, :edit, :update, :destroy], [Cluster, Group, Institution, Collection, Item]
+      can [:edit, :update], Group, group_admin: user
+      can [:edit, :update], Cluster, cluster_admin: user
       cannot :destroy, :all
       cannot [:edit, :update], Person # User sollen sich als Personenprofil selbst und unverbundene Profile editieren können
       can [:edit, :update], Person, :user_id => nil
@@ -37,9 +40,14 @@ class Ability
 
     if user.role? :editor #kann hinzugefügte Informationen auf published setzen, Standardseiten editieren
       can :manage, :all
+      cannot [:create, :edit, :update, :destroy], Cluster
+      can :create, Group
+      can [:edit, :update], Group, group_admin: user
+      can [:edit, :update], Cluster, cluster_admin: user
+      can [:edit, :update], [Group, Cluster], creator: user
       cannot [:edit, :update, :destroy], Person # User sollen sich als Personenprofil selbst und unverbundene Profile editieren und löschen können
       can [:edit, :update, :destroy], Person, :user_id => nil
-      can [:edit, :update, :destroy], Person, :user_id => user.id
+      can [:edit, :update, :destroy], Person, user_id: user.id
       cannot :manage, ['project-assignments', 'roles', 'recreate-versions', 'development', 'personal-informations', 'Memberships']
     end
 

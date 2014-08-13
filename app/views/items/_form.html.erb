@@ -120,7 +120,7 @@
       <% @item.collection.fields.order('name ASC').each do |field| %>
         <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
       <% end %>
-    <% end if params[:collection_id].present? %>
+    <% end if params[:collection_id].present? || @item.collection %>
   </div>
 
 

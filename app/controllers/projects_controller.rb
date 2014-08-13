@@ -43,6 +43,14 @@ class ProjectsController < ApplicationController
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
+    @hash = Gmaps4rails.build_markers(@project.lists.where("lists.latitude IS NOT NULL")) do |list, marker|
+      marker.lat list.latitude
+      marker.lng list.longitude
+      marker.infowindow "#{list.name}: #{list.description}. 
+      <a href='#{url_for([list.project, list])}'>...more</a>"
+      marker.json({ title: list.name })
+    end
+
     respond_to do |format|
       format.html { render layout: 'fluid' }# show.html.erb
       format.json { render json: @project }

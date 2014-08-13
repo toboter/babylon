@@ -6,16 +6,16 @@ class ActivityPresenter < SimpleDelegator
     @activity = activity
   end
   
-  def render_activity
+  def render_activity(orientation='popover-left')
     div_for activity do
       content_tag :div, class: 'body' do
-        render_partial
+        render_partial(orientation)
       end
     end
   end
   
-  def render_partial
-    locals = {activity: activity, presenter: self}
+  def render_partial(orientation)
+    locals = {activity: activity, presenter: self, orientation: orientation}
     locals[activity.trackable_type.underscore.to_sym] = activity.trackable
     render partial_path, locals
   end

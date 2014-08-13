@@ -19,6 +19,8 @@
 //= require chosen-jquery
 //= require cocoon
 //= require jquery.fluidbox.min.js
+//= require underscore
+//= require gmaps/google
 //= require_tree .
 
 $(document).ready(function(){

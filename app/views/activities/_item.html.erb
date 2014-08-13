@@ -4,7 +4,7 @@
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
   <%= activity.action.sub(/e?$/, "ed") %> object 
-  <%= link_to item.name, item, class: 'popover-left', data: { 'original-title' => item.name, 'content' => item.inspect } if item %>
+  <%= link_to item.name, item, class: "#{orientation}", data: { 'original-title' => item.name, 'content' => item.inspect } if item %>
 </div>
 <div class="details">
 

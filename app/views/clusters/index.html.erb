@@ -11,11 +11,11 @@
     <h1>
       Modules
       <div class="pull-right" style="">
-        <%= link_to "Create Module", new_cluster_path, class: "btn btn-create btn-small" if can? :create, @clusters %>
+        <%= link_to "Create Module", new_cluster_path, class: "btn btn-create btn-small" if can? :create, Cluster %>
       </div>
     </h1>
   	<% @clusters.each do |cluster| %>
-      <div class="well">
+      <div style="margin-bottom:30px;">
         <div class="row-fluid cluster-entry">
           <%= link_to cluster, class: 'hidden-phone' do %>
             <%= content_tag :div, class: 'span2' do %>
@@ -24,9 +24,31 @@
             <%= content_tag :div, class: 'span7' do %>
               <h1 style="font-size: 2em; margin-bottom:0px;"><%= link_to cluster.name, cluster %></h1>
               <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
+
+                <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
+                  <%= content_tag :h3, link_to("Groups", cluster_groups_path(cluster)), class: "muted" %>
+                  <% cluster.groups.limit(3).each do |group| %>
+                    <div class="group-entry well">
+                      <h3><%= link_to "#{group.name}", group %></h3>
+                      <% if group.description.present? %>
+                        <%= markdown(group.description) %>
+                      <% else %>
+                        <p>No abstract available</p>
+                      <% end %>
+                      <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
+                      <%= render group.projects.limit(3) %>
+                    </div>
+                  <% end %>
+                <% end if cluster.groups.any? %>
+                <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
+                  <%= content_tag :h3, link_to("Projects", [cluster, 'projects']), class: "muted" %>
+                  <%= render cluster.projects.limit(5).order('created_at DESC') %>
+
+                <% end if cluster.projects.any? %>
+
             <% end %>
           <% end %>
-          <%= content_tag :div, class: 'span3' do %>
+          <%= content_tag :div, class: 'span3 well' do %>
             <ul class="unstyled">
               <li>Speaker: <%= name_only_or_link_to(cluster.speaker) %></li>
               <li>Admin: <%= name_only_or_link_to(cluster.cluster_admin) %></li>
@@ -38,6 +60,7 @@
             <p><%= markdown(cluster.contact) if cluster.contact %></p>
           <% end %>
         </div>
+        <hr>
       </div>  
 	  <% end %>
   </div>
