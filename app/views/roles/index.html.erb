@@ -17,7 +17,7 @@
                   <div class="row-fluid">
                     <div class="span3">
                       <%= f.label :role, "#{role.user.available_name}", class: "right inline" %>
-                      <p><strong>Username: </strong><%= role.user.username %>, <strong>Email: </strong><%= role.user.email %></p>
+                      <p><strong>Username: </strong><%= role.user.username %>, <strong>Email: </strong><%= role.user.email %>, <strong>Confirmed at: </strong><%= role.user.confirmed_at %></p>
                     </div>
                     <div class="span9">
                       <% if current_user.role.role == 'superuser' %>

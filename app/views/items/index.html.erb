@@ -48,8 +48,8 @@
     <%= form_tag import_items_path, multipart: true do %>
       <%= file_field_tag :file %>
       <%= submit_tag "Import", class: 'btn' %>
-      <p><small>The *.xlsx should contain the following columns: id, collection_id, inventory_number, inventory_number_index, accession_date, title, classification_id, description, excavation_id, 
-      dissov_id, mds_id</small></p>
+      <p><small>The *.csv first row should name the following columns: collection_id, inventory_number, inventory_number_index, accession_date_text, title, classification_id, description, excavation_id, 
+      dissov_id, mds_id.</small></p>
     <% end if can? :manage, @items %>
   </div>
   <div class="span9">

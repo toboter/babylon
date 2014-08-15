@@ -88,7 +88,7 @@
             <% for inverse_connection in @item.inverse_connections do %>
               <li>
                 <strong><%= inverse_connection.predicate.inverse_name.humanize %>: </strong>
-                <%= link_to inverse_connection.item.name, inverse_connection.item, class: 'popover-right', data: { 'original-title' => inverse_connection.item.name, 'content' => inverse_connection.item.inspect } %>
+                <%= link_to inverse_connection.item.name, inverse_connection.item, class: 'popover-right', data: { 'original-title' => inverse_connection.item.name, 'content' => inverse_connection.item.inspect } if inverse_connection.item %>
               </li>
             <% end %>
           </ul>

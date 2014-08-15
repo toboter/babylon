@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140808165212) do
+ActiveRecord::Schema.define(:version => 20140815092846) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -343,7 +343,7 @@ ActiveRecord::Schema.define(:version => 20140808165212) do
 
   create_table "items", :force => true do |t|
     t.integer  "collection_id"
-    t.string   "inventory_number"
+    t.integer  "inventory_number"
     t.string   "inventory_number_index"
     t.datetime "accession_date"
     t.integer  "context_id"
@@ -356,9 +356,10 @@ ActiveRecord::Schema.define(:version => 20140808165212) do
     t.text     "description"
     t.string   "slug"
     t.text     "properties"
-    t.string   "excavation_id"
-    t.string   "dissov_id"
-    t.string   "mds_id"
+    t.integer  "excavation_id"
+    t.integer  "dissov_id"
+    t.integer  "mds_id"
+    t.string   "excavation_prefix"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
@@ -638,8 +639,12 @@ ActiveRecord::Schema.define(:version => 20140808165212) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 

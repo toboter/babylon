@@ -1,3 +1,5 @@
+require 'smarter_csv'
+
 class Item < ActiveRecord::Base
   # extend FriendlyId
   # friendly_id :inventory_name, use: [:slugged, :history]
@@ -21,19 +23,19 @@ class Item < ActiveRecord::Base
   belongs_to :classification, class_name: 'ItemClassification', foreign_key: 'classification_id'
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
-  has_many :buckets, as: :attachable
+  has_many :buckets, as: :attachable, dependent: :destroy
   has_many :assets, through: :buckets
-  has_many :citations, as: :citable
+  has_many :citations, as: :citable, dependent: :destroy
   has_many :references, through: :citations
-  has_many :actions, as: :actable
+  has_many :actions, as: :actable, dependent: :destroy
   has_many :documents, as: :documentable, dependent: :destroy
   has_many :issues, as: :issuable, dependent: :destroy
-  has_many :studies, as: :studyable
+  has_many :studies, as: :studyable, dependent: :destroy
   has_many :lists, through: :studies
   has_many :projects, through: :lists
-  has_many :connections, class_name: 'ItemConnection'
-  has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id"
-  has_many :activities, as: :trackable
+  has_many :connections, class_name: 'ItemConnection', dependent: :destroy
+  has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id", dependent: :destroy
+  has_many :activities, as: :trackable, dependent: :destroy
 
   validates :inventory_number, presence: { message: "/ if there is a collection, there should also be a inventory number" }, if: :collection_id?
   validates :collection_id, presence: { message: "/ if there is a inventory number, there should also be a collection" }, if: :inventory_number?
@@ -55,9 +57,9 @@ class Item < ActiveRecord::Base
 
   def inventory_name
     if collection
-      collection.shortcut+' '+inventory_number+inventory_number_index
+      collection.shortcut+' '+inventory_number.to_s+inventory_number_index
     elsif excavation_id.present?
-      excavation_id
+      excavation_id.to_s
     else
       id
     end
@@ -102,27 +104,32 @@ class Item < ActiveRecord::Base
   end
 
 
-  # Import xls, xlsx
+  # Import csv
   def self.import(file)
-    allowed_attributes = ["collection_id", "inventory_number", "inventory_number_index", "accession_date_text", "title", "classification_id", "description", "excavation_id", 
-      "dissov_id", "mds_id"]
-    spreadsheet = open_spreadsheet(file)
-    header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.select { |k,v| allowed_attributes.include? k }
-      item.save!
+    # allowed_attributes = ["collection_id", "inventory_number", "inventory_number_index", "accession_date_text", "title", "classification_id", "description", "excavation_id", 
+    #  "dissov_id", "mds_id"]
+    # spreadsheet = open_spreadsheet(file)
+    # header = spreadsheet.row(1)
+    # (2..spreadsheet.last_row).each do |i|
+    #   row = Hash[[header, spreadsheet.row(i)].transpose]
+    #   item = find_by_id(row["id"]) || new
+    #   item.attributes = row.to_hash.select { |k,v| allowed_attributes.include? k }
+    #   item.save!
+    # end
+    records = SmarterCSV.process(file.path, {:col_sep => ";"}) do |array|
+      # we're passing a block in, to process each resulting hash / =row (the block takes array of hashes)
+      # when chunking is not enabled, there is only one hash in each array
+      Item.create( array.first )
     end
   end
   
-  def self.open_spreadsheet(file)
-    case File.extname(file.original_filename)
-    when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
-    when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
-    else raise "Unknown file type: #{file.original_filename}"
-    end
-  end
+  # def self.open_spreadsheet(file)
+  #   case File.extname(file.original_filename)
+  #   when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+  #   when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
+  #   else raise "Unknown file type: #{file.original_filename}"
+  #   end
+  # end
 
 
 end

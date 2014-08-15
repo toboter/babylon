@@ -169,6 +169,7 @@ GEM
     simple_form (2.1.0)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    smarter_csv (1.0.17)
     spreadsheet (0.9.6)
       ruby-ole (>= 1.0)
     sprockets (2.2.2)
@@ -224,6 +225,7 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   sequenced
   simple_form
+  smarter_csv
   uglifier (>= 1.0.3)
   userstamp!
   will_paginate (~> 3.0)

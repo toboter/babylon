@@ -1,12 +1,21 @@
-<h2>Resend confirmation instructions</h2>
+<% title "Resend confirmation instructions", nil %>
+<div class="row">
+  <div class="span6">
+    <h4 class="muted">Resend confirmation instructions</h4>
 
-<%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= devise_error_messages! %>
+	<%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post, class: 'form-horizontal' }) do |f| %>
+  	  <%= devise_error_messages! %>
 
-  <div><%= f.label :login %><br />
-  <%= f.text_field :login, :autofocus => true %></div>
+      <div class="control-group" style="margin:30px 0;">
+        <%= f.label :login, "Username or Email", class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :login, :autofocus => true %>
+        </div>
+      </div>
 
-  <div><%= f.submit "Resend confirmation instructions" %></div>
-<% end %>
+  	  <div><%= f.submit "Resend confirmation instructions", class: 'btn btn-block btn-large btn-primary' %></div>
+	<% end %>
+  </div>
+</div>
 
 <%= render "devise/shared/links" %>

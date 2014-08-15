@@ -60,6 +60,7 @@
           <%= content_tag :li, link_to("Items", items_path) if can? :read, 'Items' %>
           <%= content_tag :li, link_to("Uploaded files", assets_path) if can? :read, 'Assets' %>
           <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
+          <%= content_tag :li, link_to("Your Dashboard", dashboard_path), class: 'pull-right' if user_signed_in? %>
         </ul>
       </div>
     </div>

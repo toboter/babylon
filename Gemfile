@@ -103,7 +103,7 @@ gem 'sequenced'
 # https://github.com/straydogstudio/axlsx_rails
 gem 'axlsx', '~> 2.0.1'
 gem 'axlsx_rails'
-gem 'roo'
+gem 'smarter_csv'
 
 
 # Maps: https://github.com/apneadiving/Google-Maps-for-Rails

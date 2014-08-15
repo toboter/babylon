@@ -32,6 +32,7 @@
                   Bibliotheken und Archive Babylons: texts in an e-based content
                 </small>
               </h2>
+              <%= render "shared/flash", flash: flash %>
               <%= content_tag :ul, class: 'nav nav-pills' do %>
                 <li><%= link_to 'Home', root_path %></li>
                 <%= content_tag :li, class: "#{controller_name == 'sessions' ? 'active' : ''}" do %>
@@ -45,7 +46,7 @@
           </div>
           <div class="row" style="margin-top:20px;">
             <div class="span12">
-              <% if controller_name == 'sessions' || controller_name == 'registrations' || controller_name == 'passwords' %>
+              <% if controller_name == 'sessions' || controller_name == 'registrations' || controller_name == 'passwords' || controller_name == 'confirmations' %>
                 <%= yield %>
               <% end %>
             </div>

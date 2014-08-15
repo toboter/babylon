@@ -105,7 +105,8 @@ class ItemsController < ApplicationController
 
   def import
     Item.import(params[:file])
-    redirect_to items_url, notice: "Items imported."
+      redirect_to items_url, alert: 'Items imported -  or not. There is no validation. Please check if items are imported. 
+        If not, there may be duplicates in inventory_number, excavation_id, mds_id or dissov_id'
   end
 
 private
