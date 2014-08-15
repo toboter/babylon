@@ -12,11 +12,10 @@
     </div>
   </div>
   <div class="row-fluid">
-    <%= content_tag :div, class: 'span2 hidden-phone' do %>
-      <%= image_tag(project.project_bucket.cover ? project.project_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", class: 'img-polaroid hidden-tablet') if project.project_bucket %>
+    <div class="span10">
+    <%= content_tag :div, class: 'hidden-phone hidden-tablet pull-left' do %>
+      <%= image_tag(project.project_bucket.cover ? project.project_bucket.cover.assetfile.thumb.url : "icons/no_picture.svg", class: 'img-polaroid', style: 'width:128px; margin-right:10px;') if project.project_bucket %>
     <% end %>
-
-    <div class="span8">
       <% if project.description.present? %>
         <%= markdown(project.description) %>
       <% else %>

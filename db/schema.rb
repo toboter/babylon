@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140815092846) do
+ActiveRecord::Schema.define(:version => 20140815122530) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -355,14 +355,15 @@ ActiveRecord::Schema.define(:version => 20140815092846) do
     t.integer  "classification_id"
     t.text     "description"
     t.string   "slug"
-    t.text     "properties"
     t.integer  "excavation_id"
     t.integer  "dissov_id"
     t.integer  "mds_id"
     t.string   "excavation_prefix"
+    t.hstore   "properties"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
+  add_index "items", ["properties"], :name => "index_items_on_properties"
   add_index "items", ["slug"], :name => "index_items_on_slug", :unique => true
 
   create_table "lists", :force => true do |t|
@@ -557,16 +558,17 @@ ActiveRecord::Schema.define(:version => 20140815092846) do
 
   create_table "studies", :force => true do |t|
     t.integer  "list_id"
-    t.text     "properties"
     t.string   "studyable_type"
     t.integer  "studyable_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.hstore   "properties"
   end
 
   add_index "studies", ["list_id"], :name => "index_studies_on_list_id"
+  add_index "studies", ["properties"], :name => "index_studies_on_properties"
 
   create_table "tag_hierarchies", :id => false, :force => true do |t|
     t.integer "ancestor_id",   :null => false

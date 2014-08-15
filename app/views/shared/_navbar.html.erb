@@ -59,6 +59,44 @@
             <%= content_tag :li do %>
               <a href="#connect_profile_modal" data-toggle="modal">Connect profile</a>
             <% end if !current_user.person && can?(:edit, 'Profile') %>
+
+
+          <% if can? :manage, 'settings' %>
+            <li class="divider"></li>
+            <%= content_tag :li do %>
+              <%= link_to roles_path do %>
+                Users and Roles
+              <% end %>
+            <% end if can? :manage, 'roles' %>
+            <%= content_tag :li do %>
+              <%= link_to snippets_path do %>
+                Announcements
+              <% end %>
+            <% end if can? :manage, 'publishing' %>
+            <%= content_tag :li do %>
+              <%= link_to item_classifications_path do %>
+                Item classifications
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to tags_path do %>
+                Terms of interest (tags)
+              <% end %>
+            <% end %>
+            <%= content_tag :li do %>
+              <%= link_to predicates_path do %>
+                Predicates
+              <% end %>
+            <% end %>
+          <% end %>
+
+
+        <% if can? :manage, 'development' %>
+        <li class="divider"></li>
+          <li><a href="#" data-toggle="collapse" data-target="#params-section">Show params</a></li>
+        <% end %>
+
+
           </ul>
         <% end if can? :read, 'Navbar' %>
 
@@ -71,8 +109,13 @@
             <% end %>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-            <%= content_tag :li, link_to('Current project', [current_aspect.projectable, current_aspect]) if aspect? %>
-            <%= content_tag :li, '', class: 'divider' if aspect? %>   
+            <%= content_tag :li, link_to('View current project', [current_aspect.projectable, current_aspect]) if aspect? %>
+            <%= content_tag :li do %>
+              <%= link_to exit_aspect_path do %>
+                Close <strong><%= current_aspect.name %></strong>
+              <% end %>
+            <% end if aspect? %>
+            <%= content_tag :li, '', class: 'divider' if aspect? %> 
             <% current_user.projects.order("projectable_type ASC").each do |project| %>
               <li>       
                 <%= link_to change_aspect_path(:project_id => project.id) do %>
@@ -86,12 +129,7 @@
                 <% end %>
               </li>
             <% end %>
-            <%= content_tag :li, '', class: 'divider' if aspect? %>
-            <%= content_tag :li do %>
-              <%= link_to exit_aspect_path do %>
-                Exit <strong><%= current_aspect.name %></strong>
-              <% end %>
-            <% end if aspect? %>
+          
           </ul>
         <% end if can?(:read, 'Aspects') && current_user.projects.any? %>
 
@@ -103,13 +141,6 @@
           <%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
         </li>
       <% end if can? :read, 'Navbar' %>
-
-      <%= content_tag :ul, class: 'nav pull-right visible-desktop' do %>
-        <% if can? :manage, 'development' %>
-          <li><a href="#" data-toggle="collapse" data-target="#params-section">Params</a></li>
-          <li class="divider-vertical"></li>
-        <% end %>
-      <% end if user_signed_in? %>
     </div>
   <% end %>
 </div>

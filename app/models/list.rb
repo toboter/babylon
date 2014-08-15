@@ -3,6 +3,7 @@ class List < ActiveRecord::Base
                   :accept_duplicates, :gmaps, :longitude, :latitude
 
   stampable
+  default_scope order('name ASC')
 
   belongs_to :project
   belongs_to :forked_from, class_name: 'Project'

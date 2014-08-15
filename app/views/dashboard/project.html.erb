@@ -47,13 +47,7 @@
     
     <%= content_tag :div, class: 'row-fluid' do %>
 
-      <%= content_tag :div, class: "span7" do %>
-        <%= content_tag :div, class: "" do %>
-          <%= content_tag :h3, 'Lists' %>
-      		<%= render @current_aspect.lists %>
-          <%= link_to 'All lists for this project', [current_aspect, :lists] %>
-        <% end if @current_aspect.lists.any? %>
-      <% end %>
+
 
       <div class="span5">
 

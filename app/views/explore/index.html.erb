@@ -72,12 +72,12 @@
         <%= render @featured %>
       <% end if @featured.any? %>
 
-      <%= content_tag :div do %>
+      <%= content_tag :div, style: 'padding-top:30px;' do %>
         <%= content_tag :h2, 'Modules' %>
         <% for cluster in @clusters do %>
           <div class="media" style="padding-bottom:1em;">
             <%= link_to cluster, class: "pull-left hidden-phone hidden-tablet" do %>
-              <%= cluster.cluster_bucket.cover ? image_tag(cluster.cluster_bucket.cover.assetfile.thumb.url, class: 'media-object img-polaroid', style:'width:128px;') : image_tag("icons/no_picture.svg", class: 'media-object img-polaroid', style:'width:128px;') %>
+              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.thumb.url : "icons/no_picture.svg", class: 'media-object img-polaroid', style:'width:128px; margin-top:10px;') %>
             <% end %>
             <div class="media-body">
               <h3 class="media-heading" style="margin-bottom:0px;"><%= link_to cluster.name, cluster %></h3>
@@ -86,9 +86,9 @@
           </div>
         <% end %>
         <%= link_to 'View all modules', clusters_path %>
-      <% end if @clusters %>
+      <% end if @clusters.any? %>
 
-      <%= content_tag :div, id: 'news-section' do %>
+      <%= content_tag :div, id: 'news-section', style: 'padding-top:30px;' do %>
         <%= content_tag :h2 do  %>
           Announcements    
         <% end if @news %>

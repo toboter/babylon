@@ -13,7 +13,8 @@ class Item < ActiveRecord::Base
   
   attr_writer :accession_date_text
 
-  serialize :properties, Hash
+  serialize :properties, ActiveRecord::Coders::Hstore
+
   after_create :build_album_bucket
   default_scope order('inventory_number ASC, inventory_number_index ASC')
 
@@ -96,6 +97,19 @@ class Item < ActiveRecord::Base
       end
     end
   end
+
+#  collection.fields.map{:name}.each do |key|
+#    attr_accessible key
+#    scope "has_#{key}", lambda { |value| where("properties @> hstore(?, ?)", key, value) }
+    #
+#    define_method(key) do
+#      properties && properties[key]
+#    end
+  #
+#    define_method("#{key}=") do |value|
+#      self.properties = (properties || {}).merge(key => value)
+#    end
+#  end
 
 
   # Ransack attribute, convert & concatenat definitions

@@ -3,7 +3,7 @@ class Study < ActiveRecord::Base
 
   stampable
 
-  serialize :properties, Hash
+  serialize :properties, ActiveRecord::Coders::Hstore
 
   belongs_to :list
   belongs_to :studyable, :polymorphic => true

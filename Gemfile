@@ -6,6 +6,7 @@ gem 'rails', '3.2.13'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
+gem 'activerecord-postgres-hstore'
 
 # http://railsapps.github.io/rails-environment-variables.html
 # https://github.com/laserlemon/figaro
