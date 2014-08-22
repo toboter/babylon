@@ -1,6 +1,6 @@
   <%= content_tag :div, class: 'babylo-tec-footer' do %>
     <!-- Footer section -->
-    <footer>
+<footer>
       
       <!-- Menu Footer -->
       
@@ -8,34 +8,28 @@
         <div class="container">
           <div class="row-fluid">  
          
-            <div class="span3 option-block">
+            <div class="span4 option-block">
               <span class=​"title">Research</span>​<i class="icon-globe"></i>
               <ul class="nav nav-pills nav-stacked">
                 <li><%= link_to "Modules", clusters_path %></li>
-                <li><%= link_to "News", snippets_path %></li>
-                <li><%= link_to "Blog", '' %></li>
+                <li><%= link_to "People", people_path %></li>
+                <li><%= link_to "Institutions", institutions_path %></li>
+                <li><%= link_to "Blog posts", snippets_path %></li>
               </ul>
             </div>
             
-            <div class="span3 option-block">
-              <span class=​"title">Explore</span>​<i class="icon-search"></i>
-              <ul class="nav nav-pills nav-stacked">
-                <li><%= link_to "People", people_path %></li>
-                <li><%= link_to "Institutions", institutions_path %></li>
-              </ul>
-            </div>
 
-            <div class="span3 option-block">
+            <div class="span4 option-block">
               <span class=​"title">​Resources</span>​<i class="icon-file"></i>
               <ul class="nav nav-pills nav-stacked">
                 <li><%= link_to "Items", items_path %></li>
-                <li><%= link_to "Bibliography", references_path %></li>
-                <%= content_tag :li, link_to("Uploaded files", assets_path) if can? :read, 'Assets' %>
+                <li><%= link_to "Bibliographies", references_path %></li>
+                <%= content_tag :li, link_to("Pictures", assets_path) if can? :read, 'Assets' %>
                 <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
               </ul>
             </div>
           
-            <div class="span3 option-block-last">
+            <div class="span4 option-block-last">
               <span class=​"title">BABylo-tec</span>​<i class="icon-leaf"></i>
               <ul class="nav nav-pills nav-stacked">
                 <li><%= link_to "Search" %></li>

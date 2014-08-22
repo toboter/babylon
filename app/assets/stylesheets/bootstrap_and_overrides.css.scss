@@ -1,12 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600);
 
-$navbarHeight: 50px;
-$navbarBackground: #787878;
-$navbarBackgroundHighlight: #787878;
-$navbarText: #e5e5e5;
-$navbarBrandColor: #AB9F9A;
-$navbarLinkColor: #e5e5e5;
-$navbarLinkColorHover: #6B6B6B;
+$navbarHeight: 60px;
+$navbarInverseBackground: #686868;
+$navbarInverseBackgroundHighlight: #686868;
+$navbarInverseText: #e5e5e5;
+$navbarInverseBrandColor: #AB9F9A;
+$navbarInverseLinkColor: #e5e5e5;
+$navbarInverseLinkColorHover: #d5d5d5;
 $linkColor: #648564;
 $baseFontSize: 12px;
 $baseFontFamily: 'Open Sans';
@@ -19,35 +19,45 @@ $baseFontFamily: 'Open Sans';
     position: static;
 }
 
-/* wells rounded zu eckig */
-
-.nav, .well, .dropdown-menu, pre, .nav-tabs.nav-stacked > li:first-child > a, .nav-tabs.nav-stacked > li:last-child > a, .btn, .nav-pills > li > a {
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
-	border-radius: 0px !important;
-}
 img.img-rounded {
  border-radius: 100px;
  -webkit-border-radius: 100px;
  -moz-border-radius: 100px;
 }
 
-
-body { 
-	padding-top: 50px; 
-	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #555d64;
+html,
+body {
+  font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #555d64;
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
 }
 
-header {
-	.navbar {
-		margin-bottom: 0;
-	}
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -415px;
 }
 
-.navbar {
-	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 415px;
 }
+#footer {
+  background-color: #f5f5f5;
+}
+
+
+@media (min-width: 979px) {
+  #wrap > .container-fluid {
+  	padding-top: 60px;
+  }	
+}
+
 
 .nav-pills-big {
   li a {
@@ -59,44 +69,7 @@ header {
   }
 }
 
-.navbar .brand {
-	font-weight: bold;
-}
 
-.navbar-icon {
-	width:25px;
-	margin-top:-8px;
-	margin-bottom:-8px;
-}
-
-.navbar-icon:hover {
-	opacity: .5;
-	-webkit-transition: all .2s linear;
-	-moz-transition: all .2s linear;
-	transition: all .2s linear;
-}
-
-.navbar .divider-vertical {
-	margin:0;
-	border-left: 1px solid #858585;
-	border-right: 1px solid #858585;
-}
-
-.navbar .nav {
-	font-size: 14px;
-}
-
-.navbar .navbar-inner {
-	border: 1px solid #858585;
-}
-
-.navbar a.brand:hover {
-	color: #6B6B6B;
-	text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
-	-webkit-transition: all .2s linear;
-	-moz-transition: all .2s linear;
-	transition: all .2s linear;
-}
 
 .authors, .reference-edit-link {
 	@media (min-width: 768px) { text-align:right }
@@ -118,7 +91,6 @@ header {
 }
 
 footer {
-	padding-top:9em;
 	@media (max-width: 768px) {
 		margin-left: -20px;
 		margin-right: -20px;
@@ -231,15 +203,6 @@ textarea.noResize { resize:none }
 		div.description {
 			h1 {margin-bottom:10px;}
 			.text {padding-bottom:10px;}
-			a.member {
-				padding-bottom:8px;
-				text-decoration: none;
-				img {
-					@extend .img-rounded;
-					width: 40px;
-					margin: 0 5px 5px 0;
-				}
-			}
 		}
 	}
 }
@@ -257,6 +220,9 @@ textarea.noResize { resize:none }
 		div.description {
 			h1 {margin-bottom:10px;}
 			.text {padding-bottom:10px;}
+		}
+	}
+
 			a.member {
 				padding-bottom:8px;
 				text-decoration: none;
@@ -266,8 +232,6 @@ textarea.noResize { resize:none }
 					margin: 0 5px 5px 0;
 				}
 			}
-		}
-	}
 
 #map label { width: auto; display:inline; }
 #map img { max-width: none; }

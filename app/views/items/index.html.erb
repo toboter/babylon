@@ -1,11 +1,11 @@
-<% title 'Items for '+'"'+@project.name+'"', nil, nil if @project %>
-<% title 'All Items', nil, nil unless @project %>
+<% title 'Objects for '+'"'+@project.name+'"', nil, nil if @project %>
+<% title 'All Objects', nil, nil unless @project %>
 
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
   <%= content_tag(:li, (link_to @project.name, @project) + content_tag(:span, '/', class: 'divider')) if @project %>
-  <%= content_tag :li, "Items", class: 'active' %>
+  <%= content_tag :li, "Objects", class: 'active' %>
 
 <% end %>
 
@@ -13,13 +13,13 @@
 <div class="row-fluid">
   <div class="span12">
     <h1>
-      <%= @project ? ('Items for '+(link_to h(@project.name), @project)).html_safe : 'All Items' %>
+      <%= @project ? ('Objects for '+(link_to h(@project.name), @project)).html_safe : 'All objects' %>
       <div class="pull-right" style="">
         <%= form_tag new_item_path, method: :get, class: 'form-inline' do %>
           <%= label_tag :collection_id %>
-          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut), {include_blank: true, class: ''} %>
-          <%= submit_tag 'New Item', name: nil, class: "btn btn-create" %>
-        <% end if (can? :create, @items) && !@project %>
+          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut, :selected => 1), {include_blank: false} %>
+          <%= submit_tag 'Add object', name: nil, class: "btn btn-default" %>
+        <% end if can?(:create, @items) && !@project %>
       </div>
     </h1>
   </div>
@@ -51,13 +51,19 @@
       <p><small>The *.csv first row should name the following columns: collection_id, inventory_number, inventory_number_index, accession_date_text, title, classification_id, description, excavation_id, 
       dissov_id, mds_id.</small></p>
     <% end if can? :manage, @items %>
+
+    <%= select_tag :list_id, options_from_collection_for_select(current_aspect.lists, :id, :name), {include_blank: false} %>
+      <%= submit_tag "Send", class: 'btn' %>
+
   </div>
   <div class="span9">
+    
     <table class="table table-bordered table-hover">
       <tbody>
         <%= render @items_paginated %>
       </tbody>
     </table>
+    
     <%= will_paginate(@items_paginated, class: 'pagination pagination-centered', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
     <%= content_tag :p, class: 'pull-right' do %>
       <%= link_to "Download set", items_path(format: "xlsx", q: params[:q]), class: 'btn', id: '' %>

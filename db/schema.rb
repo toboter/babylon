@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140815122530) do
+ActiveRecord::Schema.define(:version => 20140822154030) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -378,12 +378,25 @@ ActiveRecord::Schema.define(:version => 20140815122530) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.boolean  "accept_duplicates"
-    t.float    "latitude"
-    t.float    "longitude"
-    t.boolean  "gmaps"
   end
 
   add_index "lists", ["project_id"], :name => "index_lists_on_project_id"
+
+  create_table "locations", :force => true do |t|
+    t.string   "address"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "locatable_id"
+    t.string   "locatable_type"
+    t.integer  "predicate_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  add_index "locations", ["locatable_id", "locatable_type"], :name => "index_locations_on_locatable_id_and_locatable_type"
+  add_index "locations", ["predicate_id"], :name => "index_locations_on_predicate_id"
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
@@ -504,6 +517,7 @@ ActiveRecord::Schema.define(:version => 20140815122530) do
     t.boolean  "featured"
     t.text     "description"
     t.string   "project_type"
+    t.string   "map_type"
   end
 
   create_table "references", :force => true do |t|
@@ -511,15 +525,15 @@ ActiveRecord::Schema.define(:version => 20140815122530) do
     t.datetime "original_date"
     t.string   "alternative_author"
     t.string   "slug"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.string   "first_page"
     t.string   "last_page"
     t.integer  "book_id"
     t.string   "uri"
-    t.integer  "created_by_project_id"
+    t.text     "comment"
   end
 
   add_index "references", ["slug"], :name => "index_references_on_slug", :unique => true
@@ -554,6 +568,7 @@ ActiveRecord::Schema.define(:version => 20140815122530) do
     t.datetime "updated_at",   :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
+    t.text     "content"
   end
 
   create_table "studies", :force => true do |t|

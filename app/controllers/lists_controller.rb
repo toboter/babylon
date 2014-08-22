@@ -8,16 +8,16 @@ class ListsController < ApplicationController
   def index
     if @project
       @lists = @project.lists.order('name ASC')
-      @geo_lists = @project.lists.where("lists.latitude IS NOT NULL").order('name ASC')
+      @locations = @project.lists.map{|l| l.locations }.flatten
     else
       @lists = Studylist.order('name ASC')
     end
-    @hash = Gmaps4rails.build_markers(@geo_lists) do |list, marker|
-      marker.lat list.latitude
-      marker.lng list.longitude
-      marker.infowindow "#{list.name}: #{list.description}. 
-      <a href='#{url_for([list.project, list])}'>...more</a>"
-      marker.json({ title: list.name })
+    @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
+      marker.lat location.latitude
+      marker.lng location.longitude
+      marker.infowindow "#{location.locatable.name}: #{location.locatable.description}. 
+      <a href='#{url_for([location.locatable.project, location.locatable])}'>...more</a>"
+      marker.json({ title: location.locatable.name })
     end
 
     respond_to do |format|
@@ -30,6 +30,14 @@ class ListsController < ApplicationController
   # GET /lists/1.json
   def show
     @list = @project.lists.find(params[:id])
+    @locations = @list.studies.map{|s| s.studyable.locations }.flatten
+
+    @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
+      marker.lat location.latitude
+      marker.lng location.longitude
+      marker.infowindow "<a href='#{url_for([location.locatable])}'>#{location.locatable.name}</a> #{location.predicate.name.humanize.downcase}"
+      marker.json({ title: location.locatable.name })
+    end
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# show.html.erb

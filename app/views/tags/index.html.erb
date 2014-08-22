@@ -12,7 +12,7 @@
   	<h1>
       Terms of interest
       <div class="pull-right" style="">
-        <%= link_to "Create term", new_tag_path, class: "btn btn-create" if can? :create, @tags %>
+        <%= link_to "Create term", new_tag_path, class: "btn btn-default" if can? :create, Tag %>
       </div>
     </h1>
     <%= render 'full_tag_tree', :tags => @tags, add_links_visible: true, highlight: nil %>

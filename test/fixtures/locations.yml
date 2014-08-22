@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  address: MyString
+  latitude: 1.5
+  longitude: 1.5
+  locatable: 
+  locatable_type: MyString
+  predicate: 
+
+two:
+  address: MyString
+  latitude: 1.5
+  longitude: 1.5
+  locatable: 
+  locatable_type: MyString
+  predicate: 

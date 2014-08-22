@@ -9,6 +9,8 @@ class Ability
     if user.role? :guest #kann 'published' db Informationen lesen, Bilder herunterladen
       can :read, :all# , :published => true
       cannot :read, 'Aspects'
+      cannot :read, Issue
+      cannot :read, Todo
       # can :read, 'downloads'
       # can :read, 'info'
       cannot [:destroy, :edit, :create], :all
@@ -17,9 +19,13 @@ class Ability
 
     if user.role? :fellow #kann Informationen lesen die noch nicht published sind
       can :read, :all
+      cannot :read, Todo
+      cannot [:destroy, :edit, :create], :all
+
+      can [:read, :create, :update], Todo, :project => { :members => { :id => user.id }} #@Todo.project.members.include?(current_user)
       # can :read, 'downloads'
       # can :read, 'info'
-      cannot [:destroy, :edit, :create], :all
+      can [:read, :create], Issue
       can [:edit, :update], Project, :memberships => { :user_id => user.id, :role => 'admin' }
       can [:create, :edit, :update], Person, :user_id => user.id # User sollen ihr eigenes Personenprofil editieren können
       can [:edit], ['Profile']
@@ -40,7 +46,7 @@ class Ability
 
     if user.role? :editor #kann hinzugefügte Informationen auf published setzen, Standardseiten editieren
       can :manage, :all
-      cannot [:create, :edit, :update, :destroy], Cluster
+      cannot [:create, :edit, :update, :destroy], [Cluster, Collection]
       can :create, Group
       can [:edit, :update], Group, group_admin: user
       can [:edit, :update], Cluster, cluster_admin: user
@@ -51,12 +57,16 @@ class Ability
       cannot :manage, ['project-assignments', 'roles', 'recreate-versions', 'development', 'personal-informations', 'Memberships']
     end
 
-    if user.role? :admin #kann Rollen editieren (außer su), Module hinzufügen (in seinen Modulen Gruppen und Projekte hinzufügen. Da kann das aber auch der Modul-/Gruppenadmin)
+    if user.role? :admin 
+    # kann Rollen editieren (außer su), Module hinzufügen (in seinen Modulen Gruppen und Projekte 
+    # hinzufügen. Da kann das aber auch der Modul-/Gruppenadmin), Collections editieren 
+    # und Items Collections neu zuweisen.
       can :manage, :all
       cannot :manage, ['development']
     end
 
-    if user.role? :superuser #kann alles, überall
+    if user.role? :superuser 
+    # kann alles, überall
       can :manage, :all
     end
 

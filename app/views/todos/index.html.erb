@@ -24,7 +24,7 @@
         <%= content_tag :li, link_to("Assigned to you", polymorphic_url([@project, :todos], assignee: current_user, state: params[:state])), class: "#{'active' if params[:assignee]}" %>
 
         <div class="pull-right">
-          <%= link_to 'Create Task', [:new, @project, :todo], class: "btn btn-create" if @project || aspect? %>
+          <%= link_to 'Create Task', [:new, @project, :todo], class: "btn btn-default" if @project || aspect? %>
         </div>
       </ul>
     </div>

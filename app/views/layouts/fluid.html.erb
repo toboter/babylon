@@ -1,11 +1,12 @@
 <% content_for :content do %>
+<div id="wrap">
   <header>
-    <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
+    <%= content_tag :div, class: 'navbar navbar-inverse navbar-fixed-top' do %>
       <%= render 'shared/navbar' %>
     <% end %>
   </header>
 
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-bottom:50px;">
     <%= render "shared/breadcrumbs" %>
 	  <%= render "shared/debug" %>
 
@@ -26,8 +27,11 @@
     <%= yield(:footer_section) %>
 
   </div>
-
+  <div id="push"></div>
+</div>
+<div id="footer">
   <%= render "shared/site_footer" %>
+</div>
 
 <% end %>
 

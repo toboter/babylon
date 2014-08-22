@@ -1,7 +1,7 @@
 class TodosController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_project, except: [:show]
-  load_and_authorize_resource
+  load_and_authorize_resource :todo, :through => :project, :shallow => true
   
   # GET /todos
   # GET /todos.json

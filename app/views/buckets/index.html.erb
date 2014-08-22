@@ -14,7 +14,7 @@
     <h1>
       Buckets
       <div class="pull-right" style="">
-        <%= link_to "Create Bucket", [:new, @attachable, :bucket], class: "btn btn-create btn-small" if can? :create, @buckets && @attachable %>
+        <%= link_to "Create Bucket", [:new, @attachable, :bucket], class: "btn btn-default" if can?(:create, Bucket) && @attachable %>
       </div>
     </h1>
 

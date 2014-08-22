@@ -108,6 +108,7 @@ gem 'smarter_csv'
 
 
 # Maps: https://github.com/apneadiving/Google-Maps-for-Rails
+gem 'geocoder'
 gem 'gmaps4rails'
 
 # https://github.com/pokonski/public_activity

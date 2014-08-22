@@ -11,7 +11,7 @@
     <h1>
       Predicates
       <div class="pull-right" style="">
-        <%= link_to "Create predicate", new_predicate_path, class: "btn btn-create" if can? :create, @predicates %>
+        <%= link_to "Create predicate", new_predicate_path, class: "btn btn-default" if can? :create, @predicates %>
       </div>
     </h1>
     <table class="table table-bordered table-hover">

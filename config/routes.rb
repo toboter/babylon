@@ -2,9 +2,8 @@ Babylon::Application.routes.draw do
 
   resources :activities
 
-  resources :snippets, :path => 'announcements' do
+  resources :snippets, :path => 'blogs' do
     resources :buckets
-    resources :documents
   end
 
   # Settings

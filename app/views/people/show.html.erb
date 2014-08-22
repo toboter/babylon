@@ -82,10 +82,10 @@
         <div class="page-header">
           <h2>
             Documents
-            <%= link_to polymorphic_path([:new, @person, :document]), class: 'btn btn-create pull-right' do %>
-              <i class="icon-plus icon-white"></i>
+            <%= link_to polymorphic_path([:new, @person, :document]), class: 'btn btn-default pull-right' do %>
+              <i class="icon-plus"></i>
               Document
-            <% end if user_signed_in? && (can? :manage, @person) %>
+            <% end if user_signed_in? && can?(:manage, @person) %>
           </h2>
         </div>
         <% if @person.documents.any? %>
@@ -136,10 +136,10 @@
         <div class="page-header">
           <h2>
             Pictures
-            <%= link_to polymorphic_path([:new, @person, :bucket]), class: 'btn btn-create pull-right' do %>
-              <i class="icon-plus icon-white"></i>
+            <%= link_to polymorphic_path([:new, @person, :bucket]), class: 'btn btn-default pull-right' do %>
+              <i class="icon-plus"></i>
               Bucket
-            <% end if user_signed_in? && (can? :manage, @person) %>
+            <% end if user_signed_in? && can?(:manage, @person) %>
           </h2>
         </div>
         <%= render @person.buckets, :personal => true %>

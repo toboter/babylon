@@ -14,10 +14,10 @@
   <div class="span9">
     <h4 class="muted">
       Volumes / Issues
-      <%= link_to new_book_path(:serial_id => @serial), class: 'btn btn-create pull-right btn-small', style: 'margin-left:10px;' do %>
-        <i class="icon-plus icon-white"></i>
+      <%= link_to new_book_path(:serial_id => @serial), class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
+        <i class="icon-plus"></i>
         Volume
-      <% end if can? :create, @serial.books %>
+      <% end if can? :create, Book %>
     </h4>
     <%= render "books/book_entries", :books => @serial.books.order("volume ASC") %>
   </div>

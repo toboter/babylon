@@ -37,6 +37,10 @@ class Document < ActiveRecord::Base
     (document_type == 'Introduction')
   end
 
+  def self.ransackable_attributes auth_object = nil
+    %w(content title abstract) + _ransackers.keys
+  end
+
 private
 
   def update_documentfile_attributes

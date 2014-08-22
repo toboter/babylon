@@ -10,4 +10,11 @@ class ProjectStudyField < ActiveRecord::Base
   has_many :select_values, class_name: 'ProjectStudyFieldValue'
   accepts_nested_attributes_for :select_values, allow_destroy: true
 
+  before_validation :strip_whitespace
+
+  private
+  def strip_whitespace
+    self.name = self.name.squish.downcase.tr(" ","_")
+  end
+  
 end

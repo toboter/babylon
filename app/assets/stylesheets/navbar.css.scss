@@ -1,0 +1,87 @@
+    .navbar-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      margin-top: 10px;
+      margin-bottom: -80px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+    }
+
+
+header {
+	.navbar {
+		margin-bottom: 0;
+	}
+}
+
+
+.navbar {
+	font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+    #wrap .navbar .navbar-inner {
+      border: 0;
+      -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
+         -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
+              box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+
+
+.navbar .brand {
+	font-weight: bold;
+}
+
+.navbar-icon {
+	width:25px;
+	margin-top:-8px;
+	margin-bottom:-8px;
+}
+
+.navbar-icon:hover {
+	opacity: .5;
+	-webkit-transition: all .2s linear;
+	-moz-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+.navbar .divider-vertical {
+	margin:0;
+	border-left: 1px solid #777;
+	border-right: 1px solid #777;
+} 
+
+/*
+.navbar .nav {
+	font-size: 14px;
+}
+
+.navbar .navbar-inner {
+	border: 1px solid #858585;
+} */
+
+.navbar a.brand:hover {
+	color: #6B6B6B;
+	text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+	-webkit-transition: all .2s linear;
+	-moz-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+
+.admin-block {
+	@media (min-width: 979px) {
+	  padding-top:60px;
+	}
+	@media (max-width: 979px) {
+	  padding-top:1px;
+	  margin-bottom:30px;
+	}
+	@media (max-width: 768px) {
+	  margin-left: -20px;
+	  margin-right: -20px;
+	}	
+	padding: 0 20px 5px 20px;
+	background-color: #f5f5f5;
+	border-bottom:1px solid #ddd;
+}

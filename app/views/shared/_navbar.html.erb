@@ -8,26 +8,39 @@
     </a>
     <%= content_tag :div, class: 'nav-collapse collapse' do %>
       <ul class="nav pull-left">
-        <%= content_tag :li, link_to('Modules', clusters_path) %>
-        <li class="divider-vertical"></li>
-        <%= content_tag :li, link_to("People", people_path) if can? :read, 'People' %>
-        <%= content_tag :li, link_to("Institutions", institutions_path) if can? :read, 'Institutions' %>
-        <%= content_tag :li, '', class: "divider-vertical" %>
+        <%= content_tag :li, class: "dropdown" do %>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <strong>Research</strong>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <%= content_tag :li, link_to('Modules', clusters_path) if can? :read, Cluster %>
+            <%= content_tag :li, link_to("Groups", groups_path, style: 'margin-left:10px;') if can? :read, Group %>
+            <%= content_tag :li, link_to("Projects", projects_path, style: 'margin-left:15px;') if can? :read, Project %>
+            <%= content_tag :li, link_to("People", people_path) if can? :read, Person %>
+            <%= content_tag :li, link_to("Institutions", institutions_path) if can? :read, Institution %>
+            <li class="divider"></li>
+            <%= content_tag :li, link_to("Blog posts", snippets_path) if can? :read, Snippet %>
+          </ul>
+        <% end %>
+        <%= content_tag :li, '', class: "divider-vertical", style: '' %>
+        
         <%= content_tag :li, class: "dropdown" do %>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <strong>Resources</strong>
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <%= content_tag :li, link_to("References", references_path) if can? :read, Reference %>
-            <%= content_tag :li, link_to("Items", items_path) if can? :read, 'Items' %>
-            <%= content_tag :li, '',class: 'divider' %>
-            <%= content_tag :li, link_to("Uploaded files", assets_path) if can? :read, 'Assets' %>
-            <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
+            <%= content_tag :li, link_to(content_tag(:strong, 'References'), references_path) if can? :read, Reference %>
+            <%= content_tag :li, link_to(content_tag(:strong, 'Objects'), items_path) if can? :read, Item %>
+            <li class="divider"></li>
+            <%= content_tag :li, link_to("Folders", buckets_path) if can? :read, Bucket %>
+            <%= content_tag :li, link_to("Uploaded files", assets_path, style: 'margin-left:10px;') if can? :read, Asset %>
+            <%= content_tag :li, link_to("Documents", documents_path) if can? :read, Document %>
           </ul>
         <% end %>
-        <%= content_tag :li, '', class: "divider-vertical", style: 'margin-right:20px;' %>
         <!--
+        <%= content_tag :li, '', class: "divider-vertical", style: 'margin-right:20px;' %>
         <%= content_tag :li do %>
           <% form_tag '/search', class: "navbar-search" do %>
             <%= search_field_tag :q, params[:q], placeholder: 'search or type a command', class: 'search-query' %>
@@ -41,7 +54,7 @@
         <%= content_tag :li, class: 'dropdown' do %>
           <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Your personal menu" id="personal-menu">
             <% if current_user.person && current_user.person.profile_picture %>
-              <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
+              <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
               <% else %>
               <%= image_tag('icons/super.svg', class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:30px;') %>
             <% end %>
@@ -70,7 +83,7 @@
             <% end if can? :manage, 'roles' %>
             <%= content_tag :li do %>
               <%= link_to snippets_path do %>
-                Announcements
+                Blog posts
               <% end %>
             <% end if can? :manage, 'publishing' %>
             <%= content_tag :li do %>
@@ -102,14 +115,18 @@
 
         <%= content_tag :li, class: 'dropdown' do %>
           <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
-            <%= image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone') %>
+            <%= aspect? ? image_tag(current_aspect.project_bucket && current_aspect.project_bucket.cover ? current_aspect.project_bucket.cover.assetfile.mini_thumb.url : "icons/no_picture.svg", class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:35px;') : image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
             <%= content_tag :span, class: 'hidden-desktop' do %>
-              Change Aspect        
+              Change project        
               <b class="caret"></b>
             <% end %>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-            <%= content_tag :li, link_to('View current project', [current_aspect.projectable, current_aspect]) if aspect? %>
+            <%= content_tag :li do %>
+              <%= link_to [current_aspect.projectable, current_aspect] do %>
+                View current project: <strong><%= current_aspect.name %></strong>
+              <% end %>
+            <% end if aspect? %>
             <%= content_tag :li do %>
               <%= link_to exit_aspect_path do %>
                 Close <strong><%= current_aspect.name %></strong>
@@ -134,6 +151,7 @@
         <% end if can?(:read, 'Aspects') && current_user.projects.any? %>
 
         <li class="divider-vertical"></li>
+
         <li class="visible-desktop">
           <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', class: 'tooltip-bottom', id: 'sign-out-link' %>
         </li>
@@ -146,7 +164,7 @@
 </div>
 
 
-<% content_for :navbar_modal_inject do %>
+<% content_for :modal_inject do %>
   <% if !current_user.person && (can? :edit, 'Profile') %>
     <div id="connect_profile_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">

@@ -24,23 +24,23 @@
         <%= content_tag :li, link_to("Everyone's Issues", polymorphic_url([@issuable, :issues], state: params[:state])), class: "#{'active' unless params[:creator] || params[:assignee] || params[:aspect]}" %>
         <%= content_tag :li, link_to("Created by you", polymorphic_url([@issuable, :issues], creator: current_user, state: params[:state])), class: "#{'active' if params[:creator] }" %>
         <%= content_tag :li, link_to("Assigned to you", polymorphic_url([@issuable, :issues], assignee: current_user, state: params[:state])), class: "#{'active' if params[:assignee]}" %>
-        <%= content_tag :li, link_to("Current aspects", polymorphic_url([@issuable, :issues], aspect: current_aspect, state: params[:state])), class: "#{'active' if params[:aspect]}" if aspect? %>
+        <%= content_tag :li, link_to("Current projects", polymorphic_url([@issuable, :issues], aspect: current_aspect, state: params[:state])), class: "#{'active' if params[:aspect]}" if aspect? %>
       </ul>
       <hr>
-      Labels
+      <%= content_tag :h4, 'Labels' %>
       <ul class="nav nav-pills nav-stacked">
-        <li>some</li>
+        <li>todo</li>
       </ul>
     </div>
   </div>
   <div class="span9">
     <div class="issues-options">
       <div class="btn-group">
-        <%= link_to "#{@pre_issues.where(closed: false).count} Open", polymorphic_url([@issuable, :issues], state: 'open', creator: params[:creator], assignee: params[:assignee]), class: "btn btn-small #{'active' if params[:state]=='open'}" %>
-        <%= link_to "#{@pre_issues.where(closed: true).count} Closed", polymorphic_url([@issuable, :issues], state: 'closed', creator: params[:creator], assignee: params[:assignee]), class: "btn btn-small #{'active' if params[:state]=='closed'}" %>
+        <%= link_to "Open", polymorphic_url([@issuable, :issues], state: 'open', creator: params[:creator], assignee: params[:assignee]), class: "btn btn-small #{'active' if params[:state]=='open'}" %>
+        <%= link_to "Closed", polymorphic_url([@issuable, :issues], state: 'closed', creator: params[:creator], assignee: params[:assignee]), class: "btn btn-small #{'active' if params[:state]=='closed'}" %>
       </div>
       <div class="pull-right">
-        <%= link_to 'Create Issue', [:new, @issuable, :issue], class: "btn btn-create" if @issuable %>
+        <%= link_to 'Create Issue', [:new, @issuable, :issue], class: "btn btn-default" if @issuable && can?(:create, Issue) %>
       </div>
     </div>
     <div class="issues-list">

@@ -16,37 +16,59 @@
 <div class="row-fluid">
   <div class="span3">
     <div class="documents-options">
+    <%= content_tag :div, class: "filter well" do %>
+      <h4 style="margin-top:0px;">Filters</h4>
+
+      <%= search_form_for @q do |f| %>
+        <%= f.condition_fields do |c| %>
+          <%= render "condition_fields", f: c %>
+        <% end %>
+        <p style="padding-top:10px;"><%= link_to_add_fields "Add Conditions", f, :condition %></p>
+        <div class="field">
+          Sort:<br>
+          <%= f.sort_fields do |s| %>
+            <%= s.sort_select %>
+          <% end %>
+        </div>
+        <%= f.submit 'Filter', class: 'btn' %><%= link_to 'Reset', documents_path(q: nil, ufilter: params[:ufilter]), class: 'btn', style: 'margin-left:7px;' %>
+
+      <% end %>
+      <p class="text text-info"><%= @documents.count %> entries in set</p>
+    <% end %>
+
+    <hr>
       <ul class="nav nav-pills nav-stacked">
         <%= content_tag :li, class: "#{'active' unless params[:ufilter]}" do %>
-          <%= link_to polymorphic_url([@documentable, :documents]) do %>
+          <%= link_to polymorphic_url([@documentable, :documents], q: params[:q]) do %>
           	Everyone's Documents
           	<span class="cnt pull-right"><%= @all_documents.count %></span>
           <% end %>
         <% end %>
         <%= content_tag :li, class: "#{'active' if params[:ufilter]=='created_by'}" do %>
-          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'created_by') do %>
+          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'created_by', q: params[:q]) do %>
           	Created by you
           	<span class="cnt pull-right"><%= @current_user_documents.count %></span>
           <% end %>
         <% end %>
         <%= content_tag :li, class: "#{'active' if params[:ufilter]=='need_review'}" do %>
-          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'need_review') do %>
+          <%= link_to polymorphic_url([@documentable, :documents], ufilter: 'need_review', q: params[:q]) do %>
           	Need review by you
           	<span class="cnt pull-right"><%= @need_review_documents.count %></span>
           <% end %>
         <% end %>
       </ul>
       <hr>
-      Tags
+
+      <%= content_tag :h4, 'Tags' %>
       <ul class="nav nav-pills nav-stacked">
-        <li>some</li>
+        <li>todo</li>
       </ul>
     </div>
   </div>
   <div class="span9">
     <div class="documents-options">
       <div class="pull-right">
-        <%= link_to 'Create Document', [:new, @documentable, :document], class: "btn btn-create btn-small" if @documentable %>
+        <%= link_to 'Create Document', [:new, @documentable, :document], class: "btn btn-default" if @documentable && can?(:create, Document) %>
       </div>
     </div>
     <div class="documents-list">

@@ -1,6 +1,6 @@
 class Reference < ActiveRecord::Base
   attr_accessible :creator_id, :updater_id, :title, :authorships_attributes, :original_date_text, :alternative_author, :slug,
-                  :first_page, :last_page, :book_id, :uri, :tag_ids
+                  :first_page, :last_page, :book_id, :uri, :tag_ids, :comment
 
   stampable
 

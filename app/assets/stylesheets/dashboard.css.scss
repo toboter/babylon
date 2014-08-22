@@ -21,10 +21,10 @@
     color: #777;
     height: 60px;
     vertical-align: top;
-    font-size: 16px;
+    font-size: 14px;
   }
 
-  .notmonth, .notmonth a { color: #CCC; }
+  .notmonth span.day a { color: #CCC; }
   .today { background-color: #D7F2FF; }
 }
 
@@ -42,5 +42,7 @@
 
 .calendar ul {
   font-size: 11px;
+  margin-left:0px;
   padding-left: 0px;
+  list-style-type: none;
 }

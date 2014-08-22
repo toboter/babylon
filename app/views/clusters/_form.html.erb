@@ -25,6 +25,10 @@
         <%= f.label :description, class: 'control-label' %>
         <div class="controls">
           <%= f.text_area :description, class: 'input-block-level', rows: 8 %>
+          <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
+          <div class="collapse" id="md-info">
+            <%= render 'shared/md-info' %>
+          </div>
         </div>
       </div>
 

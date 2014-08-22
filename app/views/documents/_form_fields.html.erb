@@ -24,7 +24,16 @@
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="content_field">Content <%= link_to 'Howto use Markdown', "http://markdown.de/syntax/", :target => "_blank", class: 'pull-right' %></label>
+    <label class="control-label" for="content_field">
+      Content
+      <span class="pull-right">
+        Use Markdown for formatting. 
+        <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a>
+      </span>
+    </label>
+    <div class="collapse" id="md-info">
+      <%= render 'shared/md-info' %>
+    </div>
     <div class="controls">
       <%= f.text_area :content, class: 'input-block-level', id: 'content_field' %>
     </div>

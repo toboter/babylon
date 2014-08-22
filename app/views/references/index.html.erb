@@ -17,16 +17,17 @@
     <div class="row-fluid">
       <%= content_tag :div, class: 'span9' do %>
         <%= content_tag :ul, class: "nav nav-pills" do %>
-          <%= content_tag :li, link_to("All public references", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'bibliographic' }" %>
+          <%= content_tag :li, link_to("All public references", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'bibliographic' || params[:show] == 'photographic' }" %>
           <%= content_tag :li, link_to('Babylon bibliography', references_path(show: 'bibliographic', q: params[:q])), class: "#{'active' if params[:show] == 'bibliographic'}" %>
           <%= content_tag :li, link_to('Babylon archival references', references_path(show: 'archival', q: params[:q])), class: "#{'active' if params[:show] == 'archival'}" %>
+          <%= content_tag :li, link_to('Babylon photographic references', references_path(show: 'photographic', q: params[:q])), class: "#{'active' if params[:show] == 'photographic'}" %>
         <% end %>
       <% end unless @parent %>
       <%= content_tag :div, class: 'span3' do %>
-        <%= link_to new_reference_path, class: 'btn btn-create pull-right', style: 'margin-left:10px;' do %>
-          <i class="icon-plus icon-white"></i>
+        <%= link_to new_reference_path, class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
+          <i class="icon-plus"></i>
           Reference
-        <% end if aspect? && !@parent && (can? :create, @references) %>
+        <% end if aspect? && !@parent && can?(:create, @references) %>
 
       <% end %>
     </div>

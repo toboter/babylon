@@ -1,6 +1,6 @@
 <fieldset class="nested-fields">
 
-  <legend>Article/Content</legend>
+  <legend>Article/Content/Record</legend>
   <div id="authors">
     <%= f.fields_for :authorships do |builder| %>
       <%= render "references/authorship_fields", :f => builder %>
@@ -26,7 +26,8 @@
       <%= f.text_field :title, :class => 'input-block-level' %>
     </div>
   </div>
-    
+
+<% if current_aspect.project_type != 'archival' %>
   <% if !@book %>  <!--Wenn das Formular aus dem Book-form als nested_field aufgerufen wird-->
     <% if !@reference.book %> <!--Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde-->
       <div class="control-group">
@@ -41,7 +42,7 @@
   <% else %>
     <%= f.hidden_field :book_id %>
   <% end %>
-    
+ 
 
     <div class="control-group">
       <%= f.label :first_page, "First page", :class => 'control-label' %>
@@ -55,13 +56,15 @@
         <%= f.text_field :last_page %>
       </div>
     </div>
-
+<% end %> 
+<!--
   <div class="control-group">
     <%= f.label :uri, 'Internet Resource URI', :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :uri, class: 'input-block-level' %>
     </div>
   </div>
+-->
   <div id="date" class="control-group">
     <%= f.label :original_date, :class => 'control-label' %>
     <div class="controls">
@@ -76,6 +79,13 @@
     <%= f.label :tag_ids, "Tags", class: 'control-label' %>
     <div class="controls">
       <%= f.collection_select :tag_ids, Tag.order(:name), :id, :name, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :comment, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :comment, rows: 5, class: 'span6' %>
     </div>
   </div>
 

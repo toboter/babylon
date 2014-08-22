@@ -1,42 +1,40 @@
 <% title "Explore", nil, nil %>
-
+<div id="wrap">
 <header>
 
-  <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
-    <%= render 'shared/navbar' %>
-  <% end %>
+  <div class="navbar-wrapper">
+    <div class="container">
+    <%= content_tag :div, class: 'navbar navbar-inverse' do %>
+      <%= render 'shared/navbar' %>
+    <% end %>
+  </div>
+  </div>
 
-
-  <%= content_tag :div, id: "explCarousel", class: "carousel slide billboard" do %>
-    <ol class="carousel-indicators">
-      <% @about_bucket.assets.each_with_index do |asset, index| %>
-        <li data-target="#explCarousel" data-slide-to="<%= index %>" class="<%= 'active' if index == 0 %>"></li>
-      <% end %>
-    </ol>
+  <!-- Carousel. padding-top:50px wegen sticky-footer entsprechend .container{padding-top:50px;} -->
+  <%= content_tag :div, id: "explCarousel", class: "carousel slide", style: '' do %>
     <!-- Carousel items -->
     <%= content_tag :div, class: "carousel-inner" do %>
       <% @about_bucket.assets.each_with_index do |asset, index| %>
         <div class="item <%= 'active' if index == 0 %>">
-          <div class="explorer">
-            <%= image_tag(asset.assetfile.normal.url) %>
-            <div class="overlay hidden-phone">
-              <h1>$babylon</h1>
-              <!-- <p>$Bibliotheken und Archive Babylons: texts in an e-based content</p> -->
-            </div>
-          </div>
+          <%= image_tag(asset.assetfile.normal.url) %>
+          <div class="container">
           <div class="carousel-caption">
-            <h4>
-              <%= asset.name %>
-              <small><%= link_to '[Link]', asset %></small>
-              <%= link_to polymorphic_path([@about, @about_bucket]), class: 'pull-right' do %>
-                <i class="icon-edit icon-white"></i>
-              <% end if can? :manage, 'publishing' %>
-            </h4>
+            <h1>$babylon</h1>
+            <p class="lead">
+              <%= link_to asset.name, asset %>
+            </p>
             <p>
+              &copy; 
               <%= link_to asset.author.name, asset.author if asset.author %>
               <%= ', ' if asset.author && asset.license %>
               <%= link_to asset.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
             </p>
+            <%= link_to polymorphic_path([@about, @about_bucket]), class: 'btn btn-primary' do %>
+              <i class="icon-edit icon-white"></i>
+              Edit
+            <% end if can? :manage, 'publishing' %>
+
+          </div>
           </div>      
         </div>
       <% end %>
@@ -47,19 +45,27 @@
   <% end if @about_bucket.assets.any? %>
 </header>
 
-<div class="container">
+<div class="container" style="margin-bottom:50px;">
   <%= render "shared/debug" %>    
   <%= render "shared/flash", flash: flash %>
 
-  <div class="row hidden-phone">
+  <div class="row hidden">
     <div class="span12">
       <%= link_to 'Edit images', polymorphic_path([@about, @about_bucket]) unless @about_bucket.assets.any? %>
       <div class="explorer-nav" style="">
         <ul class="nav nav-pills nav-pills-big" style="font-weight:bold;background-color:#f6f6f6;padding:0 2px;">
-          <%= content_tag :li, link_to("Bibliography", references_path) if can? :read, 'Bibliography' %>
-          <%= content_tag :li, link_to("Items", items_path) if can? :read, 'Items' %>
-          <%= content_tag :li, link_to("Uploaded files", assets_path) if can? :read, 'Assets' %>
-          <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
+          <%= content_tag :li, link_to("Bibliographies", references_path) if can? :read, Reference %>
+          <%= content_tag :li, link_to("Objects", items_path) if can? :read, Item %>
+          <%= content_tag :li, class: "dropdown" do %>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <strong>Other Resources</strong>
+              <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <%= content_tag :li, link_to("Pictures", assets_path) if can? :read, Asset %>
+              <%= content_tag :li, link_to("Documents", documents_path) if can? :read, Document %>
+            </ul>
+          <% end %>
           <%= content_tag :li, link_to("Your Dashboard", dashboard_path), class: 'pull-right' if user_signed_in? %>
         </ul>
       </div>
@@ -67,6 +73,7 @@
   </div>
   <div class="row-fluid">
     <div class="span8">
+
       <%= content_tag :div do %>
         <%= content_tag :h2, 'Featured' %>
         <%= render @featured %>
@@ -88,28 +95,27 @@
         <%= link_to 'View all modules', clusters_path %>
       <% end if @clusters.any? %>
 
-      <%= content_tag :div, id: 'news-section', style: 'padding-top:30px;' do %>
+      <%= content_tag :div, id: 'blogs-section', style: 'padding-top:30px;' do %>
         <%= content_tag :h2 do  %>
-          Announcements    
-        <% end if @news %>
-        <% @news.in_groups_of(2, false).each do |row_news| %>
+          Blogs    
+        <% end if @blogs %>
+        <% @blogs.in_groups_of(2, false).each do |row_blogs| %>
           <div class="row-fluid">
-            <% for novelity in row_news do %>
+            <% for blog in row_blogs do %>
               <div class="span6" style="height:230px; border-top:1px solid #f5f5f5; padding-right:1em;">
                 <h3>
-                  <%= novelity.name %>
-                  <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if novelity.pinned? %>
+                  <%= blog.name %>
+                  <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if blog.pinned? %>
                 </h3>
-                <p><small><%= novelity.created_at.strftime("%d.%m.%Y") %></small>
-                <p><%= markdown(truncated_description(novelity, length=200)) %></p>
+                <p><small><%= blog.created_at.strftime("%d.%m.%Y") %></small>
+                <p><%= markdown(truncated_description(blog, length=200)) %></p>
               </div>
             <% end %>
           </div>
         <% end %>
-        <p>
-          <%= link_to 'View all announcements', snippets_path %>
-        </p>
+        <%= link_to 'View all posts', snippets_path %>
       <% end %>
+
     </div>
 
     <%= content_tag :div, class: 'span4 explorer-sidebar-section' do %>
@@ -124,13 +130,14 @@
         <% @activities.each do |activity| %>
           <%= ActivityPresenter.new(activity, self).render_activity %>
         <% end %>
-        <p>
-          <%= link_to 'View all activities', activities_path %>
-        </p>
+        <%= link_to 'View all activities', activities_path %>
       <% end %>
     <% end %>
   </div>
-
 </div>
 
-<%= render "shared/site_footer" %>
+  <div id="push"></div>
+</div>
+<div id="footer">
+  <%= render "shared/site_footer" %>
+</div>

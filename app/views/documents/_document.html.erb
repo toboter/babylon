@@ -8,7 +8,7 @@
       Created by <%= name_only_or_link_to(document.creator) %> 
       <%= distance_of_time_in_words_to_now(document.created_at) %> ago 
       <%= content_tag :span do %>
-        <i class="icon-exclamation-sign"></i> <%= link_to pluralize(document.issues.count, 'issue'), [document, :issues] %>
+        <%= content_tag :i,'', class: document.issues.where(closed: false).any? ? "icon-exclamation-sign" : 'icon-ok' %> <%= link_to pluralize(document.issues.count, 'issue'), [document, :issues] %>
       <% end if document.issues.any? %>
     </p>
     <div class="content">

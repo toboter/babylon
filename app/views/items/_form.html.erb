@@ -6,9 +6,9 @@
 
 <div id="metainfo">
   <div class="control-group">
-    <%= f.label :collection_id, class: 'control-label' %>
+    <%= f.label 'Collection', class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, include_blank: true, class: '' %>
+      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {include_blank: false}, {disabled: !can?(:update, Collection)} %>
     </div>
   </div>
 
@@ -92,6 +92,16 @@
   </div>
 </div>
 
+<div id='locations'>
+  <%= content_tag :h4, 'Locations' %>
+  <%= f.fields_for :locations do |builder| %>
+    <%= render "location_fields", :f => builder %>
+  <% end %>
+  <div class="links controls">
+    <%= link_to_add_association "Add Location", f, :locations %>
+  </div>
+</div>
+
 <div id='connections'>
   <%= content_tag :h4, 'Connections' %>
   <%= f.fields_for :connections do |builder| %>
@@ -108,6 +118,10 @@
       <%= f.label :description, class: 'control-label' %>
       <div class="controls">
         <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
+        <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
+        <div class="collapse" id="md-info">
+          <%= render 'shared/md-info' %>
+        </div>
       </div>
     </div>
 

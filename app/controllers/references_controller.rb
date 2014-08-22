@@ -20,6 +20,8 @@ class ReferencesController < ApplicationController
       @references_all = Reference.joins(:projects).where(projects: {project_type: 'bibliographic', show_references: true})
     elsif params[:show] == 'archival'
       @references_all = Reference.joins(:projects).where(projects: {project_type: 'archival', show_references: true})
+    elsif params[:show] == 'photographic'
+      @references_all = Reference.joins(:projects).where(projects: {project_type: 'photographic', show_references: true})
     elsif params[:show] == 'all'
       @references_all = Reference.scoped
     else

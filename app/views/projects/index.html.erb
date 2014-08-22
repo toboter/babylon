@@ -46,7 +46,7 @@
         <%= link_to "#{@projectable.projects.count} Module projects", polymorphic_url([@projectable, :projects], state: 'module', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='module'}" %>
       <% end if @projectable.class.to_s == 'Cluster' %>
       <div class="pull-right" style="<%= 'margin: 1em 0;' if @projectable.class.to_s == 'Group' %>">
-        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-create btn-small", style: 'font-weight:bold;' if @projectable %>
+        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-default", style: 'font-weight:bold;' if @projectable && can?(:create, Project) %>
       </div>
     <% end if @projectable %>
     <div class="projects-list row-fluid">
@@ -54,7 +54,7 @@
         <%= render @projects %>
       <% else %>
         <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:0px;">
-          <p class="text-center">No projects to show. <%= link_to 'Create a new project.', polymorphic_path([:new, @projectable, :project]) if @projectable %></p>
+          <p class="text-center">No projects to show. <%= link_to 'Create a new project.', polymorphic_path([:new, @projectable, :project]) if @projectable && can?(:create, Project) %></p>
         </div>
       <% end %>
     </div>

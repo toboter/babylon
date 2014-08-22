@@ -1,9 +1,6 @@
 <tr>
-  <td width="7%">
-  	<%= image_tag item.assets.where('content_type LIKE ?', '%image%').first.assetfile.mini_thumb.url if item.assets.where('content_type LIKE ?', '%image%').first %>
-  </td>
   <td width="30%">
-    <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.inventory_name, item %></span>
+    <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.name, item %></span>
     <ul class="unstyled">
       <%= content_tag :li, "Excavation: #{item.excavation_id}" if item.excavation_id.present? %>
       <%= content_tag :li, "Dissov: #{item.dissov_id}" if item.dissov_id.present? %>
@@ -11,8 +8,19 @@
     </ul>
   </td> 
   <td>
-    <span class="pull-right"><%= item.tags.map{ |a| content_tag :span, link_to(a.name, a, style: 'color:white;'), class: 'label label-info', style: 'margin-left:3px;padding:4px 8px;' }.join(" ").html_safe %></span>
+    <%= content_tag :div, class: "pull-right" do %>
+      <%= content_tag :span, class: 'label label-info', style: 'margin-left:3px;padding:5px 10px;' do %>
+        <%= item.tags.map{ |a| content_tag :span, link_to(a.name, a, style: 'color:white;')}.join(", ").html_safe %>
+      <% end if item.tags.any? %>
+
+      <%= content_tag :span, class: "label label-info", style: "padding:5px 10px;" do %>
+        <%= item.assets.any? ? (content_tag :i, '', class: "icon-picture icon-white tooltip-left" , title: 'picture provided') : nil %>
+        <%= item.locations.any? ? (content_tag :i, '', class: "icon-map-marker icon-white tooltip-left" , title: 'location provided', style: 'padding:0 2px;') : nil %>
+      <% end if item.locations.any? || item.assets.any? %>
+    <% end %>
+
     <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| link_to(c.name, c) }.join(" / ").html_safe if item.classification %>
+    <%= item.context_id %>
     <p>
       <%= item.title.present? ? item.title : item.inventory_name %><br />
       <%content_tag :span do %>Accession <%= item.accession_date.strftime("%d.%m.%Y") %><% end if item.accession_date %>
@@ -23,7 +31,5 @@
     </p>
 
   </td>
-  <%= content_tag :td, width: "5%", class: "" do %>
-    <%= item.context_id %>
-  <% end %>
+
 </tr>

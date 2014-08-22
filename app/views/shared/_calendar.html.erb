@@ -1,11 +1,12 @@
+
 <div class="calendar">
-  <h2 id="month" class="">
+  <h2 id="month" class="mn">
     <%= link_to content_tag(:i, '', class: 'icon-chevron-left'), date: @date.prev_month %>
     <%= @date.strftime("%B %Y") %>
     <%= link_to content_tag(:i, '', class: 'icon-chevron-right'), date: @date.next_month %>
   </h2>
   <%= calendar @date do |date| %>
-    <%= link_to "#{date.day}"  %>
+    <%= content_tag :span, link_to("#{date.day}"), class: 'day'  %>
     <% if @todos_by_date[date] %>
       <ul>
         <% @todos_by_date[date].each do |todo| %>

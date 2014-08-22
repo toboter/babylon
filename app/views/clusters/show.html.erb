@@ -19,13 +19,14 @@
         <%= @cluster.name %><%= yield(:edit_section) %>
       </h1>
       <%= content_tag :div, @cluster.description.present? ? markdown(@cluster.description) : content_tag(:p, "No abstract to show."), class: 'text' %>
-      <%= render partial: "shared/member", collection: @members %>
     <% end %>
   </div>
 </div>
 <% end %>
 
 <% content_for :main_section do %>
+<div class="row-fluid">
+  <div class="span8">
   <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
     <%= content_tag :h4, 'Documents', class: 'muted' %>  
       <table class="table table-bordered">
@@ -36,30 +37,32 @@
   <% end if @cluster.documents.without_document_type.any? %> 
 
   <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
-    <%= content_tag :h3, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" %>
+    <%= content_tag :h2, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" %>
     <% @cluster.groups.limit(3).each do |group| %>
-      <div class="group-entry well">
+      <div class="group-entry" style="padding-left:10px;">
         <h3><%= link_to "#{group.name}", group %></h3>
         <% if group.description.present? %>
           <%= markdown(group.description) %>
         <% else %>
           <p>No abstract available</p>
         <% end %>
-        <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
-        <%= render group.projects.limit(3) %>
+        <div style="padding-left:20px;">
+          <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
+          <%= render group.projects.limit(3) %>
+          <%= link_to "View all projects in #{group.name}", [group, :projects] %>
+        </div>
+        <hr>
       </div>
     <% end %>
   <% end if @cluster.groups.any? %>
 
   <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
-    <%= content_tag :h3, link_to("Projects", [@cluster, 'projects']), class: "muted" %>
-    <%= render @projects.limit(5).order('created_at DESC') %>
-
+    <%= content_tag :h2, link_to("Non group projects", [@cluster, :projects]), class: "muted" %>
+    <%= render @cluster.projects.limit(5).order('created_at DESC') %>
+    <%= link_to 'View all non-group projects', polymorphic_path([@cluster, :projects], state: 'module') %>
   <% end if @cluster.projects.any? %>
-
-<% end %>
-
-<% content_for :sidebar_section do %>
+  </div>
+  <div class="span4">
 
   <div class="project-options">
     <ul class="nav nav-pills nav-stacked nav-pills-big">
@@ -69,29 +72,29 @@
           Issues
           <%= content_tag :span, @cluster.issues.count, class: "badge pull-right #{@cluster.issues.where(closed: false).count > @cluster.issues.where(closed: true).count+1 ? @cluster.issues.where(closed: false).count > @cluster.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
         <% end %>
-      <% end %>
+      <% end if can? :read, Issue %>
       <%= content_tag :li do %>
         <%= link_to [@cluster, :groups] do %>
           Groups
           <span class="badge pull-right"><%= @cluster.groups.count %></span>
         <% end %>
-      <% end %>
+      <% end if can? :read, Group %>
       <%= content_tag :li do %>
         <%= link_to [@cluster, :projects] do %>
           Projects
           <span class="badge pull-right"><%= @projects.count %></span>
         <% end %>
-      <% end %>
+      <% end if can? :read, Project %>
       <%= content_tag :li do %>
         <%= link_to [@cluster, :documents] do %>
           Documents
           <span class="badge pull-right"><%= @cluster.documents.without_document_type.count %></span>
         <% end %>
-      <% end %>
+      <% end if can? :read, Document %>
     </ul>
   </div>
 
-  <div class="cluster-info well">
+  <%= content_tag :div, class: "cluster-info well" do %>
     <ul class="unstyled">
       <li>Speaker: <%= name_only_or_link_to(@cluster.speaker) %></li>
       <li>Admin: <%= name_only_or_link_to(@cluster.cluster_admin) %></li>
@@ -103,5 +106,8 @@
     <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if @cluster.contact %>
     <p><%= markdown(@cluster.contact) if @cluster.contact %></p>
     <%= link_to "Introduction Document", polymorphic_path([:new, @cluster, :document], :document_type => "Introduction") if !@cluster.documents.doctype('Introduction') && (can? :create, @cluster.documents) %>
+  <% end if can? :read, @cluster %>
+  <%= render partial: "shared/member", collection: @members %>
   </div>
+</div>
 <% end %>

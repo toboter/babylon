@@ -15,7 +15,7 @@ class IssuesController < ApplicationController
         @pre_issues = @issuable.issues.order('sequential_id DESC')
       end
     else
-      @pre_issues = Issue
+      @pre_issues = Issue.scoped
     end
 
     @issues = @pre_issues
@@ -38,7 +38,7 @@ class IssuesController < ApplicationController
     end
     if params[:aspect]
       @project = Project.find(params[:aspect])
-      @issues = @issues
+      @issues = @project.issues
     end
 
     respond_to do |format|

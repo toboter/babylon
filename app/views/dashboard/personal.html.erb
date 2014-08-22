@@ -120,11 +120,11 @@
             <p>Do you really think this is the right project for you? There is nothing to do!? :-).</p>
           <% end %>
           </ul>
-            <%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-create btn-small", style: 'margin-top:4px;' if aspect? %>
+            <%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-default btn-small", style: 'margin-top:4px;' if aspect? %>
             <%= link_to [current_aspect, :todos], class: 'pull-right' do %>
                 Tasks for this project
             <% end %>
-        <% end if aspect? %>
+        <% end if aspect? && can?(:create, Todo) %>
 
 
 

@@ -114,7 +114,7 @@ private
     resource, id = request.path.split('/')[1, 2]
     if resource == 'modules'
       resource = 'clusters'
-    elsif resource == 'announcements'
+    elsif resource == 'blogs'
       resource = 'snippets'
     end
     @attachable = resource.singularize.classify.constantize.find(id) if id

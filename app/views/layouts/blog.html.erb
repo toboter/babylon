@@ -1,29 +1,41 @@
 <% content_for :content do %>
+<div id="wrap">
   <header>
-    <%= content_tag :div, class: 'navbar navbar-fixed-top' do %>
-      <%= render 'shared/navbar' %>
-    <% end %>
+
+      <%= content_tag :div, class: 'navbar navbar-inverse navbar-fixed-top' do %>
+        <%= render 'shared/navbar' %>
+      <% end %>
+      <div class="admin-block">
+        <%= yield(:top_over) %>
+      </div>
   </header>
 
-  <div class="container">
-    <%= render "shared/breadcrumbs" %>
+  <div class="container-fluid">
+
 	  <%= render "shared/debug" %>    
 	  
 	  <%= render "shared/flash", flash: flash %>
 
     <div class="row">
-      <div class="span12">
+      <div class="span6 offset3">
         <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
-        <%= content_tag :h2, yield(:subtitle), class: 'subtitle' if show_title? %>
+        <%= content_tag :h2, class: 'subtitle' do %>
+          <%= yield(:subtitle) %>
+          <%= yield(:edit_section) %>
+        <% end if show_title? %>
+        <%= yield(:main_section) %>
+        <%= yield(:footer_section) %>
   	  </div>
     </div>
   
-    <%= yield(:top_over) %>
-    <%= yield(:main_section) %>
-    <%= yield(:footer_section) %>
+
     
   </div>
+  <div id="push"></div>
+</div>
+<div id="footer">
   <%= render "shared/site_footer" %>
+</div>
 
 <% end %>
 

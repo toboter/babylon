@@ -19,10 +19,13 @@
     </p>
   </div>
   <%= content_tag :div, class: 'span1' do %>
-    <p class="pull-right">
-      <%= list.forkable ? (content_tag :i, '', class: "icon-retweet tooltip-left", title: 'public list') : nil %>
-      <%= list.featured ? (content_tag :i, '', class: "icon-fire tooltip-left" , title: 'featured') : nil %>
-    </p>
-  <% end if list.forkable || list.featured %>
+  <div class="pull-right">
+    <span class="label label-info" style="padding:5px 10px;">
+      <%= list.forkable ? (content_tag :i, '', class: "icon-share icon-white tooltip-right", title: 'public list') : nil %>
+      <%= list.featured ? (content_tag :i, '', class: "icon-star icon-white tooltip-right" , title: 'featured') : nil %>
+      <%= list.locations.any? ? (content_tag :i, '', class: "icon-map-marker icon-white tooltip-right" , title: 'location provided') : nil %>
+    </span>
+  </div>
+  <% end if list.forkable || list.featured || list.locations.any? %>
 </div>
 </div>

@@ -33,7 +33,6 @@
     <% end if @project.project_bucket %>
     <%= content_tag :div, class: 'span10 lead description', style: '' do %>
       <%= @project.description.present? ? markdown(@project.description) : content_tag(:p, "No abstract to show.") %>
-      <%= render partial: "shared/member", collection: @project.members %>
     <% end %>
   </div>
   <hr>
@@ -59,14 +58,18 @@
 <div class="row-fluid">
   <div class="span8">
   <%= content_tag :div, class: 'lists-view', id: 'lists' do %> 
-    <%= content_tag :div, style: 'width: 100%; margin-bottom:30px;' do %>
-      <div id="map" style='width: 100%; height: 500px;'></div>
-    <% end if @hash.any? %>
+    <% if @project.map_type.present? %>
+      <%= content_tag :div, style: 'width: 100%; margin-bottom:30px;' do %>
+        <div id="map" style='width: 100%; height: 500px;'></div>
+      <% end if @hash.any? %>
+    <% else %>
+      <%= content_tag :strong, 'Mapping turned off by the administrator of the project.' if @hash.any? %>
+    <% end %>
 
     <%= content_tag :h4, 'Lists', class: '' %>
     <%= render @project.lists.limit(5) %>
     <%= link_to 'View all lists', [@project, :lists] %>
-
+    <hr>
   <% end if @project.lists.any? %> 
 
   <%= content_tag :div, class: 'documents-list', id: 'docs' do %> 
@@ -76,6 +79,7 @@
           <%= render "documents/without_document_type", :var => @project %>
         </tbody>
       </table>
+    <hr>
   <% end if @project.documents.without_document_type.any? %> 
 
   <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %>
@@ -88,44 +92,7 @@
   <% end if @project.references.any? %>  
   </div>
   <div class="span4">
-  <div class="project-options">
-    <ul class="nav nav-pills nav-stacked nav-pills-big">
-      <%= content_tag :li do %>
-        <%= link_to project_issues_path(@project) do %>
-          <i class="icon-exclamation-sign"></i>
-          Issues
-          <%= content_tag :span, @project.issues.count, class: "badge pull-right #{@project.issues.where(closed: false).count > @project.issues.where(closed: true).count+1 ? @project.issues.where(closed: false).count > @project.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
-        <% end %>
-      <% end %>
-      <%= content_tag :li do %>
-        <%= link_to [@project, :lists] do %>
-          Lists
-          <span class="badge pull-right"><%= @project.lists.count %></span>
-        <% end %>
-      <% end %>
-      <%= content_tag :li do %>
-        <%= link_to [@project, :documents] do %>
-          Documents
-          <span class="badge pull-right"><%= @project.documents.without_document_type.count %></span>
-        <% end %>
-      <% end %>
-      <%= content_tag :li do %>
-        <%= link_to [@project, :references] do %>
-          References
-          <span class="badge pull-right"><%= @project.references.count %></span>
-        <% end %>
-      <% end %>
-      <%= content_tag :li do %>
-        <%= link_to [@project, :todos] do %>
-          Todo's
-          <span class="badge badge-important pull-right" style="margin-left:2px;"><%= @project.todos.where(:completed => false).count %></span>
-          <span class="badge badge-success pull-right"><%= @project.todos.where(:completed => true).count %></span>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-  
-  <div class="project-info well">
+  <div class="project-info">
     <ul class="unstyled">
       <% if @project.projectable_type == "Group" %>
         <li>Module: <%= link_to(@project.projectable.cluster.name, @project.projectable.cluster) %></li>
@@ -135,9 +102,49 @@
       <% end %>
     </ul>
     <%= content_tag :p, 'References are public', class: 'text-info' if @project.show_references == true %>
-
-    <%= link_to "Manage Memberships", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %> 
   </div>
+  <hr>
+  <div class="project-options">
+    <ul class="nav nav-pills nav-stacked nav-pills-big">
+      <%= content_tag :li do %>
+        <%= link_to project_issues_path(@project) do %>
+          <i class="icon-exclamation-sign"></i>
+          Issues
+          <%= content_tag :span, @project.issues.count, class: "badge pull-right #{@project.issues.where(closed: false).count > @project.issues.where(closed: true).count+1 ? @project.issues.where(closed: false).count > @project.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+        <% end %>
+      <% end if can? :read, Issue %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :lists] do %>
+          Lists
+          <span class="badge pull-right"><%= @project.lists.count %></span>
+        <% end %>
+      <% end if can? :read, List %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :documents] do %>
+          Documents
+          <span class="badge pull-right"><%= @project.documents.without_document_type.count %></span>
+        <% end %>
+      <% end if can? :read, Document %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :references] do %>
+          References
+          <span class="badge pull-right"><%= @project.references.count %></span>
+        <% end %>
+      <% end if can? :read, Reference %>
+      <%= content_tag :li do %>
+        <%= link_to [@project, :todos] do %>
+          Todo's
+          <span class="badge badge-important pull-right" style="margin-left:2px;"><%= @project.todos.where(:completed => false).count %></span>
+          <span class="badge badge-success pull-right"><%= @project.todos.where(:completed => true).count %></span>
+        <% end %>
+      <% end if can? :read, @project => Todo %>
+    </ul>
+  </div>
+  
+  <hr>
+
+  <%= render partial: "shared/member", collection: @project.members %><br>
+  <%= link_to "Manage Memberships", [:edit, @project.projectable, @project] if @project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %> 
 </div>
 </div>
 <% end %>

@@ -4,7 +4,7 @@
     <div class="control-group">
       <%= f.label :predicate_id, 'Predicate', class: 'control-label' %>
       <div class="form-inline controls">
-        <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Citation'), :id, :name, class: 'span6' %>
+        <%= f.collection_select :predicate_id, Predicate.where('scope_type = ?', 'Reference'), :id, :name, class: 'span6' %>
         <small><%= link_to_remove_association "remove", f %></small>
       </div>
     </div>

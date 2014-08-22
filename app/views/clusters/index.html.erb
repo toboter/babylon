@@ -11,57 +11,62 @@
     <h1>
       Modules
       <div class="pull-right" style="">
-        <%= link_to "Create Module", new_cluster_path, class: "btn btn-create btn-small" if can? :create, Cluster %>
+        <%= link_to "Create module", new_cluster_path, class: "btn btn-default" if can? :create, Cluster %>
       </div>
     </h1>
   	<% @clusters.each do |cluster| %>
       <div style="margin-bottom:30px;">
         <div class="row-fluid cluster-entry">
-          <%= link_to cluster, class: 'hidden-phone' do %>
-            <%= content_tag :div, class: 'span2' do %>
-              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", class: 'img-polaroid') %>
-            <% end %>
-            <%= content_tag :div, class: 'span7' do %>
-              <h1 style="font-size: 2em; margin-bottom:0px;"><%= link_to cluster.name, cluster %></h1>
-              <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
 
+            <%= content_tag :div, class: 'span3' do %>
+              <%= image_tag(cluster.cluster_bucket.cover ? cluster.cluster_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg", class: 'img-polaroid hidden-phone', style: 'margin-bottom:10px;') %>
+              <%= content_tag :div, style: '' do %>
+                <ul class="unstyled">
+                  <li><strong>Speaker: </strong><%= name_only_or_link_to(cluster.speaker) %></li>
+                  <li><strong>Admin: </strong><%= name_only_or_link_to(cluster.cluster_admin) %></li>
+                  <small>
+                    <li>Created on: <%= cluster.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
+                  </small>
+                </ul>
+                <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if cluster.contact.present? %>
+                <p><%= markdown(cluster.contact) if cluster.contact %></p>
+              <% end %>              
+            <% end %>
+            <%= content_tag :div, class: 'span9' do %>
+              <h1 style="margin:0px;"><%= link_to cluster.name, cluster %></h1>
+              <%= content_tag :div, class: 'lead' do %>
+                <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
+              <% end %>
                 <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
-                  <%= content_tag :h3, link_to("Groups", cluster_groups_path(cluster)), class: "muted" %>
+                  <%= content_tag :h3, link_to("Groups", cluster_groups_path(cluster)) %>
                   <% cluster.groups.limit(3).each do |group| %>
-                    <div class="group-entry well">
+                    <div class="group-entry" style="padding-left:20px;">
                       <h3><%= link_to "#{group.name}", group %></h3>
                       <% if group.description.present? %>
                         <%= markdown(group.description) %>
                       <% else %>
                         <p>No abstract available</p>
                       <% end %>
-                      <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
-                      <%= render group.projects.limit(3) %>
+                      <div style="padding-left:10px;">
+                        <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
+                        <%= render group.projects.limit(3) %>
+                        <%= link_to "View all projects in #{group.name}", [group, :projects] %>
+                      </div>
                     </div>
                   <% end %>
                 <% end if cluster.groups.any? %>
                 <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
-                  <%= content_tag :h3, link_to("Projects", [cluster, 'projects']), class: "muted" %>
+                  <%= content_tag :h3, link_to("Non group projects", polymorphic_path([cluster, :projects], state: 'module')) %>
                   <%= render cluster.projects.limit(5).order('created_at DESC') %>
-
+                  <%= link_to 'View all non-group projects', polymorphic_path([cluster, :projects], state: 'module') %>
                 <% end if cluster.projects.any? %>
 
             <% end %>
-          <% end %>
-          <%= content_tag :div, class: 'span3 well' do %>
-            <ul class="unstyled">
-              <li>Speaker: <%= name_only_or_link_to(cluster.speaker) %></li>
-              <li>Admin: <%= name_only_or_link_to(cluster.cluster_admin) %></li>
-              <small>
-                <li>Created on: <%= cluster.created_at.strftime('%d. %b %Y (%H:%M)') %></li>
-              </small>
-            </ul>
-            <%= content_tag :h4, 'Contact', style: 'padding-top:20px;' if cluster.contact.present? %>
-            <p><%= markdown(cluster.contact) if cluster.contact %></p>
-          <% end %>
+
+
         </div>
-        <hr>
-      </div>  
+      <hr>
+      </div>
 	  <% end %>
   </div>
 </div>

@@ -13,7 +13,7 @@
     <h1>
       Collections <small><%= @institution.name %></small>
       <div class="pull-right" style="">
-        <%= link_to "Create Collection", new_institution_collection_path(@institution), class: "btn btn-create" if can? :create, @collections %>
+        <%= link_to "Create Collection", new_institution_collection_path(@institution), class: "btn btn-default" if can? :create, Collection %>
       </div>
     </h1>
 

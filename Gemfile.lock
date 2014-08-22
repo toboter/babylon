@@ -94,6 +94,7 @@ GEM
       rails (>= 3, < 5)
     friendly_id (4.0.9)
     fssm (0.2.10)
+    geocoder (1.2.4)
     gmaps4rails (2.1.2)
     hike (1.2.3)
     htmlentities (4.3.2)
@@ -218,6 +219,7 @@ DEPENDENCIES
   devise (= 3.0.0)
   figaro
   friendly_id
+  geocoder
   gmaps4rails
   jquery-fileupload-rails
   jquery-rails

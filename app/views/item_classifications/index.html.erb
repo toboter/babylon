@@ -9,7 +9,7 @@
 <div class="row-fluid">
   <div class="span6">
     <div class="pull-right" style="">
-      <%= link_to "New classification", new_item_classification_path, class: "btn btn-create btn-small" if can? :create, @item_classifications %>
+      <%= link_to "New classification", new_item_classification_path, class: "btn btn-default" if can? :create, ItemClassification %>
     </div>
     <%= render 'full_classification_tree', :item_classifications => @item_classifications, add_links_visible: true, highlight: nil %>
   </div>

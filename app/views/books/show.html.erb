@@ -15,7 +15,7 @@
     <h4 class="muted">
       Content
       <div class="pull-right" style="margin: 0 0 1em 0; %>">
-        <%= link_to "Add Contents", new_reference_path(book_id: @book.id), class: "btn btn-create", style: 'font-weight:bold;' if @book && aspect? && !(@book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial') %>
+        <%= link_to "Add Contents", new_reference_path(book_id: @book.id), class: "btn btn-default", style: 'font-weight:bold;' if @book && aspect? && !(@book.book_type == 'Monograph' || @book.book_type == 'Monograph in a serial') %>
       </div>
     </h4>
     <%= render "references/bib_entries", :references => @book.articles.order('first_page ASC') %>

@@ -22,8 +22,8 @@
 
   <div id="citations">
   <%= content_tag :h4, 'Citations' %>
-  <%= f.fields_for :citations do |builder| %>
-    <%= render "citation_fields", :f => builder %>
+  <%= f.fields_for :citations do |cite| %>
+    <%= render "citation_fields", :f => cite %>
   <% end %>
   <div class="links controls">
     <%= link_to_add_association "Add Citation", f, :citations %>

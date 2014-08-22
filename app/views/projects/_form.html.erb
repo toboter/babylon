@@ -24,6 +24,12 @@
         <%= f.select(:project_type, Project::PROJECT_TYPES) %>
       </div>
     </div>
+    <div class="control-group">
+      <%= f.label :map_type, class: 'control-label' %>
+      <div class="controls">
+        <%= f.select(:map_type, Project::MAP_TYPES, {include_blank: 'none'}) %>
+      </div>
+    </div>
 
     <div class="control-group">
       <%= f.label :featured, class: 'control-label' %>
@@ -31,10 +37,15 @@
         <%= f.check_box :featured %>
       </div>
     </div>
+
     <div class="control-group">
       <%= f.label :description, class: 'control-label' %>
       <div class="controls">
         <%= f.text_area :description, class: 'span6' %>
+        <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
+        <div class="collapse" id="md-info">
+          <%= render 'shared/md-info' %>
+        </div>
       </div>
     </div>
   </fieldset>

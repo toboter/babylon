@@ -23,12 +23,12 @@
           <%= submit_tag "Search", :name => nil, class: 'btn' %>
         <% end %>
         <div class="pull-right">
-          <%= link_to new_person_path, class: 'btn btn-create', style: 'margin-left:10px;' do %>
-            <i class="icon-plus icon-white"></i>
+          <%= link_to new_person_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
+            <i class="icon-plus"></i>
             Person
-          <% end %>
-          <%= link_to new_person_path(:user_id => current_user, :alias => current_user.username), class: 'btn btn-create', style: 'margin-left:10px;' do %>
-            <i class="icon-plus icon-white"></i>
+          <% end if can? :create, Person %>
+          <%= link_to new_person_path(:user_id => current_user, :alias => current_user.username), class: 'btn btn-default', style: 'margin-left:10px;' do %>
+            <i class="icon-plus"></i>
             Your profile
           <% end unless current_user.person %>
         </div>

@@ -1,7 +1,5 @@
-<% title 'Edit announcement', @snippet.name %>
+<% title 'Edit blog post', @snippet.name, nil %>
 
 <% content_for :main_section do %>
-  <%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) %> | 
-  <%= link_to 'Edit Documents', snippet_documents_path(@snippet) %>
   <%= render 'form' %>
 <% end %>

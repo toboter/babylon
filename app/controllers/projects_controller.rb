@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
   before_filter :load_projectable, except: :show
-  load_and_authorize_resource
+  load_and_authorize_resource :project
   
   # GET /projects
   # GET /projects.json
@@ -43,12 +43,12 @@ class ProjectsController < ApplicationController
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
     @shown_references = Project.where(show_references: true).map{|p| p.references}.flatten
 
-    @hash = Gmaps4rails.build_markers(@project.lists.where("lists.latitude IS NOT NULL")) do |list, marker|
-      marker.lat list.latitude
-      marker.lng list.longitude
-      marker.infowindow "#{list.name}: #{list.description}. 
-      <a href='#{url_for([list.project, list])}'>...more</a>"
-      marker.json({ title: list.name })
+    @hash = Gmaps4rails.build_markers(@project.lists.map{|l| l.locations}.flatten) do |location, marker|
+      marker.lat location.latitude
+      marker.lng location.longitude
+      marker.infowindow "#{location.locatable.name}: #{location.locatable.description}. 
+      <a href='#{url_for([location.locatable.project, location.locatable])}'>...more</a>"
+      marker.json({ title: location.locatable.name })
     end
 
     respond_to do |format|

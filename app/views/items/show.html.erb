@@ -1,19 +1,19 @@
-<% title @item.inventory_name, nil, nil %>
+<% title @item.name, nil, nil %>
 <% edit_section_for(@item, nil) %>
 <% footer_section(@item) %>
 
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
-  <li class="active"><%= "#{@item.inventory_name}" %></li>
+  <li><%= link_to 'Objects', items_path %> <span class="divider">/</span></li>
+  <li class="active"><%= "#{@item.name}" %></li>
 <% end %>
 
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
     <%= content_tag :h2, class: "" do %>
-      <%= @item.title? ? @item.title : @item.inventory_name %>
+      <%= @item.title? ? @item.title : @item.name %>
       <%= yield(:edit_section) %>
     <% end %>
     <div class="row-fluid">
@@ -45,9 +45,7 @@
                 <% end %>
 
               </table> 
-
             </div>
-
       </div>
     </div>
   
@@ -62,7 +60,7 @@
         </div>
 
         <div class="item-section" id='history'>
-          <%= content_tag :h3, 'History', class: '' %>
+          <%= content_tag :h3, 'History', class: '' if @item.accession_date || @item.actions.any? %>
           <ul class="unstyled">
             <% for action in @item.actions.order('created_at DESC') do %>
               <li>
@@ -76,6 +74,17 @@
             <% end if @item.accession_date %>
           </ul>
         </div>
+        <%= content_tag :div, class: "item-section", id: 'locations' do %>
+          <%= content_tag :h3, 'Locations', class: '' %>
+          <ul class="unstyled">
+            <% for location in @item.locations do %>
+              <li>
+                <strong><%= location.predicate.name.humanize %>: </strong>
+                <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>]
+              </li>
+            <% end %>
+          </ul>
+        <% end if @item.locations.any? %>
         <%= content_tag :div, class: "item-section", id: 'connections' do %>
           <%= content_tag :h3, 'Connections', class: '' %>
           <ul class="unstyled">
@@ -119,24 +128,24 @@
 
         <%= content_tag :div, class: "item-section", id: 'workspaces' do %>
           <%= content_tag :h3, class: '', style: 'margin-bottom:10px;' do %>
-            Studies on this item
+            Studies
             <span class="badge"><%= @item.studies.count %></span>
             <div class="pull-right">
               <% if current_aspect.lists.any? %>
-                <%= link_to new_item_study_path(@item), class: 'btn btn-create', style: 'margin-left:10px;' do %>
-                  <i class="icon-plus icon-white"></i>
+                <%= link_to new_item_study_path(@item), class: 'btn btn-default', style: 'margin-left:10px;' do %>
+                  <i class="icon-plus"></i>
                   Study
-                <% end %>
+                <% end if can? :create, Study %>
               <% else %>
-                <%= link_to [:edit, current_aspect.projectable, current_aspect], class: 'btn btn-create btn-small', style: 'margin-left:10px;' do %>
-                  <i class="icon-plus icon-white"></i>
+                <%= link_to [:edit, current_aspect.projectable, current_aspect], class: 'btn btn-default btn-small', style: 'margin-left:10px;' do %>
+                  <i class="icon-plus"></i>
                   No lists found. Edit your current project
-                <% end %>
+                <% end if can? :edit, current_aspect %>
               <% end if aspect? %>
             </div>
           <% end %>
           <%= render "studies/study_tiles", studies: @item.studies.limit(6) if @item.studies.any? %>
-          <%= link_to "View all studies on #{@item.name} and connected items", [@item, :studies] %>
+          <%= link_to "View all studies on #{@item.name} and connected objects", [@item, :studies] %>
         <% end %>
 
         
@@ -144,14 +153,20 @@
           <%= content_tag :h3, class: '' do %>
             Documents
             <span class="badge"><%= @item.documents.without_document_type.count %></span>
+            <%= link_to new_item_document_path(@item), class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
+              <i class="icon-plus"></i>
+              Document
+            <% end if can? :create, Document %>
           <% end %>
+          <%= content_tag :div do %>
           <table class="table table-bordered table-hover">
             <tbody>
             <%= render @item.documents %>
             </tbody>
           </table>
           <%= link_to 'View all docs', [@item, :documents] %>
-        <% end if @item.documents.any? %>
+          <% end if @item.documents.any? %>
+        <% end %>
 
         
         <%= content_tag :div, class: "item-section", id: "references" do %>
@@ -161,6 +176,15 @@
           <% end %>
           <%= render "reference_entries", :citations => @item.citations %>
           <%= link_to 'View all refs', [@item, :references] %>
+
+          <%= content_tag :h3, 'References photos' %>
+          <div class="tiles">
+            <% for asset in @item.references.joins(:projects).where(projects: {project_type: 'photographic'}).map{|r| r.assets}.uniq.flatten do %>
+              <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid" %>
+            <% end %>
+          </div>
+
+          <hr>
         <% end if @item.citations.any? %>
 
 

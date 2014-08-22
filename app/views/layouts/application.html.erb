@@ -19,7 +19,6 @@
   <body>
       <% if user_signed_in? %>
         <%= content_for?(:content) ? yield(:content) : yield %>
-        <%= yield(:navbar_modal_inject) if content_for?(:navbar_modal_inject) %>
         <%= yield(:modal_inject) if content_for?(:modal_inject) %>
         <%= yield(:scripts) if content_for?(:scripts) %>
       <% else %>

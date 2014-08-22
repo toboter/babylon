@@ -60,12 +60,12 @@
     </ul>
 
     <div class="">
-      <%= link_to new_institution_path(:parent_id => @institution.id), class: 'btn btn-create btn-small', style: 'margin-left:0;' do %>
-        <i class="icon-plus icon-white"></i>
+      <%= link_to new_institution_path(:parent_id => @institution.id), class: 'btn btn-default btn-small', style: 'margin-left:0;' do %>
+        <i class="icon-plus"></i>
         Sub-Institution
       <% end if can? :create, Institution %>
-      <%= link_to new_institution_collection_path(@institution), class: 'btn btn-create btn-small', style: 'margin-left:0;' do %>
-        <i class="icon-plus icon-white"></i>
+      <%= link_to new_institution_collection_path(@institution), class: 'btn btn-default btn-small', style: 'margin-left:0;' do %>
+        <i class="icon-plus"></i>
         Collection
       <% end if can? :create, Collection %>
     </div>

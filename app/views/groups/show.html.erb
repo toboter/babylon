@@ -34,7 +34,6 @@
       <p class="">
         <%= @group.description.present? ? markdown(@group.description) : "No abstract to show." %>
       </p>
-      <%= render partial: "shared/member", collection: @members %>
     <% end %>
   </div>
   <hr>
@@ -43,8 +42,9 @@
 
 <% content_for :main_section do %>
 <div class="row-fluid">
+  <div class="span8">
 
-  <%= content_tag :h4, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
+  <%= content_tag :h3, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
   <%= render @group.projects.limit(3) %>
   <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
     <%= content_tag :h4, 'Documents', class: 'muted' %>  
@@ -54,11 +54,8 @@
         </tbody>
       </table>
   <% end if @group.documents.without_document_type.any? %>
-</div>
-<% end %>
-
-<% content_for :sidebar_section do %>
-
+  </div>
+  <div class="span4">
   <div class="project-options">
     <ul class="nav nav-pills nav-stacked nav-pills-big">
       <%= content_tag :li do %>
@@ -67,19 +64,19 @@
           Issues
           <%= content_tag :span, @group.issues.count, class: "badge pull-right #{@group.issues.where(closed: false).count > @group.issues.where(closed: true).count+1 ? @group.issues.where(closed: false).count > @group.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
         <% end %>
-      <% end %>
+      <% end if can? :read, Issue %>
       <%= content_tag :li do %>
         <%= link_to [@group, :projects] do %>
           Projects
           <span class="badge pull-right"><%= @group.projects.count %></span>
         <% end %>
-      <% end %>
+      <% end if can? :read, Project %>
       <%= content_tag :li do %>
         <%= link_to [@group, :documents] do %>
           Documents
           <span class="badge pull-right"><%= @group.documents.without_document_type.count %></span>
         <% end %>
-      <% end %>
+      <% end if can? :read, Document %>
     </ul>
   </div>
   
@@ -94,4 +91,7 @@
       </small>
     </ul>
   </div>
+  <%= render partial: "shared/member", collection: @members %>
+  </div>
+</div>
 <% end %>

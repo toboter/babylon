@@ -20,19 +20,19 @@ class Study < ActiveRecord::Base
 
   validates :list_id, presence: true
   validates :list_id, :uniqueness => {scope: [:studyable_type, :studyable_id], :message => 'List does not accept duplicates'}, :unless => :accept_duplicates
-  validate :validate_properties
+  # validate :validate_properties
 
   def accept_duplicates
   	list.accept_duplicates
   end
 
-  def validate_properties
-    list.project.studyfields.each do |field|
-      if field.required? && properties[field.name].blank?
-        errors.add field.name, "must not be blank"
-      end
-    end
-  end
+  # def validate_properties
+  #   list.project.studyfields.each do |field|
+  #     if field.required? && properties[field.name].blank?
+  #       errors.add field.name, "must not be blank"
+  #     end
+  #   end
+  # end
 
   def name
   	'Study of '+studyable.name
