@@ -8,6 +8,10 @@
         <b>List:</b>
         <%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project] %> : : <%= study.list ? link_to(study.list.name, [study.list.project, study.list]) : content_tag(:span, 'no list', class: 'text-warning') %>
       </p>
+      <%= content_tag :p do %>
+        <b>Original <%= link_to 'study', [@parent.forked_from, study] %> on list</b>
+        <%= link_to full_qualified_name(@parent.forked_from.project), [@parent.forked_from.project.projectable, @parent.forked_from.project] %> : : <%= link_to @parent.forked_from.name, [@parent.forked_from.project, @parent.forked_from] %>
+      <% end if @parent && @parent.class.to_s == 'List' && @parent.forked_from %>
       <p>
         <b>Original Item:</b>
         <%= link_to study.studyable.name, study.studyable %>

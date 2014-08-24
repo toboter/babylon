@@ -27,9 +27,10 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :file_author, class: 'control-label' %>
+    <%= f.label :file_author, 'Author', class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :file_author, Person.all, :id, :name, prompt: "Who took it?" %>
+      <%= f.collection_select :file_author, Person.all, :id, :name %>
+      <p>The author of the description.</p>
     </div>
   </div>
 

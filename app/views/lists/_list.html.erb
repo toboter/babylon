@@ -12,7 +12,10 @@
       Created by <%= name_only_or_link_to(list.creator) %> 
       <%= distance_of_time_in_words_to_now(list.created_at) %> ago <br />
       found in <%= link_to full_qualified_name(list.project), [list.project.projectable, list.project] %><br />
-      <%= ('copied from ' + link_to(full_qualified_name(list.forked_from), [list.forked_from.projectable, list.forked_from])).html_safe if list.forked_from %>
+      <%= content_tag :span do %>
+      copied from
+      <%= link_to(full_qualified_name(list.forked_from.project), [list.forked_from.project.projectable, list.forked_from.project]).html_safe  %> : : <%= link_to list.forked_from.name, [list.forked_from.project, list.forked_from] %>
+      <% end if list.forked_from  %>
     </p>
     <p>
       <%= list.description %>

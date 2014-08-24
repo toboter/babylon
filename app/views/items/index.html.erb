@@ -52,9 +52,6 @@
       dissov_id, mds_id.</small></p>
     <% end if can? :manage, @items %>
 
-    <%= select_tag :list_id, options_from_collection_for_select(current_aspect.lists, :id, :name), {include_blank: false} %>
-      <%= submit_tag "Send", class: 'btn' %>
-
   </div>
   <div class="span9">
     

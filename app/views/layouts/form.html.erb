@@ -29,7 +29,7 @@
       <% end if content_for?(:nav) %>
 
       <%= content_tag :div, class: content_for?(:nav) ? 'span10' : 'span12' do %>
-      	<%= yield(:main_section) %>
+      	<%= content_for?(:main_section) ? yield(:main_section) : yield %>
       <% end %>
   	</div>
     

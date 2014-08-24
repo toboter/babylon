@@ -55,8 +55,8 @@
 </p>
 
 <p>
-  <b>Forked from:</b>
-  <%= @list.forked_from_id %>
+  <b>Fork of:</b>
+  <%= link_to "#{full_qualified_name(@list.forked_from.project)} : : #{@list.forked_from.name}", [@list.forked_from.project, @list.forked_from] if @list.forked_from%>
 </p>
 
 <p>
@@ -92,9 +92,9 @@
           <div class="span12">
   <%= content_tag :div, class: 'tiles', id: 'study-tiles' do %>
     <%= content_tag :h3, 'Studied objects' %>
-    <%= render "studies/study_tiles", studies: @list.studies.limit(8)  %>
+    <%= render "studies/study_tiles", studies: @studies  %>
     <%= link_to "View all studies in #{@list.name}", [@list, :studies] %>
-  <% end if @list.studies.any? %>
+  <% end if @studies.any? %>
 </div>
 </div>
 <% end %>

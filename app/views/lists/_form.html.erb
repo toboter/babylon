@@ -40,8 +40,8 @@
     </div>
 
   <div class="controls">
-    <%= f.label :forked_from_id %>
-    <%= f.number_field :forked_from_id %>
+    <%= f.label :forked_from_id, 'Fork of' %>
+    <%= f.collection_select :forked_from_id, List.all, :id, :name %>
   </div>
 
   <div id='locations'>

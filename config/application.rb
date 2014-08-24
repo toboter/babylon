@@ -64,5 +64,10 @@ module Babylon
     config.assets.initialize_on_precompile = false # Heroku Asset Pipeline
 
     config.autoload_paths << "#{Rails.root}/lib"
+
+    config.to_prepare do
+      Devise::RegistrationsController.layout proc{ |controller| user_signed_in? ? "form" : "application" }      
+    end
+
   end
 end

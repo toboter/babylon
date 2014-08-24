@@ -1,5 +1,6 @@
 <% title "Account", nil %>
-<div class="row">
+<% content_for :main_section do %>
+<div class="row-fluid">
   <div class="span8">
     <h3 style="margin-top:10px;">Edit <%= resource_name.to_s.humanize %></h3>
     <h4 class="subtitle"><%= resource.available_name %></h4>
@@ -64,3 +65,4 @@
 
   </div>
 </div>
+<% end %>

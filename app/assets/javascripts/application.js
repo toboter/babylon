@@ -45,6 +45,10 @@ $(document).ready(function(){
         placement: 'left',
         trigger: 'hover'
     });
+    $('.popover-bottom').popover({
+        placement: 'bottom',
+        trigger: 'hover'
+    });
 
     $('.chosen-select').chosen({
     	search_contains: true

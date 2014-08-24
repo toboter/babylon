@@ -49,12 +49,10 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  host: ENV["HEROKUHOST"]
-  port: 5432
-  database: ENV["HEROKUDB"]
+  database: ENV["DB"]
   pool: 5
-  username: ENV["HEROKUUSERNAME"]
-  password: ENV["HEROKUPASSWORD"]
+  username: ENV["DBUSERNAME"]
+  password: ENV["DBPASSWORD"]
 
 # production:
 #   adapter: postgresql

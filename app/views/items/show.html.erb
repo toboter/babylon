@@ -180,7 +180,7 @@
           <%= content_tag :h3, 'References photos' %>
           <div class="tiles">
             <% for asset in @item.references.joins(:projects).where(projects: {project_type: 'photographic'}).map{|r| r.assets}.uniq.flatten do %>
-              <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid" %>
+              <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid popover-bottom", data: { 'original-title' => asset.name, 'content' => asset.full_caption } %>
             <% end %>
           </div>
 

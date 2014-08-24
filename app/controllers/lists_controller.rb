@@ -30,7 +30,12 @@ class ListsController < ApplicationController
   # GET /lists/1.json
   def show
     @list = @project.lists.find(params[:id])
-    @locations = @list.studies.map{|s| s.studyable.locations }.flatten
+    @studies = @list.studies
+    if @list.forked_from
+      @forked_list = List.find(@list.forked_from)
+      @studies = @studies + @forked_list.studies
+    end
+    @locations = @studies.map{|s| s.studyable.locations }.flatten
 
     @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
       marker.lat location.latitude

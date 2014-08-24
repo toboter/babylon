@@ -6,13 +6,16 @@ class StudiesController < ApplicationController
   # GET /studies.json
   def index
     if @parent
-      @studies = @parent.studies.all
+      @studies = @parent.studies
       if @parent.class.to_s == 'Item'
         @connected_studies = @parent.connections.map {|c| c.inverse_item.studies.map { |s| s }}.flatten
-        @connected_studies.concat(@parent.inverse_connections.map {|c| c.item.studies.map { |s| s }}.flatten)
-        @studies.concat(@connected_studies) if @connected_studies
+        @connected_studies = @connected_studies + @parent.inverse_connections.map {|c| c.item.studies.map { |s| s }}.flatten
+        @studies = @studies + @connected_studies if @connected_studies
       end
-
+      if @parent.class.to_s == 'List' && @parent.forked_from
+        @forked_list = List.find(@parent.forked_from)
+        @studies = @studies + @forked_list.studies
+      end
     else
       @studies = Study.all
     end
