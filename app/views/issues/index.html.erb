@@ -1,4 +1,4 @@
-<% title 'Issues for '+'"'+@issuable.name+'"', nil, nil if @issuable %>
+<% title 'Issues on '+'"'+@issuable.name+'"', nil, nil if @issuable %>
 <% title 'All Issues', nil unless @issuable %>
 
 <% content_for :breadcrumbs_section do %>
@@ -13,7 +13,7 @@
 <div class="row-fluid">
   <div class="span12">
     <%= content_tag :h1 do %>
-      Issues for "<%= link_to @issuable.name, @issuable %>" <small>[<%= @issuable.class %>]</small>
+      Issues on "<%= link_to @issuable.name, @issuable %>" <small>[<%= @issuable.class %>]</small>
     <% end if @issuable %>
   
 
@@ -24,7 +24,7 @@
         <%= content_tag :li, link_to("Everyone's Issues", polymorphic_url([@issuable, :issues], state: params[:state])), class: "#{'active' unless params[:creator] || params[:assignee] || params[:aspect]}" %>
         <%= content_tag :li, link_to("Created by you", polymorphic_url([@issuable, :issues], creator: current_user, state: params[:state])), class: "#{'active' if params[:creator] }" %>
         <%= content_tag :li, link_to("Assigned to you", polymorphic_url([@issuable, :issues], assignee: current_user, state: params[:state])), class: "#{'active' if params[:assignee]}" %>
-        <%= content_tag :li, link_to("Current projects", polymorphic_url([@issuable, :issues], aspect: current_aspect, state: params[:state])), class: "#{'active' if params[:aspect]}" if aspect? %>
+        <!--<%= content_tag :li, link_to("Current projects", polymorphic_url([@issuable, :issues], aspect: current_aspect, state: params[:state])), class: "#{'active' if params[:aspect]}" if aspect? %>-->
       </ul>
       <hr>
       <%= content_tag :h4, 'Labels' %>

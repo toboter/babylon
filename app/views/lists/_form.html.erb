@@ -41,7 +41,7 @@
 
   <div class="controls">
     <%= f.label :forked_from_id, 'Fork of' %>
-    <%= f.collection_select :forked_from_id, List.all, :id, :name %>
+    <%= f.collection_select :forked_from_id, List.all, :id, :name, {include_blank: true} %>
   </div>
 
   <div id='locations'>

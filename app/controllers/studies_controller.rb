@@ -15,6 +15,7 @@ class StudiesController < ApplicationController
       if @parent.class.to_s == 'List' && @parent.forked_from
         @forked_list = List.find(@parent.forked_from)
         @studies = @studies + @forked_list.studies
+        @list = @parent
       end
     else
       @studies = Study.all

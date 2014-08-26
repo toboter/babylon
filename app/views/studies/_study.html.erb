@@ -1,36 +1,44 @@
-<div class="well">
-  <div class="row-fluid">
-  	<div class="span5">
+<tr>
+  <td>
+    <%= content_tag :div, class: 'span11' do %>
       <h4>
-        <%= link_to "#{study.list.name} study of #{study.studyable.name}", [study.list, study] %>
+        <%= link_to study.studyable.name, study.studyable, class: 'tooltip-bottom', title: 'link to original object' %>
+        <small>[<%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project], class: 'tooltip-bottom', title: 'original project overview' %> : : <%= study.list ? link_to(study.list.name, [study.list.project, study.list], class: 'tooltip-bottom', title: 'view the (original) list') : content_tag(:span, 'no list', class: 'text-warning') %>]</small>
       </h4>
+
+          <%= content_tag :table, class: "table table-bordered table-hover" do %>
+            <tbody>
+              <% study.properties.each do |name, value| %>
+                <tr>
+                <% if value.include?('[""') %>
+                  <td><%= name.humanize %></td>
+                  <td><%= ProjectStudyFieldValue.find(eval(value).compact.reject{|r| r.empty? }).map{ |psfv| link_to psfv.field_value, '', class: 'popover-right', data: { 'original-title' => psfv.field_value, 'content' => psfv.description } }.join(', ').html_safe %></td>
+                <% else %>
+                  <td><%= name.humanize %></td>
+                  <td><%= %['select' 'radio_buttons'].include?(ProjectStudyField.find_by_name(name).field_type) ? link_to(ProjectStudyFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => ProjectStudyFieldValue.find(value).field_value, 'content' => ProjectStudyFieldValue.find(value).description }) : value %></td>
+                <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          <% end if study.properties.any? %>  
+
+
       <p>
-        <b>List:</b>
-        <%= link_to full_qualified_name(study.list.project), [study.list.project.projectable, study.list.project] %> : : <%= study.list ? link_to(study.list.name, [study.list.project, study.list]) : content_tag(:span, 'no list', class: 'text-warning') %>
+        <%= link_to 'Documents', [study, :documents] %> | 
+        <%= link_to 'References', [study, :references] %> | 
+        <%= link_to 'Folders', [study, :buckets] %> | 
+        <%= link_to 'Issues', study_issues_path(study) %>
       </p>
-      <%= content_tag :p do %>
-        <b>Original <%= link_to 'study', [@parent.forked_from, study] %> on list</b>
-        <%= link_to full_qualified_name(@parent.forked_from.project), [@parent.forked_from.project.projectable, @parent.forked_from.project] %> : : <%= link_to @parent.forked_from.name, [@parent.forked_from.project, @parent.forked_from] %>
-      <% end if @parent && @parent.class.to_s == 'List' && @parent.forked_from %>
-      <p>
-        <b>Original Item:</b>
-        <%= link_to study.studyable.name, study.studyable %>
-      </p>
-  	</div>
-  	<div class="span7">
-          <table class="table table-bordered table-hover">
-          	<thead>
-          	  <th>Attribute</th>
-          	  <th>Value</th>
-          	    </thead>
-			            <% study.properties.each do |name, value| %>
-                    <% if value.is_a?(Array) %>
-                      <%= item_description(name.humanize, ProjectStudyFieldValue.find(value.compact.reject{|r| r.empty? }).map{ |psfv| link_to psfv.field_value, '', class: 'popover-right', data: { 'original-title' => psfv.field_value, 'content' => psfv.description } }.join(', ').html_safe) %>
-                    <% else %>
-                      <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(ProjectStudyField.find_by_name(name).field_type) ? link_to(ProjectStudyFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => ProjectStudyFieldValue.find(value).field_value, 'content' => ProjectStudyFieldValue.find(value).description }) : value ) %>
-                    <% end %>
-			            <% end %>
-		             </table>	
-	</div>
-  </div>
-</div>
+      <%= link_to 'View study', [study.studyable, study], class: 'popover-right', data: { 'original-title' => 'Study of '+study.studyable.name, 'content' => study.inspect } %>
+    <% end %>
+    <%= content_tag :div, class: 'span1' do %>
+      <div class="pull-right">
+        <span class="label label-info" style="padding:5px 10px;">
+          <%= study.list.project == current_aspect ? (content_tag :i, '', class: "icon-folder-open icon-white tooltip-left", title: "on list '#{study.list.name}'' in your current project") : nil %>
+          <%= study.studyable.locations.any? ? (content_tag :i, '', class: "icon-map-marker icon-white tooltip-left", title: 'location provided') : nil %>
+          <%= study.list != @list ? (content_tag :i, '', class: "icon-random icon-white tooltip-left" , title: 'copied') : nil if @list %>
+        </span>
+      </div>
+    <% end if study.list.project == current_aspect || study.studyable.locations.any? || (@list && study.list != @list) %>
+  </td>
+</tr>

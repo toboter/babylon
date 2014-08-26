@@ -18,7 +18,11 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <%= render partial: 'studies/study', collection: @studies %>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <%= render @studies %>
+      </tbody>
+    </table>
   </div>
 </div>
 <% end %>

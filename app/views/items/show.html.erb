@@ -144,7 +144,11 @@
               <% end if aspect? %>
             </div>
           <% end %>
-          <%= render "studies/study_tiles", studies: @item.studies.limit(6) if @item.studies.any? %>
+          <%= content_tag :table, class: 'table table-bordered table-hover' do %>
+            <tbody>
+              <%= render @item.studies.limit(6) %>
+            </tbody>
+          <% end if @item.studies.any? %>
           <%= link_to "View all studies on #{@item.name} and connected objects", [@item, :studies] %>
         <% end %>
 

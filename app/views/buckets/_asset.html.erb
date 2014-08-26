@@ -7,7 +7,7 @@
                 <ul class="unstyled">
                   <% if can? :edit, @bucket %>
                     <li><%= link_to 'Set as cover', set_as_cover_bucket_path(@bucket, :cover_asset_id => asset), method: :put %><%= content_tag :span, ' (x)' if asset.id == @bucket.cover_asset_id %></li>
-                    <li><%= link_to 'Delete from bucket', pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure?' } %></li>
+                    <li><%= link_to 'Delete from folder', pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure?' } %></li>
                   <% end %>
                 </ul>
               </div>

@@ -8,7 +8,7 @@ class ReferencesController < ApplicationController
     if params[:project_id]
       @parent = Project.find(params[:project_id])
       @direct_references = @parent.references
-      @indirect_references = @parent.studies.map{|r| r.references }.flatten
+      @indirect_references = @parent.studies.map{|r| r.references }.flatten.uniq
       @references_all = (@direct_references+@indirect_references).uniq
     elsif params[:item_id]
       @parent = Item.find(params[:item_id])

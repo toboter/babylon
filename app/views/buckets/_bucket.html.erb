@@ -7,5 +7,5 @@
     <%= asset.assetfile.normal.url if local_assigns.has_key? :with_link %> 
   <% end %>
 </div>
-<p style="margin-bottom: 30px;"><%= link_to "View all assets in #{bucket.name}", [bucket.attachable, bucket] %></p>
+<p style="margin-bottom: 30px;"><%= link_to "View all assets in #{bucket.name}", [bucket.attachable, bucket], target: '_blank' %></p>
 

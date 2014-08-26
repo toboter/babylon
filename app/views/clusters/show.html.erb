@@ -18,7 +18,7 @@
       <h1>
         <%= @cluster.name %><%= yield(:edit_section) %>
       </h1>
-      <%= content_tag :div, @cluster.description.present? ? markdown(@cluster.description) : content_tag(:p, "No abstract to show."), class: 'text' %>
+      <%= content_tag :div, @cluster.description.present? ? markdown(@cluster.description) : content_tag(:p, "No description to show."), class: 'text' %>
     <% end %>
   </div>
 </div>
@@ -31,10 +31,10 @@
     <%= content_tag :h4, 'Documents', class: 'muted' %>  
       <table class="table table-bordered">
         <tbody>
-          <%= render "documents/without_document_type", :var => @cluster %>
+          <%= render @cluster.documents %>
         </tbody>
       </table>
-  <% end if @cluster.documents.without_document_type.any? %> 
+  <% end if @cluster.documents.any? %> 
 
   <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
     <%= content_tag :h2, link_to("Groups", cluster_groups_path(@cluster)), class: "muted" %>
@@ -88,7 +88,7 @@
       <%= content_tag :li do %>
         <%= link_to [@cluster, :documents] do %>
           Documents
-          <span class="badge pull-right"><%= @cluster.documents.without_document_type.count %></span>
+          <span class="badge pull-right"><%= @cluster.documents.count %></span>
         <% end %>
       <% end if can? :read, Document %>
     </ul>

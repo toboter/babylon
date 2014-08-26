@@ -69,6 +69,7 @@
     <div class="documents-options">
       <div class="pull-right">
         <%= link_to 'Create Document', [:new, @documentable, :document], class: "btn btn-default" if @documentable && can?(:create, Document) %>
+        <%= link_to "Create Introduction", polymorphic_path([:new, @documentable, :document], :document_type => "Introduction"), class: 'btn btn-default' if !@documentable.documents.doctype('Introduction') && (@documentable.class.to_s == 'Cluster' || @documentable.class.to_s == 'Group' || @documentable.class.to_s == 'Project') %>
       </div>
     </div>
     <div class="documents-list">

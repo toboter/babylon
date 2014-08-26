@@ -35,7 +35,7 @@ class ListsController < ApplicationController
       @forked_list = List.find(@list.forked_from)
       @studies = @studies + @forked_list.studies
     end
-    @locations = @studies.map{|s| s.studyable.locations }.flatten
+    @locations = @studies.map{|s| s.studyable.locations }.flatten.uniq
 
     @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
       marker.lat location.latitude
