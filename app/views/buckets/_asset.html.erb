@@ -1,16 +1,17 @@
-        <li class="span2">
-          <% if asset.content_type.include? 'image' %>  
-            <div class="thumbnail">
-              <%= link_to (image_tag asset.assetfile.thumb.url), asset, class: "" %>
-              <div class="caption">  
-                <h5><%= link_to "#{asset.name}", asset %></h5>
-                <ul class="unstyled">
-                  <% if can? :edit, @bucket %>
-                    <li><%= link_to 'Set as cover', set_as_cover_bucket_path(@bucket, :cover_asset_id => asset), method: :put %><%= content_tag :span, ' (x)' if asset.id == @bucket.cover_asset_id %></li>
-                    <li><%= link_to 'Delete from folder', pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure?' } %></li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
-          <% end %>
-        </li>
+<tr id="asset_<%= asset.id %>">
+  <td width="50px">
+    <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:50px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), asset.assetfile.large.url, class: 'img-fluid' %>
+  </td>
+  <td>
+    <%= content_tag :div, class: 'pull-right' do %>
+      <%= link_to set_as_cover_bucket_path(@bucket, :cover_asset_id => asset), method: :put, class: 'btn btn-mini btn-info' do %>
+        <i class="icon-star icon-white"></i>
+      <% end if asset.id != @bucket.cover_asset_id %>
+      <%= link_to pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure? This will remove the asset from the folder.' }, class: 'btn btn-warning btn-mini' do %>
+        <i class="icon-trash icon-white"></i>
+      <% end %>
+    <% end if @bucket && can?(:edit, @bucket) %>
+    <%= link_to asset.name, asset %><br>
+    <%= asset.file_name %>
+  </td>
+</tr>

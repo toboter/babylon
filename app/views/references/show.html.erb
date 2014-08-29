@@ -81,7 +81,7 @@
     <div class="span4">
       <div class="tiles">
       <% for asset in @reference.assets.where('content_type LIKE ?', 'image%').order('created_at desc').limit(4) do %>
-        <%= link_to (image_tag asset.assetfile.thumb.url, class: ""), asset.assetfile.large.url, class: "img-fluid" %>
+        <%= link_to (image_tag asset.assetfile.thumb.url, class: "", style: 'width:110px;'), asset.assetfile.large.url, class: "img-fluid" %>
       <% end %>
       </div>
     </div>

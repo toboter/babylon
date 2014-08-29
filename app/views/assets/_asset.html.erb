@@ -1,23 +1,8 @@
-<%= content_tag :li, class: "span4" do %>
-  <div class="thumbnail">
-    <%= link_to (image_tag (asset.is_cover ? asset.assetfile.big_thumb.url : asset.assetfile.thumb.url)), asset if asset.content_type.include? 'image' %>
-    <%= link_to (image_tag 'mini_dummy.gif'), asset unless asset.content_type.include? 'image' %>
-    <div class="asset-info" style="padding:5px">
-      <p class="visible-desktop" style="min-height:15em;">
-        <strong><%= asset.name %></strong><br />
-        <% if asset.caption %>
-          <%= truncate(asset.caption, length: 230, seperator: ' ', omission: ' ... ') %>
-          <br />
-        <% end %>
-        <strong>Buckets: </strong>
-        <%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %>
-      </p>
-      <%= content_tag :span do %>
-        <label class="checkbox">
-          <%= check_box_tag "asset_ids[]", asset.id %> Mark deleted
-        </label> 
-      <% end if can? :destroy, asset %>
-
-    </div>
-  </div>
+<%= content_tag :li, class: "span2" do %>
+  <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.thumb.url, style: 'width:200px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:200px;')), asset, class: 'popover-bottom img', data: { 'original-title' => asset.name, 'content' => "#{render 'asset_caption', asset: asset}", html: true }, style: 'padding-bottom:100px;' %>
+  <%= content_tag :span do %>
+    <label class="checkbox">
+      <%= check_box_tag "asset_ids[]", asset.id %> Mark deleted
+    </label> 
+  <% end if can? :destroy, asset %>
 <% end %>

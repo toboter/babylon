@@ -22,9 +22,8 @@ class BucketsController < ApplicationController
   # GET /buckets/1.json
   def show
     @bucket = @attachable.buckets.find(params[:id])
-    @assets_pre = Asset.all-@bucket.assets
     # @search = Asset.search(params[:q])
-    @assets_available = @assets_pre.paginate(page: params[:page], per_page: params[:per_page] ? params[:per_page] : 12)
+    @assets_available = Asset.all-@bucket.assets
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# show.html.erb

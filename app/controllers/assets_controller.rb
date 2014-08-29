@@ -77,20 +77,19 @@ class AssetsController < ApplicationController
   # POST /assets.json
   def create
     @bucket = Bucket.find(params[:bucket_id])
-    @asset = Asset.new(params[:asset])
-    @asset.buckets << @bucket if @bucket
+    @asset = @bucket.assets.create(params[:asset])
 
-    respond_to do |format|
-      if @asset.save
-        format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
-        format.json { render json: @asset, status: :created, location: @asset }
-        format.js
-      else
-        format.html { render layout: "form", action: "new" }
-        format.json { render json: @asset.errors, status: :unprocessable_entity }
-        format.js
-      end
-    end
+    # respond_to do |format|
+    #   if @asset.save
+    #     format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
+    #     format.json { render json: @asset, status: :created, location: @asset }
+    #     format.js
+    #   else
+    #     format.html { render layout: "form", action: "new" }
+    #     format.json { render json: @asset.errors, status: :unprocessable_entity }
+    #     format.js
+    #   end
+    # end
   end
 
   # PUT /assets/1
@@ -135,14 +134,14 @@ class AssetsController < ApplicationController
     @asset.destroy
 
     respond_to do |format|
-      format.html { redirect_to assets_url }
+      format.html { redirect_to :back, notice: 'Succesfully destroyed asset.' }
       format.json { head :no_content }
     end
   end
 
   def destroy_multiple
     Asset.where(:id => params[:asset_ids]).destroy_all
-    redirect_to assets_url
+    redirect_to :back, notice: 'Succesfully destroyed assets.'
   end
 
 end

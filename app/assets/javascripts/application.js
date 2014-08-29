@@ -67,4 +67,13 @@ $(document).ready(function(){
     $('.img-fluid').fluidbox({
         viewportFill: 0.8
     });
+
+    $("#spinner").bind("ajaxSend", function() {
+        $(this).show();
+    }).bind("ajaxStop", function() {
+        $(this).hide();
+    }).bind("ajaxError", function() {
+        $(this).hide();
+    });
+
 });

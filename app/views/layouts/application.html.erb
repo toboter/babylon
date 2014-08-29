@@ -19,6 +19,9 @@
   <body>
       <% if user_signed_in? %>
         <%= content_for?(:content) ? yield(:content) : yield %>
+        <div id="spinner" class="spinner" style="display:none;">
+          <%= image_tag 'ajax-loader.gif', id: "img-spinner", alt: "Loading" %>
+        </div>
         <%= yield(:modal_inject) if content_for?(:modal_inject) %>
         <%= yield(:scripts) if content_for?(:scripts) %>
       <% else %>

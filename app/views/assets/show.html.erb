@@ -12,18 +12,24 @@
 <div class="row-fluid">
   <div class="span8">
     <% if @asset.content_type.include? 'image' %>
-      <%= image_tag(@asset.assetfile.normal.url, class: 'img-polaroid', style: "margin-top:1em;") %>
+      <%= link_to image_tag(@asset.assetfile.large.url), @asset.assetfile.xlarge.url, class: 'img-fluid', style: "margin-top:1em;" %>
     <% else %>
       <p><%= link_to "#{@asset.assetfile.url}", @asset.assetfile.url %></p>
     <% end %>
+    <br>
+    <%= link_to recreate_versions_asset_path(@asset.id), method: :put, class: 'btn btn-warning btn-small', style: 'margin-top:10px;' do %>
+      <i class="icon-repeat icon-white"></i>
+      Recreate Versions
+    <% end if (@asset.content_type.include? 'image') && (can? :manage, 'recreate-versions') %>
     <%= content_tag :div, id: "caption", style: "margin-top:20px;" do %>
       <%= markdown(@asset.caption) %>
     <% end if @asset.caption %>
   </div>
+
   <div class="span4">
     <% if can? :read, @asset %>
       <div class="btn-group pull-right" style="margin-top:15px;margin-bottom:20px;">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        <a class="btn dropdown-toggle <%= 'disabled' unless @asset.license %>" data-toggle="dropdown" href="#">
           <i class="icon-download"></i>
           Download
           <span class="caret"></span>
@@ -39,21 +45,20 @@
       </div>
     <% end  %>
 
-    <a rel="license" href="http://creativecommons.org/licenses/<%= @asset.license %>/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="http://i.creativecommons.org/l/<%= @asset.license %>/4.0/80x15.png" /></a><br />Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/<%= @asset.license %>/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
+    <% if @asset.license %>
+      <a rel="license" href="http://creativecommons.org/licenses/<%= @asset.license %>/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="http://i.creativecommons.org/l/<%= @asset.license %>/4.0/80x15.png" /></a><br />Dieses Werk ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/<%= @asset.license %>/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.
+    <% else %>
+      <p style="padding:20px 0 10px 0;">License missing. Please create an issue.</p>
+    <% end %>
     
-    <p>
-      <%= link_to recreate_versions_asset_path(@asset.id), method: :put, class: 'btn btn-warning btn-small' do %>
-        <i class="icon-repeat icon-white"></i>
-        Recreate Versions
-      <% end if (@asset.content_type.include? 'image') && (can? :manage, 'recreate-versions') %>
-    </p>
-    <br />
+    <hr>
+    
     <%= link_to 'Issues', asset_issues_path(@asset) %>
     <br />
     <div class="" id="info-section">
       <h4 class="muted">Info</h4>
             <table class="table table-bordered table-hover">
-              <%= asset_description('File author', @asset.author.name) if @asset.author %>
+              <%= asset_description('File author', link_to(@asset.author.name, @asset.author)) if @asset.author %>
               <%= asset_description('Content type', @asset.content_type) %>
               <%= asset_description('Hash', @asset.md5hash) %>
               <%= asset_description('File size', number_to_human_size(@asset.file_size, precision: 2, separator: ',')) %>
@@ -73,10 +78,10 @@
 
 
       <%= content_tag :div, class: "" do %>
-        <h4 class="muted">Buckets</h4>
+        <h4 class="muted">Folders</h4>
             <ul class="unstyled">
               <% for bucket in @buckets do %>
-                <li><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></li>
+                <li><%= link_to "#{bucket.full_bucket_name}", [bucket, :assets] %></li>
               <% end %>
             </ul>
       <% end if @buckets.any? %>

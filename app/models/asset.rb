@@ -1,5 +1,5 @@
 class Asset < ActiveRecord::Base
-  require 'will_paginate/array'
+
   attr_accessible :assetfile, :content_type, :file_name, :file_size, :name, :parent_id, :file_author, 
     :creator_id, :updater_id, :caption, :date_taken, :latitude, :longitude, :width, :height, :camera,
     :camera_make, :flash, :focal_length, :exposure, :f_number, :iso, :license
@@ -7,8 +7,7 @@ class Asset < ActiveRecord::Base
   stampable
   mount_uploader :assetfile, AssetfileUploader
 
-  before_validation :set_content_type, :update_asset_attributes, :compute_hash
-
+  before_create :update_asset_attributes
 
   has_many :buckets, through: :pailfuls
   has_many :pailfuls, :dependent => :destroy
@@ -20,14 +19,6 @@ class Asset < ActiveRecord::Base
   validates_uniqueness_of :md5hash, on: :create, message: "The File you are trying to upload already exists. Just add it to your desired bucket."
 
   LICENSES = %w[by-nc-sa by-sa] 
-
-  def asset_name
-    File.basename(assetfile.path || assetfile.filename) if assetfile
-  end
-
-  def set_content_type
-    self.content_type = assetfile.file.content_type if assetfile && assetfile_changed?
-  end
 
   def is_cover
     if buckets.first
@@ -42,15 +33,9 @@ class Asset < ActiveRecord::Base
   end
 
 private
-
-  def compute_hash
-    self.md5hash = Digest::MD5.hexdigest(self.assetfile.read) if assetfile && assetfile_changed?
-  end
   
   def update_asset_attributes
     if assetfile.present? && assetfile_changed?
-      self.file_size = assetfile.file.size
-      self.file_name = File.basename(assetfile.path || assetfile.filename)
       date_taken = get_exif("EXIF:DateTimeOriginal") rescue nil
       date = date_taken.split(" ")[0].gsub!(/:/, '-') rescue nil
       time = date_taken.split(" ")[1] rescue nil
@@ -64,9 +49,6 @@ private
       self.f_number = get_exif("EXIF:FNUMBER") rescue nil
       self.iso = get_exif("EXIF:ISOSpeedRatings") rescue nil
       extract_geolocation #funktioniert nicht mit fotos vom handy
-    end
-    if name.blank?
-      self.name = asset_name
     end
   end 
 

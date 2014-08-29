@@ -1,32 +1,86 @@
-<% title "Bucket", @bucket.name %>
+<% title "Folder", @bucket.name %>
 <% edit_section_for(@bucket, @bucket.attachable) unless @bucket.name_fixed %>
 <% footer_section(@bucket) %>
 
+<% content_for :scripts do %>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#button-upload').click(function() {
+        $('#spinner').show();
+    });
+});
+</script>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
-  <% unless @bucket.attachable_type == 'Page' %>
-    <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, (link_to @bucket.attachable.class.name.pluralize, [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
-    <%= content_tag(:li, link_to("#{@bucket.attachable.name}", @bucket.attachable) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, link_to("Buckets", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) %>
-    <%= content_tag(:li, @bucket.name.present? ? (@bucket.name) : 'Nothing', class: 'active') %>
-  <% end %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to @bucket.attachable.class.name.pluralize, [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
+  <%= content_tag(:li, link_to("#{@bucket.attachable.name}", @bucket.attachable) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, link_to("Folders", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, @bucket.name.present? ? (@bucket.name) : 'Nothing', class: 'active') %>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="row-fluid">
-    <div class="span9">
-      <%= render 'bucket_assets', bucket: @bucket %>
-    </div>
-    <div class="span3">
-    <%= content_tag :h4, 'Other files', class: 'muted' %>
-    <% for asset in @bucket.assets.order('content_type DESC', 'name ASC') do %>
-      <% unless asset.content_type.include? 'image' %>
-        <ul class="unstyled">
-          <li><%= link_to "#{asset.name}", asset %> <% if can? :edit, @bucket %><%= link_to '(Delete)', pailful_bucket_path(@bucket, :asset_id => asset), method: :delete, data: { confirm: 'Are you sure?' } %><% end %></li>
-        </ul>
+    <div class="span12">
+
+      <%= link_to [@bucket, :assets], class: 'btn', style: 'margin-bottom:10px;' do %>
+        <i class="icon-th-large"></i>
+        View tiles
       <% end %>
+
+      <table class="table table-bordered table-hover">
+        <tbody id="assets">
+          <%= render partial: 'buckets/asset', collection: @bucket.assets %>
+        </tbody>
+      </table>
+
+
+    <% if @bucket.attachable_type == 'Person' %>
+      <%= render 'buckets/upload_asset' if can? :edit, @bucket.attachable %>
+    <% else %>
+      <%= render 'buckets/upload_asset' %>
     <% end %>
     </div>
+  </div>
+<% end %>
+
+<% content_for :modal_inject do %>
+<!-- Modals beginn -->
+
+  <div id="add_assets" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Add assets</h3>
+    </div>
+
+    <%= form_tag pailfuls_bucket_path(@bucket), method: :post, class: 'custom' do %>
+    <div class="modal-body">
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <% for asset in @assets_available.sort_by { |a| a.name } do %>
+          <tr>
+            <td width="50px">
+              <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:50px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), asset.assetfile.large.url, class: 'img-fluid' %>
+            </td>
+            <td>
+              <%= asset.name %><br>
+              <%= asset.file_name %>
+            </td>
+            <td>
+              <%= check_box_tag "asset_ids[]", asset.id %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="submit">
+        <i class="icon-share icon-white"></i>
+        <span>Add marked assets to folder</span>
+      </button>
+    </div>
+    <% end %>
   </div>
 <% end %>
