@@ -2,10 +2,7 @@
   alert("Failed to upload asset: <%= j @asset.errors.full_messages.join(', ').html_safe %>");
 <% else %>
   $("#assets").append("<%= j(render :partial => 'buckets/asset', :locals => { :asset => @asset }) %>");
-<<<<<<< HEAD
   $('.img-fluid').fluidbox({
     viewportFill: 0.8
   });
-=======
->>>>>>> 11a1ccba9d32fe0b037d1f45fb392e81c4af042b
 <% end %>
