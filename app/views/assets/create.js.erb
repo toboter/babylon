@@ -1,5 +1,8 @@
 <% if @asset.new_record? %>
-  alert("Failed to upload asset: <%= j @asset.errors.full_messages.join(', ').html_safe %> Please add it manualy.");
+  alert("Failed to upload asset: <%= j @asset.errors.full_messages.join(', ').html_safe %>");
 <% else %>
-  window.location.href="<%= url_for([@bucket.attachable, @bucket]) %>";  // put your correct path in a string here
+  $("#assets").append("<%= j(render :partial => 'buckets/asset', :locals => { :asset => @asset }) %>");
+  $('.img-fluid').fluidbox({
+    viewportFill: 0.8
+  });
 <% end %>

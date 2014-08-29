@@ -9,6 +9,19 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   include CarrierWave::MiniMagick
 
   process :set_content_type
+  process :save_attributes_to_model
+  process :save_default_name
+
+  def save_default_name
+    model.file_name = File.basename(file.filename) if file
+    model.name ||= File.basename(file.filename, '.*').titleize if file
+  end
+
+  def save_attributes_to_model
+    model.content_type = file.content_type if file.content_type
+    model.file_size = file.size
+    model.md5hash = Digest::MD5.hexdigest(file.read) if file
+  end
 
   # Choose what kind of storage to use for this uploader:
   storage :file
@@ -54,6 +67,7 @@ class AssetfileUploader < CarrierWave::Uploader::Base
     process :resize_to_fit => [280, 280]
   end
 
+
   version :big_thumb, :from_version => :normal, :if => :is_image? do
     process :resize_to_fill => [370, 370]
   end
@@ -66,9 +80,9 @@ class AssetfileUploader < CarrierWave::Uploader::Base
   
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  # def extension_white_list
-  #   %w(jpg jpeg gif png)
-  # end
+  def extension_white_list
+    %w(jpg jpeg gif png tif tiff docx doc xlsx xls csv kml kmz pdf zip)
+  end
 
   #  def default_url
   #    "#{model.class.to_s.underscore.downcase}/#{mounted_as}/missing/" + [version_name, 'missing.png'].compact.join('_')

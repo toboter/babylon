@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140822154030) do
+ActiveRecord::Schema.define(:version => 20140829094645) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(:version => 20140822154030) do
     t.string   "file_size"
     t.string   "file_name"
     t.integer  "file_author"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.string   "md5hash"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20140822154030) do
     t.string   "f_number"
     t.string   "iso"
     t.string   "license"
+    t.integer  "copyright_institution_id"
   end
 
   create_table "authorships", :force => true do |t|

@@ -35,10 +35,16 @@
   <div class="control-group">
     <%= f.label :file_author, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :file_author, Person.all, :id, :name, prompt: "Who took it?" %>
+      <%= f.collection_select :file_author, Person.all, :id, :name, prompt: "Photographer" %>
     </div>
   </div>
 
+  <div class="control-group">
+    <%= f.label :copyright_institution_id, 'Copyright holder', class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :copyright_institution_id, Institution.all, :id, :name %>
+    </div>
+  </div>
 
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>

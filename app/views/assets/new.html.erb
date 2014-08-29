@@ -5,6 +5,13 @@
   <%= f.error_messages %>
 
   <div class="control-group">
+    <%= f.label :assetfile, class: 'control-label' %>
+    <div class="controls">
+      <%= f.file_field :assetfile %>
+    </div>
+  </div>
+  
+  <div class="control-group">
     <%= f.label :name, class: 'control-label' %>
     <div class="controls">
       <%= f.text_field :name, class: 'span6' %>
@@ -30,7 +37,13 @@
     <%= f.label :file_author, 'Author', class: 'control-label' %>
     <div class="controls">
       <%= f.collection_select :file_author, Person.all, :id, :name %>
-      <p>The author of the description.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :holder, 'Copyright holder', class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :holder, Institution.all, :id, :name %>
     </div>
   </div>
 

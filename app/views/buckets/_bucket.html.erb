@@ -1,5 +1,5 @@
 <h4 class="" style="margin-bottom:10px; margin-top:10px;">
-  <%= link_to "#{bucket.name}", [bucket.attachable, bucket] %>
+  <%= link_to "#{bucket.name}", [bucket, :assets] %>
 </h4>
 <div class="tiles">
   <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').order('created_at desc') do %>
@@ -7,5 +7,5 @@
     <%= asset.assetfile.normal.url if local_assigns.has_key? :with_link %> 
   <% end %>
 </div>
-<p style="margin-bottom: 30px;"><%= link_to "View all assets in #{bucket.name}", [bucket.attachable, bucket], target: '_blank' %></p>
+<p style="margin-bottom: 30px;"><%= link_to "View all assets in #{bucket.name}", [bucket, :assets] %></p>
 

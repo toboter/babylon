@@ -21,15 +21,33 @@
   <% @buckets.each do |bucket| %>
     <div class="well">
       <div class="row-fluid">
-        <div class="span3">
-          <p><%= link_to "#{bucket.full_bucket_name}", [bucket.attachable, bucket] %></p>
+        <div class="span2">
+          <h4><%= link_to "#{bucket.full_bucket_name}", [bucket, :assets] %></h4>
+          <ul class="unstyled">
+            <li><b>Attached to: </b><%= link_to bucket.attachable.name, bucket.attachable %></li>
+            <li><b>Created by: </b><%= name_only_or_link_to(bucket.creator) %></li>
+            <li><b>Created at: </b><%= bucket.created_at.strftime('%d.%m.%Y') %></li>
+            <hr>
+            <li><b>Count: </b><%= bucket.assets.count %></li>
+          </ul>
+          <div class="btn-group" style="padding-bottom:10px;">
+            <%= link_to [bucket, :assets], class: 'btn' do %>
+              <i class="icon-th-large"></i>
+              View assets
+            <% end %>
+            <%= link_to [bucket.attachable, bucket], class: 'btn' do %>
+              <i class="icon-th-list"></i>
+              Edit content
+            <% end if can? :edit, bucket %>
+          </div>
         </div>
 
-        <div class="span9">
+        <div class="span10">
           <ul class="thumbnails">
-          <% for asset in bucket.assets %>
-            <li class="thumbnail"><%= link_to (image_tag asset.assetfile.mini_thumb.url), asset, class: "" if asset.content_type.include? 'image' %>
-            <%= link_to (image_tag 'mini_dummy.gif'), asset, class: "" unless asset.content_type.include? 'image' %></li>
+          <% for asset in bucket.assets.limit(16) %>
+            <li class="">
+              <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:90px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:90px;')), asset, class: 'popover-bottom', data: { 'original-title' => asset.name, 'content' => asset.inspect }, style: 'padding-bottom:38px;'  %>
+            </li>
           <% end %>
           </ul>
         </div>

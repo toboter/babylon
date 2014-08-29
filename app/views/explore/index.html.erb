@@ -25,9 +25,13 @@
             </p>
             <p>
               &copy; 
+              <%= asset.holder.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe if asset.holder %>
+              <%= '. ' if asset.holder && asset.author %>
+              <%= 'Photographer: ' if asset.author %>
               <%= link_to asset.author.name, asset.author if asset.author %>
-              <%= ', ' if asset.author && asset.license %>
-              <%= link_to asset.license, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
+              <%= '. ' if asset.author && asset.license %>
+              <%= 'License: ' if asset.license %>
+              <%= link_to asset.license.upcase, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
             </p>
             <%= link_to polymorphic_path([@about, @about_bucket]), class: 'btn btn-primary' do %>
               <i class="icon-edit icon-white"></i>
