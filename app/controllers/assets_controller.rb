@@ -80,7 +80,11 @@ class AssetsController < ApplicationController
     @asset = @bucket.assets.create(params[:asset])
 
     # respond_to do |format|
+<<<<<<< HEAD
     #   if @asset
+=======
+    #   if @asset.save
+>>>>>>> 11a1ccba9d32fe0b037d1f45fb392e81c4af042b
     #     format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
     #     format.json { render json: @asset, status: :created, location: @asset }
     #     format.js
