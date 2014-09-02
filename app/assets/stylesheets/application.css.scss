@@ -59,102 +59,132 @@
     height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
 }
 
-/*--- Footer Top ---*/
-.babylo-tec-footer-top {
-	background: #f6f6f6;
- 	padding: 24px 0 30px;
- 	margin: 0;
- 	height: auto;
- 	border-top: 1px solid #e6e6e6;
- 	display: block;
+.nav-pills-big {
+  li a {
+    font-size: 1.2em;
+    padding: 20px;
+    .badge {
+      margin-top:-3px;
+    }
+  }
 }
 
-	.babylo-tec-footer-top .option-block span, .babylo-tec-footer-top .option-block-last span {
-		line-height: 22px;
-		font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-size: 18px;
-	}
-	
-	.babylo-tec-footer-top .option-block i, .babylo-tec-footer-top .option-block-last i {
-		margin-right: .8em;
-		margin-top: .2em;
-		float:left;
-	}
-	
-	.babylo-tec-footer-top .option-block {
-		border-right: 1px solid #e6e6e6;
-		height: 10em;
-		margin-bottom: 20px;
-		padding-left: 20px;
-	}
-	
-	.babylo-tec-footer-top .option-block-last {
-		height: 10em;
-		margin-bottom: 20px;
-		padding-left: 20px;
-		@media (max-width: 768px) { margin-top: 80px; }
-	}
-	
-	.babylo-tec-footer-top .option-block ul li, .babylo-tec-footer-top .option-block-last ul li {
-		font-size: 12px;
-		padding-left:1.1em;
-	}
+.authors, .reference-edit-link {
+	@media (min-width: 768px) { text-align:right }
+}
 
-/*--- Footer Bottom ---*/
-.babylo-tec-footer-bottom {
- 	background: #787878;
- 	padding: 20px 0 30px;
- 	margin: 0;
- 	height: auto;
- 	border-top: 1px solid #e6e6e6;
- }
+h1 {
+	font-size: 2.3em;
+	
+}
+h1.pagetop {
+	font-size: 2.6em;
+	color: black;
+	margin-top: 0.5em;
+}
+h2 {
+	font-size: 2em;
+	
+}
+h2.subtitle {
+	font-size: 1.9em;
+	color: #6f6f6f;
+	font-weight: 300;
+	margin-top: -0.5em;
+	margin-bottom: 1em;
+}
+h3 {
+	font-size: 1.7em;
+}
 
-	.babylo-tec-footer-bottom .logos {
-		padding-left:10px;
+a.no-link {
+	text-decoration: none;
+	color: #555;
+}
+
+.tag-entry a.name, .ic-entry a.name {
+	font-size: 115%;
+	font-weight: bold;
+	line-height: 2em;
+}
+
+.tag-entry a.highlight, .ic-entry a.highlight {
+	font-size: 150%;
+	font-weight: bolder;
+	line-height: 3em;
+	text-decoration: underline;
+}
+
+.well h1, .well .lead {
+	font-size: 135%;
+}
+
+div.field_with_errors { 
+  display: inline;
+  .control-label {
+	color: red;
+  }
+  select {
+    border: 2px solid red;
+  }
+}
+
+textarea { resize:both; }
+textarea.vert { resize:vertical; }
+textarea.noResize { resize:none }
+
+.issue-section {
+	.issue-obj {
+	  @extend .well;
+	  @extend .well-small;
+	  margin-bottom:7px;
+	  background-color: #fdfdfd;
 	}
-	
-	.babylo-tec-footer-bottom ul.babylo-tec-links li a.babylo-tec-logo {
-		color: #333;
-		font-weight: bold;
-		padding-right: 6px;
-		margin-left: -6px;
-		font-size: 16px;
-		font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		text-transform: none;
+}
+
+.hero-unit {
+	#about {
+		padding-bottom:30px;
+		div.cover {
+			img {
+				@extend .img-polaroid;
+				margin-top:0.7em;
+			}
+			a.change-asset {
+				font-size: 60%;
+			}
+		}
+		div.description {
+			h1 {margin-bottom:10px;}
+			.text {padding-bottom:10px;}
+		}
 	}
-	
-	.babylo-tec-footer-bottom ul.babylo-tec-links li a.babylo-tec-logo:hover, .babylo-tec-footer-bottom ul.babylo-tec-links li a:hover {
-		color: #6B6B6B;
-		text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
-		-webkit-transition: all .1s linear;
-		-moz-transition: all .1s linear;
-		transition: all .1s linear;
-		text-decoration: none;
+}
+
+#about {
+	div.cover {
+		img {
+			@extend .img-polaroid;
+			margin-top:0.7em;
+		}
+		a.change-asset {
+			font-size: 80%;
+		}
 	}
-	
-	.babylo-tec-footer-bottom .app-text-links {
-		padding-top: 1em;
-		margin-bottom: 2em;
+	div.description {
+		h1 {margin-bottom:10px;}
+		.text {padding-bottom:10px;}
 	}
-	
-	.babylo-tec-footer-bottom ul.babylo-tec-links li.upper {
-		margin-left: 6px;
-		font-family: "Proxima Nova Condensed", "proxima-nova-condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		text-transform: uppercase;
-		font-weight: 700;
-		font-size: 13px;
+}
+a.member {
+	padding-bottom:8px;
+	text-decoration: none;
+	img {
+		@extend .img-rounded;
+		width: 40px;
+		margin: 0 5px 5px 0;
 	}
-	
-	.babylo-tec-footer-bottom ul.babylo-tec-links li a {
-		color: #e5e5e5;
-		padding: 0px 2px 3px 2px;
-	}
-	
-	.babylo-tec-footer-bottom p {
-		font-size: 13px;
-		color: #333;
-	}
-	.babylo-tec-footer-bottom p a {
-		font-size: 13px;
-		color: #555;
-	}
+}
+
+#map label { width: auto; display:inline; }
+#map img { max-width: none; }

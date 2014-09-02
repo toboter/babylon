@@ -135,10 +135,10 @@
       <%= content_tag :section, id: 'uploads' do %>
         <div class="page-header">
           <h2>
-            Pictures
+            Files
             <%= link_to polymorphic_path([:new, @person, :bucket]), class: 'btn btn-default pull-right' do %>
               <i class="icon-plus"></i>
-              Bucket
+              Folder
             <% end if user_signed_in? && can?(:manage, @person) %>
           </h2>
         </div>

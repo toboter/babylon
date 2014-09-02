@@ -10,9 +10,10 @@
   <div class="span12">
     <h1>
       Modules
-      <div class="pull-right" style="">
-        <%= link_to "Create module", new_cluster_path, class: "btn btn-default" if can? :create, Cluster %>
-      </div>
+      <%= link_to new_cluster_path, class: 'btn btn-default pull-right' do %>
+        <i class="icon-plus"></i>
+        Module
+      <% end if can? :create, Cluster %>
     </h1>
   	<% @clusters.each do |cluster| %>
       <div style="margin-bottom:30px;">

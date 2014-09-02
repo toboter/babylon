@@ -25,6 +25,7 @@ img.img-rounded {
  -moz-border-radius: 100px;
 }
 
+
 html,
 body {
   font-family: "Open Sans", "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -39,18 +40,14 @@ body {
   height: auto !important;
   height: 100%;
   /* Negative indent footer by it's height */
-  margin: 0 auto -415px;
+  margin: 0 auto -420px;
 }
 
 /* Set the fixed height of the footer here */
 #push,
-#footer {
-  height: 415px;
+footer {
+  height: 420px;
 }
-#footer {
-  background-color: #f5f5f5;
-}
-
 
 @media (min-width: 979px) {
   #wrap > .container-fluid {
@@ -58,182 +55,110 @@ body {
   }	
 }
 
-
-.nav-pills-big {
-  li a {
-    font-size: 1.2em;
-    padding: 20px;
-    .badge {
-      margin-top:-3px;
-    }
-  }
-}
-
-
-
-.authors, .reference-edit-link {
-	@media (min-width: 768px) { text-align:right }
-}
-
-.border-right {
-	@media (min-width: 768px) { 
-		border-right:1px solid #efefef; 
-		padding-right:20px;
-		}
-}
-
-.border-top {
-	@media (min-width: 768px) { 
-		border-top:1px solid #efefef;
-		margin-top:20px;
-		padding-top:20px; 
-		}
-}
-
 footer {
+	background-color: #787878;
 	@media (max-width: 768px) {
 		margin-left: -20px;
 		margin-right: -20px;
 		}
-}
-
-.babylo-tec-footer-bottom {
-	@media (max-width: 768px) {
-		padding: 0 20px;
+	/*--- Footer Top ---*/
+	.babylo-tec-footer-top {
+		background: #f6f6f6;
+ 		padding: 24px 0 30px;
+ 		margin: 0;
+ 		@media (min-width: 768px) {height: 150px;}
+ 		border-top: 1px solid #e6e6e6;
+ 		display: block;
+		.option-block {
+			border-right: 1px solid #e6e6e6;
+			height: 10em;
+			margin-bottom: 20px;
+			padding-left: 20px;
+			@media (max-width: 768px) { margin-top: 60px; }
+			span {
+				line-height: 22px;
+				font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, 	sansserif;
+				font-size: 18px;
+			}
+			i {
+				margin-right: .8em;
+				margin-top: .2em;
+				float:left;
+			}
+			ul li {
+				font-size: 12px;
+				padding-left:1.1em;		
+			}
 		}
-}
-
-.babylo-tec-footer-bottom .logos img {
-	@media (max-width: 768px) {
-		max-width: 180px;
-		margin: 0 auto 20px auto;
+		.option-block-first {
+			@media (max-width: 768px) { margin-top: 0; }
 		}
-}
-
-
-.bucket-asset-thumbs { @media (min-width: 768px) { margin-left: 25px !important; } }
-
-h1 {
-	font-size: 2.3em;
-	
-}
-h1.pagetop {
-	font-size: 2.6em;
-	color: black;
-	margin-top: 0.5em;
-}
-h2 {
-	font-size: 2em;
-	
-}
-h2.subtitle {
-	font-size: 1.9em;
-	color: #6f6f6f;
-	font-weight: 300;
-	margin-top: -0.5em;
-	margin-bottom: 1em;
-}
-h3 {
-	font-size: 1.7em;
-}
-
-a.no-link {
-	text-decoration: none;
-	color: #555;
-}
-
-.tag-entry a.name, .ic-entry a.name {
-	font-size: 115%;
-	font-weight: bold;
-	line-height: 2em;
-}
-
-.tag-entry a.highlight, .ic-entry a.highlight {
-	font-size: 150%;
-	font-weight: bolder;
-	line-height: 3em;
-	text-decoration: underline;
-}
-
-.well h1, .well .lead {
-	font-size: 135%;
-}
-
-div.field_with_errors { 
-  display: inline;
-  .control-label {
-	color: red;
-  }
-  select {
-    border: 2px solid red;
-  }
-}
-
-/* Thx to Github for the color schema of this button */
-.btn-create {
-color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25);background-color:#60b044;background-image:-moz-linear-gradient(#8add6d, #60b044);background-image:-webkit-linear-gradient(#8add6d, #60b044);background-image:linear-gradient(#8add6d, #60b044);background-repeat:repeat-x;border-color:#5ca941}
-.btn-create:hover{color:#fff;background-color:#569e3d;background-image:-moz-linear-gradient(#79d858, #569e3d);background-image:-webkit-linear-gradient(#79d858, #569e3d);background-image:linear-gradient(#79d858, #569e3d);background-repeat:repeat-x;border-color:#4a993e}
-.btn-create:active,.btn-create.selected{background-color:#569e3d;background-image:none;border-color:#418737}
-
-textarea { resize:both; }
-textarea.vert { resize:vertical; }
-textarea.noResize { resize:none }
-
-.issue-section {
-	.issue-obj {
-	  @extend .well;
-	  @extend .well-small;
-	  margin-bottom:7px;
-	  background-color: #fdfdfd;
+		.option-block-last {
+			border-right: none;
+		}
 	}
-}
 
-.hero-unit {
-	#about {
-		padding-bottom:30px;
-		div.cover {
+	/*--- Footer Bottom ---*/
+	.babylo-tec-footer-bottom {
+		background-color: #787878;
+ 		margin: 0;
+ 		@media (min-width: 768px) {height: 200px;}
+ 		border-top: 1px solid #e6e6e6;
+		@media (max-width: 768px) {
+			padding: 0 20px;
+		}
+		.app-text-links {
+			padding-top: 30px;
+			margin-bottom: 2em;
+		}
+ 		.logos {
+			padding-left:0px;
 			img {
-				@extend .img-polaroid;
-				margin-top:0.7em;
-			}
-			a.change-asset {
-				font-size: 60%;
-			}
-		}
-		div.description {
-			h1 {margin-bottom:10px;}
-			.text {padding-bottom:10px;}
-		}
-	}
-}
-
-	#about {
-		div.cover {
-			img {
-				@extend .img-polaroid;
-				margin-top:0.7em;
-			}
-			a.change-asset {
-				font-size: 80%;
-			}
-		}
-		div.description {
-			h1 {margin-bottom:10px;}
-			.text {padding-bottom:10px;}
-		}
-	}
-
-			a.member {
-				padding-bottom:8px;
-				text-decoration: none;
-				img {
-					@extend .img-rounded;
-					width: 40px;
-					margin: 0 5px 5px 0;
+				@media (max-width: 768px) {
+					max-width: 180px;
+					margin: 0 auto 20px auto;
 				}
 			}
+		}
+		ul.babylo-tec-links li a.babylo-tec-logo {
+			color: #333;
+			font-weight: bold;
+			padding-right: 6px;
+			margin-left: -6px;
+			font-size: 16px;
+			font-family: "Proxima Nova", "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+			text-transform: none;
+		}
+		ul.babylo-tec-links li a.babylo-tec-logo:hover, ul.babylo-tec-links li a:hover {
+			color: #6B6B6B;
+			text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+			-webkit-transition: all .1s linear;
+			-moz-transition: all .1s linear;
+			transition: all .1s linear;
+			text-decoration: none;
+		}
+		ul.babylo-tec-links li.upper {
+			margin-left: 6px;
+		font-family: "Proxima Nova Condensed", "proxima-nova-condensed", "Helvetica Neue", Helvetica, 	Arial, sans-serif;
+			text-transform: uppercase;
+			font-weight: 700;
+			font-size: 13px;
+		}
+		ul.babylo-tec-links li a {
+			color: #e5e5e5;
+			padding: 0px 2px 3px 2px;
+		}
+		p {
+			font-size: 13px;
+			color: #333;
+		}
+		p a {
+			font-size: 13px;
+			color: #555;
+		}
+	}
 
-#map label { width: auto; display:inline; }
-#map img { max-width: none; }
+}
+
 
 @import "bootstrap-responsive";

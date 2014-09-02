@@ -1,10 +1,10 @@
-<% title "Buckets", nil, nil %>
+<% title "Folders", nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, (link_to @attachable.class.name.pluralize, [@attachable.class]) + content_tag(:span, '/', class: 'divider')) if @attachable %>
   <%= content_tag(:li, link_to(@attachable.name, @attachable) + content_tag(:span, '/', class: 'divider')) if @attachable %>
-  <%= content_tag(:li, 'Buckets', class: 'active') %>
+  <%= content_tag(:li, 'Folders', class: 'active') %>
 
 <% end %>
 
@@ -12,9 +12,9 @@
 <div class="row-fluid">
   <div class="span12">
     <h1>
-      Buckets
+      Folders
       <div class="pull-right" style="">
-        <%= link_to "Create Bucket", [:new, @attachable, :bucket], class: "btn btn-default" if can?(:create, Bucket) && @attachable %>
+        <%= link_to "Create Folder", [:new, @attachable, :bucket], class: "btn btn-default" if can?(:create, Bucket) && @attachable %>
       </div>
     </h1>
 

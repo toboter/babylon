@@ -21,10 +21,10 @@
       <%= content_tag :h2, snippet.name %>
       <%= content_tag :small do %>
         Posted by <%= name_only_or_link_to(snippet.creator) %> on <%= snippet.created_at.strftime('%d. %m %Y') %>
-        <%= link_to 'Edit', edit_snippet_path(snippet), class: 'pull-right' if can? :update, snippet %>
+        <%= link_to 'Edit', edit_snippet_path(snippet), class: 'pull-right btn btn-mini' if can? :edit, snippet %>
       <% end %>
       <%= content_tag :p, snippet.description, class: 'lead', style: 'margin-top:5px;' %>
-      <%= link_to "Read the full #{snippet.description.length+(snippet.content ? snippet.content.length : 0)} charcters long story", snippet %>
+      <%= link_to "Read the full post (#{snippet.description.length+(snippet.content ? snippet.content.length : 0)} charcters)", snippet %>
       <hr>
     <% end %>
   </div>

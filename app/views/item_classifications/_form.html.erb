@@ -15,7 +15,7 @@
       </div>
     
       <div class="control-group">
-        <%= f.label :parent_id, 'Belongs to', class: 'control-label' %>
+        <%= f.label :parent_id, 'classified under', class: 'control-label' %>
         <div class="controls">
           <%= f.collection_select :parent_id, ItemClassification.possible_parents(@item_classification), :id, :name, { include_blank: true }, class: 'input-block-level' %>
         </div>

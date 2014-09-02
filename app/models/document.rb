@@ -1,7 +1,8 @@
 class Document < ActiveRecord::Base
   attr_accessible :content, :document_type, :documentable_id, :documentable_type, :title, 
   				  :creator_id, :updater_id, :abstract, :tag_ids, :documentfile, :remote_documentfile_url,
-            :documentfile_content_type, :documentfile_name, :documentfile_upload_date, :documentfile_size, :documentfile_md5hash
+            :documentfile_content_type, :documentfile_name, :documentfile_upload_date, 
+            :documentfile_size, :documentfile_md5hash
 
   stampable
   mount_uploader :documentfile, DocumentfileUploader

@@ -124,8 +124,6 @@ private
     resource, id = request.path.split('/')[1, 2]
     if resource == 'modules'
       resource = 'clusters'
-    elsif resource == 'announcements'
-      resource = 'snippets'
     end
     if id == nil
       @documentable = nil

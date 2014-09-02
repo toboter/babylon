@@ -31,7 +31,7 @@
               <%= link_to asset.author.name, asset.author if asset.author %>
               <%= '. ' if asset.author && asset.license %>
               <%= 'License: ' if asset.license %>
-              <%= link_to asset.license.upcase, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" %>
+              <%= link_to asset.license.upcase, "http://creativecommons.org/licenses/#{@about_bucket.cover.license}/4.0/", rel: "license" if asset.license %>
             </p>
             <%= link_to polymorphic_path([@about, @about_bucket]), class: 'btn btn-primary' do %>
               <i class="icon-edit icon-white"></i>
@@ -66,7 +66,7 @@
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-              <%= content_tag :li, link_to("Pictures", assets_path) if can? :read, Asset %>
+              <%= content_tag :li, link_to("Files", assets_path) if can? :read, Asset %>
               <%= content_tag :li, link_to("Documents", documents_path) if can? :read, Document %>
             </ul>
           <% end %>
@@ -84,7 +84,13 @@
       <% end if @featured.any? %>
 
       <%= content_tag :div, style: 'padding-top:30px;' do %>
-        <%= content_tag :h2, 'Modules' %>
+        <%= content_tag :h2 do %>
+          Modules
+          <%= link_to new_cluster_path, class: 'btn btn-default pull-right' do %>
+            <i class="icon-plus"></i>
+            Module
+          <% end if can? :create, Cluster %>
+        <% end %>
         <% for cluster in @clusters do %>
           <div class="media" style="padding-bottom:1em;">
             <%= link_to cluster, class: "pull-left hidden-phone hidden-tablet" do %>
@@ -93,6 +99,7 @@
             <div class="media-body">
               <h3 class="media-heading" style="margin-bottom:0px;"><%= link_to cluster.name, cluster %></h3>
               <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
+              <%= link_to 'View module', cluster %>
             </div>
           </div>
         <% end %>
@@ -101,7 +108,11 @@
 
       <%= content_tag :div, id: 'blogs-section', style: 'padding-top:30px;' do %>
         <%= content_tag :h2 do  %>
-          Blogs    
+          Blogs
+          <%= link_to new_snippet_path, class: 'btn btn-default pull-right' do %>
+            <i class="icon-plus"></i>
+            Blog
+          <% end if can? :create, Snippet %>
         <% end if @blogs %>
         <% @blogs.in_groups_of(2, false).each do |row_blogs| %>
           <div class="row-fluid">

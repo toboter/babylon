@@ -5,7 +5,6 @@ class ClustersController < ApplicationController
   # GET /clusters
   # GET /clusters.json
   def index
-    @clusters = Cluster.all
 
     respond_to do |format|
       format.html { render layout: "fluid" }# index.html.erb
@@ -15,9 +14,7 @@ class ClustersController < ApplicationController
 
   # GET /clusters/1
   # GET /clusters/1.json
-  def show
-    @cluster = Cluster.find(params[:id])
-    
+  def show    
     @project_members = @cluster.projects.map {|project| [project.members.map {|member| member.id }]}.flatten
     @group_project_members = @cluster.group_projects.map {|project| [project.members.map {|member| member.id }]}.flatten
     @raw_members = @project_members+@group_project_members
@@ -44,7 +41,6 @@ class ClustersController < ApplicationController
 
   # GET /clusters/1/edit
   def edit
-    @cluster = Cluster.find(params[:id])
     render layout: "form"
   end
 
@@ -67,8 +63,6 @@ class ClustersController < ApplicationController
   # PUT /clusters/1
   # PUT /clusters/1.json
   def update
-    @cluster = Cluster.find(params[:id])
-
     respond_to do |format|
       if @cluster.update_attributes(params[:cluster])
         format.html { redirect_to @cluster, notice: 'Module was successfully updated.' }
@@ -83,11 +77,10 @@ class ClustersController < ApplicationController
   # DELETE /clusters/1
   # DELETE /clusters/1.json
   def destroy
-    @cluster = Cluster.find(params[:id])
     @cluster.destroy
 
     respond_to do |format|
-      format.html { redirect_to clusters_url }
+      format.html { redirect_to clusters_url, alert: 'Module destroyed.' }
       format.json { head :no_content }
     end
   end

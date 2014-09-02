@@ -1,16 +1,6 @@
-<% title "Folder", @bucket.name %>
+<% title "Folder", "#{@bucket.name} #{content_tag(:small, 'attached to '+@bucket.attachable.name)}".html_safe %>
 <% edit_section_for(@bucket, @bucket.attachable) unless @bucket.name_fixed %>
 <% footer_section(@bucket) %>
-
-<% content_for :scripts do %>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#button-upload').click(function() {
-        $('#spinner').show();
-    });
-});
-</script>
-<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>

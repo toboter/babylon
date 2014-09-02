@@ -31,11 +31,11 @@
           </p>
           <%= content_tag :td, style: 'width:15%;' do %>
             <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
-              <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+              <%= content_tag :i, '', class: 'icon-plus-sign icon-white' %>
               <%= current_aspect.name %>
             <% end if !current_aspect.references.include?(reference) %>
             <%= link_to reference_remove_from_aspect_path(reference), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
-              <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+              <%= content_tag :i, '', class: 'icon-minus-sign icon-white' %>
               <%= current_aspect.name %>
             <% end if current_aspect.references.include?(reference) && current_aspect.project_type == 'research' %>
           <% end if aspect? %>

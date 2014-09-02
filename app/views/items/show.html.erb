@@ -32,6 +32,8 @@
                 <%= item_description('Excavation Number', @item.excavation_id) %>
                 <%= item_description('Dissov Id', @item.dissov_id) %>
                 <%= item_description('MDS Id', @item.mds_id) %>
+                <%= item_description('Excavation date', @item.excavation_date.strftime('%d.%m.%Y')) if @item.excavation_date %>
+                <%= item_description('Accession date', @item.accession_date.strftime('%d.%m.%Y')) if @item.accession_date %>
                 <%= item_description('Context', @item.context_id) %>
                 <%= item_description('Object type', link_to(@item.classification.root.name, @item.classification.root)) if @item.classification %>
                 <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
@@ -181,9 +183,9 @@
           <%= render "reference_entries", :citations => @item.citations %>
           <%= link_to 'View all refs', [@item, :references] %>
 
-          <%= content_tag :h3, 'References photos' %>
+          <%= content_tag :h3, 'References files' if @item.references_assets.any? %>
           <div class="tiles">
-            <% for asset in @item.references.joins(:projects).where(projects: {project_type: 'photographic'}).map{|r| r.assets}.uniq.flatten do %>
+            <% for asset in @item.references_assets do %>
               <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid popover-bottom", data: { 'original-title' => asset.name, 'content' => asset.full_caption } %>
             <% end %>
           </div>
@@ -194,11 +196,15 @@
 
         <div class="item-section" id='buckets'>
           <%= content_tag :h3, class: '' do %>
-            Buckets
+            Folders
             <span class="badge"><%= @item.buckets.count %></span>
+            <%= link_to new_item_bucket_path(@item), class: 'btn btn-default pull-right' do %>
+              <i class="icon-plus"></i>
+              Folder
+            <% end if can? :create, Bucket %>
           <% end %>
           <%= render @item.buckets, :personal => false %>
-          <%= link_to 'View all buckets', [@item, :buckets] %>
+          <%= link_to 'View all folders', [@item, :buckets] %>
         </div>
       </div>
     </div>

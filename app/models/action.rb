@@ -1,5 +1,6 @@
 class Action < ActiveRecord::Base
-  attr_accessible :actable_date_text, :actable_id, :actable_type, :person_id, :predicate_id, :creator_id, :updater_id
+  attr_accessible :actable_date_text, :actable_id, :actable_type, :person_id, :predicate_id, 
+  				  :creator_id, :updater_id
 
   stampable
 

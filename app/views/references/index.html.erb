@@ -1,5 +1,4 @@
-<% title "References", nil unless @parent %>
-<% title "References for ", @parent.name if @parent %>
+<% title "Sources", (@parent ? @parent.name : nil) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -8,7 +7,7 @@
     <%= content_tag(:li, link_to("Projects", [@parent.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@parent.name}", [@parent.projectable, @parent]) + content_tag(:span, '/', class: 'divider')) %>
   <% end %>
-  <li class="active">References</li>
+  <li class="active">Sources</li>
 <% end %>
 
 <% content_for :main_section do %>
@@ -17,16 +16,16 @@
     <div class="row-fluid">
       <%= content_tag :div, class: 'span9' do %>
         <%= content_tag :ul, class: "nav nav-pills" do %>
-          <%= content_tag :li, link_to("All public references", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'bibliographic' || params[:show] == 'photographic' }" %>
+          <%= content_tag :li, link_to("All public sources", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'bibliographic' || params[:show] == 'photographic' }" %>
           <%= content_tag :li, link_to('Babylon bibliography', references_path(show: 'bibliographic', q: params[:q])), class: "#{'active' if params[:show] == 'bibliographic'}" %>
-          <%= content_tag :li, link_to('Babylon archival references', references_path(show: 'archival', q: params[:q])), class: "#{'active' if params[:show] == 'archival'}" %>
-          <%= content_tag :li, link_to('Babylon photographic references', references_path(show: 'photographic', q: params[:q])), class: "#{'active' if params[:show] == 'photographic'}" %>
+          <%= content_tag :li, link_to('Babylon archival sources', references_path(show: 'archival', q: params[:q])), class: "#{'active' if params[:show] == 'archival'}" %>
+          <%= content_tag :li, link_to('Babylon photographic sources', references_path(show: 'photographic', q: params[:q])), class: "#{'active' if params[:show] == 'photographic'}" %>
         <% end %>
       <% end unless @parent %>
       <%= content_tag :div, class: 'span3' do %>
         <%= link_to new_reference_path, class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
           <i class="icon-plus"></i>
-          Reference
+          Source
         <% end if aspect? && !@parent && can?(:create, @references) %>
 
       <% end %>
@@ -38,16 +37,19 @@
           <%= search_form_for @q do |f| %>
             <%= f.label :authors_full_name_cont, 'Search authors name' %>
             <%= f.search_field :authors_full_name_cont %>
+            <%= hidden_field_tag :show, params[:show] %>
             <%= content_tag :div do %>
               <%= f.label :book_year_gteq, 'Search year between' %>
               <%= f.search_field :book_year_gteq, class: 'input-mini' %> and 
               <%= f.search_field :book_year_lteq, class: 'input-mini' %>
-            <% end unless params[:show] == 'archival' %>
+            <% end unless params[:show] == 'archival' || params[:show] == 'photographic' %>
             <%= f.label :title_cont, 'Search content title' %>
             <%= f.search_field :title_cont %>
-            <%= f.label :book_full_entry_cont, 'Search book title' %>
-            <%= hidden_field_tag :show, params[:show] %>
-            <%= f.search_field :book_full_entry_cont %><br>
+            <% unless params[:show] == 'archival' || params[:show] == 'photographic' %>
+              <%= f.label :book_full_entry_cont, 'Search book title' %>
+              <%= f.search_field :book_full_entry_cont %>
+            <% end %>
+            <br>
             <%= f.submit 'Filter', class: 'btn' %><%= link_to 'Reset', references_path(q: nil, show: params[:show]), class: 'btn', style: 'margin-left:7px;' %>
           <% end unless @parent %>
           <p class="text text-info"><%= @references.count %> entries in set <small>[ of <%= content_tag :span, @references_all.count %> ]</small></p>
@@ -55,15 +57,15 @@
         <%= content_tag :ul, class: "nav nav-pills nav-stacked" do %>
           <%= content_tag :li, link_to("Books", books_path), style: 'border: 1px solid #f5f5f5;' %>
           <%= content_tag :li, link_to("Journals and serials", serials_path), style: 'border: 1px solid #f5f5f5;' %>
-        <% end unless @parent %>
+        <% end unless @parent || params[:show] == 'archival' || params[:show] == 'photographic' %>
       </div>
       <div class="span9">
         <% if @indirect_references || @direct_references %>
-          <%= content_tag :h4, 'References used in the project' if @indirect_references %>
+          <%= content_tag :h4, 'Sources used in the project' if @indirect_references %>
           <div style="color:#bbb;">
             <%= render "bib_entries", :references => @indirect_references %>
           </div>
-          <%= content_tag :h4, 'References added to the project' if @direct_references %>
+          <%= content_tag :h4, 'Sources added through the project' if @direct_references %>
           <%= render "bib_entries", :references => @direct_references %>
         <% else %>
           <%= render "bib_entries", :references => @references_paginated %>        

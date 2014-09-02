@@ -5,13 +5,13 @@ class Item < ActiveRecord::Base
   # friendly_id :name, use: [:slugged, :history]
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
-            :context_id, :accession_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
+            :context_id, :accession_date_text, :excavation_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
             :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id,
             :connections_attributes, :locations_attributes
 
   stampable
   
-  attr_writer :accession_date_text
+  attr_writer :accession_date_text, :excavation_date_text
 
   serialize :properties, ActiveRecord::Coders::Hstore
 
@@ -55,7 +55,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :connections, allow_destroy: true
   accepts_nested_attributes_for :locations, allow_destroy: true
 
-  before_save :save_accession_date_text
+  before_save :save_accession_date_text, :save_excavation_date_text
 
   def inventory_name
     if collection && collection.name != 'none' && inventory_number
@@ -71,6 +71,10 @@ class Item < ActiveRecord::Base
     else
       "#{id} (db_id)"
     end
+  end
+
+  def references_assets
+    references.joins(:projects).where(projects: {project_type: 'photographic'}).map{|r| r.assets}.uniq.flatten
   end
 
 #  Collection.all.map{|c| c.fields.map(&:name) }.flatten.each do |key|
@@ -104,6 +108,22 @@ class Item < ActiveRecord::Base
     end
   rescue ArgumentError
     errors.add :accession_date_text, "is out of range"
+  end
+
+  def excavation_date_text
+    @excavation_date_text || excavation_date.try(:strftime, "%Y-%m-%d %H:%M:%S")
+  end
+
+  def save_excavation_date_text
+    self.excavation_date = Time.zone.parse(@excavation_date_text) if @excavation_date_text.present?
+  end
+
+  def check_excavation_date_text
+    if @excavation_date_text.present? && Time.zone.parse(@excavation_date_text).nil?
+      errors.add :excavation_date_text, "cannot be parsed"
+    end
+  rescue ArgumentError
+    errors.add :excavation_date_text, "is out of range"
   end
 
   def validate_properties

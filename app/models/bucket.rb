@@ -1,6 +1,6 @@
 class Bucket < ActiveRecord::Base
   attr_accessible :name, :creator_id, :updater_id, :asset_ids, :cover_asset_id, :name_fixed, 
-  				  :attachable_id, :attachable_type
+  				  :attachable_id, :attachable_type, :tag_ids
 
   stampable
 
@@ -9,7 +9,9 @@ class Bucket < ActiveRecord::Base
   belongs_to :attachable, :polymorphic => true
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
-
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings
+  
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:attachable_id, :attachable_type]
   # validates_uniqueness_of :attachable_type if :attachable_type == 'Explore'

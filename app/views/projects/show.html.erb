@@ -27,11 +27,12 @@
     <% end %>
   </div>
   <div class="row-fluid" id="about">
-    <%= content_tag :div, class: 'span2 visible-desktop cover', style: '' do %>
-      <%= link_to (image_tag @project.project_bucket.cover.assetfile.big_thumb.url, class: "img-polaroid"), polymorphic_path([@project, @project.project_bucket]) if @project.project_bucket.cover %>
+    <%= content_tag :div, class: "visible-desktop cover #{'span2' if @project.project_bucket}", style: '' do %>
+      <%= link_to (image_tag (@project.project_bucket.cover ? @project.project_bucket.cover.assetfile.big_thumb.url : "icons/no_picture.svg"), class: "img-polaroid"), polymorphic_path([@project, @project.project_bucket]) %>
       (<%= link_to 'Edit picture', polymorphic_path([@project, @project.project_bucket]), class: 'change-asset' %>)
     <% end if @project.project_bucket %>
-    <%= content_tag :div, class: 'span10 lead description', style: '' do %>
+    <%= content_tag :div, class: "#{@project.project_bucket ? 'span10' : 'span12'} lead description", style: '' do %>
+      <%= content_tag :span, tagging_infos_for(@project), class: 'pull-right' %>
       <%= @project.description.present? ? markdown(@project.description) : content_tag(:p, "No abstract to show.") %>
     <% end %>
   </div>

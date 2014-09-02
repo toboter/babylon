@@ -9,10 +9,8 @@ module ApplicationHelper
   end
 
   def tagging_infos_for(obj)
-    content_tag(:div, class: 'tagging-area') do 
-	    for tag in obj.tags
-	      concat content_tag :span, tag.name, class: 'label label-info'
-	    end
+    content_tag(:div, class: 'tagging-area', style: 'margin: 0 10px;') do 
+	    content_tag :span, obj.tags.map{|t| link_to(t.name, t, style: 'color: white; font-weight:bold;')}.join(', ').html_safe, class: 'label label-info'
     end if obj.tags.any?
   end
 

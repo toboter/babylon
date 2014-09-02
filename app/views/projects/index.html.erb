@@ -31,7 +31,7 @@
         <% end %>
         <%= content_tag :li, class: "#{'active' if params[:ufilter]=='you-are-in'}" do %>
           <%= link_to polymorphic_url([@projectable, :projects], ufilter: 'you-are-in', state: params[:state]) do %>
-            You are in
+            You are a member
             <span class="cnt pull-right"><%= @current_user_projects.count %></span>
           <% end %>
         <% end %>
@@ -46,7 +46,10 @@
         <%= link_to "#{@projectable.projects.count} Module projects", polymorphic_url([@projectable, :projects], state: 'module', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='module'}" %>
       <% end if @projectable.class.to_s == 'Cluster' %>
       <div class="pull-right" style="<%= 'margin: 1em 0;' if @projectable.class.to_s == 'Group' %>">
-        <%= link_to "Create #{(@projectable.class.to_s == 'Group') ? 'group' : 'module'} project", [:new, @projectable, :project], class: "btn btn-default", style: 'font-weight:bold;' if @projectable && can?(:create, Project) %>
+        <%= link_to [:new, @projectable, :project], class: "btn btn-default" do %>
+          <i class="icon-plus"></i>
+          <%= "#{(@projectable.class.to_s == 'Group') ? 'Group' : 'Module'} project" %>
+        <% end if @projectable && can?(:create, Project) %>
       </div>
     <% end if @projectable %>
     <div class="projects-list row-fluid">

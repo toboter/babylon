@@ -28,7 +28,7 @@
 	  <div class="assets" style="margin-top:80px;">
 	  	<%= render @snippet.buckets, :personal => false %>
 	  </div>
-	  <%= link_to 'Edit Buckets', snippet_buckets_path(@snippet) if can?(:update, @snippet) && can?(:create, Bucket) %>
+	  <%= link_to 'Edit folders', snippet_buckets_path(@snippet) if can?(:update, @snippet) && can?(:create, Bucket) %>
 	</div>
   </div>
 

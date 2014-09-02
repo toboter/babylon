@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140829094645) do
+ActiveRecord::Schema.define(:version => 20140902170803) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(:version => 20140829094645) do
     t.integer  "mds_id"
     t.string   "excavation_prefix"
     t.hstore   "properties"
+    t.datetime "excavation_date"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"

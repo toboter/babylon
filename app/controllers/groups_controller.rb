@@ -1,13 +1,13 @@
 class GroupsController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
   before_filter :load_cluster, except: [:index, :show]
-  load_and_authorize_resource
+  authorize_resource
   
   # GET /groups
   # GET /groups.json
   def index
     if params[:cluster_id]
-      @cluster = Cluster.find(params[:cluster_id])
+      load_cluster
       @groups = @cluster.groups
     else
       @groups = Group.all
@@ -88,7 +88,7 @@ class GroupsController < ApplicationController
     @group.destroy
 
     respond_to do |format|
-      format.html { redirect_to @cluster }
+      format.html { redirect_to @cluster, alert: 'Group destroyed.' }
       format.json { head :no_content }
     end
   end

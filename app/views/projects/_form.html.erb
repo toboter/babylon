@@ -38,6 +38,14 @@
       </div>
     </div>
 
+  <div class="control-group">
+    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :tag_ids, Tag.arrange_as_tree({:order => 'name'}), :id, :name_for_selects, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+      <p class="help-block"><%= link_to 'Edit tags', tags_path, target: 'blank' %></p>
+    </div>
+  </div>
+
     <div class="control-group">
       <%= f.label :description, class: 'control-label' %>
       <div class="controls">

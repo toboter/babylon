@@ -56,13 +56,13 @@
     <%= content_tag :div, class: "reference-options pull-right" do %>
       <%= content_tag :div, class: "" do %>
         <%= link_to reference_add_to_aspect_path(@reference), :method => :post, class: 'btn btn-small btn-success' do %>
-          <%= content_tag :i, '', class: 'icon-plus icon-white' %>
+          <%= content_tag :i, '', class: 'icon-plus-sign icon-white' %>
           <%= current_aspect.name %>
         <% end %>
       <% end if aspect? && !(current_aspect.references.include?(@reference)) %>
       <%= content_tag :div, class: "" do %>
         <%= link_to reference_remove_from_aspect_path(@reference), :method => :delete, class: 'btn btn-small btn-warning' do %>
-          <%= content_tag :i, '', class: 'icon-trash icon-white' %>
+          <%= content_tag :i, '', class: 'icon-minus-sign icon-white' %>
           <%= current_aspect.name %>
         <% end %>
       <% end if aspect? && current_aspect.references.include?(@reference) && (current_aspect.project_type == 'research' || can?(:destroy, ProjectReference))  %>
@@ -105,20 +105,26 @@
         <%= content_tag :div, class: 'documents' do %>
           <h3>
             Documents
-            <%= link_to '+Document', new_reference_document_path(@reference), class: 'btn btn-default pull-right' if can? :create, Document %>
+            <%= link_to new_reference_document_path(@reference), class: 'btn btn-default pull-right' do %>
+              <i class="icon-plus"></i>
+              Document
+            <% end if can? :create, Document %>
           </h3>
           <%= render "documents/without_document_type", :var => @reference %>
-          <%= link_to "View all documents for #{@reference.title}", reference_documents_path(@reference) %>
+          <%= link_to "View all documents on #{@reference.title}", reference_documents_path(@reference) %>
         <% end %> 
 
         <hr>
         <%= content_tag :div, class: 'upload-buckets' do %>
           <h3>
             Folders
-            <%= link_to '+Folder', new_reference_bucket_path(@reference), class: 'btn btn-default pull-right' if can? :create, Bucket %>
+            <%= link_to new_reference_bucket_path(@reference), class: 'btn btn-default pull-right' do %>
+              <i class="icon-plus"></i>
+              Folder
+            <% end if can? :create, Bucket %>
           </h3>
           <%= render @reference.buckets, :personal => false %>
-          <%= link_to "View all folders for #{@reference.title}", reference_buckets_path(@reference) %>
+          <%= link_to "View all folders on #{@reference.title}", reference_buckets_path(@reference) %>
         <% end %> 
 
 

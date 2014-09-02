@@ -37,7 +37,11 @@ class ReferencesController < ApplicationController
       @references = @q.result(distinct: true).includes(:authors, :book)
     end
     
-    @references_paginated = @references.paginate(page: params[:page], per_page: 30)
+    if params[:project_id]
+      @references_paginated = @references
+    else
+      @references_paginated = @references.paginate(page: params[:page], per_page: 30)
+    end
 
     respond_to do |format|
       format.html { render layout: 'fluid' }

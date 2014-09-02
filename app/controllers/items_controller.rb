@@ -60,7 +60,7 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(params[:item])
-
+    
     respond_to do |format|
       if @item.save
         track_activity @item

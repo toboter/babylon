@@ -41,9 +41,12 @@
 
   <div class="span9">
     <%= content_tag :div, class: "groups-options row-fluid" do %>
-      <div class="pull-right" style="margin: 0 0 1em 0; %>">
-        <%= link_to "Create group", [:new, @cluster, :group], class: "btn btn-default", style: 'font-weight:bold;' if @cluster %>
-      </div>
+
+        <%= link_to [:new, @cluster, :group], class: "btn btn-default pull-right" do %>
+          <i class="icon-plus"></i>
+          Group
+        <% end if @cluster %>
+
     <% end if @cluster && (can? :create, :group) %>
 
     <div class="groups-list row-fluid">

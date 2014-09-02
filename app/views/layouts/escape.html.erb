@@ -1,11 +1,30 @@
 <% content_for :content do %>
-  <div class="container-fluid">
+<div id="wrap">
+  <header>
+    <%= content_tag :div, class: 'navbar navbar-inverse navbar-fixed-top' do %>
+      <%= render 'shared/navbar' %>
+    <% end %>
+  </header>
 
-	  <%= render "shared/debug" %>    
+  <div class="container-fluid" style="margin-bottom:50px;">
+    <%= render "shared/breadcrumbs" %>
+	  <%= render "shared/debug" %>
 
-    
-    <%= yield %>
+	  <%= render "shared/flash", flash: flash %>
 
+    <div class="row-fluid">
+      <div class="span6 offset2" style="margin-top:70px;">
+   	    <div class="alert">
+  	      <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
+  	      <p class="lead">This is not the web page you are looking for.</p>
+          <%= yield(:main_section) %>
+        </div>
+  	  </div>
+    </div>
+  </div>
+  <div id="push"></div>
+</div>
+<%= render "shared/site_footer" %>
 
 <% end %>
 

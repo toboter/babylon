@@ -1,14 +1,17 @@
-<% title "Assets#{' in ' + @bucket.name + ' ('+@bucket.attachable.name+')' if @bucket}", nil %>
+<% title "Files", ("#{@bucket.name} #{content_tag(:small, 'attached to '+@bucket.attachable.name)}".html_safe if @bucket) %>
+<% edit_section_for(@bucket, @bucket.attachable) if @bucket %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, link_to("#{@bucket.name}", [@bucket.attachable, @bucket]) + content_tag(:span, '/', class: 'divider')) if @bucket %>
-  <%= content_tag :li, "Assets", class: 'active' %>
+  <%= content_tag(:li, link_to("#{@bucket.attachable.name}", [@bucket.attachable]) + content_tag(:span, '/', class: 'divider')) if @bucket %>
+  <%= content_tag(:li, link_to("Folders", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) if @bucket %>
+  <%= content_tag :li, "#{@bucket ? @bucket.name : 'Files'}", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
+    <%= content_tag :span, tagging_infos_for(@bucket), class: 'pull-right' if @bucket %>
     <p>Total: <%= @assets.count %></p>
     <%= link_to [@bucket.attachable, @bucket], class: 'btn', style: 'margin-bottom:10px;' do %>
       <i class="icon-th-list"></i>
@@ -22,7 +25,7 @@
         </ul>
       <% else %>
         <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px; margin-bottom:20px;">
-          <p class="text-center">This folder is empty. Start adding some files to it<%= link_to ' (Edit)', [@bucket.attachable, @bucket] if @bucket %>.</p>
+          <p class="text-center">This folder is empty. Start adding some files to it <%= link_to '(Edit)', [@bucket.attachable, @bucket] if @bucket %>.</p>
         </div>
       <% end %>
 

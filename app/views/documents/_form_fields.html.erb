@@ -47,6 +47,6 @@
         <%= f.label :remote_documentfile_url, "or document URL" %>
         <%= f.text_field :remote_documentfile_url %>
       </p>
-      <p class="text-warning">Be sure if you paste something in here while editing. <%= "Current attached file is   #{@document.documentfile_name}" if @document.documentfile.present? %></p>
+      <p class="text-warning">Be sure, if you paste something in here while editing. <%= "Current attached file is   #{@document.documentfile_name}" if @document.documentfile.present? %></p>
     </div>
   </div>

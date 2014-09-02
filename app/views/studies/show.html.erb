@@ -75,7 +75,7 @@
           <% end if @study.citations.any? %>
           <div class="study-section" id='buckets'>
             <%= content_tag :h3, class: '' do %>
-              Buckets
+              Folders
               <span class="badge"><%= @study.buckets.count %></span>
             <% end %>
             <%= render @study.buckets, :personal => false %>

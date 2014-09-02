@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   attr_accessible :projectable_id, :projectable_type, :memberships_attributes, :creator_id, :updater_id, 
                   :show_references, :description, :featured, :studyfields_attributes, :map_type,
-                  :name, :lists_attributes, :project_type
+                  :name, :lists_attributes, :project_type, :tag_ids
 
   stampable
 
@@ -31,6 +31,9 @@ class Project < ActiveRecord::Base
 
   has_many :project_references, :dependent => :destroy
   has_many :references, through: :project_references
+
+  has_many :taggings, as: :taggable, dependent: :destroy
+  has_many :tags, through: :taggings
 
   validates :name, :projectable_id, :projectable_type, presence: true
   # validates :project_type, presence: {message: 'You have to choose a project type!'}

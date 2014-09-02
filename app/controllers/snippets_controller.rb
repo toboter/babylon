@@ -5,7 +5,7 @@ class SnippetsController < ApplicationController
   # GET /snippets
   # GET /snippets.json
   def index
-    @snippets = Snippet.where('snippet_type != ?', 'about')
+    @snippets = Snippet.where('snippet_type != ?', 'about').order('created_at desc')
 
     respond_to do |format|
       format.html { render layout: "blog" }# index.html.erb
@@ -48,7 +48,7 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.save
-        format.html { redirect_to @snippet, notice: 'Snippet was successfully created.' }
+        format.html { redirect_to @snippet, notice: 'Post was successfully created.' }
         format.json { render json: @snippet, status: :created, location: @snippet }
       else
         format.html { render layout: 'form', action: "new" }
@@ -64,7 +64,7 @@ class SnippetsController < ApplicationController
 
     respond_to do |format|
       if @snippet.update_attributes(params[:snippet])
-        format.html { redirect_to @snippet, notice: 'Snippet was successfully updated.' }
+        format.html { redirect_to @snippet, notice: 'Post was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render layout: 'form', action: "edit" }
@@ -80,7 +80,7 @@ class SnippetsController < ApplicationController
     @snippet.destroy unless @snippet.snippet_type == 'about'
 
     respond_to do |format|
-      format.html { redirect_to snippets_url }
+      format.html { redirect_to snippets_url, notice: 'Post was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

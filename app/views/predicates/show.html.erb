@@ -31,6 +31,11 @@
         <b>Project if attribute type:</b>
         <%= @predicate.project_id %>
       </p>
+      <br>
+      <%= link_to new_predicate_path, class: 'btn btn-default btn-small' do %>
+        <i class="icon-plus"></i>
+        Predicate
+      <% end if can? :create, Predicate %>
     </div>
   </div>
 <% end %>

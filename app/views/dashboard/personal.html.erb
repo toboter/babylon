@@ -91,7 +91,7 @@
                 </li>
               <% end %>
             <% else %>
-              <p>Go home! There is nothing to do :-).</p>
+              <p>There is nothing to do :-).</p>
             <% end %>
           </ul>
           <%= content_tag :div, class: '', style: 'text-align:right;' do %>
@@ -117,7 +117,7 @@
               </li>
             <% end %>
           <% else %>
-            <p>Do you really think this is the right project for you? There is nothing to do!? :-).</p>
+            <p>Nothing found.</p>
           <% end %>
           </ul>
             <%= link_to 'Create new task', [:new, current_aspect, :todo], class: "btn btn-default btn-small", style: 'margin-top:4px;' if aspect? %>

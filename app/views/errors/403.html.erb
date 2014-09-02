@@ -1,10 +1,8 @@
 <% title "Forbidden. (403)", nil %>
 <% content_for :main_section do %>
-  <div class="span8">
     <% if @exception %>
   	  <p><%= @exception.message %></p>
     <% else %>
       <p>You are not authorized to perform this action.</p>
     <% end %>
-  </div>
 <% end %>

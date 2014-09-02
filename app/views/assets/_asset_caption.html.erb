@@ -3,5 +3,5 @@
   <strong>Description: </strong>
   <%= truncate(asset.caption, length: 230, seperator: ' ', omission: ' ... ') %><br>
 <% end %>
-<strong>Buckets: </strong>
+<strong>Folders: </strong>
 <%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %>
