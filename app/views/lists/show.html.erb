@@ -59,7 +59,7 @@
       <%= content_tag :p do %>
         <b>Locations:</b><br>
         <% for location in @list.locations do %>
-          <em><%= location.predicate.name %></em>
+          <em><%= location.predicate.name if location.predicate %></em>
           <%= location.address if location.address %>
           <%= "[#{location.latitude}; #{location.longitude}]" if location.latitude && location.longitude %><br>
         <% end %>
@@ -76,7 +76,7 @@
         </p>
         <p>
           <b>Creator:</b>
-          <%= name_only_or_link_to(@list.creator) %>
+          <%= name_only_or_link_to(@list.creator) if @list.creator %>
         </p>
       </div>
     </div>

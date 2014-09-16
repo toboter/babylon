@@ -1,7 +1,6 @@
-<% title @item.name, nil, nil %>
-<% edit_section_for(@item, nil) %>
+<% title (@item.title? ? @item.title : @item.name), nil %>
+<% edit_section_for(@item) %>
 <% footer_section(@item) %>
-
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -12,17 +11,12 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <%= content_tag :h2, class: "" do %>
-      <%= @item.title? ? @item.title : @item.name %>
-      <%= yield(:edit_section) %>
-    <% end %>
     <div class="row-fluid">
       <div class="span4">
         <a href="" class="img-fluid">
-          <%= @item.buckets.first.cover ? (image_tag @item.buckets.first.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @item.buckets.any? %>
+          <%= @item.cover ? (image_tag @item.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') %>
         </a>
       </div>
-  
       <div class="span8">
 
             <div class="info_section">
@@ -32,10 +26,8 @@
                 <%= item_description('Excavation Number', @item.excavation_id) %>
                 <%= item_description('Dissov Id', @item.dissov_id) %>
                 <%= item_description('MDS Id', @item.mds_id) %>
-                <%= item_description('Excavation date', @item.excavation_date.strftime('%d.%m.%Y')) if @item.excavation_date %>
-                <%= item_description('Accession date', @item.accession_date.strftime('%d.%m.%Y')) if @item.accession_date %>
                 <%= item_description('Context', @item.context_id) %>
-                <%= item_description('Object type', link_to(@item.classification.root.name, @item.classification.root)) if @item.classification %>
+                <%= item_description('Object type', link_to(@item.classification.object_type.name, @item.classification.object_type)) if @item.classification %>
                 <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
 
                 <% @item.properties.each do |name, value| %>
@@ -58,35 +50,9 @@
             Issues <%= content_tag :span, @item.issues.count, class: "badge #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
           <% end %>
           <%= render @item.issues.order('created_at DESC').limit(3) %>
-          <%= @item.issues.any? ? link_to('View all issues', item_issues_path(@item)) : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
+          <%= @item.issues.any? ? "#{link_to('View all issues', item_issues_path(@item))} or #{link_to('add a new issue', new_item_issue_path(@item))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
         </div>
 
-        <div class="item-section" id='history'>
-          <%= content_tag :h3, 'History', class: '' if @item.accession_date || @item.actions.any? %>
-          <ul class="unstyled">
-            <% for action in @item.actions.order('created_at DESC') do %>
-              <li>
-                <strong><%= action.predicate.name.humanize %>: </strong>
-                <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } %>
-                <%= '[' + action.actable_date_text + ']' if action.actable_date_text %>
-              </li>
-            <% end %>
-            <%= content_tag :li do %>
-              <strong>Accession Date: </strong><%= content_tag :span, @item.accession_date.strftime('%d.%m.%Y') %>
-            <% end if @item.accession_date %>
-          </ul>
-        </div>
-        <%= content_tag :div, class: "item-section", id: 'locations' do %>
-          <%= content_tag :h3, 'Locations', class: '' %>
-          <ul class="unstyled">
-            <% for location in @item.locations do %>
-              <li>
-                <strong><%= location.predicate.name.humanize %>: </strong>
-                <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>]
-              </li>
-            <% end %>
-          </ul>
-        <% end if @item.locations.any? %>
         <%= content_tag :div, class: "item-section", id: 'connections' do %>
           <%= content_tag :h3, 'Connections', class: '' %>
           <ul class="unstyled">
@@ -116,6 +82,14 @@
 
         <% end if @item.activities.any? %>
 
+        <%= content_tag :div, class: "options-section", id: 'options' do %>
+          <%= content_tag :h3, 'Other views', class: '' %>
+          <ul class="unstyled">
+            <li><%= link_to 'View all documents', item_documents_path(@item) %></li>
+            <li><%= link_to 'View all folders', item_buckets_path(@item) %></li>
+          </ul>
+        <% end %>
+
       </div>
 
       <div class="span9">
@@ -128,10 +102,60 @@
           <%= content_tag :hr %>
         <% end if @item.description.present? || @item.tags.any? %>
 
+
+        <%= content_tag :div, class: "item-section", id: 'actions' do %>
+          <%= content_tag :h3 , class: '' do %>
+            Object sources history
+          <% end if @item.actions.any? %>
+
+          <span class="badge"><%= pluralize(@item.actions.count, 'element') %></span><br>
+
+          <%= content_tag :table, class: 'table table-bordered table-hover' do %>
+            <tbody>
+              <% for action in @item.actions.order('actable_date_text DESC').limit(3) do %>
+              <tr><td>
+                <div class="alert alert-info">
+                  <strong><%= link_to action.predicate.name.humanize, [@item, action] %> </strong>
+                  <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } %>
+                  <%= "on #{action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if action.actable_date_text %>
+                </div>
+                <ul class="unstyled">
+                  <%= content_tag :li do %>
+                    <% for source in action.sources do %>
+                      <% for location in action.locations do %>
+                      <p>
+                        <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
+                      </p>
+                      <% end if action.locations.any? %>
+                      <%= render source %>
+                      <% end %>
+                  <% end if action.sources.any? %>
+                </ul>
+              </td></tr>
+              <% end %>
+            </tbody>
+          <% end %> 
+          <%= link_to 'Show full object sources history', item_actions_path(@item) %>
+        <% end if @item.actions.any? %>
+
+        <%= content_tag :div, class: "item-section", id: "references" do %>
+          <%= content_tag :h3, class: '' do %>
+            Publications
+          <% end %>
+          <span class="badge"><%= pluralize(@item.references.count, 'element') %></span><br>
+          <table class="table table-bordered table-hover">
+            <tbody>
+              <% for citation in @item.citations do %>
+                <%= render partial: "references/reference", locals: {reference: citation.reference, citation: citation} %>
+              <% end %>
+            </tbody>
+          </table>
+          <%= link_to 'View all publications', [@item, :references] %>
+        <% end if @item.references.any? %>
+
         <%= content_tag :div, class: "item-section", id: 'workspaces' do %>
           <%= content_tag :h3, class: '', style: 'margin-bottom:10px;' do %>
             Studies
-            <span class="badge"><%= @item.studies.count %></span>
             <div class="pull-right">
               <% if current_aspect.lists.any? %>
                 <%= link_to new_item_study_path(@item), class: 'btn btn-default', style: 'margin-left:10px;' do %>
@@ -146,66 +170,15 @@
               <% end if aspect? %>
             </div>
           <% end %>
+          <span class="badge"><%= pluralize(@item.studies.count, 'element') %></span><br>
           <%= content_tag :table, class: 'table table-bordered table-hover' do %>
             <tbody>
-              <%= render @item.studies.limit(6) %>
+              <%= render @item.studies.limit(3) %>
             </tbody>
           <% end if @item.studies.any? %>
           <%= link_to "View all studies on #{@item.name} and connected objects", [@item, :studies] %>
         <% end %>
 
-        
-        <%= content_tag :div, class: "item-section", id: "documents" do %>
-          <%= content_tag :h3, class: '' do %>
-            Documents
-            <span class="badge"><%= @item.documents.without_document_type.count %></span>
-            <%= link_to new_item_document_path(@item), class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
-              <i class="icon-plus"></i>
-              Document
-            <% end if can? :create, Document %>
-          <% end %>
-          <%= content_tag :div do %>
-          <table class="table table-bordered table-hover">
-            <tbody>
-            <%= render @item.documents %>
-            </tbody>
-          </table>
-          <%= link_to 'View all docs', [@item, :documents] %>
-          <% end if @item.documents.any? %>
-        <% end %>
-
-        
-        <%= content_tag :div, class: "item-section", id: "references" do %>
-          <%= content_tag :h3, class: '' do %>
-            References
-            <span class="badge"><%= @item.references.count %></span>
-          <% end %>
-          <%= render "reference_entries", :citations => @item.citations %>
-          <%= link_to 'View all refs', [@item, :references] %>
-
-          <%= content_tag :h3, 'References files' if @item.references_assets.any? %>
-          <div class="tiles">
-            <% for asset in @item.references_assets do %>
-              <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid popover-bottom", data: { 'original-title' => asset.name, 'content' => asset.full_caption } %>
-            <% end %>
-          </div>
-
-          <hr>
-        <% end if @item.citations.any? %>
-
-
-        <div class="item-section" id='buckets'>
-          <%= content_tag :h3, class: '' do %>
-            Folders
-            <span class="badge"><%= @item.buckets.count %></span>
-            <%= link_to new_item_bucket_path(@item), class: 'btn btn-default pull-right' do %>
-              <i class="icon-plus"></i>
-              Folder
-            <% end if can? :create, Bucket %>
-          <% end %>
-          <%= render @item.buckets, :personal => false %>
-          <%= link_to 'View all folders', [@item, :buckets] %>
-        </div>
       </div>
     </div>
   </div>

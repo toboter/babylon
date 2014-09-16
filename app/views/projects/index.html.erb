@@ -1,4 +1,13 @@
-<% title "Projects", nil, nil %>
+<% title (@projectable ? "Projects" : "All projects"), @projectable ? link_to(@projectable.name, @projectable).html_safe : nil %>
+
+<% content_for :edit_section do %>
+        <div class="pull-right" style="">
+          <%= link_to [:new, @projectable, :project], class: "btn btn-default" do %>
+            <i class="icon-plus"></i>
+            <%= "#{(@projectable.class.to_s == 'Group') ? 'Group' : 'Module'} project" %>
+          <% end if @projectable && can?(:create, Project) %>
+        </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -14,11 +23,6 @@
 
 
 <% content_for :main_section do %>
-<div class="row-fluid">
-  <%= content_tag :div, class: "span12" do %>
-    <h1>Projects in "<%= link_to @projectable.name, @projectable %>"</h1>
-  <% end if @projectable %>
-</div>
 <div class="row-fluid">
   <div class="span3">
     <%= content_tag :div, class: "documents-options" do %>
@@ -45,19 +49,13 @@
         <%= link_to "#{@projectable.group_projects.count} Group projects", polymorphic_url([@projectable, :projects], state: 'group', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='group'}" %>
         <%= link_to "#{@projectable.projects.count} Module projects", polymorphic_url([@projectable, :projects], state: 'module', ufilter: params[:ufilter]), class: "btn btn-small #{'active' if params[:state]=='module'}" %>
       <% end if @projectable.class.to_s == 'Cluster' %>
-      <div class="pull-right" style="<%= 'margin: 1em 0;' if @projectable.class.to_s == 'Group' %>">
-        <%= link_to [:new, @projectable, :project], class: "btn btn-default" do %>
-          <i class="icon-plus"></i>
-          <%= "#{(@projectable.class.to_s == 'Group') ? 'Group' : 'Module'} project" %>
-        <% end if @projectable && can?(:create, Project) %>
-      </div>
     <% end if @projectable %>
     <div class="projects-list row-fluid">
       <% if @projects.any? %>
         <%= render @projects %>
       <% else %>
-        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:0px;">
-          <p class="text-center">No projects to show. <%= link_to 'Create a new project.', polymorphic_path([:new, @projectable, :project]) if @projectable && can?(:create, Project) %></p>
+        <div class="well">
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a project', [:new, @projectable, :group])+' or ' if @projectable && can?(:create, Project) %><%= link_to 'back to previous page', :back %></p>
         </div>
       <% end %>
     </div>

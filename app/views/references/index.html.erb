@@ -1,4 +1,12 @@
-<% title "Sources", (@parent ? @parent.name : nil) %>
+<% title "Bibliography", (@parent ? @parent.name : nil) %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= link_to new_reference_path, class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Reference
+        <% end if aspect? && !@parent && can?(:create, @references) %>
+      </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -7,28 +15,19 @@
     <%= content_tag(:li, link_to("Projects", [@parent.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) %>
     <%= content_tag(:li, link_to("#{@parent.name}", [@parent.projectable, @parent]) + content_tag(:span, '/', class: 'divider')) %>
   <% end %>
-  <li class="active">Sources</li>
+  <li class="active">Bibliography</li>
 <% end %>
 
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
     <div class="row-fluid">
-      <%= content_tag :div, class: 'span9' do %>
+      <%= content_tag :div, class: 'span12' do %>
         <%= content_tag :ul, class: "nav nav-pills" do %>
-          <%= content_tag :li, link_to("All public sources", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'bibliographic' || params[:show] == 'photographic' }" %>
-          <%= content_tag :li, link_to('Babylon bibliography', references_path(show: 'bibliographic', q: params[:q])), class: "#{'active' if params[:show] == 'bibliographic'}" %>
-          <%= content_tag :li, link_to('Babylon archival sources', references_path(show: 'archival', q: params[:q])), class: "#{'active' if params[:show] == 'archival'}" %>
-          <%= content_tag :li, link_to('Babylon photographic sources', references_path(show: 'photographic', q: params[:q])), class: "#{'active' if params[:show] == 'photographic'}" %>
+          <%= content_tag :li, link_to("All references", references_path(show: 'all', q: params[:q])), class: "#{'active' unless params[:show] == 'archival' || params[:show] == 'babylon' }" %>
+          <%= content_tag :li, link_to('Babylon specific', references_path(show: 'babylon', q: params[:q])), class: "#{'active' if params[:show] == 'babylon'}" %>
         <% end %>
       <% end unless @parent %>
-      <%= content_tag :div, class: 'span3' do %>
-        <%= link_to new_reference_path, class: 'btn btn-default pull-right', style: 'margin-left:10px;' do %>
-          <i class="icon-plus"></i>
-          Source
-        <% end if aspect? && !@parent && can?(:create, @references) %>
-
-      <% end %>
     </div>
     <div class="row-fluid">
       <div class="span3">
@@ -61,11 +60,11 @@
       </div>
       <div class="span9">
         <% if @indirect_references || @direct_references %>
-          <%= content_tag :h4, 'Sources used in the project' if @indirect_references %>
+          <%= content_tag :h4, "References in #{@parent.name if @parent}" if @indirect_references %>
           <div style="color:#bbb;">
             <%= render "bib_entries", :references => @indirect_references %>
           </div>
-          <%= content_tag :h4, 'Sources added through the project' if @direct_references %>
+          <%= content_tag :h4, "References added through #{@parent.name if @parent}" if @direct_references %>
           <%= render "bib_entries", :references => @direct_references %>
         <% else %>
           <%= render "bib_entries", :references => @references_paginated %>        

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  author_id: 1
+  source_type: MyString
+  original_date: 2014-09-09
+  format: MyString
+  institution_id: 1
+  comment: MyText
+  parent_id: 1
+  condition: MyString
+
+two:
+  author_id: 1
+  source_type: MyString
+  original_date: 2014-09-09
+  format: MyString
+  institution_id: 1
+  comment: MyText
+  parent_id: 1
+  condition: MyString

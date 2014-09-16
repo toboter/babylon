@@ -27,7 +27,6 @@
     </div>
   </div>
 
-<% if current_aspect.project_type != 'archival' %>
   <% if !@book %>  <!--Wenn das Formular aus dem Book-form als nested_field aufgerufen wird-->
     <% if !@reference.book %> <!--Prüft, ob das Formular über die Artikel hinzufügen bei Books aufgerufen wurde-->
       <div class="control-group">
@@ -41,7 +40,6 @@
     <% end %>
   <% else %>
     <%= f.hidden_field :book_id %>
-  <% end %>
  
 
     <div class="control-group">

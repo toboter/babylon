@@ -55,7 +55,7 @@ class StudiesController < ApplicationController
         format.json { render json: @study }
       end
     else
-      redirect_to @parent, notice: 'Please choose an project aspect first'
+      redirect_to @parent, notice: 'Please choose an project aspect'
     end
   end
 
@@ -71,7 +71,7 @@ class StudiesController < ApplicationController
         render layout: 'form'
       end
     else
-      redirect_to @parent, notice: 'Please choose an project aspect first'
+      redirect_to @parent, notice: 'Please choose an project aspect'
     end
   end
 
@@ -87,6 +87,7 @@ class StudiesController < ApplicationController
     else
       respond_to do |format|
         if @study.save
+          track_activity(@study.studyable, "study_create")
           format.html { redirect_to [@study.studyable, @study], notice: 'Study was successfully added.' }
           format.json { render json: @study, status: :created, location: @study }
         else

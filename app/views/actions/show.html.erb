@@ -1,0 +1,40 @@
+<% title "Object history", "#{@action.actable.name} :: #{@action.predicate.name}" %>
+
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <%= content_tag(:li, (link_to (@action.actable.class.to_s == 'Item' ? 'Objects' : @action.actable.class.name.pluralize), [@action.actable.class]) + content_tag(:span, '/', class: 'divider')) if @action.actable %>
+  <li><%= link_to @action.actable.name, @action.actable %> <span class="divider">/</span></li>
+  <li><%= link_to 'Object history', [@action.actable, :actions] %> <span class="divider">/</span></li>
+  <%= content_tag :li, "#{@action.predicate.name}", class: 'active' %>
+<% end %>
+
+<% content_for :main_section do %>
+  <div class="">
+    <strong>
+      <%= link_to @action.person.name, @action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(@action.person), 'content' => markdown(@action.person.general) } %>
+      <%= "on #{@action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if @action.actable_date_text %>
+    </strong>
+  </div>
+
+                <ul class="unstyled">
+                  <%= content_tag :li do %><%= render @action.sources %><% end if @action.sources.any? %>
+                  <%= content_tag :li do %>
+                    <% for location in @action.locations do %>
+                      <p>
+                        <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
+                      </p>
+                    <% end %>
+                  <% end if @action.locations.any? %>
+                  <%= content_tag :li do %>
+                    <%= content_tag :table, class: "table table-bordered table-hover" do %>
+                      <tbody>
+                        <%= render @action.documents %>
+                      </tbody>
+                    <% end %>
+                  <% end if @action.documents.any? %>
+                  <%= content_tag :li do %>
+                    <%= render @action.buckets, personal: false %>
+                  <% end if @action.buckets.any? %>
+
+<% end %>

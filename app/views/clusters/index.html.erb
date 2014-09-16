@@ -1,4 +1,11 @@
-<% title "Modules", nil, nil %>
+<% title "Modules", nil %>
+
+<% content_for :edit_section do %>
+      <%= link_to new_cluster_path, class: 'btn btn-default pull-right' do %>
+        <i class="icon-plus"></i>
+        Module
+      <% end %>
+<% end if can? :create, Cluster %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,13 +15,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <h1>
-      Modules
-      <%= link_to new_cluster_path, class: 'btn btn-default pull-right' do %>
-        <i class="icon-plus"></i>
-        Module
-      <% end if can? :create, Cluster %>
-    </h1>
   	<% @clusters.each do |cluster| %>
       <div style="margin-bottom:30px;">
         <div class="row-fluid cluster-entry">

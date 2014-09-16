@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140902170803) do
+ActiveRecord::Schema.define(:version => 20140909133013) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -346,7 +346,6 @@ ActiveRecord::Schema.define(:version => 20140902170803) do
     t.integer  "collection_id"
     t.integer  "inventory_number"
     t.string   "inventory_number_index"
-    t.datetime "accession_date"
     t.integer  "context_id"
     t.string   "title"
     t.datetime "created_at",             :null => false
@@ -361,7 +360,7 @@ ActiveRecord::Schema.define(:version => 20140902170803) do
     t.integer  "mds_id"
     t.string   "excavation_prefix"
     t.hstore   "properties"
-    t.datetime "excavation_date"
+    t.integer  "cover_asset_id"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
@@ -571,6 +570,41 @@ ActiveRecord::Schema.define(:version => 20140902170803) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.text     "content"
+  end
+
+  create_table "source_assignments", :force => true do |t|
+    t.integer  "source_id"
+    t.string   "target"
+    t.integer  "action_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+  end
+
+  create_table "source_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "source_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "source_anc_desc_udx", :unique => true
+  add_index "source_hierarchies", ["descendant_id"], :name => "source_desc_idx"
+
+  create_table "sources", :force => true do |t|
+    t.integer  "author_id"
+    t.string   "source_type"
+    t.date     "original_date"
+    t.string   "format"
+    t.integer  "institution_id"
+    t.text     "comment"
+    t.integer  "parent_id"
+    t.string   "condition"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.string   "name"
   end
 
   create_table "studies", :force => true do |t|

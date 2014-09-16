@@ -1,4 +1,4 @@
-<% title "Study on #{@study.studyable.name}", nil, nil %>
+<% title "Study", "#{@study.studyable.title? ? link_to(@study.studyable.title, @study.studyable) : link_to(@study.studyable.name, @study.studyable)}".html_safe %>
 <% edit_section_for(@study, @study.studyable) if aspect? && current_aspect == @study.list.project && (@study.list.project.memberships.where(:user_id => current_user) || (can? :manage, 'Memberships')) %>
 <% footer_section(@study) %>
 
@@ -14,10 +14,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <%= content_tag :h2, class: "" do %>
-      Study on <%= @study.studyable.title? ? link_to(@study.studyable.title, @study.studyable) : link_to(@study.studyable.name, @study.studyable) %>
-      <%= yield(:edit_section) %>
-    <% end %>
     <div class="row-fluid">
       <div class="span4">
         <div class="info_section">
@@ -47,7 +43,7 @@
         </div>
         <div class="span2">
           <a href="" class="img-fluid">
-            <%= @study.studyable.buckets.first.cover ? (image_tag @study.studyable.buckets.first.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') if @study.studyable.buckets.any? %>
+            <%= @study.studyable.cover ? (image_tag @study.studyable.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') %>
           </a>
         </div>
   	  </div>

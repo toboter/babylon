@@ -30,7 +30,9 @@ class ItemsController < ApplicationController
   # GET /items/1.json
   def show
     @item = Item.find(params[:id])
-    @images = @item.assets.where('content_type LIKE ?', '%image%')
+
+    # Opitional könnte hier auch ein Array nach einem bestimmten Sortierschlüssel aufgebaut werden.
+    # @history = @item.actions+@item.citations+@item.studies
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# show.html.erb
@@ -41,7 +43,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new(:collection_id => params[:collection_id])
+    @item = Item.new(:collection_id => params[:collection_id], classification_id: ItemClassification.find_by_name('Object').id)
 
     respond_to do |format|
       format.html { render layout: 'form' }# new.html.erb
@@ -64,7 +66,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if @item.save
         track_activity @item
-        format.html { redirect_to @item, notice: 'Item was successfully created.' }
+        format.html { redirect_to @item, notice: 'Object was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
         format.html { render layout: 'form', action: "new" }
@@ -81,7 +83,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if @item.update_attributes(params[:item])
         track_activity @item
-        format.html { redirect_to @item, notice: 'Item was successfully updated.' }
+        format.html { redirect_to @item, notice: 'Object was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render layout: 'form', action: "edit" }

@@ -1,16 +1,33 @@
 <%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
 
-  <div class="row-fluid">
-    <div class="span10">
 
-<div id="metainfo">
+  <div class="row-fluid">
+    <div class="span12">
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#metainfo" data-toggle="tab">General</a></li>
+  <li><a href="#classification" data-toggle="tab">Classification</a></li>
+  <li><a href="#actions" data-toggle="tab">Actions</a></li>
+  <li><a href="#publications" data-toggle="tab">Publications</a></li>
+  <li><a href="#connections" data-toggle="tab">Connected objects</a></li>
+</ul>
+
+<div class="tab-content">
+<div class="tab-pane active" id="metainfo">
   <div class="control-group">
     <%= f.label 'Collection', class: 'control-label' %>
     <div class="controls">
       <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {include_blank: false}, {disabled: !can?(:update, Collection)} %>
     </div>
   </div>
+
+  <%= content_tag :div, class: "control-group" do %>
+    <%= f.label 'Photo', class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cover_asset_id, @item.assets.where('content_type LIKE ?', '%image%' ), :id, :name, {include_blank: false} %>
+    </div>
+  <% end unless @item.new_record? %>
 
   <div class="control-group">
     <%= f.label :inventory_number, class: 'control-label' %>
@@ -35,34 +52,41 @@
     </div>
   </div>
 
-  <div class="control-group" style="margin-top:50px;">
-    <%= f.label :accession_date, class: 'control-label' %>
-    <div class="controls">
-      <div class="input-append date">
-        <%= f.text_field :accession_date_text, placeholder: 'Accession date' %>
-        <span class="add-on"><i class="icon-th"></i></span>
-      </div>
-    </div>
-  </div>
-  <div class="control-group" style="">
-    <%= f.label :excavation_date, class: 'control-label' %>
-    <div class="controls">
-      <div class="input-append date">
-        <%= f.text_field :excavation_date_text, placeholder: 'Excavation date' %>
-        <span class="add-on"><i class="icon-th"></i></span>
-      </div>
-    </div>
-  </div>
-
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
       <%= f.text_field :title, placeholder: 'descrptive title', class: 'span6' %>
     </div>
   </div>
+
+  <div id="description">
+
+    <div class="control-group">
+      <%= f.label :description, class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
+        <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
+        <div class="collapse" id="md-info">
+          <%= render 'shared/md-info' %>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <div id="props">
+    <%= content_tag :h4, 'Collection specific attributes', class: 'controls' %>
+    <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
+      <% @item.collection.fields.order('name ASC').each do |field| %>
+        <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
+      <% end %>
+    <% end if params[:collection_id].present? || @item.collection %>
+  </div>
 </div>
 
-<div id="classification">
+<div class="tab-pane" id="classification">
   <%= content_tag :h4, 'Classification' %>
   <div class="control-group">
     <%= f.label :classification_id, class: 'control-label' %>
@@ -81,17 +105,7 @@
   </div>
 </div>
 
-<div id="citations">
-  <%= content_tag :h4, 'Citations' %>
-  <%= f.fields_for :citations do |builder| %>
-    <%= render "citation_fields", :f => builder %>
-  <% end %>
-  <div class="links controls">
-    <%= link_to_add_association "Add Citation", f, :citations %>
-  </div>
-</div>
-  
-<div class="" id='actions'>
+<div class="tab-pane" class="" id='actions'>
   <%= content_tag :h4, 'Actions' %>
   <%= f.fields_for :actions do |builder| %>
     <%= render "action_fields", :f => builder %>
@@ -101,17 +115,18 @@
   </div>
 </div>
 
-<div id='locations'>
-  <%= content_tag :h4, 'Locations' %>
-  <%= f.fields_for :locations do |builder| %>
-    <%= render "location_fields", :f => builder %>
+<div class="tab-pane" id="publications">
+  <%= content_tag :h4, 'Publications' %>
+  <%= f.fields_for :citations do |builder| %>
+    <%= render "citation_fields", :f => builder %>
   <% end %>
   <div class="links controls">
-    <%= link_to_add_association "Add Location", f, :locations %>
+    <%= link_to_add_association "Add publication", f, :citations %>
   </div>
 </div>
+  
 
-<div id='connections'>
+<div class="tab-pane" id='connections'>
   <%= content_tag :h4, 'Connections' %>
   <%= f.fields_for :connections do |builder| %>
     <%= render "connection_fields", :f => builder %>
@@ -121,42 +136,19 @@
   </div>
 </div>
 
-  <div id="description">
-    <%= content_tag :h4, 'Description' %>
-    <div class="control-group">
-      <%= f.label :description, class: 'control-label' %>
-      <div class="controls">
-        <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
-        <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
-        <div class="collapse" id="md-info">
-          <%= render 'shared/md-info' %>
-        </div>
-      </div>
-    </div>
-
-
-  </div>
-
-
-  <div id="props">
-    <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
-      <% @item.collection.fields.order('name ASC').each do |field| %>
-        <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
-      <% end %>
-    <% end if params[:collection_id].present? || @item.collection %>
-  </div>
 
 
 
-  <div class="form-actions">
+  <div class="form-actions" style="">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
-    <% if @item.new_record? %>
-        <%= link_to 'Abbrechen', items_path, :class => 'btn' %>
-    <% else %>
-      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
-    <% end %>
   </div>
+</div>
+</div>
+</div>
 
-</div>
-</div>
+  <% content_for :edit_section do %>
+    <div class="pull-right">
+      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+    </div>
+  <% end %>    
 <% end %>

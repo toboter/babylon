@@ -1,5 +1,12 @@
-<% title "Todos", nil, nil if @project %>
-<% title "All todos", nil unless @project %>
+<% title (@project ? "Tasks" : "All tasks"), (@project ? link_to(@project.name, [@project.projectable, @project]).html_safe : nil) %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= link_to [:new, @project, :todo], class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Task
+        <% end if @project || aspect? %>
+      </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -15,17 +22,10 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <%= content_tag :h1 do %>
-      Tasks in "<%= link_to @project.name, @project %>"
-    <% end if @project %>
     <div class="todos-options">
       <ul class="nav nav-pills">
         <%= content_tag :li, link_to("Everyone's tasks", polymorphic_url([@project, :todos], state: params[:state])), class: "#{'active' unless params[:creator] || params[:assignee] || params[:aspect]}" %>
         <%= content_tag :li, link_to("Assigned to you", polymorphic_url([@project, :todos], assignee: current_user, state: params[:state])), class: "#{'active' if params[:assignee]}" %>
-
-        <div class="pull-right">
-          <%= link_to 'Create Task', [:new, @project, :todo], class: "btn btn-default" if @project || aspect? %>
-        </div>
       </ul>
     </div>
 
@@ -36,9 +36,9 @@
         </tbody>
       </table>
     <% else %>
-       <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;">
-        <p class="text-center">No tasks to show. <%= link_to "Create a new task in #{@project.name}.", polymorphic_path([:new, @project, :todo]) if aspect? || @project %></p>
-      </div>
+        <div class="well">
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a task', [:new, @project, :todo])+' or ' if aspect? || @project %><%= link_to 'back to previous page', :back %></p>
+        </div>
     <% end %>
   </div>
 </div>

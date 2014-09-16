@@ -1,4 +1,4 @@
-<% title @cluster.name, nil, false %>
+<% title @cluster.name, nil, true %>
 <% edit_section_for(@cluster, nil) %>
 
 <% content_for :breadcrumbs_section do %>
@@ -8,6 +8,7 @@
 <% end %>
 
 <%= content_for :top_over do %>
+
 <div class="hero-unit">
   <div class="row-fluid" id='about'>
     <%= content_tag :div, class: 'cover span3 hidden-phone' do %>
@@ -15,9 +16,7 @@
       <%= link_to 'Edit picture', polymorphic_path([@cluster, @cluster.cluster_bucket]), class: 'change-asset' if can? :edit, @cluster %>
     <% end if @cluster.cluster_bucket %>
     <%= content_tag :div, class: "#{(@cluster.cluster_bucket ? 'span9' : 'span12')} description" do %>
-      <h1>
-        <%= @cluster.name %><%= yield(:edit_section) %>
-      </h1>
+
       <%= content_tag :div, @cluster.description.present? ? markdown(@cluster.description) : content_tag(:p, "No description to show."), class: 'text' %>
     <% end %>
   </div>

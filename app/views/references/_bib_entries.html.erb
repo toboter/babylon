@@ -1,50 +1,11 @@
 <% if references.any? %>
-<table class="table table-bordered table-hover">
-<tbody>
-  <% references.each do |reference| %>
-    <%= content_tag :tr, class: 'list-entry' do %>
-
-        <%= content_tag :td, style: 'width:20%;' do -%>
-          <ul class="unstyled">
-            <li><%= link_to_authors_of_article(reference) %></li>
-            <%= content_tag :li, reference.book.present? ? reference.book.year : (reference.original_date ? reference.original_date.strftime('%d.%m.%Y') : 'unknown') %>
-          </ul>
-        <% end -%>
-        <%= content_tag :td, style: 'padding-bottom:10px;' do %>
-          <p>
-            <%= link_to_authors_of_article(reference)+', ' %>
-            <%= link_to "#{reference.title}", reference %>
-            <% if reference.book.present? %>
-              <%= raw(', in: '+editors(reference)) unless reference.book.book_type == 'Monograph' || reference.book.book_type == 'Monograph in a serial' %>
-              <%= content_tag :span, ', ' if reference.book.book_type == 'Monograph in a serial' %>
-              <%= article_in_book(reference) unless reference.book.book_type == 'Monograph' %>
-              <%= content_tag :span, ', ' if reference.book.publisher.present? %>
-              <%= reference.book.publisher if reference.book.publisher.present? %>
-              <%= content_tag :span, ', ' if reference.book.place.present? %>
-              <%= reference.book.place if reference.book.place.present? %>
-              <%= content_tag :span, '('+reference.book.year+')' if reference.book.year.present? %>
-            <% end %>
-            <%= content_tag :span, ', ' if reference.first_page.present? %>
-            <%= reference.first_page if reference.first_page.present? %>
-            <%= content_tag :span, '-' if reference.last_page.present? %>
-            <%= reference.last_page if reference.last_page.present? %>.
-          </p>
-          <%= content_tag :td, style: 'width:15%;' do %>
-            <%= link_to reference_add_to_aspect_path(reference), :method => :post, class: 'btn btn-mini btn-success pull-right' do %>
-              <%= content_tag :i, '', class: 'icon-plus-sign icon-white' %>
-              <%= current_aspect.name %>
-            <% end if !current_aspect.references.include?(reference) %>
-            <%= link_to reference_remove_from_aspect_path(reference), :method => :delete, class: 'btn btn-mini btn-warning pull-right' do %>
-              <%= content_tag :i, '', class: 'icon-minus-sign icon-white' %>
-              <%= current_aspect.name %>
-            <% end if current_aspect.references.include?(reference) && current_aspect.project_type == 'research' %>
-          <% end if aspect? %>
-        <% end %>
-
-    <% end %>
-  <% end %>
-</tbody>
-</table>
+  <table class="table table-bordered table-hover">
+    <tbody>
+      <% references.each do |reference| %>
+        <%= render reference %>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
   <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;">
     <p class="text-center">Nothing to show.</p>

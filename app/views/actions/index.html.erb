@@ -1,0 +1,45 @@
+<% title "Object sources history", @item.name %>
+
+
+<% content_for :breadcrumbs_section do %>
+  <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
+  <li><%= link_to 'Objects', items_path %> <span class="divider">/</span></li>
+  <li><%= link_to @item.name, @item %> <span class="divider">/</span></li>
+  <%= content_tag :li, "Object sources history", class: 'active' %>
+<% end %>
+
+
+<% content_for :main_section do %>
+        <%= content_tag :div, class: "item-section", id: 'actions' do %>
+          <span class="badge"><%= pluralize(@item.actions.count, 'element') %></span>
+
+          <%= content_tag :table, class: 'table table-bordered table-hover' do %>
+            <tbody>
+              <% for action in @item.actions.order('actable_date_text DESC') do %>
+              <tr><td>
+                <div class="alert alert-info">
+                  <strong><%= link_to action.predicate.name.humanize, [@item, action] %> </strong>
+                  <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } %>
+                  <%= "on #{action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if action.actable_date_text %>
+                </div>
+                <ul class="unstyled">
+                  <%= content_tag :li do %>
+                    <% for source in action.sources do %>
+                      <% for location in action.locations do %>
+                      <p>
+                        <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
+                      </p>
+                      <% end if action.locations.any? %>
+                      <%= render source %>
+                      <% end %>
+                  <% end if action.sources.any? %>
+              </td></tr>
+              <% end %>
+            </tbody>
+          <% end %> 
+        <% end if @item.actions.any? %>
+
+  <%= link_to 'Show publishing activity', item_references_path(@item) %> | 
+  <%= link_to 'Show study activity', item_studies_path(@item) %>
+
+<% end %>

@@ -1,7 +1,7 @@
 <tr class="document-entries" id="document-<%= document.id %>">
   <td width="100%">
       <span class="title">
-        <strong><%= document.title ? link_to(document.title, [document.documentable, document]) : link_to(document.document_type, [document.documentable, document]) %></strong>
+        <strong><%= document.title ? link_to(document.title, document) : link_to(document.document_type, document) %></strong>
       </span>
       <%= content_tag :i, '', class: 'icon-download-alt pull-right' if document.documentfile.present? %>
     <p>

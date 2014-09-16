@@ -1,0 +1,16 @@
+<tr>
+  <td>
+	<div class="alert">
+  	  <%= link_to source.author.name, source.author %> added 
+  	  <%= link_to source.name, source %> as a 
+  	  <%= source.source_type %> resource
+  	  <%= "[#{source.original_date}]" if source.original_date %>
+	</div>
+	<ul class="unstyled">
+	  <li><%= pluralize(source.buckets.count, 'folder') if source.buckets.any? %> <%= 'with '+pluralize(source.assets.count, 'file') if source.assets.any? %></li>
+	  <li><%= pluralize(source.documents.count, 'document') if source.documents.any? %></li>
+	  <li><%= pluralize(source.items.count, 'mention') if source.items.any? %></li>
+	</ul>
+	<p><%= link_to 'View source', source %>
+  </td>
+</tr>

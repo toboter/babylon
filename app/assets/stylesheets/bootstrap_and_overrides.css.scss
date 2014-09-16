@@ -19,6 +19,35 @@ $baseFontFamily: 'Open Sans';
     position: static;
 }
 
+/* Chosen fix 100% width */
+.chosen-container, .chosen-drop, .chosen-drop .chosen-search, .chosen-drop .chosen-search input {
+  width: 100% !important;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* Override width */
+.chosen-container {
+	width:250px !important;
+	@media (min-width: 979px) { width: 600px !important; }
+}
+
+form.form-horizontal {
+	.control-label {
+		font-weight: bold;	
+	}
+	.form-actions { 
+		border: none;
+		background: none;
+		margin-top: 20px;
+		margin-bottom: 170px;
+		.btn {
+			@extend .btn-large;
+		}
+	}
+}
+
 img.img-rounded {
  border-radius: 100px;
  -webkit-border-radius: 100px;

@@ -1,4 +1,13 @@
-<% title "Folders", nil, nil %>
+<% title (@attachable ? "Folders for #{link_to @attachable.name, @attachable}".html_safe : "All folders"), nil %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= link_to [:new, @attachable, :bucket], class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Folder
+        <% end if can?(:create, Bucket) && @attachable %>
+      </div>
+<% end %>
+
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -9,51 +18,52 @@
 <% end %>
 
 <% content_for :main_section do %>
-<div class="row-fluid">
-  <div class="span12">
-    <h1>
-      Folders
-      <div class="pull-right" style="">
-        <%= link_to "Create Folder", [:new, @attachable, :bucket], class: "btn btn-default" if can?(:create, Bucket) && @attachable %>
-      </div>
-    </h1>
-
-  <% @buckets.each do |bucket| %>
-    <div class="well">
-      <div class="row-fluid">
-        <div class="span2">
-          <h4><%= link_to "#{bucket.full_bucket_name}", [bucket, :assets] %></h4>
-          <ul class="unstyled">
-            <li><b>Attached to: </b><%= link_to bucket.attachable.name, bucket.attachable %></li>
-            <li><b>Created by: </b><%= name_only_or_link_to(bucket.creator) %></li>
-            <li><b>Created at: </b><%= bucket.created_at.strftime('%d.%m.%Y') %></li>
-            <hr>
-            <li><b>Count: </b><%= bucket.assets.count %></li>
-          </ul>
-          <div class="btn-group" style="padding-bottom:10px;">
-            <%= link_to [bucket, :assets], class: 'btn' do %>
-              <i class="icon-th-large"></i>
-              View assets
-            <% end %>
-            <%= link_to [bucket.attachable, bucket], class: 'btn' do %>
-              <i class="icon-th-list"></i>
-              Edit content
-            <% end if can? :edit, bucket %>
+  <div class="row-fluid">
+    <div class="span12">
+      <% if @buckets.any? %>
+        <% @buckets.each do |bucket| %>
+          <div class="well">
+            <div class="row-fluid">
+              <div class="span2">
+                <h4><%= link_to "#{bucket.full_bucket_name}", [bucket, :assets] %></h4>
+                <ul class="unstyled">
+                  <li><b>Attached to: </b><%= link_to bucket.attachable.name, bucket.attachable %></li>
+                  <li><b>Created by: </b><%= name_only_or_link_to(bucket.creator) %></li>
+                  <li><b>Created at: </b><%= bucket.created_at.strftime('%d.%m.%Y') %></li>
+                  <hr>
+                  <li><b>Count: </b><%= bucket.assets.count %></li>
+                </ul>
+                <div class="btn-group" style="padding-bottom:10px;">
+                  <%= link_to [bucket, :assets], class: 'btn' do %>
+                    <i class="icon-th-large"></i>
+                    View assets
+                  <% end %>
+                  <%= link_to [bucket.attachable, bucket], class: 'btn' do %>
+                    <i class="icon-th-list"></i>
+                    Edit content
+                  <% end if can? :edit, bucket %>
+                </div>
+              </div>
+      
+              <div class="span10">
+                <ul class="thumbnails">
+                  <% for asset in bucket.assets.limit(16) %>
+                    <li class="">
+                      <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:90px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:90px;')), asset, class: 'popover-bottom', data: { 'original-title' => asset.name, 'content' => asset.inspect }, style: 'padding-bottom:38px;'  %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
           </div>
+        <% end %>
+      <% else %>
+
+        <div class="well">
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a folder', [:new, @attachable, :bucket])+' or ' if @attachable %><%= link_to 'back to previous page', :back %></p>
         </div>
 
-        <div class="span10">
-          <ul class="thumbnails">
-          <% for asset in bucket.assets.limit(16) %>
-            <li class="">
-              <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:90px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:90px;')), asset, class: 'popover-bottom', data: { 'original-title' => asset.name, 'content' => asset.inspect }, style: 'padding-bottom:38px;'  %>
-            </li>
-          <% end %>
-          </ul>
-        </div>
-      </div>
+      <% end %>
     </div>
-  <% end %>
   </div>
-</div>
 <% end %>

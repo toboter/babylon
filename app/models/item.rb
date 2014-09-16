@@ -7,37 +7,41 @@ class Item < ActiveRecord::Base
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
             :context_id, :accession_date_text, :excavation_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
             :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id,
-            :connections_attributes, :locations_attributes
+            :connections_attributes, :cover_asset_id
 
   stampable
-  
-  attr_writer :accession_date_text, :excavation_date_text
-
+  after_create :first_action
   serialize :properties, ActiveRecord::Coders::Hstore
-
-  after_create :build_album_bucket
   default_scope order('inventory_number ASC, inventory_number_index ASC')
 
   belongs_to :collection
-  belongs_to :creator, class_name: "User"
-  belongs_to :updater, class_name: "User"
   belongs_to :classification, class_name: 'ItemClassification', foreign_key: 'classification_id'
+
+  belongs_to :cover, class_name: 'Asset', foreign_key: :cover_asset_id
+
+  has_many :issues, as: :issuable, dependent: :destroy
+  has_many :activities, as: :trackable, dependent: :destroy
+
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
-  has_many :buckets, as: :attachable, dependent: :destroy
-  has_many :assets, through: :buckets
+
   has_many :citations, as: :citable, dependent: :destroy
   has_many :references, through: :citations
+
   has_many :actions, as: :actable, dependent: :destroy
-  has_many :documents, as: :documentable, dependent: :destroy
-  has_many :issues, as: :issuable, dependent: :destroy
+  has_many :locations, through: :actions
+  has_many :sources, through: :actions
+  has_many :buckets, through: :sources
+  has_many :documents, through: :sources
+
+  has_many :assets, class_name: 'Asset', through: :sources, :source => :assets
+
   has_many :studies, as: :studyable, dependent: :destroy
   has_many :lists, through: :studies
   has_many :projects, through: :lists
+
   has_many :connections, class_name: 'ItemConnection', dependent: :destroy
   has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id", dependent: :destroy
-  has_many :activities, as: :trackable, dependent: :destroy
-  has_many :locations, as: :locatable, dependent: :destroy
 
   validates :collection_id, presence: true
   validates :excavation_id, presence: true, unless: :inventory_number?
@@ -46,7 +50,6 @@ class Item < ActiveRecord::Base
   validates :inventory_number, :allow_blank => true, :uniqueness => {:scope => :inventory_number_index}
   validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
   validates :classification_id, presence: true
-  validate :check_accession_date_text
   # validate :validate_properties
 
 
@@ -55,7 +58,10 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :connections, allow_destroy: true
   accepts_nested_attributes_for :locations, allow_destroy: true
 
-  before_save :save_accession_date_text, :save_excavation_date_text
+
+  def first_action
+    Action.create actable_id: self.id, actable_type: 'Item', actable_date_text: Time.now, person_id: self.creator_id, predicate_id: Predicate.find_by_name('is_created_by').id
+  end
 
   def inventory_name
     if collection && collection.name != 'none' && inventory_number
@@ -73,10 +79,6 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def references_assets
-    references.joins(:projects).where(projects: {project_type: 'photographic'}).map{|r| r.assets}.uniq.flatten
-  end
-
 #  Collection.all.map{|c| c.fields.map(&:name) }.flatten.each do |key|
 #    scope "has_#{key}", lambda { |value| where("properties @> hstore(?, ?)", key, value) }
 #    define_method(key) do
@@ -88,43 +90,6 @@ class Item < ActiveRecord::Base
 #      end
 #    end
 #  end
-
-
-  def build_album_bucket
-    Bucket.create :attachable_id => self.id, :attachable_type => "Item", :name => "#{self.name+' Album'}", :name_fixed => true
-  end
-
-  def accession_date_text
-    @accession_date_text || accession_date.try(:strftime, "%Y-%m-%d %H:%M:%S")
-  end
-
-  def save_accession_date_text
-    self.accession_date = Time.zone.parse(@accession_date_text) if @accession_date_text.present?
-  end
-
-  def check_accession_date_text
-    if @accession_date_text.present? && Time.zone.parse(@accession_date_text).nil?
-      errors.add :accession_date_text, "cannot be parsed"
-    end
-  rescue ArgumentError
-    errors.add :accession_date_text, "is out of range"
-  end
-
-  def excavation_date_text
-    @excavation_date_text || excavation_date.try(:strftime, "%Y-%m-%d %H:%M:%S")
-  end
-
-  def save_excavation_date_text
-    self.excavation_date = Time.zone.parse(@excavation_date_text) if @excavation_date_text.present?
-  end
-
-  def check_excavation_date_text
-    if @excavation_date_text.present? && Time.zone.parse(@excavation_date_text).nil?
-      errors.add :excavation_date_text, "cannot be parsed"
-    end
-  rescue ArgumentError
-    errors.add :excavation_date_text, "is out of range"
-  end
 
   def validate_properties
     collection.fields.each do |field|

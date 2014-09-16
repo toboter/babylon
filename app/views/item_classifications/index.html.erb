@@ -1,4 +1,12 @@
-<% title "Object classifications", nil, nil %>
+<% title 'Object classification schema', nil %>
+<% content_for :edit_section do %>
+    <div class="pull-right" style="">
+      <%= link_to new_item_classification_path, class: "btn btn-default" do %>
+        <i class="icon-plus"></i>
+        Classification
+      <% end if can? :create, ItemClassification %>
+    </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,13 +16,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <h1>
-      Object classifications
-      <%= link_to new_item_classification_path, class: "btn btn-default pull-right" do %>
-        <i class="icon-plus"></i>
-        Classification
-      <% end if can? :create, ItemClassification %>
-    </h1>
     <%= render 'full_classification_tree', :item_classifications => @item_classifications, add_links_visible: true, highlight: nil %>
   </div>
 </div>

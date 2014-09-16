@@ -1,4 +1,11 @@
-<% title "Groups", nil, nil %>
+<% title (@cluster ? "Groups" : "All groups"), (@cluster ? link_to(@cluster.name, @cluster).html_safe : nil) %>
+
+<% content_for :edit_section do %>
+        <%= link_to [:new, @cluster, :group], class: "btn btn-default pull-right" do %>
+          <i class="icon-plus"></i>
+          Group
+        <% end if @cluster && can?(:create, Group) %>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,17 +15,6 @@
 <% end %>
 
 <% content_for :main_section do %>
-<div class="row-fluid">
-  <%= content_tag :div, class: "span12" do %>
-    <h1>
-      <% if @cluster %>
-        Groups in "<%= link_to @cluster.name, @cluster %>"
-      <% else %>
-        All groups
-      <% end %>
-    </h1>
-  <% end %>
-</div>
 <div class="row-fluid">
   <div class="span3">
     <%= content_tag :div, class: "documents-options" do %>
@@ -40,21 +36,12 @@
   </div>
 
   <div class="span9">
-    <%= content_tag :div, class: "groups-options row-fluid" do %>
-
-        <%= link_to [:new, @cluster, :group], class: "btn btn-default pull-right" do %>
-          <i class="icon-plus"></i>
-          Group
-        <% end if @cluster %>
-
-    <% end if @cluster && (can? :create, :group) %>
-
     <div class="groups-list row-fluid">
       <% if @groups.any? %>
         <%= render @groups %>
       <% else %>
-        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:0px;">
-          <p class="text-center">No groups to show. <%= link_to 'Create a new group.', polymorphic_path([:new, @cluster, :group]) if @cluster %></p>
+        <div class="well">
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a group', [:new, @cluster, :group])+' or ' if @cluster && can?(:create, Group) %><%= link_to 'back to previous page', :back %></p>
         </div>
       <% end %>
     </div>

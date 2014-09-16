@@ -18,7 +18,7 @@ class DocumentsController < ApplicationController
     @q.build_sort if @q.sorts.empty?
 
     @all_documents = @documents
-    @current_user_documents = @documents.created_by(current_user)
+    @current_user_documents = @documents.where(creator_id: current_user.id)
     @need_review_documents = @documents.joins(:issues).where(issues: {assigned_id: current_user.id, closed: false})
 
     if params[:ufilter] == 'created_by'

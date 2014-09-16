@@ -31,4 +31,8 @@ class ItemClassification < ActiveRecord::Base
     %w(name description) + _ransackers.keys
   end
 
+  def object_type
+    root? ? root : self_and_ancestors.where('parent_id IS NOT ?', nil).last
+  end
+
 end

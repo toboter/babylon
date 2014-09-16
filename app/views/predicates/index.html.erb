@@ -1,4 +1,12 @@
-<% title "Predicates", nil, nil %>
+<% title "Predicates", nil %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= link_to new_predicate_path, class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Predicate
+        <% end if can?(:create, Predicate) %>
+      </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,13 +16,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <h1>
-      Predicates
-      <%= link_to new_predicate_path, class: "btn btn-default pull-right" do %>
-        <i class="icon-plus"></i>
-        Predicate
-      <% end if can? :create, Predicate %>
-    </h1>
     <table class="table table-bordered table-hover">
       <thead>
         <tr>

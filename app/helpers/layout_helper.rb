@@ -24,9 +24,10 @@ module LayoutHelper
   end
 
   def edit_section_for(var, polymorphic=nil, polymorphicl2=nil)
-    edit = h(link_to image_tag("icons/edit1.svg", class: 'navbar-icon', style: 'width:20px;margin-left:5px;'), [:edit, polymorphicl2, polymorphic, var], title: 'Edit', class: 'tooltip-bottom')
-    delete = h(link_to image_tag("icons/delete7.svg", class: 'navbar-icon', style: 'width:20px;margin-left:10px;'), [polymorphicl2, polymorphic, var], method: :delete, title: 'Delete', data: { confirm: 'Are you sure?' }, class: 'tooltip-bottom')
+    edit = h(link_to 'Edit', [:edit, polymorphicl2, polymorphic, var], class: 'btn btn-small')
+    delete = h(link_to 'Destroy', [polymorphicl2, polymorphic, var], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-small btn-warning', style: 'margin-left:10px;')
     content_for(:edit_section) { 
+        content_tag :div, class: 'pull-right' do
         if (can?(:edit, var) && can?(:destroy, var)) || (var.creator == current_user)
           edit + delete 
         elsif can?(:edit, var) || (var.creator == current_user)
@@ -35,6 +36,7 @@ module LayoutHelper
           delete
         else
           ''
+        end
         end
     }
   end

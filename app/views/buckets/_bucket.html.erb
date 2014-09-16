@@ -2,8 +2,8 @@
   <%= link_to "#{bucket.name}", [bucket, :assets] %>
 </h4>
 <div class="tiles">
-  <% for asset in bucket.assets.where('content_type LIKE ?', 'image%').order('created_at desc') do %>
-    <%= link_to (image_tag asset.assetfile.small.url, class: ""), asset.assetfile.large.url, class: "img-fluid" %>
+  <% for asset in bucket.assets.order('created_at desc') do %>
+  	<%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.thumb.url, style: 'width:200px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:200px;')), asset.assetfile.large.url, class: 'img-fluid' %>
     <%= asset.assetfile.normal.url if local_assigns.has_key? :with_link %> 
   <% end %>
 </div>

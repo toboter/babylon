@@ -53,7 +53,7 @@ class Project < ActiveRecord::Base
   end
 
 
-  PROJECT_TYPES = %w[archival bibliographic photographic research]
+  PROJECT_TYPES = %w[bibliographic research]
   MAP_TYPES = %w[Google]
 
 end

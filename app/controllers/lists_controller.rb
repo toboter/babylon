@@ -35,13 +35,13 @@ class ListsController < ApplicationController
       @forked_list = List.find(@list.forked_from)
       @studies = @studies + @forked_list.studies
     end
-    @locations = @studies.map{|s| s.studyable.locations }.flatten.uniq
+    @locations = @studies.map{|s| s.studyable.actions.map{ |a| a.locations }}.flatten.uniq
 
     @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
       marker.lat location.latitude
       marker.lng location.longitude
-      marker.infowindow "<a href='#{url_for([location.locatable])}'>#{location.locatable.name}</a> #{location.predicate.name.humanize.downcase}"
-      marker.json({ title: location.locatable.name })
+      marker.infowindow "<a href='#{url_for([location.locatable])}'>#{location.locatable.actable.name}</a> #{location.locatable.predicate.name.humanize.downcase}"
+      marker.json({ title: location.locatable.actable.name })
     end
 
     respond_to do |format|

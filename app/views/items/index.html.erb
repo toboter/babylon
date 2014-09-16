@@ -1,6 +1,13 @@
-<% title 'Objects for '+'"'+@project.name+'"', nil, nil if @project %>
-<% title 'All Objects', nil, nil unless @project %>
-
+<% title (@projectable ? "Objects for #{link_to @project.name, @project}".html_safe : "All objects"), nil %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= form_tag new_item_path, method: :get, class: 'form-inline' do %>
+          <%= label_tag :collection_id %>
+          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut, :selected => 1), {include_blank: false} %>
+          <%= submit_tag 'Add object', name: nil, class: "btn btn-default" %>
+        <% end if can?(:create, @items) && !@project %>
+      </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -10,20 +17,6 @@
 <% end %>
 
 <% content_for :main_section do %>
-<div class="row-fluid">
-  <div class="span12">
-    <h1>
-      <%= @project ? ('Objects for '+(link_to h(@project.name), @project)).html_safe : 'All objects' %>
-      <div class="pull-right" style="">
-        <%= form_tag new_item_path, method: :get, class: 'form-inline' do %>
-          <%= label_tag :collection_id %>
-          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut, :selected => 1), {include_blank: false} %>
-          <%= submit_tag 'Add object', name: nil, class: "btn btn-default" %>
-        <% end if can?(:create, @items) && !@project %>
-      </div>
-    </h1>
-  </div>
-</div>
 <div class="row-fluid">
   <div class="span3">
     <%= content_tag :div, class: "filter well" do %>

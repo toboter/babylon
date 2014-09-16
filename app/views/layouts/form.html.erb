@@ -11,18 +11,26 @@
 
   <div class="container-fluid">
 
-	  <%= render "shared/debug" %>    
-	  <%= render "shared/flash", flash: flash %>
-
 
     <%= content_tag :div, class: "row-fluid" do %>
       <div class="span12">
-        <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
-        <%= content_tag :h2, yield(:subtitle), class: 'subtitle' if show_title? %>
-        <%= yield(:error) %>
+        <%= content_tag :div, class: "title-bar" do %>
+          <%= content_tag :h1, class: 'pagetop' do %>
+            <%= yield(:title) %>
+            <%= yield(:edit_section) %>
+          <% end if show_title? %>
+          <%= content_tag :h2, class: 'subtitle' do %>
+            <%= yield(:subtitle) %>
+          <% end if show_title? %>
+          <%= render "shared/breadcrumbs" %>
+        <% end %>
       </div>
     <% end unless content_for?(:top_over) %>
-  
+    
+    <%= render "shared/debug" %>
+    <%= yield(:error) unless content_for?(:top_over)  %>
+    <%= render "shared/flash", flash: flash %>
+    
     <div class="row-fluid">
       <%= content_tag :div, class: 'span2' do %>
       	<%= yield(:nav) %>

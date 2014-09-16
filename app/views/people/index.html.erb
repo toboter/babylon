@@ -1,5 +1,17 @@
 <% title "People", nil %>
 
+<% content_for :edit_section do %>
+        <div class="pull-right">
+          <%= link_to new_person_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
+            <i class="icon-plus"></i>
+            Person
+          <% end if can? :create, Person %>
+          <%= link_to new_person_path(:user_id => current_user, :alias => current_user.username), class: 'btn btn-default', style: 'margin-left:10px;' do %>
+            <i class="icon-plus"></i>
+            Your profile
+          <% end unless current_user.person %>
+        </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
@@ -22,16 +34,6 @@
           <%= hidden_field_tag :state, params[:state] if params[:state] %>
           <%= submit_tag "Search", :name => nil, class: 'btn' %>
         <% end %>
-        <div class="pull-right">
-          <%= link_to new_person_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
-            <i class="icon-plus"></i>
-            Person
-          <% end if can? :create, Person %>
-          <%= link_to new_person_path(:user_id => current_user, :alias => current_user.username), class: 'btn btn-default', style: 'margin-left:10px;' do %>
-            <i class="icon-plus"></i>
-            Your profile
-          <% end unless current_user.person %>
-        </div>
       </div>
     </div></div>
 

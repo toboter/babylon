@@ -1,12 +1,17 @@
 <% title 'Document', @document.title %>
 <% edit_section_for(@document, @document.documentable) %>
-<% publishing_section_for(@document) %>
 <% footer_section(@document) %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <%= content_tag(:li, (link_to @document.documentable.class.name.pluralize, [@document.documentable.class]) + content_tag(:span, '/', class: 'divider')) if @document.documentable %>
-  <li><%= link_to @document.documentable.name, @document.documentable %> <span class="divider">/</span></li>
+  <% if @document.documentable.class.to_s == 'Action' %>
+    <li><%= link_to @document.documentable.actable.name, @document.documentable.actable %> <span class="divider">/</span></li>
+    <li><%= link_to 'Object history', [@document.documentable.actable, :actions] %> <span class="divider">/</span></li>
+    <li><%= link_to @document.documentable.predicate.name, @document.documentable %> <span class="divider">/</span></li>
+  <% else %>
+    <%= content_tag(:li, (link_to @document.documentable.class.name.pluralize, [@document.documentable.class]) + content_tag(:span, '/', class: 'divider')) if @document.documentable %>
+    <li><%= link_to @document.documentable.name, @document.documentable %> <span class="divider">/</span></li>
+  <% end %>
   <li><%= link_to 'Documents', [@document.documentable, :documents] %> <span class="divider">/</span></li>
   <li class="active"><%= @document.title.present? ? @document.title : @document.document_type %></li>
 <% end %>

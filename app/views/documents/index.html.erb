@@ -1,18 +1,31 @@
-<% @documentable ? (title "Documents for "+@documentable.name, nil, nil) : (title "All documents", nil) %>
+<% title 'Documents', (@documentable ? "attached to #{link_to @documentable.name, @documentable}".html_safe : "All documents") %>
+<% content_for :edit_section do %>
+    <%= content_tag :div, class: "pull-right" do %>
+        <%= link_to [:new, @documentable, :document], class: "btn btn-default" do %>
+          <i class="icon-plus"></i>
+          Document
+        <% end if @documentable && can?(:create, Document) %>
+        <%= link_to polymorphic_path([:new, @documentable, :document], :document_type => "Introduction"), class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Introduction
+        <% end if !@documentable.documents.doctype('Introduction') && (@documentable.class.to_s == 'Cluster' || @documentable.class.to_s == 'Group' || @documentable.class.to_s == 'Project') %>
+    <% end if @documentable %>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <%= content_tag(:li, (link_to @documentable.class.name.pluralize, [@documentable.class]) + content_tag(:span, '/', class: 'divider')) if @documentable %>
-  <%= content_tag(:li, link_to(@documentable.name, @documentable) + content_tag(:span, '/', class: 'divider')) if @documentable %>
+  <% if @documentable.class.to_s == 'Action' %>
+    <li><%= link_to @documentable.actable.name, @documentable.actable %> <span class="divider">/</span></li>
+    <li><%= link_to 'Object history', [@documentable.actable, :actions] %> <span class="divider">/</span></li>
+    <li><%= link_to @documentable.predicate.name, @documentable %> <span class="divider">/</span></li>
+  <% else %>
+    <%= content_tag(:li, (link_to @documentable.class.name.pluralize, [@documentable.class]) + content_tag(:span, '/', class: 'divider')) if @documentable %>
+    <li><%= link_to @documentable.name, @documentable %> <span class="divider">/</span></li>
+  <% end %>
   <li class="active">Documents</li>
 <% end %>
 
 <% content_for :main_section do %>
-<div class="row-fluid">
-  <%= content_tag :div, class: "span12" do %>
-    <h1>Documents <small>attached to <%= link_to @documentable.name, @documentable %></small></h1>
-  <% end if @documentable %>
-</div>
 <div class="row-fluid">
   <div class="span3">
     <div class="documents-options">
@@ -66,18 +79,6 @@
     </div>
   </div>
   <div class="span9">
-    <%= content_tag :div, class: "documents-options" do %>
-      <div class="pull-right">
-        <%= link_to [:new, @documentable, :document], class: "btn btn-default" do %>
-          <i class="icon-plus"></i>
-          Document
-        <% end if @documentable && can?(:create, Document) %>
-        <%= link_to polymorphic_path([:new, @documentable, :document], :document_type => "Introduction"), class: 'btn btn-default' do %>
-          <i class="icon-plus"></i>
-          Introduction
-        <% end if !@documentable.documents.doctype('Introduction') && (@documentable.class.to_s == 'Cluster' || @documentable.class.to_s == 'Group' || @documentable.class.to_s == 'Project') %>
-      </div>
-    <% end if @documentable %>
     <div class="documents-list">
       <% if @documents.any? %>
         <table class="table table-bordered table-hover">
@@ -86,8 +87,8 @@
           </tbody>
         </table>
       <% else %>
-        <div class="" style="background-color:#f5f5f5; height:80px; padding-top:40px;margin-top:40px;">
-          <p class="text-center">No documents to show. <%= link_to 'Create a new document.', polymorphic_path([:new, @documentable, :document]) if @documentable %></p>
+        <div class="well" style="">
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a document', [:new, @documentable, :document])+' or ' if @documentable %><%= link_to 'back to previous page', :back %></p>
         </div>
       <% end %>
     </div>

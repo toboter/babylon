@@ -1,5 +1,9 @@
 Babylon::Application.routes.draw do
 
+  get "actions/index"
+
+  get "actions/show"
+
   resources :activities
 
   resources :snippets, :path => 'blogs' do
@@ -21,11 +25,18 @@ Babylon::Application.routes.draw do
   resources :items do
     collection { post :import }
     resources :activities
-    resources :buckets
-    resources :documents
     resources :issues
     resources :references
     resources :studies
+    resources :actions
+    resources :buckets
+    resources :documents
+    resources :sources
+  end
+
+  resources :sources do
+    resources :buckets
+    resources :documents
   end
 
   resources :studies, only: [:index, :show] do

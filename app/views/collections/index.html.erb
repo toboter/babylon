@@ -1,4 +1,11 @@
-<% title "Collections", nil, nil %>
+<% title "Collections", @institution.name %>
+
+<% content_for :edit_section do %>
+      <%= link_to new_institution_collection_path(@institution), class: 'btn btn-default pull-right' do %>
+        <i class="icon-plus"></i>
+        Collection
+      <% end %>
+<% end if can? :create, Collection %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -10,13 +17,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-    <h1>
-      Collections <small><%= @institution.name %></small>
-      <div class="pull-right" style="">
-        <%= link_to "Create Collection", new_institution_collection_path(@institution), class: "btn btn-default" if can? :create, Collection %>
-      </div>
-    </h1>
-
     <table class="table table-bordered table-hover">
       <thead>
         <tr>

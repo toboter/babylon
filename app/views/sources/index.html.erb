@@ -1,0 +1,44 @@
+<% title 'Sources', (@parent ? @parent.name : nil) %>
+<% content_for :edit_section do %>
+  <div class="pull-right">
+    <%= link_to new_source_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
+      <i class="icon-plus"></i>
+      Source
+    <% end if can?(:create, Source) && !@parent %>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <% if @parent.class.name == 'Item' %>
+    <%= content_tag(:li, link_to("Objects", @parent.class) + content_tag(:span, '/', class: 'divider')) %>
+    <%= content_tag(:li, link_to("#{@parent.name}", @parent) + content_tag(:span, '/', class: 'divider')) %>
+  <% end %>
+  <li class="active"><%= "Sources" %></li>
+<% end %>
+
+<% content_for :main_section do %>
+    <div class="row-fluid">
+      <div class="span3">
+        <%= content_tag :div, class: "filter well" do %>
+          <h4 style="margin-top:0px;">Filters</h4>
+          <%= search_form_for @q do |f| %>
+            <%= f.label :source_type_cont, 'Filter source type' %>
+            <%= f.search_field :source_type_cont %>
+            <%= f.label :format_cont, 'Filter format' %>
+            <%= f.search_field :format_cont %>
+            <br>
+            <%= f.submit 'Filter', class: 'btn' %><%= link_to 'Reset', sources_path(q: nil), class: 'btn', style: 'margin-left:7px;' %>
+          <% end unless @parent %>
+          <p class="text text-info"><%= pluralize(@sources.count, 'element') %> <small>[ of <%= content_tag :span, @sources_all.count %> ]</small></p>
+        <% end %>
+      </div>
+      <div class="span9">
+        <table class="table table-bordered table-hover">
+          <tbody> 
+            <%= render @sources %>
+          </tbody>
+        </table>      
+      </div>
+    </div>
+<% end %>

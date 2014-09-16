@@ -3,12 +3,27 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 jQuery ->
-  $("#citations").on('cocoon:after-insert', ->
+  $("#publications").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
       no_results_text: "Oops, nothing found!"
       search_contains: true
     )
   $("#connections").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Oops, nothing found!"
+      search_contains: true
+    )
+  $("#buckets").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Oops, nothing found!"
+      search_contains: true
+    )
+  $("#documents").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Oops, nothing found!"
+      search_contains: true
+    )
+  $("#sources").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
       no_results_text: "Oops, nothing found!"
       search_contains: true

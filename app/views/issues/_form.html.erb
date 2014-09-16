@@ -36,7 +36,7 @@
   <div class="form-actions">
     <%= f.submit 'Speichern', class: 'btn btn-primary' %>
     <% if @issue.new_record? %>
-        <%= link_to 'Abbrechen', [@issuable, 'issues'], :class => 'btn' %>
+        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
     <% else %>
       <%= link_to 'Abbrechen', :back, :class => 'btn' %>
     <% end %>

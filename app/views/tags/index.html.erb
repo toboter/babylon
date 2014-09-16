@@ -1,5 +1,12 @@
-<% title "Terms of interest", nil, nil %>
-
+<% title "Tagging schema", nil %>
+<% content_for :edit_section do %>
+      <div class="pull-right" style="">
+        <%= link_to new_tag_path, class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Root tag
+        <% end if can?(:create, Tag) %>
+      </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -9,12 +16,6 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span12">
-  	<h1>
-      Terms of interest
-      <div class="pull-right" style="">
-        <%= link_to "Create term", new_tag_path, class: "btn btn-default" if can? :create, Tag %>
-      </div>
-    </h1>
     <%= render 'full_tag_tree', :tags => @tags, add_links_visible: true, highlight: nil %>
   </div>
 </div>

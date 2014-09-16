@@ -1,14 +1,17 @@
 <div class="row-fluid">
   <div class="span12">
     <%= content_tag :p do -%>
-      This document belongs to: <%= link_to("#{@documentable.name}", @documentable) %>
+      This document belongs to: <%= link_to("#{@documentable.name}", @documentable.class.name == 'Action' ? [@documentable.actable, @documentable] : @documentable) %>
     <% end -%>
 
     <div class="row-fluid">
       <div class="span8">
         <%= form_for [@documentable, @document], :html => {:multipart => true} do |f| %>
           <%= f.error_messages %>
-        
+
+          <%= f.hidden_field :documentable_type %>
+          <%= f.hidden_field :documentable_id %>
+
         
           <%= render 'form_fields', f: f %>
         

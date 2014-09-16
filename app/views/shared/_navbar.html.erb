@@ -32,7 +32,8 @@
           </a>
           <ul class="dropdown-menu">
             <%= content_tag :li, link_to(content_tag(:strong, 'Objects'), items_path) if can? :read, Item %>
-            <%= content_tag :li, link_to(content_tag(:strong, 'Sources'), references_path) if can? :read, Reference %>
+            <%= content_tag :li, link_to(content_tag(:strong, 'Sources'), sources_path) if can? :read, Source %>
+            <%= content_tag :li, link_to(content_tag(:strong, 'Bibliography'), references_path) if can? :read, Reference %>
             <li class="divider"></li>
             <%= content_tag :li, link_to("Folders", buckets_path) if can? :read, Bucket %>
             <%= content_tag :li, link_to("Uploaded files", assets_path, style: 'margin-left:10px;') if can? :read, Asset %>

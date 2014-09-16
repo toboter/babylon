@@ -7,22 +7,25 @@
   </header>
 
   <div class="container-fluid" style="margin-bottom:50px;">
-    <%= render "shared/breadcrumbs" %>
-	  <%= render "shared/debug" %>
-
-	  <%= render "shared/flash", flash: flash %>
-
-    <div class="row">
+    <%= content_tag :div, class: "row-fluid" do %>
       <div class="span12">
-        <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
-        <%= content_tag :h2, class: 'subtitle' do %>
-          <%= yield(:subtitle) %>
-          <%= yield(:edit_section) %>
-        <% end if show_title? %>
+        <%= content_tag :div, class: "title-bar" do %>
+          <%= content_tag :h1, class: 'pagetop' do %>
+            <%= yield(:title) %>
+            <%= yield(:edit_section) %>
+          <% end if show_title? %>
+          <%= content_tag :h2, class: 'subtitle' do %>
+            <%= yield(:subtitle) %>
+          <% end if show_title? %>
+          <%= render "shared/breadcrumbs" %>
+        <% end %>
   	  </div>
-    </div>
+    <% end %>
+    
+    <%= render "shared/debug" %>
   
     <%= yield(:top_over) %>
+    <%= render "shared/flash", flash: flash %>
     <%= yield(:main_section) %>
     <%= yield(:footer_section) %>
 

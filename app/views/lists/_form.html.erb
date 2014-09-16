@@ -47,10 +47,10 @@
   <div id='locations'>
     <%= content_tag :h4, 'Locations' %>
     <%= f.fields_for :locations do |builder| %>
-      <%= render "location_fields", :f => builder %>
+      <%= render "shared/location_fields", :f => builder %>
     <% end %>
     <div class="links controls">
-      <%= link_to_add_association "Add Location", f, :locations %>
+      <%= link_to_add_association "Add Location", f, :locations. partial: "shared/location_fields" %>
     </div>
   </div>
 

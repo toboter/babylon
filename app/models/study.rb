@@ -19,7 +19,7 @@ class Study < ActiveRecord::Base
   has_many :issues, as: :issuable, dependent: :destroy
 
   validates :list_id, presence: true
-  validates :list_id, :uniqueness => {scope: [:studyable_type, :studyable_id], :message => 'List does not accept duplicates'}, :unless => :accept_duplicates
+  validates :list_id, uniqueness: {scope: [:studyable_type, :studyable_id], message: 'List does not accept duplicates'}, :unless => :accept_duplicates
   # validate :validate_properties
 
   def accept_duplicates

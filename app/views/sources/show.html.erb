@@ -1,0 +1,64 @@
+<% title 'Source', @source.name %>
+<% edit_section_for(@source, nil) %>
+<% footer_section(@source) %>
+
+<% content_for :breadcrumbs_section do %>
+  <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Sources', sources_path %> <span class="divider">/</span></li>
+  <li class="active"><%= "#{@source.name}" %></li>
+<% end %>
+
+<% content_for :main_section do %>
+<div class="row-fluid">
+  <div class="span2">
+    <ul class="unstyled">
+      <li><b>Author:</b> <%= @source.author.name %></li>
+      <li><b>Source type:</b> <%= @source.source_type %></li>
+      <li><b>Original date:</b> <%= @source.original_date %></li>
+      <li><b>Format:</b> <%= @source.format %></li>
+      <li><b>Institution:</b> <%= @source.institution.name %></li>
+      <li><b>Comment:</b> <%= @source.comment %></li>
+      <li><b>Parent:</b> <%= @source.parent_id %></li>
+      <li><b>Condition:</b> <%= @source.condition %></li>
+    </ul>
+  </div>
+  <div class="span10">
+    <% if @source.actions.any? %>
+      <h3>Mentions</h3> 
+      <%= content_tag :table, class: "table table-bordered table-hover" do %>
+        <tbody>
+          <% for action in @source.actions do %>
+            <%= render action.actable %>
+          <% end %>
+        </tbody>
+      <% end %>
+    <% end %>
+    <%= content_tag :h3 do %>
+      Documents
+      <div class="pull-right">
+        <%= link_to new_source_document_path(@source), class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Document
+        <% end %>
+      </div>
+    <% end %> 
+    <%= content_tag :table, class: "table table-bordered table-hover" do %>
+      <tbody>   
+        <%= render @source.documents %>
+      </tbody>
+    <% end if @source.documents.any? %>
+    <%= content_tag :h3 do %>
+      Folders
+      <div class="pull-right">
+        <%= link_to new_source_bucket_path(@source), class: 'btn btn-default' do %>
+          <i class="icon-plus"></i>
+          Folder
+        <% end %>
+      </div>
+    <% end %>
+    <%= render @source.buckets, personal: false %>
+
+  </div>
+</div>
+
+<% end %>

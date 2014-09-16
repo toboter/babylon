@@ -17,3 +17,5 @@ Bucket.create(name: 'Explorer Pictures', attachable_id: @snippet.id, attachable_
 
 @institution = Institution.create(name: 'None', creator_id: @user.id, updater_id: @user.id)
 Collection.create(name: 'None', shortcut: 'None', institution_id: @institution.id, creator_id: @user.id, updater_id: @user.id)
+
+ItemClassification.create(name: 'Object')

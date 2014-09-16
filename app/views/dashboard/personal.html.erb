@@ -1,4 +1,11 @@
-<% title "Dashboard, #{current_user.available_name}", nil, nil %>
+<% title "Dashboard", "#{current_user.available_name}" %>
+<% content_for :edit_section do %>
+  <div class="pull-right" style="">
+    <%= link_to 'Edit your profile', edit_person_path(current_user.person), class: 'btn btn-default btn-small' if current_user.person && can?(:edit, current_user.person) %>
+    <%= link_to 'Account settings', edit_user_registration_path, class: 'btn btn-default btn-small' if current_user %>
+    <p class="text-right" style="font-size:.4em">Status: <%= current_user.role.role %></p>
+  </div>
+<% end %>
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
@@ -8,18 +15,6 @@
 
 
 <% content_for :main_section do %>
-  <div class="row-fluid">
-    <div class="span3">
-      <%= content_tag :h1, 'Dashboard', class: 'pagetop' %>
-      <%= content_tag :h2, current_user.available_name, class: 'subtitle' %>
-    </div>
-    <div class="span6 offset3">
-      <%= content_tag :div, class: "alert alert-block alert-success", style: "margin-top:30px;right:0;" do %>
-        Active project:  <span style="padding-left:5px;font-weight:bold; font-size:1.2em;"><%= current_aspect.name %></span>
-      <% end if aspect? %>
-    </div>
-  </div>
-  
   <%= content_tag :div, class: 'row-fluid' do %>
       <div class="span7">
 
@@ -72,7 +67,9 @@
 
 
       <div class="span5">
-
+        <%= content_tag :div, class: "alert alert-block alert-success" do %>
+          Active project:  <span style="padding-left:5px;font-weight:bold;"><%= current_aspect.name %></span>
+        <% end if aspect? %>
         <%= render 'shared/calendar' %>
 
         <div class="well" style="margin-top:20px;">

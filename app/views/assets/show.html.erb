@@ -60,7 +60,6 @@
             <table class="table table-bordered table-hover">
               <%= asset_description('Photographer', link_to(@asset.author.name, @asset.author)) if @asset.author %>
               <%= asset_description('Copyright', @asset.holder.self_and_ancestors.map{ |a| link_to(a.name,a) }.join(", ").html_safe) if @asset.holder %>
-              <%= asset_description('File author', link_to(@asset.author.name, @asset.author)) if @asset.author %>
               <%= asset_description('Content type', @asset.content_type) %>
               <%= asset_description('Hash', @asset.md5hash) %>
               <%= asset_description('File size', number_to_human_size(@asset.file_size, precision: 2, separator: ',')) %>

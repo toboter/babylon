@@ -22,10 +22,13 @@
             <div class="span4 option-block">
               <span class=​"title">​Resources</span>​<i class="icon-file"></i>
               <ul class="nav nav-pills nav-stacked">
-                <li><%= link_to "Items", items_path %></li>
+                <li><%= link_to "Objects", items_path %></li>
+                <li><%= link_to "Sources", sources_path %></li>
                 <li><%= link_to "Bibliographies", references_path %></li>
+                <!--
                 <%= content_tag :li, link_to("Pictures", assets_path) if can? :read, 'Assets' %>
                 <%= content_tag :li, link_to("Documents", documents_path) if can? :read, 'Documents' %>
+                -->
               </ul>
             </div>
           
