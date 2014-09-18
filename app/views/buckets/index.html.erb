@@ -22,6 +22,7 @@
     <div class="span12">
       <% if @buckets.any? %>
         <% @buckets.each do |bucket| %>
+
           <div class="well">
             <div class="row-fluid">
               <div class="span2">
@@ -56,11 +57,12 @@
               </div>
             </div>
           </div>
+
         <% end %>
       <% else %>
 
         <div class="well">
-          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a folder', [:new, @attachable, :bucket])+' or ' if @attachable %><%= link_to 'back to previous page', :back %></p>
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a folder', [:new, @attachable, :bucket])+' or ' if @attachable && @attachable.class.name != 'Item' %><%= link_to 'back to previous page', :back %></p>
         </div>
 
       <% end %>

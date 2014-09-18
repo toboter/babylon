@@ -7,7 +7,7 @@ class BucketsController < ApplicationController
   # GET /buckets.json
   def index
     if @attachable
-      @buckets = @attachable.buckets
+      @buckets = @attachable.buckets.uniq
     else
       @buckets = Bucket.all
     end

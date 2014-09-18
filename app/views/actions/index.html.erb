@@ -1,11 +1,11 @@
-<% title "Object sources history", @item.name %>
+<% title "Sources", @item.name %>
 
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <li><%= link_to 'Objects', items_path %> <span class="divider">/</span></li>
   <li><%= link_to @item.name, @item %> <span class="divider">/</span></li>
-  <%= content_tag :li, "Object sources history", class: 'active' %>
+  <%= content_tag :li, "Sources", class: 'active' %>
 <% end %>
 
 

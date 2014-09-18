@@ -8,7 +8,7 @@
 <ul class="nav nav-tabs">
   <li class="active"><a href="#metainfo" data-toggle="tab">General</a></li>
   <li><a href="#classification" data-toggle="tab">Classification</a></li>
-  <li><a href="#actions" data-toggle="tab">Actions</a></li>
+  <li><a href="#actions" data-toggle="tab">Sources</a></li>
   <li><a href="#publications" data-toggle="tab">Publications</a></li>
   <li><a href="#connections" data-toggle="tab">Connected objects</a></li>
 </ul>
@@ -87,7 +87,6 @@
 </div>
 
 <div class="tab-pane" id="classification">
-  <%= content_tag :h4, 'Classification' %>
   <div class="control-group">
     <%= f.label :classification_id, class: 'control-label' %>
     <div class="controls">
@@ -106,7 +105,6 @@
 </div>
 
 <div class="tab-pane" class="" id='actions'>
-  <%= content_tag :h4, 'Actions' %>
   <%= f.fields_for :actions do |builder| %>
     <%= render "action_fields", :f => builder %>
   <% end %>
@@ -116,7 +114,6 @@
 </div>
 
 <div class="tab-pane" id="publications">
-  <%= content_tag :h4, 'Publications' %>
   <%= f.fields_for :citations do |builder| %>
     <%= render "citation_fields", :f => builder %>
   <% end %>
@@ -127,7 +124,6 @@
   
 
 <div class="tab-pane" id='connections'>
-  <%= content_tag :h4, 'Connections' %>
   <%= f.fields_for :connections do |builder| %>
     <%= render "connection_fields", :f => builder %>
   <% end %>

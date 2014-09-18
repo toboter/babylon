@@ -72,7 +72,7 @@
         <% end if @item.inverse_connections.any? || @item.connections.any? %>
 
         <%= content_tag :div, class: "activity-section", id: 'activity' do %>
-          <%= content_tag :h3, 'Activity', class: '' %>
+          <%= content_tag :h3, 'Record activity', class: '' %>
           <% @item.activities.order('created_at DESC').limit(6).each do |activity| %>
             <%= ActivityPresenter.new(activity, self).render_activity('popover-right') %>
           <% end %>
@@ -85,8 +85,8 @@
         <%= content_tag :div, class: "options-section", id: 'options' do %>
           <%= content_tag :h3, 'Other views', class: '' %>
           <ul class="unstyled">
-            <li><%= link_to 'View all documents', item_documents_path(@item) %></li>
-            <li><%= link_to 'View all folders', item_buckets_path(@item) %></li>
+            <li><%= link_to 'View sources documents', item_documents_path(@item) %></li>
+            <li><%= link_to 'View sources & publications folders', item_buckets_path(@item) %></li>
           </ul>
         <% end %>
 
@@ -103,9 +103,16 @@
         <% end if @item.description.present? || @item.tags.any? %>
 
 
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#by_category" data-toggle="tab">Object</a></li>
+  <li><a href="#history" data-toggle="tab">History</a></li>
+  <!-- <li><a href="#statistics" data-toggle="tab">Statistics</a></li> -->
+</ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="by_category">
         <%= content_tag :div, class: "item-section", id: 'actions' do %>
           <%= content_tag :h3 , class: '' do %>
-            Object sources history
+            Object sources
           <% end if @item.actions.any? %>
 
           <span class="badge"><%= pluralize(@item.actions.count, 'element') %></span><br>
@@ -135,7 +142,7 @@
               <% end %>
             </tbody>
           <% end %> 
-          <%= link_to 'Show full object sources history', item_actions_path(@item) %>
+          <%= link_to 'Show all object sources', item_actions_path(@item) %>
         <% end if @item.actions.any? %>
 
         <%= content_tag :div, class: "item-section", id: "references" do %>
@@ -178,6 +185,41 @@
           <% end if @item.studies.any? %>
           <%= link_to "View all studies on #{@item.name} and connected objects", [@item, :studies] %>
         <% end %>
+      </div>
+
+      <div class="tab-pane" id="history">
+        <% @history.sort_by{|e| e[:created_at]}.reverse.each_with_index do |element, index| %>
+        <div class="row-fluid">
+        <div class="span6 offset2">
+          <%= content_tag :div, class: "element" do %>
+            <div class="head">
+              <span class="name">
+                <%= element[:predicate] %> <%= element[:author] %>
+              </span>
+              <span class="small-date"><%= element[:object].class.name == 'Citation' ? element[:created_at].strftime('%Y') : "on #{element[:created_at].strftime('%d.%m.%Y')}" %></span>
+            </div>
+            <div class="body">
+              <% if element[:object].class.name == 'Study' %>
+                <%= link_to element[:object].name, [element[:object].studyable, element[:object]] %> by
+                <%= link_to full_qualified_name(element[:object].list.project), [element[:object].list.project.projectable, element[:object].list.project] %> :: <%= link_to element[:object].list.name, [element[:object].list.project, element[:object].list] %>
+              <% elsif element[:object].class.name == 'Citation' %>
+                <%= link_to full_reference(element[:object].reference), element[:object].reference %>
+              <% elsif element[:object].class.name == 'Action' %>
+                <%= link_to element[:object].name, [element[:object].actable, element[:object]] %>
+              <% end %>
+            </div>
+          <% end unless element[:object].class.name == 'Activity' %>
+          <%= content_tag :div, class: 'connector' do %>
+          <% end unless @history.size-1 == index %>
+        </div>
+        </div>
+        <% end %>
+      </div>
+
+      <div class="tab-pane" id="statistics">
+
+      </div>
+    </div>
 
       </div>
     </div>

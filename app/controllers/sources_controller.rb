@@ -36,7 +36,12 @@ class SourcesController < ApplicationController
   # GET /sources/new
   # GET /sources/new.json
   def new
-    @source = Source.new
+    if params[:parent]
+      @parent = Source.find(params[:parent])
+      @source = Source.new(parent_id: @parent.id, source_type: @parent.source_type, comment: "Original name was #{@parent.name}, original author was #{@parent.author.name}")
+    else
+      @source = Source.new
+    end
 
     respond_to do |format|
       format.html { render layout: 'form' }# new.html.erb

@@ -47,7 +47,8 @@ $(document).ready(function(){
     });
     $('.popover-bottom').popover({
         placement: 'bottom',
-        trigger: 'hover'
+        trigger: 'hover',
+        delay: { show: 0, hide: 900 }
     });
 
     $('.chosen-select').chosen({

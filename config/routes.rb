@@ -34,6 +34,10 @@ Babylon::Application.routes.draw do
     resources :sources
   end
 
+  resources :action do
+    resources :buckets
+  end
+
   resources :sources do
     resources :buckets
     resources :documents

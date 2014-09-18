@@ -27,14 +27,17 @@ class Item < ActiveRecord::Base
 
   has_many :citations, as: :citable, dependent: :destroy
   has_many :references, through: :citations
+  has_many :r_buckets, class_name: 'Bucket', through: :references, :source => :buckets
+  has_many :r_assets, class_name: 'Asset', through: :references, :source => :assets
+  # Wenn auch die reference docs hinzu genommen werden sollen, funktioniert die suche nicht mehr.
+  # has_many :r_documents, class_name: 'Document', through: :references, :source => :documents
 
   has_many :actions, as: :actable, dependent: :destroy
   has_many :locations, through: :actions
   has_many :sources, through: :actions
-  has_many :buckets, through: :sources
-  has_many :documents, through: :sources
-
-  has_many :assets, class_name: 'Asset', through: :sources, :source => :assets
+  has_many :s_buckets, class_name: 'Bucket', through: :sources, :source => :buckets
+  has_many :documents, class_name: 'Document', through: :sources, :source => :documents
+  has_many :s_assets, class_name: 'Asset', through: :sources, :source => :assets
 
   has_many :studies, as: :studyable, dependent: :destroy
   has_many :lists, through: :studies
@@ -58,6 +61,13 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :connections, allow_destroy: true
   accepts_nested_attributes_for :locations, allow_destroy: true
 
+  def buckets
+    s_buckets+r_buckets
+  end
+
+  def assets
+    s_assets+r_assets
+  end
 
   def first_action
     Action.create actable_id: self.id, actable_type: 'Item', actable_date_text: Time.now, person_id: self.creator_id, predicate_id: Predicate.find_by_name('is_created_by').id

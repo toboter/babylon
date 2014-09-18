@@ -62,11 +62,15 @@
             <%= link_to 'View all docs', [@study, :documents] %>
           <% end %>
           <%= content_tag :div, class: "study-section", id: "references" do %>
-            <%= content_tag :h3, class: '' do %>
-              References
-              <span class="badge"><%= @study.references.count %></span>
-            <% end %>
-            <%= render "items/reference_entries", :citations => @study.citations %>
+            <%= content_tag :h3, 'References', class: '' %>
+            <span class="badge"><%= pluralize(@study.references.count, 'element') %></span><br>
+            <table class="table table-bordered table-hover">
+              <tbody>
+                <% for citation in @study.citations do %>
+                  <%= render partial: "references/reference", locals: {reference: citation.reference, citation: citation} %>
+                <% end %>
+              </tbody>
+            </table>
             <%= link_to 'View all refs', [@study, :references] %>
           <% end if @study.citations.any? %>
           <div class="study-section" id='buckets'>
