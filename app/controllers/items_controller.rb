@@ -85,7 +85,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
-        track_activity @item
+        track_activity(@item, 'update', @item.previous_changes)
         format.html { redirect_to @item, notice: 'Object was successfully updated.' }
         format.json { head :no_content }
       else

@@ -89,7 +89,11 @@
           </h2>
         </div>
         <% if @person.documents.any? %>
-          <%= render "documents/without_document_type", var: @person %>
+          <table class="table table-bordered table-hover">
+            <tbody>
+              <%= render "documents/without_document_type", var: @person %>
+            </tbody>
+          </table>
         <% else %>
           <p>No documents to show.</p>
         <% end %>

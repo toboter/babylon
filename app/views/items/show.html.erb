@@ -112,7 +112,7 @@
       <div class="tab-pane active" id="by_category">
         <%= content_tag :div, class: "item-section", id: 'actions' do %>
           <%= content_tag :h3 , class: '' do %>
-            Object sources
+            Object actions & sources
           <% end if @item.actions.any? %>
 
           <span class="badge"><%= pluralize(@item.actions.count, 'element') %></span><br>

@@ -1,3 +1,25 @@
+.issue-section {
+  /* Find this in bootstrap and overrides
+  .issue-obj {
+
+  }
+  */
+
+  .issue-name {
+    font-size:1.1em;font-weight:bold;
+  }
+  .object-issue-name {
+    display: none;
+  }
+  a.assignee {
+      display: none;
+    } 
+    div.sequential-id {
+      display: none;
+    }
+  
+}
+
 .issues-list {
   .row-fluid {
     border-top:1px solid #dddddd;

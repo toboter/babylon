@@ -21,6 +21,8 @@ class Action < ActiveRecord::Base
   accepts_nested_attributes_for :locations, allow_destroy: true
   accepts_nested_attributes_for :source_assignments, allow_destroy: true
 
+  after_create {Activity.create(user: creator, action: 'create', trackable: actable, targetable: self)}
+
   def name
     "#{actable.name} (#{predicate.name} #{person.name})"
   end

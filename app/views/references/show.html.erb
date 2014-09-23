@@ -153,6 +153,14 @@
           </ul>
         <% end if @reference.projects.any? %> 
 
+        <div class="issue-section" id='issue'>
+          <%= content_tag :h3 do %>
+            Issues <%= content_tag :span, @reference.issues.count, class: "badge #{@reference.issues.where(closed: false).count > @reference.issues.where(closed: true).count+1 ? @reference.issues.where(closed: false).count > @reference.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+          <% end %>
+          <%= render @reference.issues.order('created_at DESC').limit(3) %>
+          <%= @reference.issues.any? ? "#{link_to('View all issues', reference_issues_path(@reference))} or #{link_to('add a new issue', new_reference_issue_path(@reference))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_reference_issue_path(@reference))).html_safe %>
+        </div>
+
   </div>
 </div>
 <% end %>

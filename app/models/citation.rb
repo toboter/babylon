@@ -9,4 +9,6 @@ class Citation < ActiveRecord::Base
   belongs_to :creator, class_name: "User"
   belongs_to :updater, class_name: "User"
 
+  after_create {Activity.create(user: creator, action: 'add', trackable: citable, targetable: reference)}
+
 end

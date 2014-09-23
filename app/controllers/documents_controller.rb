@@ -90,7 +90,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.update_attributes(params[:document])
-        track_activity @document
+        track_activity(@document, 'update', @document.previous_changes)
         format.html { redirect_to [@documentable, @document], notice: 'Document was successfully updated.' }
         format.json { head :no_content }
       else

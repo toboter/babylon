@@ -8,30 +8,6 @@
 	}
 }
 
-.issue-section {
-	/* Find this in bootstrap and overrides
-	.issue-obj {
-	  @extend .well;
-	  @extend .well-small;
-	  margin-bottom:7px;
-	}
-	*/
-
-	.issue-name {
-		font-size:1.1em;font-weight:bold;
-	}
-	.object-issue-name {
-	  display: none;
-	}
-	a.assignee {
-  	  display: none;
-  	} 
-  	div.sequential-id {
-  	  display: none;
-  	}
-	
-}
-
 
 #history {
 	.element {

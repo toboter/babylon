@@ -1,4 +1,4 @@
-<% title (@issuable ? "Issues on #{link_to @issuable.name, @issuable} #{content_tag :small, "[#{@issuable.class}]"}".html_safe : "All issues"), nil %>
+<% title (@issuable ? "Issues on #{link_to @issuable.name, @issuable}".html_safe : "All issues"), nil %>
 <% content_for :edit_section do %>
       <div class="pull-right" style="">
         <%= link_to [:new, @issuable, :issue], class: 'btn btn-default' do %>

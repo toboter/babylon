@@ -25,7 +25,7 @@
   <%= content_tag :div, class: "control-group" do %>
     <%= f.label 'Photo', class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :cover_asset_id, @item.assets.where('content_type LIKE ?', '%image%' ), :id, :name, {include_blank: false} %>
+      <%= f.collection_select :cover_asset_id, @item.s_assets.where('content_type LIKE ?', '%image%' ).uniq, :id, :name, {include_blank: false} %>
     </div>
   <% end unless @item.new_record? %>
 

@@ -41,6 +41,7 @@ Babylon::Application.routes.draw do
   resources :sources do
     resources :buckets
     resources :documents
+    resources :issues
   end
 
   resources :studies, only: [:index, :show] do

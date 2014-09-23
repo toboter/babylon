@@ -1,11 +1,11 @@
-<% title "Source", "#{@action.actable.name} :: #{@action.predicate.name}" %>
+<% title "Action", "#{@action.actable.name} :: #{@action.predicate.name}" %>
 
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, (link_to (@action.actable.class.to_s == 'Item' ? 'Objects' : @action.actable.class.name.pluralize), [@action.actable.class]) + content_tag(:span, '/', class: 'divider')) if @action.actable %>
   <li><%= link_to @action.actable.name, @action.actable %> <span class="divider">/</span></li>
-  <li><%= link_to 'Sources', [@action.actable, :actions] %> <span class="divider">/</span></li>
+  <li><%= link_to 'Actions', [@action.actable, :actions] %> <span class="divider">/</span></li>
   <%= content_tag :li, "#{@action.predicate.name}", class: 'active' %>
 <% end %>
 

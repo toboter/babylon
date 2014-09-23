@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   end
 
 private
-  def track_activity(trackable, action = params[:action])
-  	current_user.activities.create! action: action, trackable: trackable
+  def track_activity(trackable, action = params[:action], changes_content=nil, targetable=nil)
+  	current_user.activities.create! action: action, trackable: trackable, changes_content: changes_content, targetable: targetable
   end
 
 end

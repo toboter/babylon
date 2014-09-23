@@ -83,7 +83,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
-        track_activity @issue
+        track_activity(@issuable, 'create', nil, @issue)
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully created.' }
         format.json { render json: @issue, status: :created, location: @issue }
       else
@@ -101,7 +101,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.update_attributes(params[:issue])
-        (@changed == true && @issue.closed == true) ? (track_activity @issue, 'closed') : (track_activity @issue)
+        (@changed == true && @issue.closed == true) ? (track_activity(@issuable, 'close', nil, @issue)) : (track_activity(@issuable, 'update', @issue.previous_changes, @issue))
 
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
@@ -117,7 +117,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.update_attribute(:closed, true)
-        track_activity @issue, 'closed'
+        track_activity(@issuable, 'close', nil, @issue)
 
         format.html { redirect_to [@issue.issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
@@ -148,6 +148,9 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        if @issue.closed == true
+          @issue.update_attribute(:closed, false)
+        end
         track_activity @comment
         format.html { redirect_to [@issue.issuable, @issue], notice: 'Comment was successfully created.' }
         format.json { render json: @comment, status: :created, location: @comment }

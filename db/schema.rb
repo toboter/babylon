@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140909133013) do
+ActiveRecord::Schema.define(:version => 20140923094449) do
 
   create_table "actions", :force => true do |t|
     t.integer  "person_id"
@@ -33,10 +33,14 @@ ActiveRecord::Schema.define(:version => 20140909133013) do
     t.string   "action"
     t.integer  "trackable_id"
     t.string   "trackable_type"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.text     "changes_content"
+    t.string   "targetable_type"
+    t.integer  "targetable_id"
   end
 
+  add_index "activities", ["targetable_id"], :name => "index_activities_on_targetable_id"
   add_index "activities", ["trackable_id"], :name => "index_activities_on_trackable_id"
   add_index "activities", ["user_id"], :name => "index_activities_on_user_id"
 
