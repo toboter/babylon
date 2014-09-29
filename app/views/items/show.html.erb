@@ -122,8 +122,8 @@
               <% for action in @item.actions.order('actable_date_text DESC').limit(3) do %>
               <tr><td>
                 <div class="alert alert-info">
-                  <strong><%= link_to action.predicate.name.humanize, [@item, action] %> </strong>
-                  <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } %>
+                  <strong><%= link_to action.predicate.name.humanize, [@item, action] if action.predicate %> </strong>
+                  <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } if action.person %>
                   <%= "on #{action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if action.actable_date_text %>
                 </div>
                 <ul class="unstyled">

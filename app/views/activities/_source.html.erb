@@ -1,4 +1,4 @@
-<abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
+<abbr class="timeago tooltip-bottom" title='<%= activity.created_at.strftime('%d.%m.%Y') %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
 <div class="title">
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
@@ -10,7 +10,7 @@
   	  a <%= link_to activity.targetable.class.name.downcase, [activity.trackable, activity.targetable] %> on
   	<% end %>
   <% end %>
-  <%= link_to item.name, item, class: "#{orientation}", data: { 'original-title' => item.name, 'content' => item.description } if item %>
+  <%= link_to activity.trackable.name, activity.trackable, class: "#{orientation}", data: { 'original-title' => activity.trackable.name, 'content' => activity.trackable.comment } if activity.trackable %>
 </div>
 <div class="details">
   <% if activity.targetable && activity.targetable.class.name == 'Comment' %>

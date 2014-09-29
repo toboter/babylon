@@ -62,6 +62,7 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if @source.save
+        track_activity @source
         format.html { redirect_to @source, notice: 'Source was successfully created.' }
         format.json { render json: @source, status: :created, location: @source }
       else
@@ -78,6 +79,7 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if @source.update_attributes(params[:source])
+        track_activity(@source, 'update', @source.previous_changes)
         format.html { redirect_to @source, notice: 'Source was successfully updated.' }
         format.json { head :no_content }
       else

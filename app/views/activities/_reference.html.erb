@@ -1,10 +1,31 @@
-<abbr class="timeago tooltip-bottom" title='<%= activity.created_at %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
+<abbr class="timeago tooltip-bottom" title='<%= activity.created_at.strftime('%d.%m.%Y') %>'><%= distance_of_time_in_words_to_now(activity.created_at) %> ago</abbr>
 <div class="title">
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
-  <%= activity.action.sub(/e?$/, "ed") %> reference entry 
-  <%= link_to reference.name, reference, title: reference.entries_for_select, class: 'popover-left', data: { 'original-title' => reference.title, 'content' => reference.inspect } if reference %>
+  <%= activity.action.sub(/e?$/, "ed") %> 
+  <% if activity.targetable %>
+  	<% if activity.targetable.class.name == 'Comment' %>
+  	  a <%= link_to 'comment', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => activity.targetable.content } %> to an <%= link_to 'issue', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => pluralize(activity.targetable.issue.comments.count, 'comment') } %> on
+  	<% else %>
+  	  a <%= link_to activity.targetable.class.name.downcase, [activity.trackable, activity.targetable] %> on
+  	<% end %>
+  <% end %>
+  <%= link_to activity.trackable.name, activity.trackable, class: "#{orientation}", data: { 'original-title' => activity.trackable.title, 'content' => activity.trackable.entries_for_select } if activity.trackable %>
 </div>
 <div class="details">
-  <p><%= activity.changes_content.inspect %></p>
+  <% if activity.targetable && activity.targetable.class.name == 'Comment' %>
+    <p class="muted"><i class="icon-comment"></i> <%= activity.targetable.content %></p>
+  <% elsif activity.targetable && activity.targetable.class.name == 'Issue' %>
+    <p>
+      <%= activity.targetable.name %><br>
+      <span class="muted"><i class="icon-comment"></i> <%= activity.targetable.comments.first.content %></span>
+    </p>
+  <% elsif activity.targetable && activity.targetable.class.name == 'Document' %>
+    <p>
+      <%= activity.targetable.name %><br>
+      <span class="muted" style="font-size:90%;"><%= activity.targetable.abstract %></span>
+    </p>
+  <% else %>
+    <p class="muted"><%= activity.changes_content if activity.action == 'update' && !activity.changes_content.blank? %></p>
+  <% end %>
 </div>

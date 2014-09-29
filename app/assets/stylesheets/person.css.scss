@@ -1,17 +1,15 @@
-.person-sidebar {
-	.affix-top {
-		
-	}
-	.affix { 
-		@media (min-width: 768px) {
-			position:fixed;
-			top:90px;
+.panel {
+	ul.contact-info-list {
+		list-style: none;
+		li {
+			margin-top: 8px;
 		}
 	}
-}
-
-#scroll-pane {
-	section {
-		padding-bottom:30px;
+	ul.nav-pills {
+		li {
+		a.hover {
+			background-color: black;
+		}
+		}
 	}
 }

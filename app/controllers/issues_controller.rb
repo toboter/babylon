@@ -1,8 +1,7 @@
 class IssuesController < ApplicationController
   before_filter :authenticate_user!, except: [:index, :show]
-  before_filter :load_issuable, except: [:close]
+  before_filter :load_issuable
   load_and_authorize_resource
-  skip_authorize_resource :only => :close
 
   # GET /issues
   # GET /issues.json
@@ -83,7 +82,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.save
-        track_activity(@issuable, 'create', nil, @issue)
+        track_activity(@issuable, 'open', nil, @issue)
         format.html { redirect_to [@issuable, @issue], notice: 'Issue was successfully created.' }
         format.json { render json: @issue, status: :created, location: @issue }
       else
@@ -117,7 +116,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.update_attribute(:closed, true)
-        track_activity(@issuable, 'close', nil, @issue)
+        track_activity(@issue.issuable, 'close', nil, @issue)
 
         format.html { redirect_to [@issue.issuable, @issue], notice: 'Issue was successfully updated.' }
         format.json { head :no_content }
@@ -151,7 +150,7 @@ class IssuesController < ApplicationController
         if @issue.closed == true
           @issue.update_attribute(:closed, false)
         end
-        track_activity @comment
+        track_activity(@issue.issuable, 'add', nil, @comment)
         format.html { redirect_to [@issue.issuable, @issue], notice: 'Comment was successfully created.' }
         format.json { render json: @comment, status: :created, location: @comment }
       else

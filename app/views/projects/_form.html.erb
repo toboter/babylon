@@ -4,20 +4,27 @@
 <%= form_for [@projectable, @project], :html => { class: "form-horizontal" } do |f| %>
   <%= f.error_messages %>
 
-  <%= content_tag :h3, 'General project stuff', id: 'project' %>
-    <fieldset style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
+  <%= content_tag :h4, 'General', id: 'project' %>
+
     <div class="control-group">
       <%= f.label :name, class: 'control-label' %>
       <div class="controls">
         <%= f.text_field :name, class: 'span6' %>
       </div>
     </div>
-    <div class="control-group">
-      <%= f.label :show_references, 'Make bibliography public', class: 'control-label' %>
+    <div class="control-group" style="margin-bottom:0px;">
+      <%= f.label :show_references, 'Public references (?)', class: 'control-label' %>
       <div class="controls">
         <%= f.check_box :show_references %>
       </div>
     </div>
+    <div class="control-group">
+      <%= f.label :featured, 'Featured on root page (?)', class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :featured %>
+      </div>
+    </div>
+
     <div class="control-group">
       <%= f.label :project_type, class: 'control-label' %>
       <div class="controls">
@@ -28,13 +35,6 @@
       <%= f.label :map_type, class: 'control-label' %>
       <div class="controls">
         <%= f.select(:map_type, Project::MAP_TYPES, {include_blank: 'none'}) %>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :featured, class: 'control-label' %>
-      <div class="controls">
-        <%= f.check_box :featured %>
       </div>
     </div>
 
@@ -56,43 +56,44 @@
         </div>
       </div>
     </div>
-  </fieldset>
 
-    <%= content_tag :h3, 'Manage members', id: 'members' %>
+
+    <%= content_tag :h4, 'Memberships', id: 'members' %>
     <%= f.fields_for :memberships do |builder| %>
       <%= render "membership_fields", :f => builder %>
     <% end %>
     <div class="links control-group">
-      <%= link_to_add_association "Add Member", f, :memberships %>
+      <%= link_to_add_association "Add Member", f, :memberships, class: 'btn btn-default btn-mini' %>
     </div>
 
-    <%= content_tag :h3, id: 'lists' do %>
-      Add lists <small>they will arrange your studies</small>
+    <%= content_tag :h4, id: 'lists' do %>
+      Lists
     <% end %>
     <%= f.fields_for :lists do |builder| %>
       <%= render "list_fields", :f => builder %>
     <% end %>
     <div class="links control-group">
-      <%= link_to_add_association "Add new list", f, :lists %>
+      <%= link_to_add_association "Add new list", f, :lists, class: 'btn btn-default btn-mini' %>
     </div>
 
-    <%= content_tag :h3, id: 'studyfields' do %>
-      Attributes for items on lists
+    <%= content_tag :h4, id: 'studyfields' do %>
+      Attributes for objects on lists
     <% end %>
     <%= f.fields_for :studyfields do |builder| %>
       <%= render "studyfield_fields", :f => builder %>
     <% end %>
     <div class="links control-group">
-      <%= link_to_add_association "Add study attribute", f, :studyfields %>
+      <%= link_to_add_association "Add study attribute", f, :studyfields, class: 'btn btn-default btn-mini' %>
     </div>
 
     <% if can? :manage, 'project-assignments' %>
-    <%= content_tag :h3, 'Incorrect group or module? change it here' %>
+    <%= content_tag :h4, 'Change the project assignment' %>
       <div class="control-group">
-        <%= f.label :projectable_type, 'Move somewhere else', class: 'control-label' %>
+        <%= f.label :projectable_type, 'Move to', class: 'control-label' %>
         <div class="controls">
-          <%= f.text_field :projectable_id %>
           <%= f.text_field :projectable_type %>
+          <%= f.text_field :projectable_id %>
+          <p>First field is the Cluster or Group, the second field is the appropiate id</p>
         </div>
       </div>
     <% else %>
@@ -100,19 +101,25 @@
       <%= f.hidden_field :projectable_type %>
     <% end %>
 
+    <hr>
+
     <div class="form-actions">
-      <%= f.submit "Speichern", :class => 'btn btn-primary' %>
-      <% if @project.new_record? %>
-        <% if @project.projectable %>
-          <%= link_to 'Abbrechen', @project.projectable, :class => 'btn' %>
+      <%= f.submit "Create project", :class => 'btn btn-primary' %>
+      <span class="pull-right">
+        <% if @project.projectable.class.name == 'Cluster' %>
+          Need a group for several dependent projects? <%= link_to 'Create a group', [:new, @project.projectable, :group], class: 'btn btn-default btn-mini' %>
         <% else %>
-          <%= link_to 'Abbrechen', projects_path, :class => 'btn' %>
+          Just need a independent project? <%= link_to 'Create a project', [:new, @projectable.cluster, :project], class: 'btn btn-default btn-mini' %>
         <% end %>
-      <% else %>
-        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
-      <% end %>
+      </span>
     </div>
 
+    
+  <% content_for :edit_section do %>
+    <div class="pull-right">
+      <%= link_to 'Back', :back, :class => 'btn' %>
+    </div>
+  <% end %> 
 <% end %>
     </div>
   </div>

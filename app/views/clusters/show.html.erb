@@ -70,14 +70,14 @@
 
   <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
     <%= content_tag :h2, class: "muted" do %>
-      <%= link_to("Non group projects", [@cluster, :projects])%>
+      <%= link_to("Independent projects", [@cluster, :projects])%>
       <%= link_to new_cluster_project_path(@cluster), class: 'btn btn-default pull-right' do %>
         <i class="icon-plus"></i>
         Project
       <% end if can? :create, @cluster.projects %>
     <% end %>
     <%= render @cluster.projects.limit(5).order('created_at DESC') %>
-    <%= link_to 'View all non-group projects', polymorphic_path([@cluster, :projects], state: 'module') %>
+    <%= link_to 'View all independent projects', polymorphic_path([@cluster, :projects], state: 'module') %>
   <% end if @cluster.projects.any? %>
   </div>
   <div class="span4">

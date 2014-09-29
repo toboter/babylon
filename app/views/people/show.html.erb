@@ -10,11 +10,12 @@
 <% end %>
 
 <% content_for :top_over do %>
+<div class="container">
   <div class="row-fluid" style="">
     <%= content_tag :div, class: 'span3' do %>
       <%= link_to (image_tag @person.profile_picture.assetfile.small.url, class: "img-polaroid", style: "margin-top:20px;"), @person.profile_picture if @person.profile_picture %>
     <% end if @person.profile_picture %>
-    <div class="<%= @person.profile_picture ? 'span6' : 'span9' %>">
+    <div class="<%= @person.profile_picture ? 'span9' : 'span12' %>">
       <h1>
         <%= graded_fullname(@person) %>
         <%= yield(:edit_section) %>
@@ -45,33 +46,17 @@
         <% end %>
       </ul>
     </div>
-    <div class="span3 vcard" style="margin-top:10px;">
-      <address>
-        <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
-        <%= content_tag :h5, 'Contact Information', class: 'muted' if @person.public_email.present? || @person.phone.present? || @person.fax.present? || (@person.institutions.any? && @person.show_inst_address == true) || @person.uri.present? %>
-        <ul class="unstyled">
-          <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
-          <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
-          <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
-          <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
-            <%= content_tag :li, prepend('home', '-25px')+(@person.primary_or_first_institution.root.self_and_descendants-@person.primary_or_first_institution.descendants-@person.primary_or_first_institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
-            <%= content_tag :li, @person.primary_or_first_institution.street, class: "street-address" %>
-            <%= content_tag :li, (content_tag :span, @person.primary_or_first_institution.zip, class: "postal-code")+' '+(content_tag :span, @person.primary_or_first_institution.city, class: "locality") %>
-            <%= content_tag :li, @person.primary_or_first_institution.country, class: "country-name" %>
-          <% end if @person.institutions.any? && @person.show_inst_address == true -%>
-          <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
-        </ul>
-      </address>
-    </div>
   </div>
   <div class="row">
     <div class="span12"><hr></div>
   </div>
+</div>
 <% end %>
 
 <% content_for :main_section do %>
+  <div class="container">
   <div class="row-fluid">
-    <div class="span9" id="scroll-pane" data-target="#scroll-nav">
+    <div class="span8">
       <%= content_tag :section, id: 'about', class: 'person-section' do %>
         <%= markdown(@person.general) if @person.general.present? %>
         <%= content_tag :h2, 'Curriculum Vitae' if @person.cv.present? && @person.general.present? %>
@@ -99,26 +84,22 @@
         <% end %>
       <% end %>
 
-      <%= content_tag :section, id: 'updates' do %>
-        <div class="page-header">
-          <h2>Public Activity</h2>
-        </div>
-        <%= content_tag :div, id: "activity-section", style: '' do %>
-          <% @person.user.activities.order('created_at DESC').limit(10).each do |activity| %>
-            <%= ActivityPresenter.new(activity, self).render_activity %>
-          <% end %>
-          <p>
-            <%= link_to "View all activities for #{@person.name}", person_activities_path(@person) %>
-          </p>
-        <% end %>
-      <% end if @person.user %>
 
-      <%= content_tag :section, id: 'projects' do %>
+      <%= content_tag :section, id: 'sources' do %>
         <div class="page-header">
-          <h2>Projects</h2>
+          <h2>Sources</h2>
         </div>
-        <%= render @person.user.projects %>  
-      <% end if @person.user %>
+        <%= render @person.sources %>
+      <% end if @person.sources.any? %>
+
+
+      <%= content_tag :section, id: 'actions' do %>
+        <div class="page-header">
+          <h2>Actions</h2>
+        </div>
+        <%= render @person.actions %>
+    
+      <% end if @person.actions.any? %>
 
       <%= content_tag :section, id: 'publications' do %>
         <div class="page-header">
@@ -151,48 +132,57 @@
     </div>
 
 
-  <div class="span3 person-sidebar">
-  <div id="scroll-nav" data-spy="affix" data-offset-top="260" class="affix-top">
-    <ul class="nav nav-tabs nav-stacked nav-list">
-      <%= content_tag :li do %>
-        <%= link_to "#about" do %>
-          <i class="icon-chevron-left"></i>
-          About
-        <% end %>
-      <% end if @person.cv.present? || @person.general.present? %>
-      <%= content_tag :li, class: '' do %>
-        <%= link_to "#documents" do %>
-          <i class="icon-chevron-left"></i>
-          Documents
-        <% end %>
-      <% end %>
-      <%= content_tag :li, class: '' do %>
-        <%= link_to "#updates" do %>
-          <i class="icon-chevron-left"></i>
-          Activity
+  <div class="span4">
+    <div class="vcard">
+      <address>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%= link_to (image_tag('microformat-logo-small.png', class: "pull-right", style: "")), '' %>
+          <%= content_tag :h5, 'Contact Information' if @person.public_email.present? || @person.phone.present? || @person.fax.present? || (@person.institutions.any? && @person.show_inst_address == true) || @person.uri.present? %>
+        </div>
+        <ul class="contact-info-list">
+          <%= content_tag :li, prepend('envelope')+@person.public_email, class: "email" if @person.public_email.present? %>
+          <%= content_tag :li, prepend('bullhorn')+(content_tag :abbr, (content_tag :span, @person.phone, class: "value"), class: 'type', title: 'Office'), class: "tel" if @person.phone.present? %>
+          <%= content_tag :li, prepend('inbox')+(content_tag :abbr, (content_tag :span, @person.fax, class: "value"), class: 'type', title: 'Fax'), class: "tel" if @person.fax.present? %>
+          <%= content_tag :div, class: "adr", style: "margin-top:10px;margin-bottom:10px;padding-left:25px;" do %>
+            <%= content_tag :li, prepend('home', '-25px')+(@person.primary_or_first_institution.root.self_and_descendants-@person.primary_or_first_institution.descendants-@person.primary_or_first_institution.siblings).map{ |a| a.name }.join(", "), class: "org" %>
+            <%= content_tag :li, @person.primary_or_first_institution.street, class: "street-address" %>
+            <%= content_tag :li, (content_tag :span, @person.primary_or_first_institution.zip, class: "postal-code")+' '+(content_tag :span, @person.primary_or_first_institution.city, class: "locality") %>
+            <%= content_tag :li, @person.primary_or_first_institution.country, class: "country-name" %>
+          <% end if @person.institutions.any? && @person.show_inst_address == true -%>
+          <%= content_tag :li, prepend('globe')+(link_to "#{@person.uri}", "#{@person.uri}"), class: "url" if @person.uri.present? %>
+        </ul>
+      </div>
+      </address>
+    </div>
+
+      <%= content_tag :section, id: 'projects' do %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h5>Projects</h5>
+          </div>
+            <ul class="nav nav-pills nav-stacked" style="margin-bottom: 0px;">
+              <% for project in @person.user.projects do %>
+                <li><%= link_to full_qualified_name(project), [project.projectable, project] %></li>
+              <% end %>
+            </ul>
+        </div>
+      <% end if @person.user %>
+
+
+
+      <%= content_tag :section, id: 'updates' do %>
+        <h4>Public Activity</h4>
+        <%= content_tag :div, id: "activity-section", style: '' do %>
+          <% @person.user.activities.order('created_at DESC').limit(10).each do |activity| %>
+            <%= ActivityPresenter.new(activity, self).render_activity %>
+          <% end %>
+          <p>
+            <%= link_to "View all activities for #{@person.name}", person_activities_path(@person) %>
+          </p>
         <% end %>
       <% end if @person.user %>
-      <%= content_tag :li, class: '' do %>
-        <%= link_to "#projects" do %>
-          <i class="icon-chevron-left"></i>
-          Projects
-        <% end %>
-      <% end if @person.user %>
-      <%= content_tag :li, class: '' do %>
-        <%= link_to "#publications" do %>
-          <i class="icon-chevron-left"></i>
-          Publications
-        <% end %>
-      <% end %>
-      <%= content_tag :li, class: '' do %>
-        <%= link_to "#uploads" do %>
-          <i class="icon-chevron-left"></i>
-          Uploads
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
   </div>
 </div>
-
+</div>
 <% end %>

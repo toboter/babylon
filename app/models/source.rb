@@ -10,6 +10,8 @@ class Source < ActiveRecord::Base
   has_many :actions, through: :source_assignments
   has_many :items, through: :actions, :source => :actable, :source_type => "Item"
   has_many :issues, as: :issuable, dependent: :destroy
+  has_many :activities, as: :trackable, dependent: :destroy
+  
   belongs_to :author, class_name: 'Person', foreign_key: :author_id
   belongs_to :institution
 

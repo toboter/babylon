@@ -16,12 +16,12 @@ class Action < ActiveRecord::Base
   has_many :buckets, through: :sources
   has_many :documents, through: :sources
 
-  validates_presence_of :person_id, :predicate_id
+  validates_presence_of :person_id, :predicate_id, :actable_id, :actable_type
 
   accepts_nested_attributes_for :locations, allow_destroy: true
   accepts_nested_attributes_for :source_assignments, allow_destroy: true
 
-  after_create {Activity.create(user: creator, action: 'create', trackable: actable, targetable: self)}
+  after_create { Activity.create(user: creator, action: 'add', trackable: actable, targetable: self) }
 
   def name
     "#{actable.name} (#{predicate.name} #{person.name})"

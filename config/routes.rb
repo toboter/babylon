@@ -42,6 +42,7 @@ Babylon::Application.routes.draw do
     resources :buckets
     resources :documents
     resources :issues
+    resources :activities
   end
 
   resources :studies, only: [:index, :show] do
@@ -100,6 +101,7 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :buckets
     resources :issues
+    resources :activities
     post 'add_to_aspect' => 'project_references#create', :as => :add_to_aspect
     delete 'remove_from_aspect' => 'project_references#destroy', :as => :remove_from_aspect
   end

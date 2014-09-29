@@ -55,6 +55,7 @@ class BucketsController < ApplicationController
 
     respond_to do |format|
       if @bucket.save
+        track_activity(@attachable, 'add', nil, @bucket)
         format.html { redirect_to [@attachable, @bucket], notice: 'Bucket was successfully created.' }
         format.json { render json: @bucket, status: :created, location: @bucket }
       else
@@ -71,6 +72,7 @@ class BucketsController < ApplicationController
 
     respond_to do |format|
       if @bucket.update_attributes(params[:bucket])
+        track_activity(@attachable, 'update', nil, @bucket)
         format.html { redirect_to [@attachable, @bucket], notice: 'Bucket was successfully updated.' }
         format.json { head :no_content }
       else

@@ -57,9 +57,9 @@
                   <% end %>
                 <% end if cluster.groups.any? %>
                 <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
-                  <%= content_tag :h3, link_to("Non group projects", polymorphic_path([cluster, :projects], state: 'module')) %>
+                  <%= content_tag :h3, link_to("Independent projects", polymorphic_path([cluster, :projects], state: 'module')) %>
                   <%= render cluster.projects.limit(5).order('created_at DESC') %>
-                  <%= link_to 'View all non-group projects', polymorphic_path([cluster, :projects], state: 'module') %>
+                  <%= link_to 'View all independent projects', polymorphic_path([cluster, :projects], state: 'module') %>
                 <% end if cluster.projects.any? %>
 
             <% end %>

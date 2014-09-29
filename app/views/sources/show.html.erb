@@ -17,7 +17,7 @@
       <li><b>Source type:</b> <%= @source.source_type %></li>
       <li><b>Original date:</b> <%= @source.original_date %></li>
       <li><b>Format:</b> <%= @source.format %></li>
-      <li><b>Institution:</b> <%= @source.institution.name %></li>
+      <li><b>Institution:</b> <%= @source.institution.name if @source.institution %></li>
       <li><b>Condition:</b> <%= @source.condition %></li>
     </ul>
     <%= content_tag :p, link_to('Original', @source.parent) if @source.parent %>
@@ -34,6 +34,17 @@
           <%= render @source.issues.order('created_at DESC').limit(3) %>
           <%= @source.issues.any? ? "#{link_to('View all issues', source_issues_path(@source))} or #{link_to('add a new issue', new_source_issue_path(@source))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_source_issue_path(@source))).html_safe %>
         </div>
+
+        <%= content_tag :div, class: "activity-section", id: 'activity' do %>
+          <%= content_tag :h3, 'Record activity', class: '' %>
+          <% @source.activities.order('created_at DESC').limit(6).each do |activity| %>
+            <%= ActivityPresenter.new(activity, self).render_activity('popover-right') %>
+          <% end %>
+          <p>
+            <%= link_to "View all activities for #{@source.name}", source_activities_path(@source) %>
+          </p>
+
+        <% end if @source.activities.any? %>
 
   </div>
   <div class="span9">

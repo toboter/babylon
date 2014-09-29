@@ -38,16 +38,14 @@
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
-    <% if @group.new_record? %>
-      <% if @group.cluster %>
-        <%= link_to 'Abbrechen', @group.cluster, :class => 'btn' %>
-      <% else %>
-        <%= link_to 'Abbrechen', groups_path, :class => 'btn' %>
-      <% end %>
-    <% else %>
-      <%= link_to 'Abbrechen', @group, :class => 'btn' %>
-    <% end %>
+    <%= f.submit "Create group", :class => 'btn btn-primary' %>
+
   </div>
+
+  <% content_for :edit_section do %>
+    <div class="pull-right">
+      <%= link_to 'Back', :back, :class => 'btn' %>
+    </div>
+  <% end %> 
 
 <% end %>

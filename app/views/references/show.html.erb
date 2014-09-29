@@ -110,7 +110,11 @@
               Document
             <% end if can? :create, Document %>
           </h3>
-          <%= render "documents/without_document_type", :var => @reference %>
+          <%= content_tag :table, class: "table table-bordered table-hover" do %>
+            <tbody>
+              <%= render "documents/without_document_type", :var => @reference %>
+            </tbody>
+          <% end if @reference.documents.any? %>
           <%= link_to "View all documents on #{@reference.title}", reference_documents_path(@reference) %>
         <% end %> 
 
@@ -160,6 +164,17 @@
           <%= render @reference.issues.order('created_at DESC').limit(3) %>
           <%= @reference.issues.any? ? "#{link_to('View all issues', reference_issues_path(@reference))} or #{link_to('add a new issue', new_reference_issue_path(@reference))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_reference_issue_path(@reference))).html_safe %>
         </div>
+
+        <%= content_tag :div, class: "activity-section", id: 'activity' do %>
+          <%= content_tag :h3, 'Record activity', class: '' %>
+          <% @reference.activities.order('created_at DESC').limit(6).each do |activity| %>
+            <%= ActivityPresenter.new(activity, self).render_activity('popover-right') %>
+          <% end %>
+          <p>
+            <%= link_to "View all activities for #{@reference.name}", reference_activities_path(@reference) %>
+          </p>
+
+        <% end if @reference.activities.any? %>
 
   </div>
 </div>

@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
 
     # Opitional könnte hier auch ein Array nach einem bestimmten Sortierschlüssel aufgebaut werden.
     # @history = @item.actions+@item.citations+@item.studies
-    @history = @item.actions.map{|a| {author: a.person.name, :predicate => a.predicate.name, :created_at => a.actable_date_text.to_date, object: a }}
+    @history = @item.actions.map{|a| {author: a.person.name, :predicate => a.predicate ? a.predicate.name : 'undefined', :created_at => a.actable_date_text.to_date, object: a }}
               .concat(@item.studies.map{|s| {author: s.creator.person ? s.creator.person.name : s.creator.username, :predicate => 'is_studied_by', :created_at => s.created_at.to_date, object: s }})
               .concat(@item.citations.map{|c| {author: c.reference.authors.map{|author| author.name }.join(', '), :predicate => c.predicate.name, :created_at => Date.strptime(c.reference.book.year, '%Y'), object: c }})
 

@@ -28,6 +28,9 @@ class Person < ActiveRecord::Base
   has_many :documents, as: :documentable
   has_many :affiliations, :dependent => :destroy
   has_many :institutions, through: :affiliations
+
+  has_many :sources, foreign_key: :author_id
+  has_many :actions
   
   validates_uniqueness_of :user_id, :allow_blank => true, :message => "is already connected to someone else"
 

@@ -1,0 +1,7 @@
+  <%= content_tag :div, class: "alert alert-info" do %>
+    <strong>
+      <%= link_to action.actable.name, action.actable if action.actable %>
+      <%= link_to action.predicate.name, [action.actable, action] if action.predicate %> <%= link_to action.person.name, action.person %>
+      <%= "on #{action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if action.actable_date_text.present? %>
+    </strong>
+  <% end if action %>
