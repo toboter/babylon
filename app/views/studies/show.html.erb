@@ -4,7 +4,7 @@
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <li><%= link_to 'Items', items_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Objects', items_path %> <span class="divider">/</span></li>
   <li><%= link_to @study.studyable.name, @study.studyable %> <span class="divider">/</span></li>
   <li><%= link_to "Studies", [@study.studyable, :studies] %> <span class="divider">/</span></li>
 
@@ -35,7 +35,7 @@
                 <% if value.include?('[""') %>
                   <%= item_description(name.humanize, ProjectStudyFieldValue.find(eval(value).compact.reject{|r| r.empty? }).map{ |psfv| link_to psfv.field_value, '', class: 'popover-right', data: { 'original-title' => psfv.field_value, 'content' => psfv.description } }.join(', ').html_safe) %>
                 <% else %>
-                  <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(ProjectStudyField.find_by_name(name).field_type) ? link_to(ProjectStudyFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => ProjectStudyFieldValue.find(value).field_value, 'content' => ProjectStudyFieldValue.find(value).description }) : value ) %>
+                  <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(ProjectStudyField.find_by_name(name).field_type) ? link_to(ProjectStudyFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => ProjectStudyFieldValue.find(value).field_value, 'content' => ProjectStudyFieldValue.find(value).description }) : markdown(value) ) %>
                 <% end %>
 			        <% end %>
 		        </table>

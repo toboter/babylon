@@ -88,7 +88,7 @@
         </table>
       <% else %>
         <div class="well" style="">
-          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a document', [:new, @documentable, :document])+' or ' if @documentable %><%= link_to 'back to previous page', :back %></p>
+          <p class="text-center">Nothing to show. <%= link_to 'Back to previous page', :back %></p>
         </div>
       <% end %>
     </div>

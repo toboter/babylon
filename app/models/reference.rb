@@ -43,7 +43,7 @@ class Reference < ActiveRecord::Base
   end
 
   def entries_for_select
-    authors_of_article+', '+title
+    "#{authors_of_article}, #{title} #{', '+book.serial.shortcut+' '+book.volume if book && book.serial}"
   end
 
   def authors_of_article

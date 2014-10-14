@@ -75,16 +75,36 @@
   <% end if @project.documents.without_document_type.any? %> 
 
   <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %>
-    <%= content_tag :h4, 'References', class: '' %>
+    <%= content_tag :h4, 'Bibliography', class: '' %>
     <%= content_tag :h5, 'References used by this project', class: '' %>
     <%= render "references/bib_entries", :references => @project.studies.map{|r| r.references }.flatten.take(3) %>
-    <%= content_tag :h5, 'References added by this project', class: '' %>
+    <%= content_tag :h5, 'Bibliography added by this project', class: '' %>
     <%= render "references/bib_entries", :references => @project.references.limit(3) %>
     <%= link_to "View all references for #{full_qualified_name(@project)}", [@project, :references] %>
   <% end if @project.references.any? && @project.show_references == true %>  
   </div>
   <div class="span4">
+
+
   <div class="project-info">
+  <%= content_tag :div do %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h5>Associated projects in <%= @project.projectable.name %></h5>
+      </div>
+      <ul class="nav nav-pills nav-stacked" style="margin-bottom: 0px;">
+        <% for project in @project.projectable.projects do %>
+          <li><%= link_to full_qualified_name(project), [project.projectable, project] %></li>
+        <% end %>
+      </ul>
+      <%= content_tag :div, class: "panel-footer" do %>
+        <%= link_to 'Add a associated project to this group', [:new, @project.projectable, :project] %>
+      <% end if can? :create, Project %>
+    </div>
+  <% end if @project.projectable_type == "Group" %>
+
+
+
     <ul class="unstyled">
       <% if @project.projectable_type == "Group" %>
         <li>Module: <%= link_to(@project.projectable.cluster.name, @project.projectable.cluster) %></li>
@@ -119,7 +139,7 @@
       <% end if can? :read, Document %>
       <%= content_tag :li do %>
         <%= link_to [@project, :references] do %>
-          References
+          Project Bibliography
           <span class="badge pull-right"><%= @project.references.count %></span>
         <% end %>
       <% end if can? :read, Reference %>

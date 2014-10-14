@@ -23,7 +23,9 @@
 <% content_for :main_section do %>
   <div class="row-fluid">
   	<div class="span12">
-	  	<p class="lead"><%= @snippet.description %></p>
+	  	<p class="lead">
+        <%= markdown(@snippet.description) if @snippet.description %>
+      </p>
 	  	<div><%= markdown(@snippet.content) if @snippet.content %></div>
 	  <div class="assets" style="margin-top:80px;">
 	  	<%= render @snippet.buckets, :personal => false %>

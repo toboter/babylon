@@ -19,13 +19,13 @@
           <% end if show_title? %>
           <%= render "shared/breadcrumbs" %>
         <% end %>
+        <%= render "shared/flash", flash: flash %>
   	  </div>
     <% end %>
     
     <%= render "shared/debug" %>
   
     <%= yield(:top_over) %>
-    <%= render "shared/flash", flash: flash %>
     <%= yield(:main_section) %>
     <%= yield(:footer_section) %>
 

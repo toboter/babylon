@@ -92,15 +92,6 @@
         <%= render @person.sources %>
       <% end if @person.sources.any? %>
 
-
-      <%= content_tag :section, id: 'actions' do %>
-        <div class="page-header">
-          <h2>Actions</h2>
-        </div>
-        <%= render @person.actions %>
-    
-      <% end if @person.actions.any? %>
-
       <%= content_tag :section, id: 'publications' do %>
         <div class="page-header">
           <h2>Publications</h2>

@@ -72,16 +72,8 @@
         <%= render @source.documents %>
       </tbody>
     <% end if @source.documents.any? %>
-    <%= content_tag :h3 do %>
-      Folders
-      <div class="pull-right">
-        <%= link_to new_source_bucket_path(@source), class: 'btn btn-default' do %>
-          <i class="icon-plus"></i>
-          Folder
-        <% end %>
-      </div>
-    <% end %>
-    <%= render @source.buckets, personal: false %>
+
+    <%= render @source.buckets, personal: false if @source.buckets.any? %>
 
   </div>
 </div>

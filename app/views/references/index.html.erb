@@ -60,11 +60,13 @@
       </div>
       <div class="span9">
         <% if @indirect_references || @direct_references %>
-          <%= content_tag :h4, "References in #{@parent.name if @parent}" if @indirect_references %>
+          <%= content_tag :h4, "References used by #{@parent.name if @parent}" if @indirect_references %>
           <div style="color:#bbb;">
             <%= render "bib_entries", :references => @indirect_references %>
+            <p>References in this section show references associated with items or studies connected to this project through its lists.</p>
+            <br>
           </div>
-          <%= content_tag :h4, "References added through #{@parent.name if @parent}" if @direct_references %>
+          <%= content_tag :h4, "Bibliography added by #{@parent.name if @parent}" if @direct_references %>
           <%= render "bib_entries", :references => @direct_references %>
         <% else %>
           <%= render "bib_entries", :references => @references_paginated %>        

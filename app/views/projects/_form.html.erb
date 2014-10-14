@@ -47,7 +47,7 @@
   </div>
 
     <div class="control-group">
-      <%= f.label :description, class: 'control-label' %>
+      <%= f.label :description, 'Abstract', class: 'control-label' %>
       <div class="controls">
         <%= f.text_area :description, class: 'span6' %>
         <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
@@ -104,7 +104,7 @@
     <hr>
 
     <div class="form-actions">
-      <%= f.submit "Create project", :class => 'btn btn-primary' %>
+      <%= f.submit @project.new_record? ? 'Create project' : 'Save changes', class: 'btn btn-primary' %>
       <span class="pull-right">
         <% if @project.projectable.class.name == 'Cluster' %>
           Need a group for several dependent projects? <%= link_to 'Create a group', [:new, @project.projectable, :group], class: 'btn btn-default btn-mini' %>
@@ -117,9 +117,10 @@
     
   <% content_for :edit_section do %>
     <div class="pull-right">
-      <%= link_to 'Back', :back, :class => 'btn' %>
+      <%= link_to 'Discard changes and go back', :back, :class => 'btn' %>
     </div>
-  <% end %> 
+  <% end %>
+  
 <% end %>
     </div>
   </div>

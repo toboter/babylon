@@ -13,9 +13,12 @@
   <div class="span12">
     <div class="row-fluid">
       <div class="span4">
-        <a href="" class="img-fluid">
-          <%= @item.cover ? (image_tag @item.cover.assetfile.big_thumb.url, class: 'img-polaroid ') : (image_tag 'icons/no_picture.svg', class: 'img-polaroid') %>
-        </a>
+        <% if @item.cover %>
+          <%= link_to ((@item.cover.content_type.include? 'image') ? (image_tag @item.cover.assetfile.small.url, style: 'width:100%;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?@item.cover.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{@item.cover.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), @item.cover.assetfile.large.url, class: 'img-fluid' %>
+          <p><%= link_to @item.cover.name, @item.cover %></p>
+        <% else %>
+          <%= image_tag 'icons/no_picture.svg' %>
+        <% end %>
       </div>
       <div class="span8">
 
@@ -23,7 +26,7 @@
               <table class="table table-bordered table-hover">
                 <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) if @item.collection %>
                 <%= item_description('Inventory Number', @item.inventory_name) %>
-                <%= item_description('Excavation Number', @item.excavation_id) %>
+                <%= item_description('Excavation Number', "Bab #{@item.excavation_id}") if @item.excavation_id %>
                 <%= item_description('Dissov Id', @item.dissov_id) %>
                 <%= item_description('MDS Id', @item.mds_id) %>
                 <%= item_description('Context', @item.context_id) %>
@@ -119,24 +122,20 @@
 
           <%= content_tag :table, class: 'table table-bordered table-hover' do %>
             <tbody>
-              <% for action in @item.actions.order('actable_date_text DESC').limit(3) do %>
+              <% for action in @item.actions.limit(3) do %>
               <tr><td>
                 <div class="alert alert-info">
                   <strong><%= link_to action.predicate.name.humanize, [@item, action] if action.predicate %> </strong>
-                  <%= link_to action.person.name, action.person, class: 'popover-right', data: { 'original-title' => graded_fullname(action.person), 'content' => markdown(action.person.general) } if action.person %>
-                  <%= "on #{action.actable_date_text.to_date.strftime("%d.%m.%Y")}" if action.actable_date_text %>
                 </div>
                 <ul class="unstyled">
                   <%= content_tag :li do %>
-                    <% for source in action.sources do %>
-                      <% for location in action.locations do %>
+                    <% for location in action.locations do %>
                       <p>
                         <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
                       </p>
-                      <% end if action.locations.any? %>
-                      <%= render source %>
-                      <% end %>
-                  <% end if action.sources.any? %>
+                    <% end if action.locations.any? %>
+                    <%= render action.source if action.source %>
+                  <% end %>
                 </ul>
               </td></tr>
               <% end %>
@@ -194,9 +193,9 @@
           <%= content_tag :div, class: "element" do %>
             <div class="head">
               <span class="name">
-                <%= element[:predicate] %> <%= element[:author] %>
+                <%= element[:predicate] %> 
               </span>
-              <span class="small-date"><%= element[:object].class.name == 'Citation' ? element[:created_at].strftime('%Y') : "on #{element[:created_at].strftime('%d.%m.%Y')}" %></span>
+              <span class="small-date muted">[<%= element[:object].class.name == 'Citation' ? element[:created_at] : "#{element[:created_at]}" %>]</span>
             </div>
             <div class="body">
               <% if element[:object].class.name == 'Study' %>
@@ -205,6 +204,7 @@
               <% elsif element[:object].class.name == 'Citation' %>
                 <%= link_to full_reference(element[:object].reference), element[:object].reference %>
               <% elsif element[:object].class.name == 'Action' %>
+                <%= element[:author] %><br>
                 <%= link_to element[:object].name, [element[:object].actable, element[:object]] %>
               <% end %>
             </div>

@@ -55,7 +55,7 @@
         <%= render @projects %>
       <% else %>
         <div class="well">
-          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a project', [:new, @projectable, :group])+' or ' if @projectable && can?(:create, Project) %><%= link_to 'back to previous page', :back %></p>
+          <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a project', [:new, @projectable, :project])+' or ' if @projectable && can?(:create, Project) %><%= link_to 'back to previous page', :back %></p>
         </div>
       <% end %>
     </div>

@@ -1,15 +1,30 @@
 <tr>
   <td>
-	<div class="alert">
-  	  <%= link_to source.author.name, source.author %> added 
-  	  <%= link_to source.name, source %> as a 
-  	  <%= source.source_type %> resource
-  	  <%= "[#{source.original_date}]" if source.original_date %>
+	<div>
+	  <h5><%= link_to source.name, source %> <small>[<%= source.source_type %>]</small></h5>
+	  <p>
+	  	<%= link_to source.author.name, source.author if source.author %>
+  	  	<span class="muted"><%= "[#{source.original_date}]" if source.original_date %></span>
+  	  </p>
 	</div>
 	<ul class="unstyled">
-	  <li><%= pluralize(source.buckets.count, 'folder') if source.buckets.any? %> <%= 'with '+pluralize(source.assets.count, 'file') if source.assets.any? %></li>
-	  <li><%= pluralize(source.documents.count, 'document') if source.documents.any? %></li>
-	  <li><%= pluralize(source.items.count, 'mention') if source.items.any? %></li>
+	  <%= content_tag :li do %>
+	  	<%= content_tag :ul, class: "thumbnails" do %>
+	  	  <% for asset in source.assets do %>
+	  	    <li style="margin-left:10px;">
+	  	      <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:50px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), asset.assetfile.large.url, class: 'img-fluid thumbnail' %>
+	  	    </li>
+	  	  <% end %>
+	  	  <li><%= pluralize(source.assets.count, 'file') %></li>
+	  	<% end %>
+	  <% end if source.assets.any? %>
+	  <%= content_tag :li do %>
+	  	<%= pluralize(source.documents.count, 'document') %>
+	  <% end if source.documents.any? %>
+	  <%= content_tag :li do %>
+	  	<%= pluralize(source.actions.count, 'mention') %> in:
+	  	<%= source.actions.map{|e| link_to e.actable.name, e.actable }.join(', ').html_safe %>
+	  <% end if source.actions.any? %>
 	</ul>
 	<p><%= link_to 'View source', source %>
   </td>

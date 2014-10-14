@@ -1,5 +1,6 @@
 <%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field :collection_id, value: @item.collection_id %>
 
 
   <div class="row-fluid">
@@ -15,23 +16,11 @@
 
 <div class="tab-content">
 <div class="tab-pane active" id="metainfo">
-  <div class="control-group">
-    <%= f.label 'Collection', class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {include_blank: false}, {disabled: !can?(:update, Collection)} %>
-    </div>
-  </div>
-
-  <%= content_tag :div, class: "control-group" do %>
-    <%= f.label 'Photo', class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :cover_asset_id, @item.s_assets.where('content_type LIKE ?', '%image%' ).uniq, :id, :name, {include_blank: false} %>
-    </div>
-  <% end unless @item.new_record? %>
 
   <div class="control-group">
     <%= f.label :inventory_number, class: 'control-label' %>
     <div class="controls form-inline">
+      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {prompt: 'Select collection'}, {disabled: false, class: 'span2'} %>
       <%= f.text_field :inventory_number, placeholder: 'Inventory number' %>
       <%= f.text_field :inventory_number_index, placeholder: 'Index (optional)', style: 'margin-left:10px;' %>
     </div>
@@ -40,7 +29,7 @@
   <div class="control-group">
     <%= f.label :excavation_id, 'Excavation number', class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :excavation_id, placeholder: 'excavation number', class: 'span6' %>
+      <%= f.text_field :excavation_id, placeholder: 'Bab. no', class: 'span6' %>
     </div>
   </div>
 
@@ -49,13 +38,14 @@
     <div class="controls form-inline">
       <%= f.text_field :dissov_id, placeholder: 'Dissov Id' %>
       <%= f.text_field :mds_id, placeholder: 'MDS Id', style: 'margin-left:10px;' %>
+      <p>Please only enter integer values in id-fields.</p>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :title, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :title, placeholder: 'descrptive title', class: 'span6' %>
+      <%= f.text_field :title, placeholder: 'title', class: 'span6' %>
     </div>
   </div>
 
@@ -75,6 +65,12 @@
 
   </div>
 
+  <%= content_tag :div, class: "control-group" do %>
+    <%= f.label 'Photo', class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cover_asset_id, @item.s_assets.where('content_type LIKE ?', '%image%' ).uniq, :id, :name, {include_blank: false} %>
+    </div>
+  <% end unless @item.new_record? %>
 
   <div id="props">
     <%= content_tag :h4, 'Collection specific attributes', class: 'controls' %>
@@ -136,7 +132,7 @@
 
 
   <div class="form-actions" style="">
-    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <%= f.submit @item.new_record? ? "Create object" : 'Save changes', class: 'btn btn-primary' %>
   </div>
 </div>
 </div>
@@ -144,7 +140,7 @@
 
   <% content_for :edit_section do %>
     <div class="pull-right">
-      <%= link_to 'Abbrechen', :back, :class => 'btn' %>
+      <%= link_to 'Discard changes an go back', :back, :class => 'btn' %>
     </div>
   <% end %>    
 <% end %>

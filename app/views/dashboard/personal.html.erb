@@ -68,7 +68,8 @@
 
       <div class="span5">
         <%= content_tag :div, class: "alert alert-block alert-success" do %>
-          Active project:  <span style="padding-left:5px;font-weight:bold;"><%= current_aspect.name %></span>
+          Active project:  <span style="padding-left:5px;font-weight:bold;"><%= current_aspect.name %></span><br>
+          <small>The 'Active project' is saved to a session variable (a cookie) and is retrieved if you add bibliography or if you create a study on an object.</small>
         <% end if aspect? %>
         <%= render 'shared/calendar' %>
 

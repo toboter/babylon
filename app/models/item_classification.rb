@@ -6,6 +6,8 @@ class ItemClassification < ActiveRecord::Base
 
   has_many :items, foreign_key: 'classification_id'
 
+  validates :description, :name, presence: true
+
 
   def self.possible_parents(classification)
     possible_parents = all-classification.self_and_descendants

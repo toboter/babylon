@@ -27,11 +27,10 @@
         
         <%= content_tag :li, class: "dropdown" do %>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <strong>Resources</strong>
+            <strong>Media</strong>
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <%= content_tag :li, link_to(content_tag(:strong, 'Objects'), items_path) if can? :read, Item %>
             <%= content_tag :li, link_to(content_tag(:strong, 'Sources'), sources_path) if can? :read, Source %>
             <%= content_tag :li, link_to(content_tag(:strong, 'Bibliography'), references_path) if can? :read, Reference %>
             <li class="divider"></li>
@@ -40,6 +39,7 @@
             <%= content_tag :li, link_to("Documents", documents_path) if can? :read, Document %>
           </ul>
         <% end %>
+        <%= content_tag :li, link_to(content_tag(:strong, 'Objects'), items_path) if can? :read, Item %>
         <!--
         <%= content_tag :li, '', class: "divider-vertical", style: 'margin-right:20px;' %>
         <%= content_tag :li do %>
@@ -113,12 +113,12 @@
 
           </ul>
         <% end if can? :read, 'Navbar' %>
-
+        <%= content_tag :li, '', class: "divider-vertical", style: '' %>
         <%= content_tag :li, class: 'dropdown' do %>
           <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
             <%= aspect? ? image_tag(current_aspect.project_bucket && current_aspect.project_bucket.cover ? current_aspect.project_bucket.cover.assetfile.mini_thumb.url : "icons/no_picture.svg", class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:35px;') : image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
             <%= content_tag :span, class: 'hidden-desktop' do %>
-              Change project        
+              Change project
               <b class="caret"></b>
             <% end %>
           </a>

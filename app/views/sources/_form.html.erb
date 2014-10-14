@@ -1,17 +1,20 @@
 <%= form_for @source, html: {class: "form-horizontal"} do |f| %>
   <%= f.error_messages %>
-  
+
+  <div class="row-fluid">
+    <div class="span12">
+
   <div class="control-group">
-    <%= f.label :source_type, class: 'control-label' %>
+    <%= f.label :name, 'Title', class: 'control-label' %>
     <div class="controls">
-      <%= f.select(:source_type, Source::SourceTypes) %>
+      <%= f.text_field :name, class: 'span7' %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :author_id, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select(:author_id, Person.all, :id, :name, {include_blank: true}) %>
+      <%= f.collection_select(:author_id, Person.all, :id, :name, {selected: 2}, {class: 'form-control chosen-select'}) %>
     </div>
   </div>
 
@@ -26,30 +29,31 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :name, class: 'control-label' %>
+    <%= f.label :source_type, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :name %>
+      <%= f.select(:source_type, Source::SourceTypes, {}, {class: 'span4'}) %>
     </div>
   </div>
+
 
   <div class="control-group">
     <%= f.label :format, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :format %>
+      <%= f.text_field :format, class: 'span4' %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :condition, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :condition %>
+      <%= f.text_field :condition, class: 'span4' %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :parent_id, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select(:parent_id, Source.possible_parents(@source), :id, :name, {include_blank: true}) %>
+      <%= f.collection_select(:parent_id, Source.possible_parents(@source), :id, :name, {include_blank: true}, {class: 'span4'}) %>
       <p>Should be blank, if the source is the original</p>
     </div>
   </div>
@@ -57,28 +61,28 @@
   <div class="control-group">
     <%= f.label :institution_id, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select(:institution_id, Institution.all, :id, :name, {include_blank: true}) %>
+      <%= f.collection_select(:institution_id, Institution.all, :id, :name, {include_blank: true}, {class: 'span4'}) %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :comment, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :comment %>
+      <%= f.text_area :comment, rows: 6, class: 'span7' %>
     </div>
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Speichern", :class => 'btn btn-primary' %>
+    <%= f.submit "Submit", :class => 'btn btn-primary' %>
   </div>
+
+
+</div>
+</div>
 
   <% content_for :edit_section do %>
     <div class="pull-right">
-      <% if @source.new_record? %>
-        <%= link_to 'Abbrechen', :back, :class => 'btn' %>
-      <% else %>
-        <%= link_to 'Abbrechen', @source, :class => 'btn' %>
-      <% end %>
+      <%= link_to 'Back', @source.new_record? ? :back : @source, :class => 'btn' %>
     </div>
   <% end %>
 

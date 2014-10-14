@@ -1,4 +1,4 @@
-<% title "#{@list.project ? @list.project.name : 'List'}", @list.name %>
+<% title "#{@list.project.name+' -' if @list.project} List", @list.name %>
 <% edit_section_for(@list, @list.project) if @list.project.memberships.where(:user_id => current_user, :role => 'admin').present? || (can? :manage, 'Memberships') %>
 <% footer_section(@list.project) %>
 
@@ -93,7 +93,7 @@
       <% end if @hash.any? %>
 
       <%= content_tag :div, id: 'studies-list' do %>
-        <%= content_tag :h3, 'Studied objects' %>
+        <%= content_tag :h3, "Studied objects in #{@list.name}" %>
           <table class="table table-bordered table-hover">
             <tbody>
               <%= render @studies %>

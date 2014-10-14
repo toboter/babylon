@@ -10,7 +10,6 @@ class Item < ActiveRecord::Base
             :connections_attributes, :cover_asset_id
 
   stampable
-  after_create :first_action
   serialize :properties, ActiveRecord::Coders::Hstore
   default_scope order('inventory_number ASC, inventory_number_index ASC')
 
@@ -33,8 +32,10 @@ class Item < ActiveRecord::Base
   # has_many :r_documents, class_name: 'Document', through: :references, :source => :documents
 
   has_many :actions, as: :actable, dependent: :destroy
-  has_many :locations, through: :actions
   has_many :sources, through: :actions
+  
+  has_many :locations, through: :actions
+  
   has_many :s_buckets, class_name: 'Bucket', through: :sources, :source => :buckets
   has_many :documents, class_name: 'Document', through: :sources, :source => :documents
   has_many :s_assets, class_name: 'Asset', through: :sources, :source => :assets
@@ -46,9 +47,9 @@ class Item < ActiveRecord::Base
   has_many :connections, class_name: 'ItemConnection', dependent: :destroy
   has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id", dependent: :destroy
 
-  validates :collection_id, presence: true
   validates :excavation_id, presence: true, unless: :inventory_number?
   validates :inventory_number, presence: true, unless: :excavation_id?
+  validates :collection_id, presence: true, if: :inventory_number?
   validates :mds_id, :dissov_id, allow_blank: true, uniqueness: true
   validates :inventory_number, :allow_blank => true, :uniqueness => {:scope => :inventory_number_index}
   validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
@@ -69,10 +70,6 @@ class Item < ActiveRecord::Base
     s_assets+r_assets
   end
 
-  def first_action
-    Action.create actable_id: self.id, actable_type: 'Item', actable_date_text: Time.now, person_id: self.creator_id, predicate_id: Predicate.find_by_name('is_created_by').id
-  end
-
   def inventory_name
     if collection && collection.name != 'none' && inventory_number
       collection.shortcut+' '+inventory_number.to_s+inventory_number_index
@@ -83,7 +80,7 @@ class Item < ActiveRecord::Base
     if inventory_name
       inventory_name
     elsif excavation_id
-      excavation_id.to_s
+      "Bab #{excavation_id.to_s}"
     else
       "#{id} (db_id)"
     end

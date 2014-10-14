@@ -10,7 +10,7 @@
 <% content_for :main_section do %>
 <div class="row-fluid">
   <div class="span8">
-    <%= render 'full_classification_tree', :item_classifications => @item_classification.root.self_and_descendants, add_links_visible: true, highlight: @item_classification %>
+    <%= render 'full_classification_tree', :item_classifications => @item_classification.root? ? @item_classification.self_and_descendants : @item_classification.root.self_and_descendants, add_links_visible: true, highlight: @item_classification %>
   </div>
   <div class="span4">
     <h4 class="muted">Items for <%= @item_classification.name %></h4>

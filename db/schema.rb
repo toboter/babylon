@@ -11,21 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140923094449) do
+ActiveRecord::Schema.define(:version => 20141011135619) do
 
   create_table "actions", :force => true do |t|
-    t.integer  "person_id"
     t.integer  "predicate_id"
     t.string   "actable_type"
     t.integer  "actable_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.string   "actable_date_text"
+    t.string   "target"
+    t.integer  "source_id"
   end
 
-  add_index "actions", ["person_id"], :name => "index_actions_on_person_id"
   add_index "actions", ["predicate_id"], :name => "index_actions_on_predicate_id"
 
   create_table "activities", :force => true do |t|
@@ -574,16 +573,6 @@ ActiveRecord::Schema.define(:version => 20140923094449) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.text     "content"
-  end
-
-  create_table "source_assignments", :force => true do |t|
-    t.integer  "source_id"
-    t.string   "target"
-    t.integer  "action_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
   end
 
   create_table "source_hierarchies", :id => false, :force => true do |t|

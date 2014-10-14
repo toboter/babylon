@@ -8,31 +8,24 @@
       </div>
     </div>
 
-    <div class="control-group">
-      <%= f.label :person_id, 'Person Entry', class: 'control-label' %>
-      <div class="controls">
-        <%= f.collection_select :person_id, Person.all, :id, :name, class: 'span6' %>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <%= f.label :actable_date_text, 'Date of action', class: 'control-label' %>
-      <div class="controls">
-        <div class="input-append date">
-          <%= f.text_field :actable_date_text, placeholder: 'Date', :'data-behaviour' => 'datepicker' %>
-          <span class="add-on"><i class="icon-th"></i></span>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <div id='sources'>
-    <%= f.fields_for :source_assignments do |builder| %>
-      <%= render "source_assignment_fields", :f => builder %>
-    <% end %>
-    <div class="links controls">
-      <%= link_to_add_association "Add Source", f, :source_assignments %>
+  <div class="source-field">
+
+    <div class="control-group">
+      <%= f.label :source_id, class: 'control-label' %>
+      <div class="controls">
+        <%= f.collection_select :source_id, Source.all, :id, :name, {}, {multiple: false, class: 'form-control chosen-select input-block-level'} %>
+      </div>
     </div>
+
+    <div class="control-group">
+      <%= f.label :target, '(Page, Image)', class: 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :target %>
+      </div>
+    </div>
+
   </div>
 
   <div id='locations'>
