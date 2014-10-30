@@ -16,7 +16,7 @@
   <% end if @project %>
   <%= content_tag(:li, link_to("Projects", [@project.projectable, 'projects']) + content_tag(:span, '/', class: 'divider')) if @project %>
   <%= content_tag(:li, link_to("#{@project.name}", [@project.projectable, @project]) + content_tag(:span, '/', class: 'divider')) if @project %>
-  <%= content_tag :li, "Todos", class: 'active' %>
+  <%= content_tag :li, "Tasks", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>

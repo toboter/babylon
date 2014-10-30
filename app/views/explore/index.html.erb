@@ -16,7 +16,7 @@
     <%= content_tag :div, class: "carousel-inner" do %>
       <% @about_bucket.assets.each_with_index do |asset, index| %>
         <div class="item <%= 'active' if index == 0 %>">
-          <%= image_tag(asset.assetfile.normal.url) %>
+          <%= image_tag(asset.assetfile.large.url) %>
           <div class="container">
           <div class="carousel-caption">
             <h1>$babylon</h1>

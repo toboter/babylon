@@ -79,18 +79,17 @@ class AssetsController < ApplicationController
     @bucket = Bucket.find(params[:bucket_id])
     @asset = @bucket.assets.create(params[:asset])
 
-    # respond_to do |format|
-    #   if @asset
-    #   if @asset.save
-    #     format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
-    #     format.json { render json: @asset, status: :created, location: @asset }
-    #     format.js
-    #   else
-    #     format.html { render layout: "form", action: "new" }
-    #     format.json { render json: @asset.errors, status: :unprocessable_entity }
-    #     format.js
-    #   end
-    # end
+  #  respond_to do |format|
+  #    if @asset && @asset.save
+  #      #format.html { redirect_to [@bucket.attachable, @bucket], notice: 'Asset was successfully created.' }
+  #      format.json { render json: @asset, status: :created, location: @asset }
+  #      #format.js
+  #    else
+  #      #format.html { render layout: "form", action: "new" }
+  #      format.json { render json: @asset.errors, status: :unprocessable_entity }
+  #      #format.js
+  #    end
+  #  end
   end
 
   # PUT /assets/1

@@ -53,6 +53,45 @@
     <div class="nav-collapse collapse">
       <%= content_tag :ul, class: 'nav pull-right' do %>
         <%= content_tag :li, class: 'dropdown' do %>
+          <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
+            <%= aspect? ? image_tag(current_aspect.project_bucket && current_aspect.project_bucket.cover ? current_aspect.project_bucket.cover.assetfile.mini_thumb.url : "icons/no_picture.svg", class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:35px;') : image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
+            <%= content_tag :span, class: 'hidden-desktop' do %>
+              Change project
+              <b class="caret"></b>
+            <% end %>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
+            <%= content_tag :li do %>
+              <%= link_to [current_aspect.projectable, current_aspect] do %>
+                View current project: <strong><%= current_aspect.name %></strong>
+              <% end %>
+            <% end if aspect? %>
+            <%= content_tag :li do %>
+              <%= link_to exit_aspect_path do %>
+                Close <strong><%= current_aspect.name %></strong>
+              <% end %>
+            <% end if aspect? %>
+            <%= content_tag :li, '', class: 'divider' if aspect? %> 
+            <% current_user.projects.order("projectable_type ASC").each do |project| %>
+              <li>       
+                <%= link_to change_aspect_path(:project_id => project.id) do %>
+                  <%= project.projectable.name if project.projectable_type == "Cluster" %>
+                  <% if project.projectable_type == "Group" %>
+                    <%= project.projectable.cluster.name %> /
+                    <%= project.projectable.name %>
+                  <% end %>
+                  /
+                  <strong><%= project.name %></strong>
+                <% end %>
+              </li>
+            <% end %>
+          
+          </ul>
+        <% end if can?(:read, 'Aspects') && current_user.projects.any? %>
+
+        <%= content_tag :li, '', class: "divider-vertical", style: '' %>
+
+        <%= content_tag :li, class: 'dropdown' do %>
           <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Your personal menu" id="personal-menu">
             <% if current_user.person && current_user.person.profile_picture %>
               <%= image_tag(current_user.person.profile_picture.assetfile.mini_thumb.url, class: 'img-rounded navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
@@ -105,60 +144,16 @@
           <% end %>
 
 
-        <% if can? :manage, 'development' %>
-        <li class="divider"></li>
-          <li><a href="#" data-toggle="collapse" data-target="#params-section">Show params</a></li>
+            <% if can? :manage, 'development' %>
+              <li class="divider"></li>
+              <li><a href="#" data-toggle="collapse" data-target="#params-section">Show params</a></li>
+            <% end %>
+
+            <li class="divider"></li>
+
+            <li><%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %></li>
+          </ul>
         <% end %>
-
-
-          </ul>
-        <% end if can? :read, 'Navbar' %>
-        <%= content_tag :li, '', class: "divider-vertical", style: '' %>
-        <%= content_tag :li, class: 'dropdown' do %>
-          <a href="#" class="dropdown-toggle tooltip-bottom" data-toggle="dropdown" title="Project views" id="aspect-menu">
-            <%= aspect? ? image_tag(current_aspect.project_bucket && current_aspect.project_bucket.cover ? current_aspect.project_bucket.cover.assetfile.mini_thumb.url : "icons/no_picture.svg", class: 'navbar-icon img-rounded hidden-tablet hidden-phone', style: 'width:35px;') : image_tag("icons/aspect.svg", class: 'navbar-icon hidden-tablet hidden-phone', style: 'width:35px;') %>
-            <%= content_tag :span, class: 'hidden-desktop' do %>
-              Change project
-              <b class="caret"></b>
-            <% end %>
-          </a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dlabel">
-            <%= content_tag :li do %>
-              <%= link_to [current_aspect.projectable, current_aspect] do %>
-                View current project: <strong><%= current_aspect.name %></strong>
-              <% end %>
-            <% end if aspect? %>
-            <%= content_tag :li do %>
-              <%= link_to exit_aspect_path do %>
-                Close <strong><%= current_aspect.name %></strong>
-              <% end %>
-            <% end if aspect? %>
-            <%= content_tag :li, '', class: 'divider' if aspect? %> 
-            <% current_user.projects.order("projectable_type ASC").each do |project| %>
-              <li>       
-                <%= link_to change_aspect_path(:project_id => project.id) do %>
-                  <%= project.projectable.name if project.projectable_type == "Cluster" %>
-                  <% if project.projectable_type == "Group" %>
-                    <%= project.projectable.cluster.name %> /
-                    <%= project.projectable.name %>
-                  <% end %>
-                  /
-                  <strong><%= project.name %></strong>
-                <% end %>
-              </li>
-            <% end %>
-          
-          </ul>
-        <% end if can?(:read, 'Aspects') && current_user.projects.any? %>
-
-        <li class="divider-vertical"></li>
-
-        <li class="visible-desktop">
-          <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:35px;'), destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', class: 'tooltip-bottom', id: 'sign-out-link' %>
-        </li>
-        <li class="hidden-desktop">
-          <%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { confirm: 'You really want to sign out?' }, title: 'Sign out', id: 'sign-out-link' %>
-        </li>
       <% end if can? :read, 'Navbar' %>
     </div>
   <% end %>

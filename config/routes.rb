@@ -58,6 +58,7 @@ Babylon::Application.routes.draw do
     resources :documents
     resources :issues
     resources :activities
+    resources :sources
   end
 
   resources :clusters, :path => 'modules' do

@@ -15,19 +15,9 @@
   <div class="span12">
   <p>
   	  <b>Name: </b>
-  	  <%= @collection.name %>
+  	  <%= @collection.name %> (<%= @collection.shortcut %>)
 	</p>
 	  
-	<p>
-  	  <b>Shortcut: </b>
-  	  <%= @collection.shortcut %>
-	</p>
-
-  <p>
-    <b>Properties: </b>
-    [Inventory name, Description, Classification], <%= @collection.fields.map{ |f| f.name }.join(', ').html_safe %>
-
-
   <h4>
     Objects
     <%= link_to new_item_path(:collection_id => @collection.id), class: 'btn btn-default pull-right', style: 'margin-left:0;' do %>

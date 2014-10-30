@@ -48,6 +48,7 @@
           <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a issue', [:new, @issuable, :issue])+' or ' if @issuable %><%= link_to 'back to previous page', :back %></p>
         </div>
       <% end %>
+      <%= link_to 'View all issues', issues_path %>
     </div>
   </div>
 </div>

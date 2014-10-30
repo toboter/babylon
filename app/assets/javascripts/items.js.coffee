@@ -5,27 +5,27 @@
 jQuery ->
   $("#publications").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!"
+      no_results_text: "Nothing found!"
       search_contains: true
     )
   $("#connections").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!"
+      no_results_text: "Nothing found!"
       search_contains: true
     )
   $("#buckets").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!"
+      no_results_text: "Nothing found!"
       search_contains: true
     )
   $("#documents").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!"
+      no_results_text: "Nothing found!"
       search_contains: true
     )
   $("#sources").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!"
+      no_results_text: "Nothing found!"
       search_contains: true
     )
   $("#actions").on('cocoon:after-insert', -> 

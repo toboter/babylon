@@ -3,7 +3,7 @@
   <div class="inner-issue">
   <div class="span1 pull-left"><%= content_tag :i, '', class: issue.closed ? 'icon-ok' : 'icon-warning-sign' %></div>
   <div class="span10">
-    <span class="issue-name"><%= link_to issue.name, [issue.issuable, issue] %></span><span class="object-issue-name"><%= ' ['+issue.issuable.class.to_s+': '+issue.issuable.name+']' if !@issuable %></span>
+    <%= link_to issue.name, [issue.issuable, issue], class: "popover-#{ orientation ||= 'left' } issue-name", data: { 'original-title' => issue.name, 'content' => issue_comment_popover_presenter(issue) } %><span class="object-issue-name"><%= ' ['+issue.issuable.class.to_s+': '+issue.issuable.name+']' if !@issuable %></span>
     <%= link_to issue.assigned.person, title: 'Assignee '+issue.assigned.available_name, class: 'pull-right tooltip-left assignee' do %>
       <%= image_tag((issue.assigned.person ? (issue.assigned.person.profile_picture ? issue.assigned.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded hidden-tablet hidden-phone', style: 'width:20px;') %>
     <% end if issue.assigned %>

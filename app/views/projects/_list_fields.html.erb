@@ -27,12 +27,12 @@
         <%= f.check_box :accept_duplicates %>
       </div>
     </div>
-    <div class="control-group">
+    <%= content_tag :div, class: "control-group" do %>
       <%= f.label :featured, class: 'control-label' %>
       <div class="controls">
         <%= f.check_box :featured %>
       </div>
-    </div>
+    <% end if can? :manage, 'curation' %>
 
   <div class="controls">
     <%= f.label :forked_from_id %>

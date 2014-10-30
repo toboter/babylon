@@ -1,15 +1,15 @@
 <% title 'Documents', (@documentable ? "attached to #{link_to @documentable.name, @documentable}".html_safe : "All documents") %>
 <% content_for :edit_section do %>
-    <%= content_tag :div, class: "pull-right" do %>
-        <%= link_to [:new, @documentable, :document], class: "btn btn-default" do %>
-          <i class="icon-plus"></i>
-          Document
-        <% end if @documentable && can?(:create, Document) %>
-        <%= link_to polymorphic_path([:new, @documentable, :document], :document_type => "Introduction"), class: 'btn btn-default' do %>
-          <i class="icon-plus"></i>
-          Introduction
-        <% end if !@documentable.documents.doctype('Introduction') && (@documentable.class.to_s == 'Cluster' || @documentable.class.to_s == 'Group' || @documentable.class.to_s == 'Project') %>
-    <% end if @documentable %>
+  <%= content_tag :div, class: "pull-right" do %>
+    <%= link_to [:new, @documentable, :document], class: "btn btn-default" do %>
+      <i class="icon-plus"></i>
+      Document
+    <% end if @documentable && can?(:create, Document) %>
+    <%= link_to polymorphic_path([:new, @documentable, :document], :document_type => "Introduction"), class: 'btn btn-default' do %>
+      <i class="icon-plus"></i>
+      Introduction
+    <% end if !@documentable.documents.doctype('Introduction') && (@documentable.class.to_s == 'Cluster' || @documentable.class.to_s == 'Group' || @documentable.class.to_s == 'Project') %>
+  <% end if @documentable %>
 <% end %>
 
 <% content_for :breadcrumbs_section do %>
@@ -19,15 +19,19 @@
     <li><%= link_to 'Object history', [@documentable.actable, :actions] %> <span class="divider">/</span></li>
     <li><%= link_to @documentable.predicate.name, @documentable %> <span class="divider">/</span></li>
   <% else %>
-    <%= content_tag(:li, (link_to @documentable.class.name.pluralize, [@documentable.class]) + content_tag(:span, '/', class: 'divider')) if @documentable %>
+    <% if @documentable.class.name == 'Cluster' %>
+      <%= content_tag(:li, (link_to 'Modules', [@documentable.class]) + content_tag(:span, '/', class: 'divider')) %>
+    <% else %>
+      <%= content_tag(:li, (link_to @documentable.class.name.pluralize, [@documentable.class]) + content_tag(:span, '/', class: 'divider')) %>
+    <% end %>
     <li><%= link_to @documentable.name, @documentable %> <span class="divider">/</span></li>
-  <% end %>
+  <% end if @documentable %>
   <li class="active">Documents</li>
 <% end %>
 
 <% content_for :main_section do %>
 <div class="row-fluid">
-  <div class="span3">
+  <div class="span4">
     <div class="documents-options">
     <%= content_tag :div, class: "filter well" do %>
       <h4 style="margin-top:0px;">Filters</h4>
@@ -78,7 +82,7 @@
       </ul>
     </div>
   </div>
-  <div class="span9">
+  <div class="span8">
     <div class="documents-list">
       <% if @documents.any? %>
         <table class="table table-bordered table-hover">

@@ -4,7 +4,13 @@
 
 <% content_for :breadcrumbs_section do %>
   <%= content_tag(:li, link_to("Root", root_path) + content_tag(:span, '/', class: 'divider')) %>
-  <%= content_tag(:li, (link_to @bucket.attachable.class.name.pluralize, [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
+  <% if @bucket.attachable.class.name == 'Cluster' %>
+    <%= content_tag(:li, (link_to 'Modules', [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
+  <% elsif @bucket.attachable.class.name == 'Snippet' %>
+    <%= content_tag(:li, (link_to 'Blogs', [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
+  <% else %>
+    <%= content_tag(:li, (link_to @bucket.attachable.class.name.pluralize, [@bucket.attachable.class]) + content_tag(:span, '/', class: 'divider')) if @bucket.attachable %>
+  <% end %>
   <%= content_tag(:li, link_to("#{@bucket.attachable.name}", @bucket.attachable) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, link_to("Folders", [@bucket.attachable, :buckets]) + content_tag(:span, '/', class: 'divider')) %>
   <%= content_tag(:li, @bucket.name.present? ? (@bucket.name) : 'Nothing', class: 'active') %>

@@ -5,12 +5,12 @@ class Item < ActiveRecord::Base
   # friendly_id :name, use: [:slugged, :history]
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
-            :context_id, :accession_date_text, :excavation_date_text, :creator_id, :updater_id, :title, :tag_ids, :mds_id, :dissov_id,
-            :citations_attributes, :actions_attributes, :description, :slug, :properties, :excavation_id,
-            :connections_attributes, :cover_asset_id
+            :context_id, :title, :tag_ids, :mds_id, :dissov_id, :citations_attributes, :actions_attributes,
+            :description, :slug, :excavation_id, :excavation_date, :excavation_place, :excavation_situation,
+            :connections_attributes, :cover_asset_id, :dimensions, :condition, :material, :technique, :place, 
+            :period, :excavation_prefix, :cdli_id, :weight
 
   stampable
-  serialize :properties, ActiveRecord::Coders::Hstore
   default_scope order('inventory_number ASC, inventory_number_index ASC')
 
   belongs_to :collection
@@ -54,8 +54,6 @@ class Item < ActiveRecord::Base
   validates :inventory_number, :allow_blank => true, :uniqueness => {:scope => :inventory_number_index}
   validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
   validates :classification_id, presence: true
-  # validate :validate_properties
-
 
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
@@ -72,7 +70,7 @@ class Item < ActiveRecord::Base
 
   def inventory_name
     if collection && collection.name != 'none' && inventory_number
-      collection.shortcut+' '+inventory_number.to_s+inventory_number_index
+      "#{collection.shortcut} #{inventory_number} #{inventory_number_index}"
     end
   end
 
@@ -80,37 +78,16 @@ class Item < ActiveRecord::Base
     if inventory_name
       inventory_name
     elsif excavation_id
-      "Bab #{excavation_id.to_s}"
+      "#{excavation_prefix} #{excavation_id}"
     else
       "#{id} (db_id)"
     end
   end
 
-#  Collection.all.map{|c| c.fields.map(&:name) }.flatten.each do |key|
-#    scope "has_#{key}", lambda { |value| where("properties @> hstore(?, ?)", key, value) }
-#    define_method(key) do
-#      property = properties && properties[key]
-#      if property && property.include?('[""')
-#        CollectionFieldValue.find(eval(property).compact.reject{|r| r.empty? }).map{ |cfv| cfv.field_value}
-#      elsif property
-#        %['select' 'radio_buttons'].include?(CollectionField.find_by_name(key).field_type) ? CollectionFieldValue.find(property).field_value : property
-#      end
-#    end
-#  end
-
-  def validate_properties
-    collection.fields.each do |field|
-      if field.required? && properties[field.name].blank?
-        errors.add field.name, "must not be blank"
-      end
-    end
-  end
-
   # Ransack attribute, convert & concatenat definitions
   def self.ransackable_attributes auth_object = nil
-    %w(inventory_number accession_date_text title mds_id dissov_id description excavation_id) + _ransackers.keys
+    %w(inventory_number title mds_id dissov_id description excavation_id excavation_date excavation_place excavation_situation dimensions condition material technique place period) + _ransackers.keys
   end
-
 
   # Import csv
   def self.import(file)
@@ -130,14 +107,5 @@ class Item < ActiveRecord::Base
       Item.create( array.first )
     end
   end
-  
-  # def self.open_spreadsheet(file)
-  #   case File.extname(file.original_filename)
-  #   when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
-  #   when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
-  #   else raise "Unknown file type: #{file.original_filename}"
-  #   end
-  # end
-
 
 end

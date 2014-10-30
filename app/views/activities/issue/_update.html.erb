@@ -3,7 +3,7 @@
   <%= image_tag((activity.user.person ? (activity.user.person.profile_picture ? activity.user.person.profile_picture.assetfile.mini_thumb.url : 'icons/super.svg') : 'icons/super.svg'), class: 'img-rounded') %>
   <%= name_only_or_link_to(activity.user) %> 
   <% if issue %>
-    updated an <%= link_to 'issue', [issue.issuable, issue], title: issue.name, class: 'popover-left', data: { 'original-title' => issue.name, 'content' => issue_comment_popover_presenter(issue) } %> on <%= link_to issue.issuable.name, issue.issuable, title: issue.issuable.name, class: 'popover-left', data: { 'original-title' => issue.issuable.name, 'content' => issue_issuable_popover_presenter(issue) } %>
+    updated an <%= link_to 'issue', [issue.issuable, issue], title: issue.name, class: 'popover-left', data: { 'original-title' => issue.name, 'content' => issue_comment_popover_presenter(issue) } %> on <%= link_to issue.issuable.name, issue.issuable, title: issue.issuable.name %>
   <% else %>
     updated a issue which has since been removed
   <% end %>

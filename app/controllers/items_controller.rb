@@ -46,7 +46,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new(:collection_id => params[:collection_id], classification_id: ItemClassification.find_by_name('Object').id)
+    @item = Item.new(classification_id: ItemClassification.find_by_name('Object').id)
 
     respond_to do |format|
       format.html { render layout: 'form' }# new.html.erb
@@ -110,8 +110,7 @@ class ItemsController < ApplicationController
 
   def import
     Item.import(params[:file])
-      redirect_to items_url, alert: 'Items imported -  or not. There is no validation. Please check if items are imported. 
-        If not, there may be duplicates in inventory_number, excavation_id, mds_id or dissov_id'
+      redirect_to items_url, alert: 'Items imported -  if not, there may be duplicates in inventory_number, excavation_id, mds_id or dissov_id'
   end
 
 private

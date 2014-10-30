@@ -1,86 +1,70 @@
 <%= form_for @item, :html => {:class => "form-horizontal"} do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :collection_id, value: @item.collection_id %>
-
-
   <div class="row-fluid">
     <div class="span12">
-
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#metainfo" data-toggle="tab">General</a></li>
-  <li><a href="#classification" data-toggle="tab">Classification</a></li>
-  <li><a href="#actions" data-toggle="tab">Sources</a></li>
-  <li><a href="#publications" data-toggle="tab">Publications</a></li>
-  <li><a href="#connections" data-toggle="tab">Connected objects</a></li>
-</ul>
-
-<div class="tab-content">
-<div class="tab-pane active" id="metainfo">
-
-  <div class="control-group">
-    <%= f.label :inventory_number, class: 'control-label' %>
-    <div class="controls form-inline">
-      <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {prompt: 'Select collection'}, {disabled: false, class: 'span2'} %>
-      <%= f.text_field :inventory_number, placeholder: 'Inventory number' %>
-      <%= f.text_field :inventory_number_index, placeholder: 'Index (optional)', style: 'margin-left:10px;' %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :excavation_id, 'Excavation number', class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :excavation_id, placeholder: 'Bab. no', class: 'span6' %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label '', 'other Ids', class: 'control-label' %>
-    <div class="controls form-inline">
-      <%= f.text_field :dissov_id, placeholder: 'Dissov Id' %>
-      <%= f.text_field :mds_id, placeholder: 'MDS Id', style: 'margin-left:10px;' %>
-      <p>Please only enter integer values in id-fields.</p>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :title, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :title, placeholder: 'title', class: 'span6' %>
-    </div>
-  </div>
-
-  <div id="description">
-
-    <div class="control-group">
-      <%= f.label :description, class: 'control-label' %>
-      <div class="controls">
-        <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
-        <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
-        <div class="collapse" id="md-info">
-          <%= render 'shared/md-info' %>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#metainfo" data-toggle="tab">Ids & Description</a></li>
+        <li><a href="#classification" data-toggle="tab">Classification & Attributes</a></li>
+        <li><a href="#actions" data-toggle="tab">Sources</a></li>
+        <li><a href="#publications" data-toggle="tab">Publications</a></li>
+        <li><a href="#connections" data-toggle="tab">Connected objects</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="metainfo">
+          <div class="control-group">
+            <%= f.label :inventory_number, class: 'control-label' %>
+            <div class="controls form-inline">
+              <%= f.collection_select :collection_id, Collection.all, :id, :shortcut, {prompt: 'Select collection'}, {class: 'span2'} %>
+              <%= f.text_field :inventory_number, placeholder: 'integer' %>
+              <%= f.text_field :inventory_number_index, placeholder: 'index (optional)' %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :excavation_prefix, 'Excavation number', class: 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :excavation_prefix, placeholder: "prefix (e.g. 'Bab')", style: 'margin-right:10px;' %>
+              <%= f.text_field :excavation_id, placeholder: 'integer' %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label '', 'other Ids', class: 'control-label' %>
+            <div class="controls form-inline">
+              Dissov Id: <%= f.text_field :dissov_id, placeholder: 'integer', style: 'margin-right:10px;' %>
+              MDS Id: <%= f.text_field :mds_id, placeholder: 'integer', style: 'margin-right:10px;' %>
+              Cdli: <%= f.text_field :cdli_id, placeholder: 'string' %>
+            </div>
+          </div>
+          <hr>
+          <div class="control-group">
+            <%= f.label :title, class: 'control-label' %>
+            <div class="controls">
+              <%= f.text_field :title, placeholder: 'descriptive or public known', class: 'input-block-level' %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :description, class: 'control-label' %>
+            <div class="controls">
+              <%= f.text_area :description, rows: 10, class: 'input-block-level' %>
+              <p>Use Markdown for formatting. <a href="#" data-toggle="collapse" data-target="#md-info">See examples.</a></p>
+              <div class="collapse" id="md-info">
+                <%= render 'shared/md-info' %>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+            <div class="controls">
+              <%= f.collection_select :tag_ids, Tag.arrange_as_tree({:order => 'name'}), :id, :name_for_selects, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
+              <p class="help-block"><%= link_to 'Edit tags', tags_path, target: 'blank' %></p>
+            </div>
+          </div>
+          <%= content_tag :div, class: "control-group" do %>
+            <%= f.label 'Photo', class: 'control-label' %>
+            <div class="controls">
+              <%= f.collection_select :cover_asset_id, @item.s_assets.where('content_type LIKE ?', '%image%' ).uniq, :id, :name, {include_blank: true} %>
+            </div>
+          <% end unless @item.new_record? %>
         </div>
-      </div>
-    </div>
-
-
-  </div>
-
-  <%= content_tag :div, class: "control-group" do %>
-    <%= f.label 'Photo', class: 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :cover_asset_id, @item.s_assets.where('content_type LIKE ?', '%image%' ).uniq, :id, :name, {include_blank: false} %>
-    </div>
-  <% end unless @item.new_record? %>
-
-  <div id="props">
-    <%= content_tag :h4, 'Collection specific attributes', class: 'controls' %>
-    <%= f.fields_for :properties, OpenStruct.new(@item.properties) do |builder| %>
-      <% @item.collection.fields.order('name ASC').each do |field| %>
-        <%= render "items/fields/#{field.field_type}", field: field, f: builder %>
-      <% end %>
-    <% end if params[:collection_id].present? || @item.collection %>
-  </div>
-</div>
 
 <div class="tab-pane" id="classification">
   <div class="control-group">
@@ -90,41 +74,102 @@
       <p class="help-block"><%= link_to 'Edit classifications', item_classifications_path, target: 'blank' %></p>
     </div>
   </div>
-
   <div class="control-group">
-    <%= f.label :tag_ids, "Tags", class: 'control-label' %>
+    <%= f.label :dimensions, class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :tag_ids, Tag.arrange_as_tree({:order => 'name'}), :id, :name_for_selects, {}, {multiple: true, class: 'form-control chosen-select input-block-level'} %>
-      <p class="help-block"><%= link_to 'Edit tags', tags_path, target: 'blank' %></p>
+      <%= f.text_field :dimensions, class: 'span6' %>
     </div>
   </div>
+  <div class="control-group">
+    <%= f.label :weight, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :weight, class: 'span6' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :material, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :material, class: 'span6' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :technique, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :technique, class: 'span6' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :period, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :period, class: 'span6' %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="control-group">
+    <%= f.label :place, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :place, class: 'span6' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :condition, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :condition, class: 'span6' %>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="control-group">
+    <%= f.label :excavation_date, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :excavation_date, class: 'span6' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :excavation_place, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :excavation_place, class: 'span6' %>
+    </div>
+  </div>  
+  <div class="control-group">
+    <%= f.label :excavation_situation, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :excavation_situation, class: 'span6' %>
+    </div>
+  </div>  
 </div>
 
 <div class="tab-pane" class="" id='actions'>
+  <p>Add references to <%= link_to 'sources', sources_path %> here.</p>
   <%= f.fields_for :actions do |builder| %>
     <%= render "action_fields", :f => builder %>
   <% end %>
-  <div class="links controls">
-    <%= link_to_add_association "Add Action", f, :actions %>
+  <div class="links">
+    <%= link_to_add_association "Add source", f, :actions, class: 'btn btn-default btn-small' %>
   </div>
 </div>
 
 <div class="tab-pane" id="publications">
+  <p>Add references to <%= link_to 'publications', references_path %> here.</p>
   <%= f.fields_for :citations do |builder| %>
     <%= render "citation_fields", :f => builder %>
   <% end %>
-  <div class="links controls">
-    <%= link_to_add_association "Add publication", f, :citations %>
+  <div class="links">
+    <%= link_to_add_association "Add publication", f, :citations, class: 'btn btn-default btn-small' %>
   </div>
 </div>
   
 
 <div class="tab-pane" id='connections'>
+  <p>Connected objects are joins or other representations of an object like copies which have an id for themselves</p>
   <%= f.fields_for :connections do |builder| %>
     <%= render "connection_fields", :f => builder %>
   <% end %>
-  <div class="links controls">
-    <%= link_to_add_association "Add Connection", f, :connections %>
+  <div class="links">
+    <%= link_to_add_association "Add connection", f, :connections, class: 'btn btn-default btn-small' %>
   </div>
 </div>
 
@@ -140,7 +185,7 @@
 
   <% content_for :edit_section do %>
     <div class="pull-right">
-      <%= link_to 'Discard changes an go back', :back, :class => 'btn' %>
+      <%= link_to 'Discard changes / back', :back, :class => 'btn' %>
     </div>
   <% end %>    
 <% end %>

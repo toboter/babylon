@@ -18,5 +18,5 @@ jQuery ->
 
   $("#authors").on('cocoon:after-insert', ->
     $(".chosen-select").chosen
-      no_results_text: "Oops, nothing found!",
+      no_results_text: "Nothing found!",
       search_contains: true )

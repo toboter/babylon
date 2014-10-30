@@ -9,7 +9,11 @@
     <li><%= link_to 'Object history', [@document.documentable.actable, :actions] %> <span class="divider">/</span></li>
     <li><%= link_to @document.documentable.predicate.name, @document.documentable %> <span class="divider">/</span></li>
   <% else %>
+  <% if @document.documentable && @document.documentable.class.name == 'Cluster' %>
+    <%= content_tag(:li, (link_to 'Modules', [@document.documentable.class]) + content_tag(:span, '/', class: 'divider')) if @document.documentable %>
+  <% else %>
     <%= content_tag(:li, (link_to @document.documentable.class.name.pluralize, [@document.documentable.class]) + content_tag(:span, '/', class: 'divider')) if @document.documentable %>
+  <% end %>
     <li><%= link_to @document.documentable.name, @document.documentable %> <span class="divider">/</span></li>
   <% end %>
   <li><%= link_to 'Documents', [@document.documentable, :documents] %> <span class="divider">/</span></li>
@@ -18,46 +22,57 @@
 
 <% content_for :main_section do %>
 <div class="row-fluid">
-  <div class="span9">
+  <div class="span7">
     <%= content_tag :div, class: "lead" do %>
+      <%= tagging_infos_for(@document, 'pull-right') %>
       <%= markdown(@document.abstract) %>
     <% end if @document.abstract? %>
     <%= content_tag :div, class: "content_section document-content" do %>
       <%= markdown(@document.content) %>
     <% end if @document.content? %>
   </div>
-  <div class="span3">
-  <div class="issues-options well well-small">
-    <i class="icon-exclamation-sign"></i>
-    <%= link_to 'Issues', document_issues_path(@document) %> 
-    <%= content_tag :span, @document.issues.count, class: 'badge pull-right' %>
-  </div>
-  <%= tagging_infos_for(@document) %>
-  <div class="info-box">
-    <h4 class="">
-      Cross reference
-      <%= content_tag :i, '', class: 'icon-file pull-right' %>
-    </h4>
-    <ul class="unstyled">
-      <%= content_tag :li, link_to(@document.documentable.name, @document.documentable) %>
-      <%= content_tag :li, 'Type: ' + @document.document_type if @document.document_type.present? %>
-    </ul>
-
-    <%= content_tag :div, class: 'attachements' do %>
-      <h4 class="">
-        Attached file
-        <%= content_tag :i, '', class: 'icon-download-alt pull-right' %>
-      </h4>
-      <%= content_tag :p do %>
-        <strong><%= @document.documentfile_name %></strong><br />
-        Uploaded <%= distance_of_time_in_words_to_now(@document.documentfile_upload_date) %> ago. 
-        Size <%= number_to_human_size(@document.documentfile_size) %>. 
-        [<%= link_to 'Download', download_document_path(@document) %>]
-        <small><%= @document.documentfile_md5hash %></small>
+  <div class="span4 offset1">
+    <div class="panel panel-default" id='issue'>
+      <div class="panel-heading">
+      <%= content_tag :h4 do %>
+        Issues <%= content_tag :span, @document.issues.count, class: "badge pull-right #{@document.issues.where(closed: false).count > @document.issues.where(closed: true).count+1 ? @document.issues.where(closed: false).count > @document.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
       <% end %>
-    <% end if @document.documentfile.present? %>
-    
-  </div>
+      </div>
+      <%= content_tag :div, class: "panel-body" do %>
+        <%= render @document.issues.order('created_at DESC').limit(3) %>
+      <% end if @document.issues.any? %>
+      <div class="panel-footer">
+        <%= @document.issues.any? ? "#{link_to('View all issues', [@document, :issues])} #{'('+(@document.issues.count-3).to_s+' more)' unless (@document.issues.count-3 < 1)} or #{link_to('add a new issue', [:new, @document, :issue])}".html_safe : ('Nothing to show! '+link_to('Create Issue', [:new, @document, :issue])).html_safe %>
+      </div>
+    </div>
+    <div class="panel panel-default" id='info-box'>
+      <div class="panel-heading">
+      <%= content_tag :h4 do %>
+        Info
+        <%= content_tag :i, '', class: 'icon-file pull-right' %>
+      <% end %>
+      </div>
+      <div class="panel-body">
+        <%= content_tag :p do %>
+          Attached to:
+          <%= link_to(@document.documentable.name, @document.documentable) %>
+          <%= ' (Type: ' + @document.document_type + ')' if @document.document_type.present? %>
+        <% end if @document.documentable %>
+        <%= content_tag :p do %>
+          Attached file: 
+          <%= content_tag :i, '', class: 'icon-download-alt pull-right' %>
+          <strong><%= @document.documentfile_name %></strong><br>
+          Uploaded <%= distance_of_time_in_words_to_now(@document.documentfile_upload_date) %> ago. 
+          Size <%= number_to_human_size(@document.documentfile_size) %>. 
+          [<%= link_to 'Download', download_document_path(@document) %>]
+          <small><%= @document.documentfile_md5hash %></small>
+        <% end if @document.documentfile.present? %>
+
+
+      </div>
+    </div>
+  
+
   </div>
 </div>
 <% end %>

@@ -1,4 +1,4 @@
-<% title "#{@todo.name}", nil %>
+<% title "Task", @todo.name %>
 <% edit_section_for(@todo, @todo.project) %>
 
 <% content_for :breadcrumbs_section do %>
@@ -16,7 +16,7 @@
 
 <% content_for :main_section do %>
 <div class="row-fluid">
-  <div class="span9">
+  <div class="span8">
     <% if @todo.dependencies.any? %>
       <div style="padding-bottom:30px;">
       <h4 class="muted">"<%= @todo.name %>" depends on</h4>
@@ -33,7 +33,6 @@
         <div class="span2" style="padding-bottom:20px;">
           <p class="form-inline">
             <%= f.label :completed, class: "checkbox" do %><%= f.check_box :completed %><% end %> <%= f.submit "Update", class: "btn btn-small" %>
-            <%= link_to 'Delete', [@todo.project, @todo], method: :delete, confirm: 'Are you sure', style: 'margin-left:10px;' %>
           </p>
         </div>
         <div class="span6">
@@ -66,11 +65,20 @@
       </table>
     <% end %>
   </div>
-  <div class="span3">
-    <div class="issues-options well well-small">
-      <i class="icon-exclamation-sign"></i>
-      <%= link_to 'Issues', todo_issues_path(@todo) %> 
-      <%= content_tag :span, @todo.issues.count, class: 'badge pull-right' %>
+
+  <div class="span4">
+    <div class="panel panel-default" id='issue'>
+      <div class="panel-heading">
+      <%= content_tag :h4 do %>
+        Issues <%= content_tag :span, @todo.issues.count, class: "badge pull-right #{@todo.issues.where(closed: false).count > @todo.issues.where(closed: true).count+1 ? @todo.issues.where(closed: false).count > @todo.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+      <% end %>
+      </div>
+      <%= content_tag :div, class: "panel-body" do %>
+        <%= render partial: @todo.issues.order('created_at DESC').limit(3) %>
+      <% end if @todo.issues.any? %>
+      <div class="panel-footer">
+        <%= @todo.issues.any? ? "#{link_to('View all issues', [@todo, :issues])} #{'('+(@todo.issues.count-3).to_s+' more)' unless (@todo.issues.count-3 < 1)} or #{link_to('add a new issue', [:new, @todo, :issue])}".html_safe : ('Nothing to show! '+link_to('Create Issue', [:new, @todo, :issue])).html_safe %>
+      </div>
     </div>
   </div>
 

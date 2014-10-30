@@ -17,61 +17,42 @@
           <%= link_to ((@item.cover.content_type.include? 'image') ? (image_tag @item.cover.assetfile.small.url, style: 'width:100%;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?@item.cover.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{@item.cover.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), @item.cover.assetfile.large.url, class: 'img-fluid' %>
           <p><%= link_to @item.cover.name, @item.cover %></p>
         <% else %>
-          <%= image_tag 'icons/no_picture.svg' %>
+          <%= image_tag 'icons/no_picture.svg', style: 'width:100%;' %>
         <% end %>
-      </div>
-      <div class="span8">
-
-            <div class="info_section">
-              <table class="table table-bordered table-hover">
-                <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) if @item.collection %>
-                <%= item_description('Inventory Number', @item.inventory_name) %>
-                <%= item_description('Excavation Number', "Bab #{@item.excavation_id}") if @item.excavation_id %>
-                <%= item_description('Dissov Id', @item.dissov_id) %>
-                <%= item_description('MDS Id', @item.mds_id) %>
-                <%= item_description('Context', @item.context_id) %>
-                <%= item_description('Object type', link_to(@item.classification.object_type.name, @item.classification.object_type)) if @item.classification %>
-                <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
-
-                <% @item.properties.each do |name, value| %>
-                  <% if value.include?('[""') %>
-                  <%= item_description(name.humanize, CollectionFieldValue.find(eval(value).compact.reject{|r| r.empty? }).map{ |cfv| link_to cfv.field_value, '', class: 'popover-right', data: { 'original-title' => cfv.field_value, 'content' => cfv.description } }.join(', ').html_safe) %>
-                  <% else %>
-                    <%= item_description(name.humanize, %['select' 'radio_buttons'].include?(CollectionField.find_by_name(name).field_type) ? link_to(CollectionFieldValue.find(value).field_value, '', class: 'popover-right', data: { 'original-title' => CollectionFieldValue.find(value).field_value, 'content' => CollectionFieldValue.find(value).description }) : value ) %>
-                  <% end %>
-                <% end %>
-
-              </table> 
-            </div>
-      </div>
-    </div>
-  
-    <div class="row-fluid" style="margin-top:20px;">
-      <div class="span3">
-        <div class="issue-section" id='issue'>
-          <%= content_tag :h3 do %>
-            Issues <%= content_tag :span, @item.issues.count, class: "badge #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
+        <div class="panel panel-default" id='issue' style="margin-top:20px;">
+          <div class="panel-heading">
+          <%= content_tag :h4 do %>
+            Issues <%= content_tag :span, @item.issues.count, class: "badge pull-right #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
           <% end %>
-          <%= render @item.issues.order('created_at DESC').limit(3) %>
-          <%= @item.issues.any? ? "#{link_to('View all issues', item_issues_path(@item))} or #{link_to('add a new issue', new_item_issue_path(@item))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
+          </div>
+          <div class="panel-body">
+            <%= render partial: @item.issues.order('created_at DESC').limit(3), locals: {orientation: 'right'} %>
+          </div>
+          <div class="panel-footer">
+            <%= @item.issues.any? ? "#{link_to('View all issues', item_issues_path(@item))} #{'('+(@item.issues.count-3).to_s+' more)' unless (@item.issues.count-3 < 1)} or #{link_to('add a new issue', new_item_issue_path(@item))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
+          </div>
         </div>
 
-        <%= content_tag :div, class: "item-section", id: 'connections' do %>
-          <%= content_tag :h3, 'Connections', class: '' %>
-          <ul class="unstyled">
+        <%= content_tag :div, class: "panel panel-default", id: 'connections', style: "margin-top:20px;" do %>
+          <div class="panel-heading">
+            <%= content_tag :h4, 'Connections', class: '' %>
+          </div>
+          <div class="panel-body">
+            <ul class="unstyled">
             <% for connection in @item.connections do %>
               <li>
                 <strong><%= connection.predicate.name.humanize %>: </strong>
-                <%= link_to connection.inverse_item.name, connection.inverse_item, class: 'popover-right', data: { 'original-title' => connection.inverse_item.name, 'content' => connection.inverse_item.inspect } %>
+                <%= link_to connection.inverse_item.name, connection.inverse_item %>
               </li>
             <% end %>
             <% for inverse_connection in @item.inverse_connections do %>
               <li>
                 <strong><%= inverse_connection.predicate.inverse_name.humanize %>: </strong>
-                <%= link_to inverse_connection.item.name, inverse_connection.item, class: 'popover-right', data: { 'original-title' => inverse_connection.item.name, 'content' => inverse_connection.item.inspect } if inverse_connection.item %>
+                <%= link_to inverse_connection.item.name, inverse_connection.item if inverse_connection.item %>
               </li>
             <% end %>
-          </ul>
+            </ul>
+          </div>
         <% end if @item.inverse_connections.any? || @item.connections.any? %>
 
         <%= content_tag :div, class: "activity-section", id: 'activity' do %>
@@ -92,10 +73,34 @@
             <li><%= link_to 'View sources & publications folders', item_buckets_path(@item) %></li>
           </ul>
         <% end %>
-
       </div>
+      <div class="span8">
 
-      <div class="span9">
+            <div class="info_section">
+              <table class="table table-bordered table-hover">
+                <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) if @item.collection %>
+                <%= item_description('Inventory Number', @item.inventory_name) %>
+                <%= item_description('Excavation Number', "#{@item.excavation_prefix} #{@item.excavation_id}") if @item.excavation_id %>
+                <%= item_description('Dissov Id', @item.dissov_id) %>
+                <%= item_description('MDS Id', @item.mds_id) %>
+                <%= item_description('Cdli Id', @item.cdli_id) %>
+                <tr><td colspan="2"></td></tr>
+                <%= item_description('Object type', link_to(@item.classification.object_type.name, @item.classification.object_type)) if @item.classification %>
+                <%= item_description('Classification', @item.classification.self_and_ancestors.reverse.map{|cl| link_to cl.name, cl, class: 'popover-right', data: { 'original-title' => cl.name, 'content' => cl.description } }.join(' / ').html_safe) if @item.classification && @item.classification.ancestors.any? %>
+                <%= item_description('Object dimensions', @item.dimensions) %>
+                <%= item_description('Object weight', @item.weight) %>
+                <%= item_description('Material', @item.material) %>
+                <%= item_description('Technique', @item.technique) %>
+                <%= item_description('Period', @item.period) %>
+                <%= item_description('Condition', @item.condition) %>
+                <%= item_description('Place', @item.place) %>
+                <tr><td colspan="2"></td></tr>
+                <%= item_description('Excavation date', @item.excavation_date) %>
+                <%= item_description('Excavation place', @item.excavation_place) %>
+                <%= item_description('Excavation situation', @item.excavation_situation) %>
+              </table> 
+            </div>
+
         <%= content_tag :div, class: "item-section", id: 'description' do %>
           <%= content_tag :h3, class: '' do %>
             Description
@@ -213,7 +218,7 @@
           <% end unless @history.size-1 == index %>
         </div>
         </div>
-        <% end %>
+        <% end if @history.any? %>
       </div>
 
       <div class="tab-pane" id="statistics">

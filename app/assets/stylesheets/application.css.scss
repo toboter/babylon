@@ -145,12 +145,7 @@ textarea.vert { resize:vertical; }
 textarea.noResize { resize:none }
 
 .issue-section {
-	.issue-obj {
-	  @extend .well;
-	  @extend .well-small;
-	  margin-bottom:7px;
-	  background-color: #fdfdfd;
-	}
+
 }
 
 .hero-unit {

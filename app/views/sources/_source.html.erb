@@ -1,31 +1,42 @@
 <tr>
   <td>
-	<div>
-	  <h5><%= link_to source.name, source %> <small>[<%= source.source_type %>]</small></h5>
-	  <p>
+	<div class="source-info">
+	  <h4>
+	  	<%= link_to source.name, source %> 
+	  	<span class="pull-right">
+	  	  <small>[<%= source.source_type %>]</small>
+	  	</span>
+	  </h4>
+	  <div class="source-author pull-right">
 	  	<%= link_to source.author.name, source.author if source.author %>
   	  	<span class="muted"><%= "[#{source.original_date}]" if source.original_date %></span>
-  	  </p>
+  	  </div>
 	</div>
-	<ul class="unstyled">
-	  <%= content_tag :li do %>
-	  	<%= content_tag :ul, class: "thumbnails" do %>
-	  	  <% for asset in source.assets do %>
-	  	    <li style="margin-left:10px;">
-	  	      <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.mini_thumb.url, style: 'width:50px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:50px;')), asset.assetfile.large.url, class: 'img-fluid thumbnail' %>
-	  	    </li>
+
+	<div class="source-assets">
+	  <strong>
+	  	<%= pluralize(source.assets.count, 'file') %>
+	  </strong>
+	  <%= content_tag :ul, class: "thumbnails", style: '' do %>
+	  	<% for asset in source.assets do %>
+	  	  <%= content_tag :li do %>
+	  	    <%= link_to ((asset.content_type.include? 'image') ? (image_tag asset.assetfile.small.url, style: 'width:100px;') : (image_tag (%['sheet' 'document' 'msword' 'ms-excel' 'x-zip-compressed' 'kml+xml' 'pdf'].include?asset.content_type.sub('application/', '').split('.').last) ?  "icons/formats/#{asset.content_type.split('.').last.sub('application/', '')}.svg" : 'icons/formats/tmp.svg' , style: 'width:100px;')), asset.assetfile.large.url, class: 'img-fluid thumbnail' %>
 	  	  <% end %>
-	  	  <li><%= pluralize(source.assets.count, 'file') %></li>
 	  	<% end %>
 	  <% end if source.assets.any? %>
-	  <%= content_tag :li do %>
-	  	<%= pluralize(source.documents.count, 'document') %>
-	  <% end if source.documents.any? %>
-	  <%= content_tag :li do %>
-	  	<%= pluralize(source.actions.count, 'mention') %> in:
-	  	<%= source.actions.map{|e| link_to e.actable.name, e.actable }.join(', ').html_safe %>
-	  <% end if source.actions.any? %>
-	</ul>
-	<p><%= link_to 'View source', source %>
+	</div>
+	<%= content_tag :div, class: 'source-documents' do %>
+	  <strong>
+	  	<%= pluralize(source.documents.count, 'document') %>: 
+	  </strong>
+	  <%= source.documents.map{|d| link_to d.name, d }.join(', ').html_safe %>
+	<% end if source.documents.any? %>
+	<%= content_tag :div, class: 'source-mentions' do %>
+	  <strong>
+	  	<%= pluralize(source.actions.count, 'mention') %>: 
+	  </strong>
+	  <%= source.actions.map{|e| link_to e.actable.name, e.actable }.join(', ').html_safe %>
+	<% end if source.actions.any? %>
+	<p><%= link_to 'View source', source %></p>
   </td>
 </tr>

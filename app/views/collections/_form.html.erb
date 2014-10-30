@@ -16,46 +16,6 @@
   </div>
 
 
-  <div class="control-group">
-    <label class='control-label'>Properties</label>
-    <div class='controls'>
-
-    <fieldset class="form-inline" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
-      <%= select_tag ':field_type', '', prompt: "text_field", disabled: true %>
-      <%= text_field_tag ':name', 'Inventory name', disabled: true %>
-      <label class="checkbox"><%= check_box_tag ':required', '', true, disabled: true %>Required</label>
-    </fieldset>
-    <fieldset class="form-inline" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
-      <%= select_tag ':field_type', '', prompt: "select", disabled: true %>
-      <%= text_field_tag ':name', 'Classification', disabled: true %>
-      <label class="checkbox"><%= check_box_tag ':required', '', true, disabled: true %>Required</label>
-    </fieldset>
-    <fieldset class="form-inline" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
-      <%= select_tag ':field_type', '', prompt: "date", disabled: true %>
-      <%= text_field_tag ':name', 'Accession Date', disabled: true %>
-      <label class="checkbox"><%= check_box_tag ':required', '', true, disabled: true %>Required</label>
-    </fieldset>
-    <fieldset class="form-inline" style="border:1px solid #cfcfcf; padding:10px; margin-bottom:10px;">
-      <%= select_tag ':field_type', '', prompt: "text_area", disabled: true %>
-      <%= text_field_tag ':name', 'Description', disabled: true %>
-      <label class="checkbox"><%= check_box_tag ':required', '', true, disabled: true %>Required</label>
-    </fieldset>
-    <p class="muted">+Actions, Folder, Documents, Issue-Tracker and Referencesmodule</p>
-
-    <div id="fields">
-      <%= f.fields_for :fields do |builder| %>
-        <%= render "field_fields", :f => builder %>
-      <% end %>
-      <div class="links" style="margin-top:5px;">
-        <%= link_to_add_association "Add field", f, :fields %>
-      </div>
-    </div>
-
-      
-    </div>
-  </div>
-
-
   <div class="form-actions">
     <%= f.submit "Speichern", :class => 'btn btn-primary' %>
     <% if @collection.new_record? %>

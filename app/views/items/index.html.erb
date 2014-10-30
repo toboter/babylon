@@ -1,12 +1,11 @@
 <% title (@projectable ? "Objects for #{link_to @project.name, @project}".html_safe : "All objects"), nil %>
 <% content_for :edit_section do %>
-      <div class="pull-right" style="">
-        <%= form_tag new_item_path, method: :get, class: 'form-inline' do %>
-          <%= label_tag :collection_id %>
-          <%= select_tag :collection_id, options_from_collection_for_select(Collection.all, :id, :shortcut, :selected => 1), {include_blank: false} %>
-          <%= submit_tag 'Add object', name: nil, class: "btn btn-default" %>
-        <% end if can?(:create, @items) && !@project %>
-      </div>
+  <div class="pull-right" style="">
+    <%= link_to new_item_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
+      <i class="icon-plus"></i>
+      Object
+    <% end if can?(:create, Item) && !@project %>
+  </div>
 <% end %>
 
 <% content_for :breadcrumbs_section do %>
@@ -41,8 +40,7 @@
     <%= form_tag import_items_path, multipart: true do %>
       <%= file_field_tag :file %>
       <%= submit_tag "Import", class: 'btn' %>
-      <p><small>The *.csv first row should name the following columns: collection_id, inventory_number, inventory_number_index, accession_date_text, title, classification_id, description, excavation_id, 
-      dissov_id, mds_id.</small></p>
+      <p><small>The *.csv first row should name the following columns: :collection_id, :classification_id, :inventory_number, :inventory_number_index, :title, :mds_id, :dissov_id, :description, :slug, :excavation_id, :excavation_date, :excavation_place, :excavation_situation, :cover_asset_id, :dimensions, :condition, :material, :technique, :place, :period, :excavation_prefix.</small></p>
     <% end if can? :manage, @items %>
 
   </div>

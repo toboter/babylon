@@ -8,6 +8,9 @@ class SourcesController < ApplicationController
     if params[:item_id]
       @parent = Item.find(params[:item_id])
       @sources = @parent.sources
+    elsif params[:person_id]
+      @parent = Person.find(params[:person_id])
+      @sources = @parent.sources
     else
       @sources = Source.scoped
     end

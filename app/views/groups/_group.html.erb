@@ -11,7 +11,7 @@
       <% if group.description.present? %>
         <%= group.description %>
       <% else %>
-        No abstract to show. <%= link_to 'Edit it!', [:edit, group.cluster, group] %>
+        No abstract to show. <%= link_to '(Edit)', [:edit, group.cluster, group] if can? :edit, group %>
       <% end %>
       <hr>
     </div>

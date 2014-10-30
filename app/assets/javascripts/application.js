@@ -39,10 +39,12 @@ $(document).ready(function(){
     });
     $('.popover-right').popover({
         placement: 'right',
+        html: true,
         trigger: 'hover'
     });
     $('.popover-left').popover({
         placement: 'left',
+        html: true,
         trigger: 'hover'
     });
     $('.popover-bottom').popover({

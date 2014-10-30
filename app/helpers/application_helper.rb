@@ -8,8 +8,8 @@ module ApplicationHelper
     link_to(name, '#', class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
   end
 
-  def tagging_infos_for(obj)
-    content_tag(:div, class: 'tagging-area', style: 'margin: 0 10px;') do 
+  def tagging_infos_for(obj, cssoptions=nil)
+    content_tag(:div, class: "tagging-area #{cssoptions}", style: 'margin: 0 10px;') do 
 	    content_tag :span, obj.tags.map{|t| link_to(t.name, t, style: 'color: white; font-weight:bold;')}.join(', ').html_safe, class: 'label label-info'
     end if obj.tags.any?
   end

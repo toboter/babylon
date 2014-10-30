@@ -5,9 +5,15 @@
   <%= activity.action.sub(/e?$/, "ed") %> 
   <% if activity.targetable %>
   	<% if activity.targetable.class.name == 'Comment' %>
-  	  a <%= link_to 'comment', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => activity.targetable.content } %> to an <%= link_to 'issue', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => pluralize(activity.targetable.issue.comments.count, 'comment') } %> on
+  	  a <%= link_to 'comment', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => activity.targetable.content } %> to an <%= link_to 'issue', [activity.trackable, activity.targetable.issue], class: "#{orientation}", data: { 'original-title' => activity.targetable.issue.name, 'content' => issue_comment_popover_presenter(activity.targetable.issue) } %> on
   	<% else %>
-  	  a <%= link_to activity.targetable.class.name.downcase, [activity.trackable, activity.targetable] %> on
+  	  a 
+      <% if activity.targetable.class.name == 'Issue' %>
+        <%= link_to activity.targetable.class.name.downcase, [activity.trackable, activity.targetable], class: "#{orientation}", data: { 'original-title' => activity.targetable.name, 'content' => issue_comment_popover_presenter(activity.targetable) } %>
+      <% else %>
+        <%= link_to activity.targetable.class.name.downcase, [activity.trackable, activity.targetable] %> 
+      <% end %>
+      on
   	<% end %>
   <% end %>
   <%= link_to item.name, item, class: "#{orientation}", data: { 'original-title' => item.name, 'content' => item.description } if item %>

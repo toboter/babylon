@@ -89,7 +89,12 @@
         <div class="page-header">
           <h2>Sources</h2>
         </div>
-        <%= render @person.sources %>
+          <table class="table table-bordered table-hover">
+            <tbody>
+              <%= render @person.sources.limit(5) %>
+            </tbody>
+          </table>
+        <p><%= link_to "View all sources by #{@person.name}", [@person, :sources] %></p>
       <% end if @person.sources.any? %>
 
       <%= content_tag :section, id: 'publications' do %>

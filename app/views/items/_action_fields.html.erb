@@ -15,7 +15,7 @@
     <div class="control-group">
       <%= f.label :source_id, class: 'control-label' %>
       <div class="controls">
-        <%= f.collection_select :source_id, Source.all, :id, :name, {}, {multiple: false, class: 'form-control chosen-select input-block-level'} %>
+        <%= f.collection_select :source_id, Source.order('name ASC'), :id, :name, {}, {multiple: false, class: 'form-control chosen-select input-block-level'} %>
       </div>
     </div>
 

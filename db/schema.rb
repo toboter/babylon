@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141011135619) do
+ActiveRecord::Schema.define(:version => 20141030115947) do
 
   create_table "actions", :force => true do |t|
     t.integer  "predicate_id"
@@ -155,32 +155,6 @@ ActiveRecord::Schema.define(:version => 20141011135619) do
     t.text     "description"
     t.text     "contact"
   end
-
-  create_table "collection_field_values", :force => true do |t|
-    t.string   "field_value"
-    t.integer  "collection_field_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-    t.text     "description"
-  end
-
-  add_index "collection_field_values", ["collection_field_id"], :name => "index_collection_field_values_on_collection_field_id"
-
-  create_table "collection_fields", :force => true do |t|
-    t.string   "field_type"
-    t.boolean  "required"
-    t.integer  "collection_id"
-    t.string   "name"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-    t.integer  "predicate_id"
-  end
-
-  add_index "collection_fields", ["collection_id"], :name => "index_collection_fields_on_collection_id"
 
   create_table "collections", :force => true do |t|
     t.integer  "institution_id"
@@ -362,12 +336,21 @@ ActiveRecord::Schema.define(:version => 20141011135619) do
     t.integer  "dissov_id"
     t.integer  "mds_id"
     t.string   "excavation_prefix"
-    t.hstore   "properties"
     t.integer  "cover_asset_id"
+    t.string   "dimensions"
+    t.string   "condition"
+    t.string   "material"
+    t.string   "technique"
+    t.string   "place"
+    t.string   "period"
+    t.string   "excavation_date"
+    t.string   "excavation_place"
+    t.text     "excavation_situation"
+    t.string   "cdli_id"
+    t.string   "weight"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"
-  add_index "items", ["properties"], :name => "index_items_on_properties"
   add_index "items", ["slug"], :name => "index_items_on_slug", :unique => true
 
   create_table "lists", :force => true do |t|
