@@ -7,10 +7,9 @@ class ExploreController < ApplicationController
 #  	@about = @docs.find(:first, :joins => :page, :conditions => ['pages.permalink = ?', 'about']) # @about.documents.first if @about.present?
 #  	@resources = @docs.find(:first, :joins => :page, :conditions => ['pages.permalink = ?', 'resources'])
 #  	@research = @docs.find(:first, :joins => :page, :conditions => ['pages.permalink = ?', 'research'])
-	@snippets = Snippet.order('pinned DESC, created_at DESC')
-	@about = (@snippets.select { |snip| snip.snippet_type == 'about' }).first
-	@blogs = @snippets.limit(4).select { |snip| snip.snippet_type == 'news' }
-	@about_bucket = @about.buckets.find_by_name('Explorer Pictures')
+	@about = (Snippet.select { |snip| snip.snippet_type == 'about' }).first
+	@documents = Document.order('created_at DESC').limit(4)
+	@about_bucket = @about.buckets.first
 	@clusters = Cluster.limit(4)
 	@activities = Activity.order('created_at DESC').limit(11)
 

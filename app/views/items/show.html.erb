@@ -25,35 +25,53 @@
             Issues <%= content_tag :span, @item.issues.count, class: "badge pull-right #{@item.issues.where(closed: false).count > @item.issues.where(closed: true).count+1 ? @item.issues.where(closed: false).count > @item.issues.where(closed: true).count+3 ? 'badge-important' : 'badge-warning' : 'badge-success' }" %>
           <% end %>
           </div>
-          <div class="panel-body">
+          <%= content_tag :div, class: "panel-body" do %>
             <%= render partial: @item.issues.order('created_at DESC').limit(3), locals: {orientation: 'right'} %>
-          </div>
+          <% end if @item.issues.any? %>
           <div class="panel-footer">
-            <%= @item.issues.any? ? "#{link_to('View all issues', item_issues_path(@item))} #{'('+(@item.issues.count-3).to_s+' more)' unless (@item.issues.count-3 < 1)} or #{link_to('add a new issue', new_item_issue_path(@item))}".html_safe : ('Nothing to show! '+link_to('Create Issue', new_item_issue_path(@item))).html_safe %>
+            <%= @item.issues.any? ? "#{link_to('View all issues', item_issues_path(@item))} #{'('+(@item.issues.count-3).to_s+' more)' unless (@item.issues.count-3 < 1)} or #{link_to('add a new issue', new_item_issue_path(@item))}".html_safe : ('Nothing to show! '+link_to('Create an issue', new_item_issue_path(@item))).html_safe %>
           </div>
         </div>
 
         <%= content_tag :div, class: "panel panel-default", id: 'connections', style: "margin-top:20px;" do %>
           <div class="panel-heading">
-            <%= content_tag :h4, 'Connections', class: '' %>
+            <%= content_tag :h4 do %>
+              Connections
+              <%= content_tag :span, "#{content_tag :i, '', class: 'icon-tags icon-white'} #{@item.root.self_and_descendants.count}".html_safe, class: "badge pull-right badge-default tooltip-right", title: 'joins' %>
+            <% end %>
           </div>
           <div class="panel-body">
             <ul class="unstyled">
+              <%= content_tag :li do %>
+                <ul class="unstyled">
+                  <% for join in @item.root.self_and_descendants do %>
+                    <li>
+                      <strong>Joins: </strong>
+                      <%= link_to join.name, join, style: "#{'font-weight:bold;' if join.root?}" %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+
+            <%= content_tag :div do %>
+              <hr>
+              <h5>Other Object connections</h5>
+            <% end if (@item.parent || @item.children) && (@item.connections.any? || @item.inverse_connections.any?) %>
             <% for connection in @item.connections do %>
               <li>
                 <strong><%= connection.predicate.name.humanize %>: </strong>
                 <%= link_to connection.inverse_item.name, connection.inverse_item %>
               </li>
-            <% end %>
+            <% end if @item.connections.any? %>
             <% for inverse_connection in @item.inverse_connections do %>
               <li>
                 <strong><%= inverse_connection.predicate.inverse_name.humanize %>: </strong>
                 <%= link_to inverse_connection.item.name, inverse_connection.item if inverse_connection.item %>
               </li>
-            <% end %>
+            <% end if @item.inverse_connections.any? %>
             </ul>
           </div>
-        <% end if @item.inverse_connections.any? || @item.connections.any? %>
+        <% end %>
 
         <%= content_tag :div, class: "activity-section", id: 'activity' do %>
           <%= content_tag :h3, 'Record activity', class: '' %>
@@ -128,21 +146,7 @@
           <%= content_tag :table, class: 'table table-bordered table-hover' do %>
             <tbody>
               <% for action in @item.actions.limit(3) do %>
-              <tr><td>
-                <div class="alert alert-info">
-                  <strong><%= link_to action.predicate.name.humanize, [@item, action] if action.predicate %> </strong>
-                </div>
-                <ul class="unstyled">
-                  <%= content_tag :li do %>
-                    <% for location in action.locations do %>
-                      <p>
-                        <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
-                      </p>
-                    <% end if action.locations.any? %>
-                    <%= render action.source if action.source %>
-                  <% end %>
-                </ul>
-              </td></tr>
+                <%= render partial: action.source, locals: {action: action} if action.source %>
               <% end %>
             </tbody>
           <% end %> 
@@ -187,7 +191,7 @@
               <%= render @item.studies.limit(3) %>
             </tbody>
           <% end if @item.studies.any? %>
-          <%= link_to "View all studies on #{@item.name} and connected objects", [@item, :studies] %>
+          <%= link_to "View all studies on #{@item.name} and joined objects", [@item, :studies] %>
         <% end %>
       </div>
 

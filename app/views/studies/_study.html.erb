@@ -32,11 +32,10 @@
       <div class="pull-right">
         <span class="label label-info" style="padding:5px 10px;">
           <%= study.list.project == current_aspect ? (content_tag :i, '', class: "icon-folder-open icon-white tooltip-left", title: "on list '#{study.list.name}'' in your current project") : nil %>
-          <%= study.studyable.locations.any? ? (content_tag :i, '', class: "icon-map-marker icon-white tooltip-left", title: 'location provided') : nil %>
           <%= study.list != @list ? (content_tag :i, '', class: "icon-random icon-white tooltip-left" , title: 'copied') : nil if @list %>
           <%= link_to (content_tag :i, '', class: 'icon-exclamation-sign icon-white tooltip-left', title: 'has issues'), study_issues_path(study) if study.issues.any? %>
         </span>
       </div>
-    <% end if study.list.project == current_aspect || study.studyable.locations.any? || (@list && study.list != @list) %>
+    <% end if study.list.project == current_aspect || (@list && study.list != @list) %>
   </td>
 </tr>

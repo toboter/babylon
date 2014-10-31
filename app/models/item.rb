@@ -8,9 +8,10 @@ class Item < ActiveRecord::Base
             :context_id, :title, :tag_ids, :mds_id, :dissov_id, :citations_attributes, :actions_attributes,
             :description, :slug, :excavation_id, :excavation_date, :excavation_place, :excavation_situation,
             :connections_attributes, :cover_asset_id, :dimensions, :condition, :material, :technique, :place, 
-            :period, :excavation_prefix, :cdli_id, :weight
+            :period, :excavation_prefix, :cdli_id, :weight, :joins_to_id
 
   stampable
+  acts_as_tree parent_column_name: 'joins_to_id'
   default_scope order('inventory_number ASC, inventory_number_index ASC')
 
   belongs_to :collection
@@ -34,8 +35,6 @@ class Item < ActiveRecord::Base
   has_many :actions, as: :actable, dependent: :destroy
   has_many :sources, through: :actions
   
-  has_many :locations, through: :actions
-  
   has_many :s_buckets, class_name: 'Bucket', through: :sources, :source => :buckets
   has_many :documents, class_name: 'Document', through: :sources, :source => :documents
   has_many :s_assets, class_name: 'Asset', through: :sources, :source => :assets
@@ -58,7 +57,6 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :citations, allow_destroy: true
   accepts_nested_attributes_for :actions, allow_destroy: true
   accepts_nested_attributes_for :connections, allow_destroy: true
-  accepts_nested_attributes_for :locations, allow_destroy: true
 
   def buckets
     s_buckets+r_buckets
@@ -82,6 +80,10 @@ class Item < ActiveRecord::Base
     else
       "#{id} (db_id)"
     end
+  end
+
+  def self.possible_parents(obj)
+    obj ? (all-obj.self_and_descendants) : all
   end
 
   # Ransack attribute, convert & concatenat definitions

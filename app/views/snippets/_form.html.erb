@@ -2,7 +2,7 @@
 
   <%= f.error_messages %>
   <%= f.hidden_field :snippet_type, value: 'news' if @snippet.new_record? %>
-
+  <p class="controls">Use with caution. Snippets are mainly predefined as 'about', 'imprint' or 'help'.</p>
   
     <div class="control-group">
       <%= f.label :name, class: 'control-label' %>
@@ -11,18 +11,10 @@
       </div>
     </div>
 
-    <div class="control-group">  
-      <div class="controls">
-        <label class="checkbox">
-          <%= f.check_box :pinned %> Pinned?
-        </label>
-      </div>
-    </div>
-
     <div class="control-group">
-      <%= f.label :description, class: 'control-label' %>
+      <%= f.label :snippet_type, class: 'control-label' %>
       <div class="controls">
-        <%= f.text_area :description, rows:6, class: 'span8' %>
+        <%= f.select :snippet_type, Snippet::SNIPPETTYPES, class: 'span8' %>
       </div>
     </div>
 
@@ -49,11 +41,11 @@
     </div>
 
   <% content_for :top_over do %>
-    <h1><%= @snippet.new_record? ? 'Write a new post' : @snippet.name %>
+    <h1><%= @snippet.new_record? ? 'New snippet' : @snippet.name %>
 
     </h1>
     <%= content_tag :small do %>
-      Originally posted by <%= name_only_or_link_to(@snippet.creator) %> on <%= @snippet.created_at.strftime('%d. %m %Y') %>
+      Originally written by <%= name_only_or_link_to(@snippet.creator) %> on <%= @snippet.created_at.strftime('%d. %m %Y') %>
     <% end unless @snippet.new_record? %>
   <% end %>
 

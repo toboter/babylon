@@ -33,12 +33,11 @@
             </div>
           
             <div class="span4 option-block option-block-last">
-              <span class=​"title">BABylo-tec</span>​<i class="icon-leaf"></i>
+              <span class=​"title">$babylon-platform</span>​<i class="icon-leaf"></i>
               <ul class="nav nav-pills nav-stacked">
-                <li><%= link_to "Search" %></li>
-                <li><%= link_to "Help" %></li>
-                <li><%= link_to "Sitemap" %></li>
-                <li><%= link_to "API" %></li>
+                <li class="upper"><%= link_to "About", about_path %></li>
+                <li class="upper"><%= link_to "Imprint", imprint_path %></li>
+                <li class="upper"><%= link_to "Help", help_path %></li>
               </ul>
             </div>
           </div>
@@ -53,10 +52,10 @@
           <div class="row">
             <div class="span12 app-text-links">            
               <ul class="babylo-tec-links inline">
-                <li><%= link_to "BABylo-tec", root_url, class: "babylo-tec-logo" %></li>
-                <li class="upper"><%= link_to "Help" %></li>
-                <li class="upper"><%= link_to "API" %></li>
-                <li class="upper"><%= link_to "Sitemap" %></li>
+                <li><%= link_to "$babylon-platform", root_url, class: "babylo-tec-logo" %></li>
+                <li class="upper"><%= link_to "About", about_path %></li>
+                <li class="upper"><%= link_to "Imprint", imprint_path %></li>
+                <li class="upper"><%= link_to "Help", help_path %></li>
               </ul>
               <p class="sentence">&copy; 2014 BABylo-tec. All rights reserved. Developed by <%= link_to 'Tobias Schmidt', "https://github.com/toboter" %>. Source code available on <%= link_to 'Github', "https://github.com/toboter/babylon" %>.</p>
             </div>

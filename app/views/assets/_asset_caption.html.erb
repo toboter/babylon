@@ -4,4 +4,4 @@
   <%= truncate(asset.caption, length: 230, seperator: ' ', omission: ' ... ') %><br>
 <% end %>
 <strong>Folders: </strong>
-<%= asset.buckets.map{ |b| link_to(b.full_bucket_name,[b.attachable, b]) }.join(", ").html_safe %>
+<%= asset.buckets.map{ |b| b.full_bucket_name }.join(", ").html_safe %>

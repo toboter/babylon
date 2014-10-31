@@ -5,9 +5,9 @@
       <%= content_tag :div, class: 'navbar navbar-inverse navbar-fixed-top' do %>
         <%= render 'shared/navbar' %>
       <% end %>
-      <div class="admin-block">
+      <%= content_tag :div, class: "admin-block" do %>
         <%= yield(:top_over) %>
-      </div>
+      <% end if (can? :manage, Snippet) %>
   </header>
 
   <div class="container-fluid">
@@ -15,7 +15,7 @@
 	  <%= render "shared/debug" %>    
 
     <div class="row">
-      <div class="span6 offset3">
+      <div class="span6 offset2" style="margin-top:30px;">
         <%= content_tag :h1, yield(:title), class: 'pagetop' if show_title? %>
         <%= content_tag :h2, class: 'subtitle' do %>
           <%= yield(:subtitle) %>

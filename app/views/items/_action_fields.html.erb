@@ -28,13 +28,4 @@
 
   </div>
 
-  <div id='locations'>
-    <%= f.fields_for :locations do |builder| %>
-      <%= render "shared/location_fields", :f => builder %>
-    <% end %>
-    <div class="links controls">
-      <%= link_to_add_association "Add Location", f, :locations, :partial => 'shared/location_fields' %>
-    </div>
-  </div>
-
 </fieldset>

@@ -5,10 +5,10 @@ class SnippetsController < ApplicationController
   # GET /snippets
   # GET /snippets.json
   def index
-    @snippets = Snippet.where('snippet_type != ?', 'about').order('created_at desc')
+    @snippets = Snippet.all
 
     respond_to do |format|
-      format.html { render layout: "blog" }# index.html.erb
+      format.html { render layout: "fluid" }# index.html.erb
       format.json { render json: @snippets }
     end
   end
@@ -16,10 +16,15 @@ class SnippetsController < ApplicationController
   # GET /snippets/1
   # GET /snippets/1.json
   def show
-    @snippet = Snippet.find(params[:id])
-
+    resource, id = request.path.split('/')[1, 2]
+    if id
+      @snippet = Snippet.find(params[:id])
+    else
+      @snippet = Snippet.find_by_snippet_type(resource)
+    end
+ 
     respond_to do |format|
-      format.html { render layout: "blog" }# show.html.erb
+      format.html { render layout: "fluid" }# show.html.erb
       format.json { render json: @snippet }
     end
   end

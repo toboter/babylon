@@ -1,12 +1,17 @@
-<%= form_for [@bucket, @bucket.assets.new], html: {id: 'fileupload', :multipart => true} do |f| %>
-  <div class="row-fluid fileupload-buttonbar">
-    <div class="span7">
-      <a href="#add_assets" data-toggle="modal" class='btn btn-success fileinput-button'>
+<div class="row-fluid asset-existing">
+  <div class="span12">
+    <a href="#add_assets" data-toggle="modal" class='btn btn-success'>
         <i class="icon-plus icon-white"></i> 
         <span>Add existing assets</span>
-      </a>
+    </a>
+  </div>
+</div>
+
+<%= form_for [@bucket, @bucket.assets.new], html: {class: 'asset-fileupload', id: 'fileupload', :multipart => true} do |f| %>
+  <div class="row-fluid fileupload-buttonbar">
+    <div class="span7">
       <!-- The fileinput-button span is used to style the file input field as button -->
-      <span class="btn btn-success fileinput-button">
+      <span class="btn btn-primary fileinput-button">
         <i class="icon-plus icon-white"></i>
         <span>Upload new assets</span>
         <%= f.file_field :assetfile, multiple: true %>

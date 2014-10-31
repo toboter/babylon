@@ -1,30 +1,25 @@
-<% title "Blog posts", nil, nil %>
+<% title "Pages", nil, nil %>
+<% content_for :edit_section do %>
+  <div class="pull-right" style="">
+    <%= link_to new_snippet_path, class: 'btn btn-default', style: 'margin-left:10px;' do %>
+      <i class="icon-plus"></i>
+      Snippet
+    <% end if (can? :manage, Snippet) %>
+  </div>
+<% end %>
+
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <%= content_tag :li, "Blogs", class: 'active' %>
-<% end %>
-
-<% content_for :top_over do %>
-    <h1>
-      Blog posts
-      <div class="pull-right" style="">
-        <%= link_to "Add post", new_snippet_path, class: "btn btn-default" if (can? :create, Snippet) %>
-      </div>
-    </h1>
+  <%= content_tag :li, "Pages", class: 'active' %>
 <% end %>
 
 <% content_for :main_section do %>
 <div class="row-fluid">
-  <div class="span12">
+  <div class="span6">
     <% @snippets.each do |snippet| %>
       <%= content_tag :h2, snippet.name %>
-      <%= content_tag :small do %>
-        Posted by <%= name_only_or_link_to(snippet.creator) %> on <%= snippet.created_at.strftime('%d. %m %Y') %>
-        <%= link_to 'Edit', edit_snippet_path(snippet), class: 'pull-right btn btn-mini' if can? :edit, snippet %>
-      <% end %>
-      <%= content_tag :div, markdown(snippet.description), class: 'lead', style: 'margin-top:5px;' if snippet.description %>
-      <%= link_to "Read the full post (#{snippet.description.length+(snippet.content ? snippet.content.length : 0)} charcters)", snippet %>
+      <%= content_tag :div, truncated_snippet(snippet), class: '', style: 'margin-top:5px;' if snippet.content %>
       <hr>
     <% end %>
   </div>

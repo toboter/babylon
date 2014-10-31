@@ -1,6 +1,6 @@
 class Action < ActiveRecord::Base
   attr_accessible :target, :actable_id, :actable_type, :source_id, :predicate_id, 
-  				  :creator_id, :updater_id, :locations_attributes
+  				  :creator_id, :updater_id
 
   stampable
 
@@ -11,13 +11,10 @@ class Action < ActiveRecord::Base
   belongs_to :updater, class_name: "User"
   belongs_to :source
 
-  has_many :locations, as: :locatable, dependent: :destroy
   has_many :buckets, through: :source
   has_many :documents, through: :source
 
   validates_presence_of :predicate_id
-
-  accepts_nested_attributes_for :locations, allow_destroy: true
 
   after_create { Activity.create(user: creator, action: 'add', trackable: actable, targetable: self) }
 

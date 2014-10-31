@@ -15,26 +15,7 @@
     <%= content_tag :table, class: 'table table-bordered table-hover' do %>
       <tbody>
         <% for action in @item.actions do %>
-        <tr>
-          <td>
-            <div class="alert alert-info">
-              <strong>
-                <%= link_to action.predicate.name.humanize, [@item, action] %> 
-              </strong>
-              <%= "on #{action.source.original_date.strftime("%d.%m.%Y")}" if action.source && action.source.original_date %>
-            </div>
-            <ul class="unstyled">
-              <%= content_tag :li do %>
-                <% for location in action.locations do %>
-                  <p>
-                    <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %>
-                  </p>
-                <% end if action.locations.any? %>
-                <%= render action.source if action.source %>
-              <% end %>
-            </ul>
-          </td>
-        </tr>
+          <%= render partial: action.source, locals: {action: action} if action.source %>
         <% end %>
       </tbody>
     <% end %> 

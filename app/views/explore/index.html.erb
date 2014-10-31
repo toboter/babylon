@@ -106,29 +106,25 @@
         <%= link_to 'View all modules', clusters_path %>
       <% end if @clusters.any? %>
 
-      <%= content_tag :div, id: 'blogs-section', style: 'padding-top:30px;' do %>
+      <%= content_tag :div, id: 'documents-section', style: 'padding-top:30px;' do %>
         <%= content_tag :h2 do  %>
-          Blogs
-          <%= link_to new_snippet_path, class: 'btn btn-default pull-right' do %>
-            <i class="icon-plus"></i>
-            Blog
-          <% end if can? :create, Snippet %>
-        <% end if @blogs %>
-        <% @blogs.in_groups_of(2, false).each do |row_blogs| %>
+          Latest Documents
+        <% end if @documents %>
+        <% @documents.in_groups_of(2, false).each do |row_docs| %>
           <div class="row-fluid">
-            <% for blog in row_blogs do %>
+            <% for doc in row_docs do %>
               <div class="span6" style="height:230px; border-top:1px solid #f5f5f5; padding-right:1em;">
                 <h3>
-                  <%= blog.name %>
-                  <%= content_tag :i, '', class: 'icon-star-empty pull-right', style: 'margin:10px 15px 0 0' if blog.pinned? %>
+                  <%= doc.name %>
                 </h3>
-                <p><small><%= blog.created_at.strftime("%d.%m.%Y") %></small>
-                <p><%= markdown(truncated_description(blog, length=200)) %></p>
+                <p><small><%= doc.created_at.strftime("%d.%m.%Y") %></small>
+                <%= markdown(doc.abstract) %>
+                <%= link_to 'Read the full document', doc %>
               </div>
             <% end %>
           </div>
         <% end %>
-        <%= link_to 'View all posts', snippets_path %>
+        <%= link_to 'View all documents', documents_path %>
       <% end %>
 
     </div>
@@ -138,7 +134,7 @@
         <h2>
           <%= @about.name %>
         </h2>
-        <p><%= markdown(truncated_description(@about, length=800)) %></p>
+        <p><%= markdown(truncated_snippet(@about, length=800)) %></p>
       <% end if @about %>
 
       <%= content_tag :div, id: "activity-section", style: 'padding-top:2em;' do %>

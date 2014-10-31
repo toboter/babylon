@@ -33,7 +33,7 @@ class Ability
 
     if user.role? :author #kann Informationen hinzufügen, Datensätze anlegen, nichts löschen
       can :manage, :all
-      cannot [:create, :edit, :update, :destroy], [Cluster, Group, Institution, Collection, Item]
+      cannot [:create, :edit, :update, :destroy], [Cluster, Group, Institution, Collection, Item, Snippet]
       can [:edit, :update], Group, group_admin: user
       can [:edit, :update], Cluster, cluster_admin: user
       cannot :destroy, :all

@@ -1,36 +1,23 @@
-<% title "Blog #{'- about' if @snippet.snippet_type == 'about'}", nil, nil %>
+<% title @snippet.name, nil, nil %>
 
 <% content_for :breadcrumbs_section do %>
   <li><%= link_to 'Root', root_path %> <span class="divider">/</span></li>
-  <li><%= link_to 'Blogs', snippets_path %> <span class="divider">/</span></li>
+  <li><%= link_to 'Pages', snippets_path %> <span class="divider">/</span></li>
   <li class="active"><%= @snippet.name %></li>
-<% end %>
-
-<% content_for :top_over do %>
-    <h1><%= @snippet.name %>
-      <%= content_tag :i, '', class: 'icon-star-empty', style: 'margin:10px 15px 0 0' if @snippet.pinned? %>
-      <div class="pull-right" style="">
-        <%= link_to "View all", snippets_path, class: "btn btn-default" if (can? :read, Snippet) %>
-        <%= link_to "Edit", edit_snippet_path(@snippet), class: "btn btn-default" if (can? :update, @snippet) %>
-      </div>
-    </h1>
-    <%= content_tag :small do %>
-      Posted by <%= name_only_or_link_to(@snippet.creator) %> on <%= @snippet.created_at.strftime('%d. %m %Y') %>
-      
-    <% end %>
 <% end %>
 
 <% content_for :main_section do %>
   <div class="row-fluid">
-  	<div class="span12">
-	  	<p class="lead">
-        <%= markdown(@snippet.description) if @snippet.description %>
-      </p>
+  	<div class="span6">
+      <h1>
+        <%= @snippet.name %>
+        <%= link_to 'Edit', edit_snippet_path(@snippet), class: 'btn btn-default btn-small pull-right' if can? :manage, @snippet %>
+      </h1>
 	  	<div><%= markdown(@snippet.content) if @snippet.content %></div>
 	  <div class="assets" style="margin-top:80px;">
 	  	<%= render @snippet.buckets, :personal => false %>
 	  </div>
-	  <%= link_to 'Edit folders', snippet_buckets_path(@snippet) if can?(:update, @snippet) && can?(:create, Bucket) %>
+	  <%= link_to 'Edit folders', snippet_buckets_path(@snippet) if can?(:manage, @snippet) && can?(:create, Bucket) %>
 	</div>
   </div>
 

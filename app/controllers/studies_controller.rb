@@ -7,12 +7,10 @@ class StudiesController < ApplicationController
   def index
     if @parent
       @studies = @parent.studies
-      if @parent.class.to_s == 'Item'
-        @connected_studies = @parent.connections.map {|c| c.inverse_item.studies.map { |s| s }}.flatten
-        @connected_studies = @connected_studies + @parent.inverse_connections.map {|c| c.item.studies.map { |s| s }}.flatten
-        @studies = @studies + @connected_studies if @connected_studies
+      if @parent.class.name == 'Item'
+        @studies = @parent.root.self_and_descendants.map{|p| p.studies.map { |s| s }}.flatten
       end
-      if @parent.class.to_s == 'List' && @parent.forked_from
+      if @parent.class.name == 'List' && @parent.forked_from
         @forked_list = List.find(@parent.forked_from)
         @studies = @studies + @forked_list.studies
         @list = @parent

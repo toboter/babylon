@@ -137,7 +137,7 @@
   <div class="control-group">
     <%= f.label :excavation_situation, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :excavation_situation, class: 'span6' %>
+      <%= f.text_area :excavation_situation, class: 'span6' %>
     </div>
   </div>  
 </div>
@@ -165,6 +165,15 @@
 
 <div class="tab-pane" id='connections'>
   <p>Connected objects are joins or other representations of an object like copies which have an id for themselves</p>
+
+  <div class="control-group">
+    <%= f.label :joins_to_id, class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select(:joins_to_id, Item.possible_parents(@item).sort_by { |a| a.name }, :id, :name, {include_blank: true}, {class: 'span4'}) %>
+      <p>Should be blank, if the object ist the 'main' object</p>
+    </div>
+  </div>
+
   <%= f.fields_for :connections do |builder| %>
     <%= render "connection_fields", :f => builder %>
   <% end %>

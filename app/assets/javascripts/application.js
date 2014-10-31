@@ -49,8 +49,7 @@ $(document).ready(function(){
     });
     $('.popover-bottom').popover({
         placement: 'bottom',
-        trigger: 'hover',
-        delay: { show: 0, hide: 600 }
+        trigger: 'hover'
     });
 
     $('.chosen-select').chosen({

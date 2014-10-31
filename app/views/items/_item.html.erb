@@ -10,14 +10,14 @@
   </td> 
   <td>
     <%= content_tag :div, class: "pull-right" do %>
+      <%= content_tag :span, "#{content_tag :i, '', class: 'icon-tags icon-white'} #{item.children.count}".html_safe, class: "badge badge-default tooltip-left", title: "joins #{item.children.map{ |i| i.name }.join(', ')}" if item.children.any? %>
       <%= content_tag :span, class: 'label label-info', style: 'margin-left:3px;padding:5px 10px;' do %>
         <%= item.tags.map{ |a| content_tag :span, link_to(a.name, a, style: 'color:white;')}.join(", ").html_safe %>
       <% end if item.tags.any? %>
 
       <%= content_tag :span, class: "label label-info", style: "padding:5px 10px;" do %>
         <%= item.assets.any? ? (content_tag :i, '', class: "icon-picture icon-white tooltip-left" , title: 'picture provided') : nil %>
-        <%= item.locations.any? ? (content_tag :i, '', class: "icon-map-marker icon-white tooltip-left" , title: 'location provided', style: 'padding:0 2px;') : nil %>
-      <% end if item.locations.any? || item.assets.any? %>
+      <% end if item.assets.any? %>
     <% end %>
 
     <%= content_tag :p, item.classification.self_and_ancestors.reverse.map{ |c| link_to(c.name, c) }.join(" / ").html_safe if item.classification %>
@@ -29,7 +29,6 @@
         <%= content_tag :i, '',class: 'icon-ok' if !item.issues.where(closed: false).any? %>
       <% end if item.issues.any? %>
     </p>
-
   </td>
 
 </tr>

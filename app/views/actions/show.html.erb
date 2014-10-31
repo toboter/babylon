@@ -16,11 +16,6 @@
       <%= "[#{@action.source.original_date.strftime("%d.%m.%Y")}]" if @action.source.original_date %>
     </strong>
   </div>
-    <%= content_tag :div do %>
-      <% for location in @action.locations do %>
-        <%= name_only_or_link_to(location.creator) %> added <%= location.address %> [<%= link_to "#{location.latitude}, #{location.longitude}", "https://www.google.de/maps/@#{location.latitude},#{location.longitude},13z", target: '_blank' %>] as location <%= "[#{location.created_at}]" if location.created_at %> to <%= @action.name %><br>
-      <% end %>
-    <% end if @action.locations.any? %>
   <%= content_tag :ul, class: "unstyled" do %>
     <%= content_tag :li do %>
       <%= render @action.source %>

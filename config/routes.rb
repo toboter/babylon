@@ -6,7 +6,10 @@ Babylon::Application.routes.draw do
 
   resources :activities
 
-  resources :snippets, :path => 'blogs' do
+  get "about", to: 'snippets#show'
+  get "imprint", to: 'snippets#show'
+  get "help", to: 'snippets#show'
+  resources :snippets do
     resources :buckets
   end
 

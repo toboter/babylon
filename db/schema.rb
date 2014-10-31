@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141030115947) do
+ActiveRecord::Schema.define(:version => 20141031155536) do
 
   create_table "actions", :force => true do |t|
     t.integer  "predicate_id"
@@ -319,6 +319,15 @@ ActiveRecord::Schema.define(:version => 20141030115947) do
   add_index "item_connections", ["item_id"], :name => "index_item_connections_on_item_id"
   add_index "item_connections", ["predicate_id"], :name => "index_item_connections_on_predicate_id"
 
+  create_table "item_hierarchies", :id => false, :force => true do |t|
+    t.integer "ancestor_id",   :null => false
+    t.integer "descendant_id", :null => false
+    t.integer "generations",   :null => false
+  end
+
+  add_index "item_hierarchies", ["ancestor_id", "descendant_id", "generations"], :name => "item_anc_desc_udx", :unique => true
+  add_index "item_hierarchies", ["descendant_id"], :name => "item_desc_idx"
+
   create_table "items", :force => true do |t|
     t.integer  "collection_id"
     t.integer  "inventory_number"
@@ -348,6 +357,7 @@ ActiveRecord::Schema.define(:version => 20141030115947) do
     t.text     "excavation_situation"
     t.string   "cdli_id"
     t.string   "weight"
+    t.integer  "joins_to_id"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"

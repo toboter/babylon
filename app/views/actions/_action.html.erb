@@ -2,6 +2,5 @@
     <strong>
       <%= link_to action.actable.name, action.actable if action.actable %>
       <%= link_to action.predicate.name, [action.actable, action] if action.predicate %> <%= link_to action.source.name, action.source if action.source %>
-
     </strong>
   <% end if action %>
