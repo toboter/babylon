@@ -52,7 +52,7 @@
     <% end if @projectable %>
     <div class="projects-list row-fluid">
       <% if @projects.any? %>
-        <%= render @projects %>
+        <%= render @projects.order('name asc') %>
       <% else %>
         <div class="well">
           <p class="text-center">Nothing to show. <%= content_tag :span, link_to('Create a project', [:new, @projectable, :project])+' or ' if @projectable && can?(:create, Project) %><%= link_to 'back to previous page', :back %></p>

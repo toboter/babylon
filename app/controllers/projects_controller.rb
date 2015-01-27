@@ -9,7 +9,7 @@ class ProjectsController < ApplicationController
     if params[:cluster_id]
       @cluster_projects =  @projectable.projects
       @group_projects = @projectable.group_projects
-      @all_projects = Project.where(id: (@projectable.project_ids+@projectable.group_project_ids))
+      @all_projects = Project.where(id: (@projectable.project_ids+@projectable.group_project_ids)).order('name asc')
 
       if params[:state] == 'group'
         @projects = @group_projects

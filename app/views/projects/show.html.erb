@@ -64,15 +64,20 @@
     <hr>
   <% end if @project.lists.any? %> 
 
-  <%= content_tag :div, class: 'documents-list', id: 'docs' do %> 
-    <%= content_tag :h4, 'Documents', class: '' %>  
+  <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
+    <%= content_tag :h4, class: 'muted', style: 'padding-bottom:10px;' do %>
+      Documents
+    <% end %>
       <table class="table table-bordered">
         <tbody>
-          <%= render "documents/without_document_type", :var => @project %>
+          <%= render @project.documents.where(document_type: 'Introduction') %>
         </tbody>
       </table>
-    <hr>
-  <% end if @project.documents.without_document_type.any? %> 
+      <%= link_to "View #{pluralize @project.documents.count, 'document'}", [@project, :documents] %>
+
+  <hr>
+
+  <% end if @project.documents.any? %> 
 
   <%= content_tag :div, class: 'bibliography-view', id: 'bib' do %>
     <%= content_tag :h4, 'Bibliography', class: '' %>

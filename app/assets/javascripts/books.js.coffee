@@ -56,3 +56,8 @@ jQuery ->
       format: "dd.mm.yyyy",
       todayHighlight: true,
       forceParse: false )
+
+  $("#if_editorial").on('cocoon:after-insert', ->
+    $(".chosen-select").chosen
+      no_results_text: "Nothing found!",
+      search_contains: true )

@@ -36,10 +36,13 @@
     <% end %>
       <table class="table table-bordered">
         <tbody>
-          <%= render @cluster.documents %>
+          <%= render @cluster.documents.where(document_type: 'Introduction') %>
         </tbody>
       </table>
-      <%= link_to 'View all documents', [@cluster, :documents] %>
+      <%= link_to "View #{pluralize @cluster.documents.count, 'document'}", [@cluster, :documents] %>
+
+  <hr>
+
   <% end if @cluster.documents.any? %> 
 
   <%= content_tag :div, class: 'groups-list', id: 'groups' do %>
@@ -50,19 +53,42 @@
         Group
       <% end if can? :create, @cluster.groups %>
     <% end %>
-    <% @cluster.groups.limit(3).each do |group| %>
+    <% @cluster.groups.each do |group| %>
       <div class="group-entry" style="padding-left:10px;">
         <h3><%= link_to "#{group.name}", group %></h3>
-        <% if group.description.present? %>
-          <%= markdown(group.description) %>
-        <% else %>
-          <p>No abstract available</p>
-        <% end %>
-        <div style="padding-left:20px;">
-          <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
-          <%= render group.projects.limit(3) %>
-          <%= link_to "View all projects in #{group.name}", [group, :projects] %>
-        </div>
+        <div class="accordion" id="accordion2">
+            <%= content_tag :div, class: "accordion-group" do %>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                  Info
+                </a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                  <% if group.description.present? %>
+                    <%= markdown(group.description) %>
+                  <% else %>
+                    <p>No abstract available</p>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            <%= content_tag :div, class: "accordion-group" do %>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                  Projects
+                </a>
+              </div>
+              <div id="collapseTwo" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <%= render group.projects.order('name asc') %>
+                  <%= link_to "View all projects in #{group.name}", [group, :projects] %>
+                </div>
+              </div>
+            <% end if group.projects.any? %>
+          </div>
+
+
         <hr>
       </div>
     <% end %>
@@ -70,14 +96,14 @@
 
   <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
     <%= content_tag :h2, class: "muted" do %>
-      <%= link_to("Independent projects", [@cluster, :projects])%>
+      <%= link_to("Projects without group", [@cluster, :projects])%>
       <%= link_to new_cluster_project_path(@cluster), class: 'btn btn-default pull-right' do %>
         <i class="icon-plus"></i>
         Project
       <% end if can? :create, @cluster.projects %>
     <% end %>
-    <%= render @cluster.projects.limit(5).order('created_at DESC') %>
-    <%= link_to 'View all independent projects', polymorphic_path([@cluster, :projects], state: 'module') %>
+    <%= render @cluster.projects.order('name asc') %>
+    <%= link_to 'View all projects without group', polymorphic_path([@cluster, :projects], state: 'module') %>
   <% end if @cluster.projects.any? %>
   </div>
   <div class="span4">

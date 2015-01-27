@@ -4,9 +4,9 @@
       <h4>
         <%= link_to(full_qualified_name(project), [project.projectable, project]) %>
         <% if current_aspect == project %>
-          <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:25px;'), exit_aspect_path, class: 'pull-right tooltip-right', title: 'Exit current aspect' %>
+          <%= link_to image_tag("icons/sign4.svg", class: 'navbar-icon', style: 'width:25px;'), exit_aspect_path, class: 'pull-right tooltip-left', title: 'Exit current aspect' %>
         <% elsif project.members.exists?(current_user) %>
-          <%= link_to image_tag("icons/sign3.svg", class: 'navbar-icon', style: 'width:25px;'), change_aspect_path(:project_id => project.id), class: 'pull-right tooltip-right', title: 'Use this aspect' %>
+          <%= link_to image_tag("icons/sign3.svg", class: 'navbar-icon', style: 'width:25px;'), change_aspect_path(:project_id => project.id), class: 'pull-right tooltip-left', title: 'Use this aspect' %>
         <% end %>
       </h4>
     </div>

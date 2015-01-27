@@ -34,12 +34,38 @@
               <% end %>              
             <% end %>
             <%= content_tag :div, class: 'span9' do %>
-              <h1 style="margin:0px;"><%= link_to cluster.name, cluster %></h1>
-              <%= content_tag :div, class: 'lead' do %>
-                <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
-              <% end %>
+              <h1><%= link_to cluster.name, cluster %></h1>
+
+
+
+
+
+
+
+        <div class="accordion" id="accordion2">
+            <%= content_tag :div, class: "accordion-group" do %>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                  Info
+                </a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                  <%= content_tag :div, class: 'lead' do %>
+                    <%= cluster.description.present? ? markdown(cluster.description) : content_tag(:p, "No abstract to show.") %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+            <%= content_tag :div, class: "accordion-group" do %>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                  Groups
+                </a>
+              </div>
+              <div id="collapseTwo" class="accordion-body collapse">
+                <div class="accordion-inner">
                 <%= content_tag :div, class: 'groups-list', id: 'groups' do %> 
-                  <%= content_tag :h3, link_to("Groups", cluster_groups_path(cluster)) %>
                   <% cluster.groups.limit(3).each do |group| %>
                     <div class="group-entry" style="padding-left:20px;">
                       <h3><%= link_to "#{group.name}", group %></h3>
@@ -50,20 +76,35 @@
                       <% end %>
                       <div style="padding-left:10px;">
                         <%= content_tag :h4, link_to("Projects", group_projects_path(group)), class: "muted" if group.projects.any? %>
-                        <%= render group.projects.limit(3) %>
+                        <%= render group.projects.order('name asc') %>
                         <%= link_to "View all projects in #{group.name}", [group, :projects] %>
                       </div>
+                      <hr>
                     </div>
                   <% end %>
-                <% end if cluster.groups.any? %>
+                  <%= link_to("View all groups", cluster_groups_path(cluster)) %>
+                <% end %>
+                </div>
+              </div>
+            <% end if cluster.groups.any? %>
+            <%= content_tag :div, class: "accordion-group" do %>
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                  Projects without group
+                </a>
+              </div>
+              <div id="collapseThree" class="accordion-body collapse">
+                <div class="accordion-inner">
                 <%= content_tag :div, class: 'projects-list', id: 'projects' do %> 
-                  <%= content_tag :h3, link_to("Independent projects", polymorphic_path([cluster, :projects], state: 'module')) %>
-                  <%= render cluster.projects.limit(5).order('created_at DESC') %>
-                  <%= link_to 'View all independent projects', polymorphic_path([cluster, :projects], state: 'module') %>
-                <% end if cluster.projects.any? %>
+                  <%= render cluster.projects.order('name asc') %>
+                  <%= link_to 'View all projects without group', polymorphic_path([cluster, :projects], state: 'module') %>
+                <% end %>
+                </div>
+              </div>
+            <% end if cluster.projects.any? %>
+          </div>
 
             <% end %>
-
 
         </div>
       <hr>

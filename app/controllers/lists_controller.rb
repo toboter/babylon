@@ -40,7 +40,7 @@ class ListsController < ApplicationController
     @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
       marker.lat location.latitude
       marker.lng location.longitude
-      marker.infowindow "<a href='#{url_for([location.locatable])}'>#{location.locatable.actable.name}</a> #{location.locatable.predicate.name.humanize.downcase}"
+      marker.infowindow "<a href=''>#{location.locatable.actable.name}</a> #{location.locatable.predicate.name.humanize.downcase}"
       marker.json({ title: location.locatable.actable.name })
     end
 

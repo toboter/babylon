@@ -3,8 +3,8 @@
     <div class="control-group">
       <%= f.label :person_name_id, 'Editor', class: 'control-label' %>
       <div class="form-inline controls">
-        <%= f.collection_select :person_name_id, PersonName.order(:last_name), :id, :name_with_profession, {include_blank: true }, {multiple: false, class: 'form-control'} %>
-        <small><%= link_to_remove_association "remove", f %></small>
+        <%= f.collection_select :person_name_id, PersonName.order(:last_name), :id, :name_with_profession, {include_blank: true }, {multiple: false, class: 'chosen-select form-control'} %>
+        <small><%= link_to_remove_association "remove", f, style: 'margin-left:3em;' %></small>
       </div>
     </div>  
   </div>

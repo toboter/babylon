@@ -1,5 +1,5 @@
 class Snippet < ActiveRecord::Base
-  attr_accessible :snippet_type, :creator_id, :updater_id, :name, :content
+  attr_accessible :snippet_type, :creator_id, :updater_id, :name, :content, :pinned
 
   stampable
 

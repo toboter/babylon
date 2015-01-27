@@ -13,7 +13,7 @@ class ExploreController < ApplicationController
 	@clusters = Cluster.limit(4)
 	@activities = Activity.order('created_at DESC').limit(11)
 
-	@featured = Project.where(featured: true)
+	@featured = Project.where(featured: true).order('name asc')
 	@featured.concat(List.where(featured: true).limit(2))
 
   end

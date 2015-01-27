@@ -34,7 +34,7 @@
   <div class="span8">
 
   <%= content_tag :h3, link_to('Projects', group_projects_path(@group)), class: "muted" if @group.projects.present? %>
-  <%= render @group.projects.limit(3) %>
+  <%= render @group.projects.order('name asc') %>
   <%= content_tag :div, class: 'documents-list', id: 'bib' do %> 
     <%= content_tag :h4, 'Documents', class: 'muted' %>  
       <table class="table table-bordered">
