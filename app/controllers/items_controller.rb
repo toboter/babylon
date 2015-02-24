@@ -33,9 +33,9 @@ class ItemsController < ApplicationController
 
     # Opitional könnte hier auch ein Array nach einem bestimmten Sortierschlüssel aufgebaut werden.
     # @history = @item.actions+@item.citations+@item.studies
-    @history = @item.actions.map{|a| {author: a.source.author.name, :predicate => a.predicate.name, :created_at => a.source.original_date ? a.source.original_date : "1970-01-01".to_date, object: a } if a.source }
-              .concat(@item.studies.map{|s| {author: s.creator.person ? s.creator.person.name : s.creator.username, :predicate => 'studied', :created_at => s.created_at.to_date, object: s }})
-              .concat(@item.citations.map{|c| {author: c.reference.authors.map{|author| author.name }.join(', '), :predicate => c.predicate.name, :created_at => Date.strptime(c.reference.book.year, '%Y'), object: c }})
+    @history = @item.actions.map{|a| {author: a.source.author.name, :predicate => a.predicate.name, :created_at => a.source.original_date.present? ? a.source.original_date : "1970-01-01".to_date, object: a } if a.source }
+              .concat(@item.studies.map{|s| {author: s.creator.person ? s.creator.person.name : s.creator.username, :predicate => 'studied', :created_at => s.created_at.to_date, object: s } if s})
+              .concat(@item.citations.map{|c| {author: c.reference.authors.map{|author| author.name }.join(', '), :predicate => c.predicate.name, :created_at => Date.strptime(c.reference.book.year, '%Y'), object: c } if c })
 
     respond_to do |format|
       format.html { render layout: 'fluid' }# show.html.erb

@@ -1,5 +1,5 @@
 class Study < ActiveRecord::Base
-  attr_accessible :properties, :studyable_id, :studyable_type, :list_id, :citations_attributes
+  attr_accessible :properties, :studyable_id, :studyable_type, :list_id, :citations_attributes, :creator_id, :updater_id
 
   stampable
 

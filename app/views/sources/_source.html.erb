@@ -1,7 +1,8 @@
 <tr>
   <td>
   	<%= content_tag :div do %>
-  	  <strong><%= link_to action.predicate.name.humanize, [@item, action] if action.predicate %> </strong>
+  	  <strong><%= link_to action.predicate.name.humanize, [@item, action] if action.predicate %> </strong><br />
+      <%= "Postition: #{action.target}" if action.target %>
   	<% end if local_assigns.has_key? :action %>
 	<div class="source-info">
 	  <h4>

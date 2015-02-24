@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141031155536) do
+ActiveRecord::Schema.define(:version => 20150213133939) do
 
   create_table "actions", :force => true do |t|
     t.integer  "predicate_id"
@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(:version => 20141031155536) do
     t.integer  "classification_id"
     t.text     "description"
     t.string   "slug"
-    t.integer  "excavation_id"
+    t.integer  "excavation_number"
     t.integer  "dissov_id"
     t.integer  "mds_id"
     t.string   "excavation_prefix"
@@ -358,6 +358,7 @@ ActiveRecord::Schema.define(:version => 20141031155536) do
     t.string   "cdli_id"
     t.string   "weight"
     t.integer  "joins_to_id"
+    t.string   "excavation_index"
   end
 
   add_index "items", ["collection_id"], :name => "index_items_on_collection_id"

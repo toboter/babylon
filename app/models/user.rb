@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
       errors.add(:base, "You cannot destroy the admin!")
       return false
     else
-      errors.add(:base, "You cannot destroy any user! This is an implementation error. Perhaps there are records associated to the user in question.")
+      errors.add(:base, "You cannot destroy any user! This is an implementation error. Perhaps there are records associated to the user.")
       return false
     end
   end

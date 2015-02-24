@@ -23,7 +23,9 @@
         </div>
       <% end %>
     </ul>
-
+        <div id="pagination">
+          <%= will_paginate(@serials, class: 'pagination', :renderer => WillPaginate::ActionView::BootstrapLinkRenderer) %>
+        </div>
         <% @serials.each do |serial| %>
           <%= content_tag :div, class: 'list-entry' do -%>
             <div class="row-fluid">

@@ -2,7 +2,7 @@
   <td width="30%">
     <span style="font-size:1.5em;font-weight:bold;"><%= link_to item.name, item %></span>
     <ul class="unstyled">
-      <%= content_tag :li, "Excavation: #{item.excavation_prefix} #{item.excavation_id}" if item.excavation_id.present? %>
+      <%= content_tag :li, "Excavation: #{item.excavation_prefix} #{item.excavation_number}" if item.excavation_number.present? %>
       <%= content_tag :li, "Dissov: #{item.dissov_id}" if item.dissov_id.present? %>
       <%= content_tag :li, "MDS: #{item.mds_id}" if item.mds_id.present? %>
       <%= content_tag :li, "Cdli: #{item.cdli_id}" if item.cdli_id.present? %>

@@ -98,7 +98,7 @@
               <table class="table table-bordered table-hover">
                 <%= item_description('Collection', link_to(@item.collection.name+' ('+@item.collection.shortcut+')', [@item.collection.institution, @item.collection])) if @item.collection %>
                 <%= item_description('Inventory Number', @item.inventory_name) %>
-                <%= item_description('Excavation Number', "#{@item.excavation_prefix} #{@item.excavation_id}") if @item.excavation_id %>
+                <%= item_description('Excavation Number', "#{@item.excavation_prefix} #{@item.excavation_number}") if @item.excavation_number %>
                 <%= item_description('Dissov Id', @item.dissov_id) %>
                 <%= item_description('MDS Id', @item.mds_id) %>
                 <%= item_description('Cdli Id', @item.cdli_id) %>
@@ -196,6 +196,7 @@
       </div>
 
       <div class="tab-pane" id="history">
+      <% if false %>
         <% @history.sort_by{|e| e[:created_at]}.reverse.each_with_index do |element, index| %>
         <div class="row-fluid">
         <div class="span6 offset2">
@@ -222,7 +223,8 @@
           <% end unless @history.size-1 == index %>
         </div>
         </div>
-        <% end if @history.any? %>
+        <% end %>
+      <% end %>
       </div>
 
       <div class="tab-pane" id="statistics">

@@ -1,5 +1,7 @@
 class Source < ActiveRecord::Base
-  attr_accessible :author_id, :comment, :condition, :format, :institution_id, :original_date, :parent_id, :source_type, :name
+
+  attr_accessible :author_id, :comment, :condition, :format, :institution_id, :original_date, 
+                  :parent_id, :source_type, :name, :creator_id, :updater_id
 
   stampable
 

@@ -1,9 +1,8 @@
 class List < ActiveRecord::Base
   attr_accessible :description, :featured, :forkable, :forked_from_id, :name, :project_id, 
-                  :accept_duplicates, :locations_attributes
+                  :accept_duplicates, :locations_attributes, :creator_id, :updater_id
 
   stampable
-  default_scope order('name ASC')
 
   belongs_to :project
   belongs_to :forked_from, class_name: 'List'

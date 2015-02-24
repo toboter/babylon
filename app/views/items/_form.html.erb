@@ -23,7 +23,8 @@
             <%= f.label :excavation_prefix, 'Excavation number', class: 'control-label' %>
             <div class="controls">
               <%= f.text_field :excavation_prefix, placeholder: "prefix (e.g. 'Bab')", style: 'margin-right:10px;' %>
-              <%= f.text_field :excavation_id, placeholder: 'integer' %>
+              <%= f.text_field :excavation_number, placeholder: 'integer' %>
+              <%= f.text_field :excavation_index, placeholder: 'index (optional)' %>
             </div>
           </div>
           <div class="control-group">

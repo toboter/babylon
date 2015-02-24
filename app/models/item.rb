@@ -6,9 +6,9 @@ class Item < ActiveRecord::Base
   
   attr_accessible :collection_id, :classification_id, :inventory_number, :inventory_number_index, 
             :context_id, :title, :tag_ids, :mds_id, :dissov_id, :citations_attributes, :actions_attributes,
-            :description, :slug, :excavation_id, :excavation_date, :excavation_place, :excavation_situation,
+            :description, :slug, :excavation_number, :excavation_date, :excavation_place, :excavation_situation,
             :connections_attributes, :cover_asset_id, :dimensions, :condition, :material, :technique, :place, 
-            :period, :excavation_prefix, :cdli_id, :weight, :joins_to_id
+            :period, :excavation_prefix, :excavation_index, :cdli_id, :weight, :joins_to_id
 
   stampable
   acts_as_tree parent_column_name: 'joins_to_id'
@@ -46,12 +46,12 @@ class Item < ActiveRecord::Base
   has_many :connections, class_name: 'ItemConnection', dependent: :destroy
   has_many :inverse_connections, :class_name => "ItemConnection", :foreign_key => "inverse_item_id", dependent: :destroy
 
-  validates :excavation_id, presence: true, unless: :inventory_number?
-  validates :inventory_number, presence: true, unless: :excavation_id?
+  validates :excavation_number, presence: true, unless: :inventory_number?
+  validates :inventory_number, presence: true, unless: :excavation_number?
   validates :collection_id, presence: true, if: :inventory_number?
   validates :mds_id, :dissov_id, allow_blank: true, uniqueness: true
-  validates :inventory_number, :allow_blank => true, :uniqueness => {:scope => :inventory_number_index}
-  validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
+  # validates :inventory_number, :allow_blank => true, :uniqueness => {:scope => :inventory_number_index}
+  # validates :inventory_number_index, :allow_blank => true, :uniqueness => {:scope => :inventory_number}
   validates :classification_id, presence: true
 
   accepts_nested_attributes_for :citations, allow_destroy: true
@@ -75,8 +75,8 @@ class Item < ActiveRecord::Base
   def name
     if inventory_name
       inventory_name
-    elsif excavation_id
-      "#{excavation_prefix} #{excavation_id}"
+    elsif excavation_number
+      "#{excavation_prefix} #{excavation_number}"
     else
       "#{id} (db_id)"
     end
@@ -88,12 +88,12 @@ class Item < ActiveRecord::Base
 
   # Ransack attribute, convert & concatenat definitions
   def self.ransackable_attributes auth_object = nil
-    %w(inventory_number title mds_id dissov_id description excavation_id excavation_date excavation_place excavation_situation dimensions condition material technique place period) + _ransackers.keys
+    %w(inventory_number title mds_id dissov_id description excavation_number excavation_date excavation_place excavation_situation dimensions condition material technique place period) + _ransackers.keys
   end
 
   # Import csv
   def self.import(file)
-    # allowed_attributes = ["collection_id", "inventory_number", "inventory_number_index", "accession_date_text", "title", "classification_id", "description", "excavation_id", 
+    # allowed_attributes = ["collection_id", "inventory_number", "inventory_number_index", "accession_date_text", "title", "classification_id", "description", "excavation_number", 
     #  "dissov_id", "mds_id"]
     # spreadsheet = open_spreadsheet(file)
     # header = spreadsheet.row(1)
